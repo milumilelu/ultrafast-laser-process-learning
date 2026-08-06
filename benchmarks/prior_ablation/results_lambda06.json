@@ -1,0 +1,2358 @@
+{
+  "config": {
+    "budget": 20,
+    "seeds": 5,
+    "init_samples": 5,
+    "objective": "depth_um(synthetic)",
+    "prior_lambda_0": 0.6
+  },
+  "true_optimum": 45.0,
+  "correct_prior": [
+    {
+      "approval_id": "ABLATION-frequency_kHz-20.0",
+      "parameter_name": "frequency_kHz",
+      "lower_bound": 15.0,
+      "upper_bound": 25.0
+    },
+    {
+      "approval_id": "ABLATION-scan_speed_mm_s-50.0",
+      "parameter_name": "scan_speed_mm_s",
+      "lower_bound": 40.0,
+      "upper_bound": 60.0
+    }
+  ],
+  "wrong_prior": [
+    {
+      "approval_id": "ABLATION-frequency_kHz-160.0",
+      "parameter_name": "frequency_kHz",
+      "lower_bound": 155.0,
+      "upper_bound": 165.0
+    },
+    {
+      "approval_id": "ABLATION-scan_speed_mm_s-160.0",
+      "parameter_name": "scan_speed_mm_s",
+      "lower_bound": 150.0,
+      "upper_bound": 170.0
+    }
+  ],
+  "aggregated": [
+    {
+      "step": 0,
+      "vanilla_regret_mean": 7.3998750000000015,
+      "vanilla_applied_preferences_mean": 0.0,
+      "correct_prior_regret_mean": 7.3998750000000015,
+      "correct_prior_applied_preferences_mean": 2.0,
+      "wrong_prior_regret_mean": 7.3998750000000015,
+      "wrong_prior_applied_preferences_mean": 2.0,
+      "prior_weight_lambda_t": 0.13333333333333333
+    },
+    {
+      "step": 1,
+      "vanilla_regret_mean": 7.3998750000000015,
+      "vanilla_applied_preferences_mean": 0.0,
+      "correct_prior_regret_mean": 7.3998750000000015,
+      "correct_prior_applied_preferences_mean": 2.0,
+      "wrong_prior_regret_mean": 7.3998750000000015,
+      "wrong_prior_applied_preferences_mean": 2.0,
+      "prior_weight_lambda_t": 0.125
+    },
+    {
+      "step": 2,
+      "vanilla_regret_mean": 7.3998750000000015,
+      "vanilla_applied_preferences_mean": 0.0,
+      "correct_prior_regret_mean": 7.3998750000000015,
+      "correct_prior_applied_preferences_mean": 2.0,
+      "wrong_prior_regret_mean": 7.3998750000000015,
+      "wrong_prior_applied_preferences_mean": 2.0,
+      "prior_weight_lambda_t": 0.11764705882352941
+    },
+    {
+      "step": 3,
+      "vanilla_regret_mean": 7.3998750000000015,
+      "vanilla_applied_preferences_mean": 0.0,
+      "correct_prior_regret_mean": 7.3998750000000015,
+      "correct_prior_applied_preferences_mean": 2.0,
+      "wrong_prior_regret_mean": 7.3998750000000015,
+      "wrong_prior_applied_preferences_mean": 2.0,
+      "prior_weight_lambda_t": 0.11111111111111112
+    },
+    {
+      "step": 4,
+      "vanilla_regret_mean": 7.3998750000000015,
+      "vanilla_applied_preferences_mean": 0.0,
+      "correct_prior_regret_mean": 7.3998750000000015,
+      "correct_prior_applied_preferences_mean": 2.0,
+      "wrong_prior_regret_mean": 7.3998750000000015,
+      "wrong_prior_applied_preferences_mean": 2.0,
+      "prior_weight_lambda_t": 0.10526315789473685
+    },
+    {
+      "step": 5,
+      "vanilla_regret_mean": 4.144502615901916,
+      "vanilla_applied_preferences_mean": 0.0,
+      "correct_prior_regret_mean": 4.144502615901916,
+      "correct_prior_applied_preferences_mean": 2.0,
+      "wrong_prior_regret_mean": 4.025111912013704,
+      "wrong_prior_applied_preferences_mean": 2.0,
+      "prior_weight_lambda_t": 0.1
+    },
+    {
+      "step": 6,
+      "vanilla_regret_mean": 4.282307182615121,
+      "vanilla_applied_preferences_mean": 0.0,
+      "correct_prior_regret_mean": 2.9110662747755653,
+      "correct_prior_applied_preferences_mean": 2.0,
+      "wrong_prior_regret_mean": 3.7953225420128107,
+      "wrong_prior_applied_preferences_mean": 2.0,
+      "prior_weight_lambda_t": 0.09523809523809523
+    },
+    {
+      "step": 7,
+      "vanilla_regret_mean": 3.665286165828617,
+      "vanilla_applied_preferences_mean": 0.0,
+      "correct_prior_regret_mean": 3.395961074160539,
+      "correct_prior_applied_preferences_mean": 2.0,
+      "wrong_prior_regret_mean": 3.7056985584002264,
+      "wrong_prior_applied_preferences_mean": 2.0,
+      "prior_weight_lambda_t": 0.09090909090909091
+    },
+    {
+      "step": 8,
+      "vanilla_regret_mean": 3.03032915058444,
+      "vanilla_applied_preferences_mean": 0.0,
+      "correct_prior_regret_mean": 2.6545849067575658,
+      "correct_prior_applied_preferences_mean": 2.0,
+      "wrong_prior_regret_mean": 3.565856403463033,
+      "wrong_prior_applied_preferences_mean": 2.0,
+      "prior_weight_lambda_t": 0.08695652173913045
+    },
+    {
+      "step": 9,
+      "vanilla_regret_mean": 1.4966451332008546,
+      "vanilla_applied_preferences_mean": 0.0,
+      "correct_prior_regret_mean": 1.856143458637473,
+      "correct_prior_applied_preferences_mean": 2.0,
+      "wrong_prior_regret_mean": 2.3908463264555437,
+      "wrong_prior_applied_preferences_mean": 2.0,
+      "prior_weight_lambda_t": 0.08333333333333333
+    },
+    {
+      "step": 10,
+      "vanilla_regret_mean": 1.3412287846227813,
+      "vanilla_applied_preferences_mean": 0.0,
+      "correct_prior_regret_mean": 1.389297088852261,
+      "correct_prior_applied_preferences_mean": 2.0,
+      "wrong_prior_regret_mean": 2.4723865698023446,
+      "wrong_prior_applied_preferences_mean": 2.0,
+      "prior_weight_lambda_t": 0.08
+    },
+    {
+      "step": 11,
+      "vanilla_regret_mean": 1.3087780464030132,
+      "vanilla_applied_preferences_mean": 0.0,
+      "correct_prior_regret_mean": 1.811431756374843,
+      "correct_prior_applied_preferences_mean": 2.0,
+      "wrong_prior_regret_mean": 2.3648600798227846,
+      "wrong_prior_applied_preferences_mean": 2.0,
+      "prior_weight_lambda_t": 0.07692307692307693
+    },
+    {
+      "step": 12,
+      "vanilla_regret_mean": 1.0608754768163577,
+      "vanilla_applied_preferences_mean": 0.0,
+      "correct_prior_regret_mean": 1.389297088852261,
+      "correct_prior_applied_preferences_mean": 2.0,
+      "wrong_prior_regret_mean": 2.3648600798227846,
+      "wrong_prior_applied_preferences_mean": 2.0,
+      "prior_weight_lambda_t": 0.07407407407407407
+    },
+    {
+      "step": 13,
+      "vanilla_regret_mean": 1.0727147225178855,
+      "vanilla_applied_preferences_mean": 0.0,
+      "correct_prior_regret_mean": 1.5499750543232338,
+      "correct_prior_applied_preferences_mean": 2.0,
+      "wrong_prior_regret_mean": 2.3648600798227846,
+      "wrong_prior_applied_preferences_mean": 2.0,
+      "prior_weight_lambda_t": 0.07142857142857144
+    },
+    {
+      "step": 14,
+      "vanilla_regret_mean": 1.3326103938839382,
+      "vanilla_applied_preferences_mean": 0.0,
+      "correct_prior_regret_mean": 1.389297088852261,
+      "correct_prior_applied_preferences_mean": 2.0,
+      "wrong_prior_regret_mean": 2.3648600798227846,
+      "wrong_prior_applied_preferences_mean": 2.0,
+      "prior_weight_lambda_t": 0.06896551724137931
+    },
+    {
+      "step": 15,
+      "vanilla_regret_mean": 1.1038015860764745,
+      "vanilla_applied_preferences_mean": 0.0,
+      "correct_prior_regret_mean": 1.389297088852261,
+      "correct_prior_applied_preferences_mean": 2.0,
+      "wrong_prior_regret_mean": 2.3648600798227846,
+      "wrong_prior_applied_preferences_mean": 2.0,
+      "prior_weight_lambda_t": 0.06666666666666667
+    },
+    {
+      "step": 16,
+      "vanilla_regret_mean": 0.9074917607596078,
+      "vanilla_applied_preferences_mean": 0.0,
+      "correct_prior_regret_mean": 1.3847520925649561,
+      "correct_prior_applied_preferences_mean": 2.0,
+      "wrong_prior_regret_mean": 2.3648600798227846,
+      "wrong_prior_applied_preferences_mean": 2.0,
+      "prior_weight_lambda_t": 0.06451612903225806
+    },
+    {
+      "step": 17,
+      "vanilla_regret_mean": 0.9074917607596078,
+      "vanilla_applied_preferences_mean": 0.0,
+      "correct_prior_regret_mean": 1.3847520925649561,
+      "correct_prior_applied_preferences_mean": 2.0,
+      "wrong_prior_regret_mean": 2.3648600798227846,
+      "wrong_prior_applied_preferences_mean": 2.0,
+      "prior_weight_lambda_t": 0.0625
+    },
+    {
+      "step": 18,
+      "vanilla_regret_mean": 0.9074917607596078,
+      "vanilla_applied_preferences_mean": 0.0,
+      "correct_prior_regret_mean": 1.389297088852261,
+      "correct_prior_applied_preferences_mean": 2.0,
+      "wrong_prior_regret_mean": 2.3648600798227846,
+      "wrong_prior_applied_preferences_mean": 2.0,
+      "prior_weight_lambda_t": 0.06060606060606061
+    },
+    {
+      "step": 19,
+      "vanilla_regret_mean": 0.9074917607596078,
+      "vanilla_applied_preferences_mean": 0.0,
+      "correct_prior_regret_mean": 1.389297088852261,
+      "correct_prior_applied_preferences_mean": 2.0,
+      "wrong_prior_regret_mean": 2.3648600798227846,
+      "wrong_prior_applied_preferences_mean": 2.0,
+      "prior_weight_lambda_t": 0.058823529411764705
+    }
+  ],
+  "trajectories": {
+    "vanilla": [
+      {
+        "step": 0,
+        "regret": 7.3998750000000015,
+        "applied_preferences": 0,
+        "recommended_frequency_kHz": 71.3,
+        "recommended_scan_speed_mm_s": 70.64999999999999
+      },
+      {
+        "step": 1,
+        "regret": 7.3998750000000015,
+        "applied_preferences": 0,
+        "recommended_frequency_kHz": 71.3,
+        "recommended_scan_speed_mm_s": 70.64999999999999
+      },
+      {
+        "step": 2,
+        "regret": 7.3998750000000015,
+        "applied_preferences": 0,
+        "recommended_frequency_kHz": 71.3,
+        "recommended_scan_speed_mm_s": 70.64999999999999
+      },
+      {
+        "step": 3,
+        "regret": 7.3998750000000015,
+        "applied_preferences": 0,
+        "recommended_frequency_kHz": 71.3,
+        "recommended_scan_speed_mm_s": 70.64999999999999
+      },
+      {
+        "step": 4,
+        "regret": 7.3998750000000015,
+        "applied_preferences": 0,
+        "recommended_frequency_kHz": 71.3,
+        "recommended_scan_speed_mm_s": 70.64999999999999
+      },
+      {
+        "step": 5,
+        "regret": 4.8908748961741395,
+        "applied_preferences": 0,
+        "recommended_frequency_kHz": 2.167455651358711,
+        "recommended_scan_speed_mm_s": 4.33703489107153
+      },
+      {
+        "step": 6,
+        "regret": 4.130386636019367,
+        "applied_preferences": 0,
+        "recommended_frequency_kHz": 5.24669318543767,
+        "recommended_scan_speed_mm_s": 89.18551231208927
+      },
+      {
+        "step": 7,
+        "regret": 3.024944195493582,
+        "applied_preferences": 0,
+        "recommended_frequency_kHz": 4.131225674121126,
+        "recommended_scan_speed_mm_s": 68.53817033615253
+      },
+      {
+        "step": 8,
+        "regret": 0.9974290482693249,
+        "applied_preferences": 0,
+        "recommended_frequency_kHz": 15.979480378223153,
+        "recommended_scan_speed_mm_s": 58.44959987066111
+      },
+      {
+        "step": 9,
+        "regret": 2.677245335964443,
+        "applied_preferences": 0,
+        "recommended_frequency_kHz": 34.22808531534816,
+        "recommended_scan_speed_mm_s": 33.959500795980524
+      },
+      {
+        "step": 10,
+        "regret": 0.9747040668327998,
+        "applied_preferences": 0,
+        "recommended_frequency_kHz": 22.199786359962147,
+        "recommended_scan_speed_mm_s": 61.712016478320734
+      },
+      {
+        "step": 11,
+        "regret": 1.4055611167505901,
+        "applied_preferences": 0,
+        "recommended_frequency_kHz": 27.29441436967731,
+        "recommended_scan_speed_mm_s": 58.71136493057625
+      },
+      {
+        "step": 12,
+        "regret": 0.9747040668327998,
+        "applied_preferences": 0,
+        "recommended_frequency_kHz": 22.199786359962147,
+        "recommended_scan_speed_mm_s": 61.712016478320734
+      },
+      {
+        "step": 13,
+        "regret": 1.7780938941876627,
+        "applied_preferences": 0,
+        "recommended_frequency_kHz": 16.04145242502206,
+        "recommended_scan_speed_mm_s": 71.39316384682989
+      },
+      {
+        "step": 14,
+        "regret": 0.9747040668327998,
+        "applied_preferences": 0,
+        "recommended_frequency_kHz": 22.199786359962147,
+        "recommended_scan_speed_mm_s": 61.712016478320734
+      },
+      {
+        "step": 15,
+        "regret": 0.9747040668327998,
+        "applied_preferences": 0,
+        "recommended_frequency_kHz": 22.199786359962147,
+        "recommended_scan_speed_mm_s": 61.712016478320734
+      },
+      {
+        "step": 16,
+        "regret": 0.9747040668327998,
+        "applied_preferences": 0,
+        "recommended_frequency_kHz": 22.199786359962147,
+        "recommended_scan_speed_mm_s": 61.712016478320734
+      },
+      {
+        "step": 17,
+        "regret": 0.9747040668327998,
+        "applied_preferences": 0,
+        "recommended_frequency_kHz": 22.199786359962147,
+        "recommended_scan_speed_mm_s": 61.712016478320734
+      },
+      {
+        "step": 18,
+        "regret": 0.9747040668327998,
+        "applied_preferences": 0,
+        "recommended_frequency_kHz": 22.199786359962147,
+        "recommended_scan_speed_mm_s": 61.712016478320734
+      },
+      {
+        "step": 19,
+        "regret": 0.9747040668327998,
+        "applied_preferences": 0,
+        "recommended_frequency_kHz": 22.199786359962147,
+        "recommended_scan_speed_mm_s": 61.712016478320734
+      },
+      {
+        "step": 0,
+        "regret": 7.3998750000000015,
+        "applied_preferences": 0,
+        "recommended_frequency_kHz": 71.3,
+        "recommended_scan_speed_mm_s": 70.64999999999999
+      },
+      {
+        "step": 1,
+        "regret": 7.3998750000000015,
+        "applied_preferences": 0,
+        "recommended_frequency_kHz": 71.3,
+        "recommended_scan_speed_mm_s": 70.64999999999999
+      },
+      {
+        "step": 2,
+        "regret": 7.3998750000000015,
+        "applied_preferences": 0,
+        "recommended_frequency_kHz": 71.3,
+        "recommended_scan_speed_mm_s": 70.64999999999999
+      },
+      {
+        "step": 3,
+        "regret": 7.3998750000000015,
+        "applied_preferences": 0,
+        "recommended_frequency_kHz": 71.3,
+        "recommended_scan_speed_mm_s": 70.64999999999999
+      },
+      {
+        "step": 4,
+        "regret": 7.3998750000000015,
+        "applied_preferences": 0,
+        "recommended_frequency_kHz": 71.3,
+        "recommended_scan_speed_mm_s": 70.64999999999999
+      },
+      {
+        "step": 5,
+        "regret": 3.024944195493582,
+        "applied_preferences": 0,
+        "recommended_frequency_kHz": 4.131225674121126,
+        "recommended_scan_speed_mm_s": 68.53817033615253
+      },
+      {
+        "step": 6,
+        "regret": 2.824271122113956,
+        "applied_preferences": 0,
+        "recommended_frequency_kHz": 3.760276678466367,
+        "recommended_scan_speed_mm_s": 35.40428150577824
+      },
+      {
+        "step": 7,
+        "regret": 3.024944195493582,
+        "applied_preferences": 0,
+        "recommended_frequency_kHz": 4.131225674121126,
+        "recommended_scan_speed_mm_s": 68.53817033615253
+      },
+      {
+        "step": 8,
+        "regret": 4.130386636019367,
+        "applied_preferences": 0,
+        "recommended_frequency_kHz": 5.24669318543767,
+        "recommended_scan_speed_mm_s": 89.18551231208927
+      },
+      {
+        "step": 9,
+        "regret": 0.9974290482693249,
+        "applied_preferences": 0,
+        "recommended_frequency_kHz": 15.979480378223153,
+        "recommended_scan_speed_mm_s": 58.44959987066111
+      },
+      {
+        "step": 10,
+        "regret": 0.8259705402766997,
+        "applied_preferences": 0,
+        "recommended_frequency_kHz": 24.692661756607997,
+        "recommended_scan_speed_mm_s": 45.94365719585565
+      },
+      {
+        "step": 11,
+        "regret": 1.4055611167505901,
+        "applied_preferences": 0,
+        "recommended_frequency_kHz": 27.29441436967731,
+        "recommended_scan_speed_mm_s": 58.71136493057625
+      },
+      {
+        "step": 12,
+        "regret": 1.4055611167505901,
+        "applied_preferences": 0,
+        "recommended_frequency_kHz": 27.29441436967731,
+        "recommended_scan_speed_mm_s": 58.71136493057625
+      },
+      {
+        "step": 13,
+        "regret": 1.4055611167505901,
+        "applied_preferences": 0,
+        "recommended_frequency_kHz": 27.29441436967731,
+        "recommended_scan_speed_mm_s": 58.71136493057625
+      },
+      {
+        "step": 14,
+        "regret": 1.4055611167505901,
+        "applied_preferences": 0,
+        "recommended_frequency_kHz": 27.29441436967731,
+        "recommended_scan_speed_mm_s": 58.71136493057625
+      },
+      {
+        "step": 15,
+        "regret": 1.4055611167505901,
+        "applied_preferences": 0,
+        "recommended_frequency_kHz": 27.29441436967731,
+        "recommended_scan_speed_mm_s": 58.71136493057625
+      },
+      {
+        "step": 16,
+        "regret": 1.4055611167505901,
+        "applied_preferences": 0,
+        "recommended_frequency_kHz": 27.29441436967731,
+        "recommended_scan_speed_mm_s": 58.71136493057625
+      },
+      {
+        "step": 17,
+        "regret": 1.4055611167505901,
+        "applied_preferences": 0,
+        "recommended_frequency_kHz": 27.29441436967731,
+        "recommended_scan_speed_mm_s": 58.71136493057625
+      },
+      {
+        "step": 18,
+        "regret": 1.4055611167505901,
+        "applied_preferences": 0,
+        "recommended_frequency_kHz": 27.29441436967731,
+        "recommended_scan_speed_mm_s": 58.71136493057625
+      },
+      {
+        "step": 19,
+        "regret": 1.4055611167505901,
+        "applied_preferences": 0,
+        "recommended_frequency_kHz": 27.29441436967731,
+        "recommended_scan_speed_mm_s": 58.71136493057625
+      },
+      {
+        "step": 0,
+        "regret": 7.3998750000000015,
+        "applied_preferences": 0,
+        "recommended_frequency_kHz": 71.3,
+        "recommended_scan_speed_mm_s": 70.64999999999999
+      },
+      {
+        "step": 1,
+        "regret": 7.3998750000000015,
+        "applied_preferences": 0,
+        "recommended_frequency_kHz": 71.3,
+        "recommended_scan_speed_mm_s": 70.64999999999999
+      },
+      {
+        "step": 2,
+        "regret": 7.3998750000000015,
+        "applied_preferences": 0,
+        "recommended_frequency_kHz": 71.3,
+        "recommended_scan_speed_mm_s": 70.64999999999999
+      },
+      {
+        "step": 3,
+        "regret": 7.3998750000000015,
+        "applied_preferences": 0,
+        "recommended_frequency_kHz": 71.3,
+        "recommended_scan_speed_mm_s": 70.64999999999999
+      },
+      {
+        "step": 4,
+        "regret": 7.3998750000000015,
+        "applied_preferences": 0,
+        "recommended_frequency_kHz": 71.3,
+        "recommended_scan_speed_mm_s": 70.64999999999999
+      },
+      {
+        "step": 5,
+        "regret": 4.8908748961741395,
+        "applied_preferences": 0,
+        "recommended_frequency_kHz": 2.167455651358711,
+        "recommended_scan_speed_mm_s": 4.33703489107153
+      },
+      {
+        "step": 6,
+        "regret": 5.813291917551361,
+        "applied_preferences": 0,
+        "recommended_frequency_kHz": 44.77231427637997,
+        "recommended_scan_speed_mm_s": 2.7757617218636748
+      },
+      {
+        "step": 7,
+        "regret": 3.024944195493582,
+        "applied_preferences": 0,
+        "recommended_frequency_kHz": 4.131225674121126,
+        "recommended_scan_speed_mm_s": 68.53817033615253
+      },
+      {
+        "step": 8,
+        "regret": 4.130386636019367,
+        "applied_preferences": 0,
+        "recommended_frequency_kHz": 5.24669318543767,
+        "recommended_scan_speed_mm_s": 89.18551231208927
+      },
+      {
+        "step": 9,
+        "regret": 0.9974290482693249,
+        "applied_preferences": 0,
+        "recommended_frequency_kHz": 15.979480378223153,
+        "recommended_scan_speed_mm_s": 58.44959987066111
+      },
+      {
+        "step": 10,
+        "regret": 1.4055611167505901,
+        "applied_preferences": 0,
+        "recommended_frequency_kHz": 27.29441436967731,
+        "recommended_scan_speed_mm_s": 58.71136493057625
+      },
+      {
+        "step": 11,
+        "regret": 1.4055611167505901,
+        "applied_preferences": 0,
+        "recommended_frequency_kHz": 27.29441436967731,
+        "recommended_scan_speed_mm_s": 58.71136493057625
+      },
+      {
+        "step": 12,
+        "regret": 0.9747040668327998,
+        "applied_preferences": 0,
+        "recommended_frequency_kHz": 22.199786359962147,
+        "recommended_scan_speed_mm_s": 61.712016478320734
+      },
+      {
+        "step": 13,
+        "regret": 0.9747040668327998,
+        "applied_preferences": 0,
+        "recommended_frequency_kHz": 22.199786359962147,
+        "recommended_scan_speed_mm_s": 61.712016478320734
+      },
+      {
+        "step": 14,
+        "regret": 0.9747040668327998,
+        "applied_preferences": 0,
+        "recommended_frequency_kHz": 22.199786359962147,
+        "recommended_scan_speed_mm_s": 61.712016478320734
+      },
+      {
+        "step": 15,
+        "regret": 0.9747040668327998,
+        "applied_preferences": 0,
+        "recommended_frequency_kHz": 22.199786359962147,
+        "recommended_scan_speed_mm_s": 61.712016478320734
+      },
+      {
+        "step": 16,
+        "regret": 0.9747040668327998,
+        "applied_preferences": 0,
+        "recommended_frequency_kHz": 22.199786359962147,
+        "recommended_scan_speed_mm_s": 61.712016478320734
+      },
+      {
+        "step": 17,
+        "regret": 0.9747040668327998,
+        "applied_preferences": 0,
+        "recommended_frequency_kHz": 22.199786359962147,
+        "recommended_scan_speed_mm_s": 61.712016478320734
+      },
+      {
+        "step": 18,
+        "regret": 0.9747040668327998,
+        "applied_preferences": 0,
+        "recommended_frequency_kHz": 22.199786359962147,
+        "recommended_scan_speed_mm_s": 61.712016478320734
+      },
+      {
+        "step": 19,
+        "regret": 0.9747040668327998,
+        "applied_preferences": 0,
+        "recommended_frequency_kHz": 22.199786359962147,
+        "recommended_scan_speed_mm_s": 61.712016478320734
+      },
+      {
+        "step": 0,
+        "regret": 7.3998750000000015,
+        "applied_preferences": 0,
+        "recommended_frequency_kHz": 71.3,
+        "recommended_scan_speed_mm_s": 70.64999999999999
+      },
+      {
+        "step": 1,
+        "regret": 7.3998750000000015,
+        "applied_preferences": 0,
+        "recommended_frequency_kHz": 71.3,
+        "recommended_scan_speed_mm_s": 70.64999999999999
+      },
+      {
+        "step": 2,
+        "regret": 7.3998750000000015,
+        "applied_preferences": 0,
+        "recommended_frequency_kHz": 71.3,
+        "recommended_scan_speed_mm_s": 70.64999999999999
+      },
+      {
+        "step": 3,
+        "regret": 7.3998750000000015,
+        "applied_preferences": 0,
+        "recommended_frequency_kHz": 71.3,
+        "recommended_scan_speed_mm_s": 70.64999999999999
+      },
+      {
+        "step": 4,
+        "regret": 7.3998750000000015,
+        "applied_preferences": 0,
+        "recommended_frequency_kHz": 71.3,
+        "recommended_scan_speed_mm_s": 70.64999999999999
+      },
+      {
+        "step": 5,
+        "regret": 4.8908748961741395,
+        "applied_preferences": 0,
+        "recommended_frequency_kHz": 2.167455651358711,
+        "recommended_scan_speed_mm_s": 4.33703489107153
+      },
+      {
+        "step": 6,
+        "regret": 4.379786349635282,
+        "applied_preferences": 0,
+        "recommended_frequency_kHz": 32.944267103058564,
+        "recommended_scan_speed_mm_s": 2.8526090296489346
+      },
+      {
+        "step": 7,
+        "regret": 3.024944195493582,
+        "applied_preferences": 0,
+        "recommended_frequency_kHz": 4.131225674121126,
+        "recommended_scan_speed_mm_s": 68.53817033615253
+      },
+      {
+        "step": 8,
+        "regret": 3.3682393001931246,
+        "applied_preferences": 0,
+        "recommended_frequency_kHz": 6.996122097801406,
+        "recommended_scan_speed_mm_s": 80.15927318974084
+      },
+      {
+        "step": 9,
+        "regret": 1.4055611167505901,
+        "applied_preferences": 0,
+        "recommended_frequency_kHz": 27.29441436967731,
+        "recommended_scan_speed_mm_s": 58.71136493057625
+      },
+      {
+        "step": 10,
+        "regret": 2.525204132421017,
+        "applied_preferences": 0,
+        "recommended_frequency_kHz": 30.052442025964663,
+        "recommended_scan_speed_mm_s": 71.82923968784544
+      },
+      {
+        "step": 11,
+        "regret": 0.9747040668327998,
+        "applied_preferences": 0,
+        "recommended_frequency_kHz": 22.199786359962147,
+        "recommended_scan_speed_mm_s": 61.712016478320734
+      },
+      {
+        "step": 12,
+        "regret": 0.9747040668327998,
+        "applied_preferences": 0,
+        "recommended_frequency_kHz": 22.199786359962147,
+        "recommended_scan_speed_mm_s": 61.712016478320734
+      },
+      {
+        "step": 13,
+        "regret": 0.9974290482693249,
+        "applied_preferences": 0,
+        "recommended_frequency_kHz": 15.979480378223153,
+        "recommended_scan_speed_mm_s": 58.44959987066111
+      },
+      {
+        "step": 14,
+        "regret": 0.9974290482693249,
+        "applied_preferences": 0,
+        "recommended_frequency_kHz": 15.979480378223153,
+        "recommended_scan_speed_mm_s": 58.44959987066111
+      },
+      {
+        "step": 15,
+        "regret": 0.9747040668327998,
+        "applied_preferences": 0,
+        "recommended_frequency_kHz": 22.199786359962147,
+        "recommended_scan_speed_mm_s": 61.712016478320734
+      },
+      {
+        "step": 16,
+        "regret": 0.9747040668327998,
+        "applied_preferences": 0,
+        "recommended_frequency_kHz": 22.199786359962147,
+        "recommended_scan_speed_mm_s": 61.712016478320734
+      },
+      {
+        "step": 17,
+        "regret": 0.9747040668327998,
+        "applied_preferences": 0,
+        "recommended_frequency_kHz": 22.199786359962147,
+        "recommended_scan_speed_mm_s": 61.712016478320734
+      },
+      {
+        "step": 18,
+        "regret": 0.9747040668327998,
+        "applied_preferences": 0,
+        "recommended_frequency_kHz": 22.199786359962147,
+        "recommended_scan_speed_mm_s": 61.712016478320734
+      },
+      {
+        "step": 19,
+        "regret": 0.9747040668327998,
+        "applied_preferences": 0,
+        "recommended_frequency_kHz": 22.199786359962147,
+        "recommended_scan_speed_mm_s": 61.712016478320734
+      },
+      {
+        "step": 0,
+        "regret": 7.3998750000000015,
+        "applied_preferences": 0,
+        "recommended_frequency_kHz": 71.3,
+        "recommended_scan_speed_mm_s": 70.64999999999999
+      },
+      {
+        "step": 1,
+        "regret": 7.3998750000000015,
+        "applied_preferences": 0,
+        "recommended_frequency_kHz": 71.3,
+        "recommended_scan_speed_mm_s": 70.64999999999999
+      },
+      {
+        "step": 2,
+        "regret": 7.3998750000000015,
+        "applied_preferences": 0,
+        "recommended_frequency_kHz": 71.3,
+        "recommended_scan_speed_mm_s": 70.64999999999999
+      },
+      {
+        "step": 3,
+        "regret": 7.3998750000000015,
+        "applied_preferences": 0,
+        "recommended_frequency_kHz": 71.3,
+        "recommended_scan_speed_mm_s": 70.64999999999999
+      },
+      {
+        "step": 4,
+        "regret": 7.3998750000000015,
+        "applied_preferences": 0,
+        "recommended_frequency_kHz": 71.3,
+        "recommended_scan_speed_mm_s": 70.64999999999999
+      },
+      {
+        "step": 5,
+        "regret": 3.024944195493582,
+        "applied_preferences": 0,
+        "recommended_frequency_kHz": 4.131225674121126,
+        "recommended_scan_speed_mm_s": 68.53817033615253
+      },
+      {
+        "step": 6,
+        "regret": 4.2637998877556385,
+        "applied_preferences": 0,
+        "recommended_frequency_kHz": 31.02280288642109,
+        "recommended_scan_speed_mm_s": 1.1682641504745028
+      },
+      {
+        "step": 7,
+        "regret": 6.226654047168758,
+        "applied_preferences": 0,
+        "recommended_frequency_kHz": 17.0472452182102,
+        "recommended_scan_speed_mm_s": 147.72646897930252
+      },
+      {
+        "step": 8,
+        "regret": 2.525204132421017,
+        "applied_preferences": 0,
+        "recommended_frequency_kHz": 30.052442025964663,
+        "recommended_scan_speed_mm_s": 71.82923968784544
+      },
+      {
+        "step": 9,
+        "regret": 1.4055611167505901,
+        "applied_preferences": 0,
+        "recommended_frequency_kHz": 27.29441436967731,
+        "recommended_scan_speed_mm_s": 58.71136493057625
+      },
+      {
+        "step": 10,
+        "regret": 0.9747040668327998,
+        "applied_preferences": 0,
+        "recommended_frequency_kHz": 22.199786359962147,
+        "recommended_scan_speed_mm_s": 61.712016478320734
+      },
+      {
+        "step": 11,
+        "regret": 1.3525028149304958,
+        "applied_preferences": 0,
+        "recommended_frequency_kHz": 25.947766517853495,
+        "recommended_scan_speed_mm_s": 60.68244238528875
+      },
+      {
+        "step": 12,
+        "regret": 0.9747040668327998,
+        "applied_preferences": 0,
+        "recommended_frequency_kHz": 22.199786359962147,
+        "recommended_scan_speed_mm_s": 61.712016478320734
+      },
+      {
+        "step": 13,
+        "regret": 0.20778548654904938,
+        "applied_preferences": 0,
+        "recommended_frequency_kHz": 20.137304976969858,
+        "recommended_scan_speed_mm_s": 46.92872868796741
+      },
+      {
+        "step": 14,
+        "regret": 2.310653670734176,
+        "applied_preferences": 0,
+        "recommended_frequency_kHz": 10.656966499094267,
+        "recommended_scan_speed_mm_s": 30.310008914547353
+      },
+      {
+        "step": 15,
+        "regret": 1.1893346131333828,
+        "applied_preferences": 0,
+        "recommended_frequency_kHz": 26.590380272386987,
+        "recommended_scan_speed_mm_s": 43.41848282096786
+      },
+      {
+        "step": 16,
+        "regret": 0.20778548654904938,
+        "applied_preferences": 0,
+        "recommended_frequency_kHz": 20.137304976969858,
+        "recommended_scan_speed_mm_s": 46.92872868796741
+      },
+      {
+        "step": 17,
+        "regret": 0.20778548654904938,
+        "applied_preferences": 0,
+        "recommended_frequency_kHz": 20.137304976969858,
+        "recommended_scan_speed_mm_s": 46.92872868796741
+      },
+      {
+        "step": 18,
+        "regret": 0.20778548654904938,
+        "applied_preferences": 0,
+        "recommended_frequency_kHz": 20.137304976969858,
+        "recommended_scan_speed_mm_s": 46.92872868796741
+      },
+      {
+        "step": 19,
+        "regret": 0.20778548654904938,
+        "applied_preferences": 0,
+        "recommended_frequency_kHz": 20.137304976969858,
+        "recommended_scan_speed_mm_s": 46.92872868796741
+      }
+    ],
+    "correct_prior": [
+      {
+        "step": 0,
+        "regret": 7.3998750000000015,
+        "applied_preferences": 2,
+        "recommended_frequency_kHz": 71.3,
+        "recommended_scan_speed_mm_s": 70.64999999999999
+      },
+      {
+        "step": 1,
+        "regret": 7.3998750000000015,
+        "applied_preferences": 2,
+        "recommended_frequency_kHz": 71.3,
+        "recommended_scan_speed_mm_s": 70.64999999999999
+      },
+      {
+        "step": 2,
+        "regret": 7.3998750000000015,
+        "applied_preferences": 2,
+        "recommended_frequency_kHz": 71.3,
+        "recommended_scan_speed_mm_s": 70.64999999999999
+      },
+      {
+        "step": 3,
+        "regret": 7.3998750000000015,
+        "applied_preferences": 2,
+        "recommended_frequency_kHz": 71.3,
+        "recommended_scan_speed_mm_s": 70.64999999999999
+      },
+      {
+        "step": 4,
+        "regret": 7.3998750000000015,
+        "applied_preferences": 2,
+        "recommended_frequency_kHz": 71.3,
+        "recommended_scan_speed_mm_s": 70.64999999999999
+      },
+      {
+        "step": 5,
+        "regret": 4.8908748961741395,
+        "applied_preferences": 2,
+        "recommended_frequency_kHz": 2.167455651358711,
+        "recommended_scan_speed_mm_s": 4.33703489107153
+      },
+      {
+        "step": 6,
+        "regret": 4.130386636019367,
+        "applied_preferences": 2,
+        "recommended_frequency_kHz": 5.24669318543767,
+        "recommended_scan_speed_mm_s": 89.18551231208927
+      },
+      {
+        "step": 7,
+        "regret": 3.024944195493582,
+        "applied_preferences": 2,
+        "recommended_frequency_kHz": 4.131225674121126,
+        "recommended_scan_speed_mm_s": 68.53817033615253
+      },
+      {
+        "step": 8,
+        "regret": 0.9974290482693249,
+        "applied_preferences": 2,
+        "recommended_frequency_kHz": 15.979480378223153,
+        "recommended_scan_speed_mm_s": 58.44959987066111
+      },
+      {
+        "step": 9,
+        "regret": 2.677245335964443,
+        "applied_preferences": 2,
+        "recommended_frequency_kHz": 34.22808531534816,
+        "recommended_scan_speed_mm_s": 33.959500795980524
+      },
+      {
+        "step": 10,
+        "regret": 0.9747040668327998,
+        "applied_preferences": 2,
+        "recommended_frequency_kHz": 22.199786359962147,
+        "recommended_scan_speed_mm_s": 61.712016478320734
+      },
+      {
+        "step": 11,
+        "regret": 1.4055611167505901,
+        "applied_preferences": 2,
+        "recommended_frequency_kHz": 27.29441436967731,
+        "recommended_scan_speed_mm_s": 58.71136493057625
+      },
+      {
+        "step": 12,
+        "regret": 0.9747040668327998,
+        "applied_preferences": 2,
+        "recommended_frequency_kHz": 22.199786359962147,
+        "recommended_scan_speed_mm_s": 61.712016478320734
+      },
+      {
+        "step": 13,
+        "regret": 1.7780938941876627,
+        "applied_preferences": 2,
+        "recommended_frequency_kHz": 16.04145242502206,
+        "recommended_scan_speed_mm_s": 71.39316384682989
+      },
+      {
+        "step": 14,
+        "regret": 0.9747040668327998,
+        "applied_preferences": 2,
+        "recommended_frequency_kHz": 22.199786359962147,
+        "recommended_scan_speed_mm_s": 61.712016478320734
+      },
+      {
+        "step": 15,
+        "regret": 0.9747040668327998,
+        "applied_preferences": 2,
+        "recommended_frequency_kHz": 22.199786359962147,
+        "recommended_scan_speed_mm_s": 61.712016478320734
+      },
+      {
+        "step": 16,
+        "regret": 0.9747040668327998,
+        "applied_preferences": 2,
+        "recommended_frequency_kHz": 22.199786359962147,
+        "recommended_scan_speed_mm_s": 61.712016478320734
+      },
+      {
+        "step": 17,
+        "regret": 0.9747040668327998,
+        "applied_preferences": 2,
+        "recommended_frequency_kHz": 22.199786359962147,
+        "recommended_scan_speed_mm_s": 61.712016478320734
+      },
+      {
+        "step": 18,
+        "regret": 0.9747040668327998,
+        "applied_preferences": 2,
+        "recommended_frequency_kHz": 22.199786359962147,
+        "recommended_scan_speed_mm_s": 61.712016478320734
+      },
+      {
+        "step": 19,
+        "regret": 0.9747040668327998,
+        "applied_preferences": 2,
+        "recommended_frequency_kHz": 22.199786359962147,
+        "recommended_scan_speed_mm_s": 61.712016478320734
+      },
+      {
+        "step": 0,
+        "regret": 7.3998750000000015,
+        "applied_preferences": 2,
+        "recommended_frequency_kHz": 71.3,
+        "recommended_scan_speed_mm_s": 70.64999999999999
+      },
+      {
+        "step": 1,
+        "regret": 7.3998750000000015,
+        "applied_preferences": 2,
+        "recommended_frequency_kHz": 71.3,
+        "recommended_scan_speed_mm_s": 70.64999999999999
+      },
+      {
+        "step": 2,
+        "regret": 7.3998750000000015,
+        "applied_preferences": 2,
+        "recommended_frequency_kHz": 71.3,
+        "recommended_scan_speed_mm_s": 70.64999999999999
+      },
+      {
+        "step": 3,
+        "regret": 7.3998750000000015,
+        "applied_preferences": 2,
+        "recommended_frequency_kHz": 71.3,
+        "recommended_scan_speed_mm_s": 70.64999999999999
+      },
+      {
+        "step": 4,
+        "regret": 7.3998750000000015,
+        "applied_preferences": 2,
+        "recommended_frequency_kHz": 71.3,
+        "recommended_scan_speed_mm_s": 70.64999999999999
+      },
+      {
+        "step": 5,
+        "regret": 3.024944195493582,
+        "applied_preferences": 2,
+        "recommended_frequency_kHz": 4.131225674121126,
+        "recommended_scan_speed_mm_s": 68.53817033615253
+      },
+      {
+        "step": 6,
+        "regret": 2.824271122113956,
+        "applied_preferences": 2,
+        "recommended_frequency_kHz": 3.760276678466367,
+        "recommended_scan_speed_mm_s": 35.40428150577824
+      },
+      {
+        "step": 7,
+        "regret": 3.024944195493582,
+        "applied_preferences": 2,
+        "recommended_frequency_kHz": 4.131225674121126,
+        "recommended_scan_speed_mm_s": 68.53817033615253
+      },
+      {
+        "step": 8,
+        "regret": 3.024944195493582,
+        "applied_preferences": 2,
+        "recommended_frequency_kHz": 4.131225674121126,
+        "recommended_scan_speed_mm_s": 68.53817033615253
+      },
+      {
+        "step": 9,
+        "regret": 3.024944195493582,
+        "applied_preferences": 2,
+        "recommended_frequency_kHz": 4.131225674121126,
+        "recommended_scan_speed_mm_s": 68.53817033615253
+      },
+      {
+        "step": 10,
+        "regret": 3.024944195493582,
+        "applied_preferences": 2,
+        "recommended_frequency_kHz": 4.131225674121126,
+        "recommended_scan_speed_mm_s": 68.53817033615253
+      },
+      {
+        "step": 11,
+        "regret": 3.024944195493582,
+        "applied_preferences": 2,
+        "recommended_frequency_kHz": 4.131225674121126,
+        "recommended_scan_speed_mm_s": 68.53817033615253
+      },
+      {
+        "step": 12,
+        "regret": 3.024944195493582,
+        "applied_preferences": 2,
+        "recommended_frequency_kHz": 4.131225674121126,
+        "recommended_scan_speed_mm_s": 68.53817033615253
+      },
+      {
+        "step": 13,
+        "regret": 3.024944195493582,
+        "applied_preferences": 2,
+        "recommended_frequency_kHz": 4.131225674121126,
+        "recommended_scan_speed_mm_s": 68.53817033615253
+      },
+      {
+        "step": 14,
+        "regret": 3.024944195493582,
+        "applied_preferences": 2,
+        "recommended_frequency_kHz": 4.131225674121126,
+        "recommended_scan_speed_mm_s": 68.53817033615253
+      },
+      {
+        "step": 15,
+        "regret": 3.024944195493582,
+        "applied_preferences": 2,
+        "recommended_frequency_kHz": 4.131225674121126,
+        "recommended_scan_speed_mm_s": 68.53817033615253
+      },
+      {
+        "step": 16,
+        "regret": 3.024944195493582,
+        "applied_preferences": 2,
+        "recommended_frequency_kHz": 4.131225674121126,
+        "recommended_scan_speed_mm_s": 68.53817033615253
+      },
+      {
+        "step": 17,
+        "regret": 3.024944195493582,
+        "applied_preferences": 2,
+        "recommended_frequency_kHz": 4.131225674121126,
+        "recommended_scan_speed_mm_s": 68.53817033615253
+      },
+      {
+        "step": 18,
+        "regret": 3.024944195493582,
+        "applied_preferences": 2,
+        "recommended_frequency_kHz": 4.131225674121126,
+        "recommended_scan_speed_mm_s": 68.53817033615253
+      },
+      {
+        "step": 19,
+        "regret": 3.024944195493582,
+        "applied_preferences": 2,
+        "recommended_frequency_kHz": 4.131225674121126,
+        "recommended_scan_speed_mm_s": 68.53817033615253
+      },
+      {
+        "step": 0,
+        "regret": 7.3998750000000015,
+        "applied_preferences": 2,
+        "recommended_frequency_kHz": 71.3,
+        "recommended_scan_speed_mm_s": 70.64999999999999
+      },
+      {
+        "step": 1,
+        "regret": 7.3998750000000015,
+        "applied_preferences": 2,
+        "recommended_frequency_kHz": 71.3,
+        "recommended_scan_speed_mm_s": 70.64999999999999
+      },
+      {
+        "step": 2,
+        "regret": 7.3998750000000015,
+        "applied_preferences": 2,
+        "recommended_frequency_kHz": 71.3,
+        "recommended_scan_speed_mm_s": 70.64999999999999
+      },
+      {
+        "step": 3,
+        "regret": 7.3998750000000015,
+        "applied_preferences": 2,
+        "recommended_frequency_kHz": 71.3,
+        "recommended_scan_speed_mm_s": 70.64999999999999
+      },
+      {
+        "step": 4,
+        "regret": 7.3998750000000015,
+        "applied_preferences": 2,
+        "recommended_frequency_kHz": 71.3,
+        "recommended_scan_speed_mm_s": 70.64999999999999
+      },
+      {
+        "step": 5,
+        "regret": 4.8908748961741395,
+        "applied_preferences": 2,
+        "recommended_frequency_kHz": 2.167455651358711,
+        "recommended_scan_speed_mm_s": 4.33703489107153
+      },
+      {
+        "step": 6,
+        "regret": 0.9747040668327998,
+        "applied_preferences": 2,
+        "recommended_frequency_kHz": 22.199786359962147,
+        "recommended_scan_speed_mm_s": 61.712016478320734
+      },
+      {
+        "step": 7,
+        "regret": 4.130386636019367,
+        "applied_preferences": 2,
+        "recommended_frequency_kHz": 5.24669318543767,
+        "recommended_scan_speed_mm_s": 89.18551231208927
+      },
+      {
+        "step": 8,
+        "regret": 2.9650709562601776,
+        "applied_preferences": 2,
+        "recommended_frequency_kHz": 27.089787981269044,
+        "recommended_scan_speed_mm_s": 85.10555268278405
+      },
+      {
+        "step": 9,
+        "regret": 0.20778548654904938,
+        "applied_preferences": 2,
+        "recommended_frequency_kHz": 20.137304976969858,
+        "recommended_scan_speed_mm_s": 46.92872868796741
+      },
+      {
+        "step": 10,
+        "regret": 0.9974290482693249,
+        "applied_preferences": 2,
+        "recommended_frequency_kHz": 15.979480378223153,
+        "recommended_scan_speed_mm_s": 58.44959987066111
+      },
+      {
+        "step": 11,
+        "regret": 2.677245335964443,
+        "applied_preferences": 2,
+        "recommended_frequency_kHz": 34.22808531534816,
+        "recommended_scan_speed_mm_s": 33.959500795980524
+      },
+      {
+        "step": 12,
+        "regret": 0.9974290482693249,
+        "applied_preferences": 2,
+        "recommended_frequency_kHz": 15.979480378223153,
+        "recommended_scan_speed_mm_s": 58.44959987066111
+      },
+      {
+        "step": 13,
+        "regret": 0.9974290482693249,
+        "applied_preferences": 2,
+        "recommended_frequency_kHz": 15.979480378223153,
+        "recommended_scan_speed_mm_s": 58.44959987066111
+      },
+      {
+        "step": 14,
+        "regret": 0.9974290482693249,
+        "applied_preferences": 2,
+        "recommended_frequency_kHz": 15.979480378223153,
+        "recommended_scan_speed_mm_s": 58.44959987066111
+      },
+      {
+        "step": 15,
+        "regret": 0.9974290482693249,
+        "applied_preferences": 2,
+        "recommended_frequency_kHz": 15.979480378223153,
+        "recommended_scan_speed_mm_s": 58.44959987066111
+      },
+      {
+        "step": 16,
+        "regret": 0.9747040668327998,
+        "applied_preferences": 2,
+        "recommended_frequency_kHz": 22.199786359962147,
+        "recommended_scan_speed_mm_s": 61.712016478320734
+      },
+      {
+        "step": 17,
+        "regret": 0.9747040668327998,
+        "applied_preferences": 2,
+        "recommended_frequency_kHz": 22.199786359962147,
+        "recommended_scan_speed_mm_s": 61.712016478320734
+      },
+      {
+        "step": 18,
+        "regret": 0.9974290482693249,
+        "applied_preferences": 2,
+        "recommended_frequency_kHz": 15.979480378223153,
+        "recommended_scan_speed_mm_s": 58.44959987066111
+      },
+      {
+        "step": 19,
+        "regret": 0.9974290482693249,
+        "applied_preferences": 2,
+        "recommended_frequency_kHz": 15.979480378223153,
+        "recommended_scan_speed_mm_s": 58.44959987066111
+      },
+      {
+        "step": 0,
+        "regret": 7.3998750000000015,
+        "applied_preferences": 2,
+        "recommended_frequency_kHz": 71.3,
+        "recommended_scan_speed_mm_s": 70.64999999999999
+      },
+      {
+        "step": 1,
+        "regret": 7.3998750000000015,
+        "applied_preferences": 2,
+        "recommended_frequency_kHz": 71.3,
+        "recommended_scan_speed_mm_s": 70.64999999999999
+      },
+      {
+        "step": 2,
+        "regret": 7.3998750000000015,
+        "applied_preferences": 2,
+        "recommended_frequency_kHz": 71.3,
+        "recommended_scan_speed_mm_s": 70.64999999999999
+      },
+      {
+        "step": 3,
+        "regret": 7.3998750000000015,
+        "applied_preferences": 2,
+        "recommended_frequency_kHz": 71.3,
+        "recommended_scan_speed_mm_s": 70.64999999999999
+      },
+      {
+        "step": 4,
+        "regret": 7.3998750000000015,
+        "applied_preferences": 2,
+        "recommended_frequency_kHz": 71.3,
+        "recommended_scan_speed_mm_s": 70.64999999999999
+      },
+      {
+        "step": 5,
+        "regret": 4.8908748961741395,
+        "applied_preferences": 2,
+        "recommended_frequency_kHz": 2.167455651358711,
+        "recommended_scan_speed_mm_s": 4.33703489107153
+      },
+      {
+        "step": 6,
+        "regret": 3.6042530638421084,
+        "applied_preferences": 2,
+        "recommended_frequency_kHz": 10.206139612521358,
+        "recommended_scan_speed_mm_s": 9.490789828689353
+      },
+      {
+        "step": 7,
+        "regret": 3.024944195493582,
+        "applied_preferences": 2,
+        "recommended_frequency_kHz": 4.131225674121126,
+        "recommended_scan_speed_mm_s": 68.53817033615253
+      },
+      {
+        "step": 8,
+        "regret": 1.4055611167505901,
+        "applied_preferences": 2,
+        "recommended_frequency_kHz": 27.29441436967731,
+        "recommended_scan_speed_mm_s": 58.71136493057625
+      },
+      {
+        "step": 9,
+        "regret": 2.396038208347491,
+        "applied_preferences": 2,
+        "recommended_frequency_kHz": 34.20215383008549,
+        "recommended_scan_speed_mm_s": 61.40273875431626
+      },
+      {
+        "step": 10,
+        "regret": 0.9747040668327998,
+        "applied_preferences": 2,
+        "recommended_frequency_kHz": 22.199786359962147,
+        "recommended_scan_speed_mm_s": 61.712016478320734
+      },
+      {
+        "step": 11,
+        "regret": 0.9747040668327998,
+        "applied_preferences": 2,
+        "recommended_frequency_kHz": 22.199786359962147,
+        "recommended_scan_speed_mm_s": 61.712016478320734
+      },
+      {
+        "step": 12,
+        "regret": 0.9747040668327998,
+        "applied_preferences": 2,
+        "recommended_frequency_kHz": 22.199786359962147,
+        "recommended_scan_speed_mm_s": 61.712016478320734
+      },
+      {
+        "step": 13,
+        "regret": 0.9747040668327998,
+        "applied_preferences": 2,
+        "recommended_frequency_kHz": 22.199786359962147,
+        "recommended_scan_speed_mm_s": 61.712016478320734
+      },
+      {
+        "step": 14,
+        "regret": 0.9747040668327998,
+        "applied_preferences": 2,
+        "recommended_frequency_kHz": 22.199786359962147,
+        "recommended_scan_speed_mm_s": 61.712016478320734
+      },
+      {
+        "step": 15,
+        "regret": 0.9747040668327998,
+        "applied_preferences": 2,
+        "recommended_frequency_kHz": 22.199786359962147,
+        "recommended_scan_speed_mm_s": 61.712016478320734
+      },
+      {
+        "step": 16,
+        "regret": 0.9747040668327998,
+        "applied_preferences": 2,
+        "recommended_frequency_kHz": 22.199786359962147,
+        "recommended_scan_speed_mm_s": 61.712016478320734
+      },
+      {
+        "step": 17,
+        "regret": 0.9747040668327998,
+        "applied_preferences": 2,
+        "recommended_frequency_kHz": 22.199786359962147,
+        "recommended_scan_speed_mm_s": 61.712016478320734
+      },
+      {
+        "step": 18,
+        "regret": 0.9747040668327998,
+        "applied_preferences": 2,
+        "recommended_frequency_kHz": 22.199786359962147,
+        "recommended_scan_speed_mm_s": 61.712016478320734
+      },
+      {
+        "step": 19,
+        "regret": 0.9747040668327998,
+        "applied_preferences": 2,
+        "recommended_frequency_kHz": 22.199786359962147,
+        "recommended_scan_speed_mm_s": 61.712016478320734
+      },
+      {
+        "step": 0,
+        "regret": 7.3998750000000015,
+        "applied_preferences": 2,
+        "recommended_frequency_kHz": 71.3,
+        "recommended_scan_speed_mm_s": 70.64999999999999
+      },
+      {
+        "step": 1,
+        "regret": 7.3998750000000015,
+        "applied_preferences": 2,
+        "recommended_frequency_kHz": 71.3,
+        "recommended_scan_speed_mm_s": 70.64999999999999
+      },
+      {
+        "step": 2,
+        "regret": 7.3998750000000015,
+        "applied_preferences": 2,
+        "recommended_frequency_kHz": 71.3,
+        "recommended_scan_speed_mm_s": 70.64999999999999
+      },
+      {
+        "step": 3,
+        "regret": 7.3998750000000015,
+        "applied_preferences": 2,
+        "recommended_frequency_kHz": 71.3,
+        "recommended_scan_speed_mm_s": 70.64999999999999
+      },
+      {
+        "step": 4,
+        "regret": 7.3998750000000015,
+        "applied_preferences": 2,
+        "recommended_frequency_kHz": 71.3,
+        "recommended_scan_speed_mm_s": 70.64999999999999
+      },
+      {
+        "step": 5,
+        "regret": 3.024944195493582,
+        "applied_preferences": 2,
+        "recommended_frequency_kHz": 4.131225674121126,
+        "recommended_scan_speed_mm_s": 68.53817033615253
+      },
+      {
+        "step": 6,
+        "regret": 3.0217164850695966,
+        "applied_preferences": 2,
+        "recommended_frequency_kHz": 27.18617737958902,
+        "recommended_scan_speed_mm_s": 14.167893307729633
+      },
+      {
+        "step": 7,
+        "regret": 3.774586148302582,
+        "applied_preferences": 2,
+        "recommended_frequency_kHz": 26.18306595206,
+        "recommended_scan_speed_mm_s": 100.39237230220485
+      },
+      {
+        "step": 8,
+        "regret": 4.879919217014155,
+        "applied_preferences": 2,
+        "recommended_frequency_kHz": 45.18370174565498,
+        "recommended_scan_speed_mm_s": 19.175744958113302
+      },
+      {
+        "step": 9,
+        "regret": 0.9747040668327998,
+        "applied_preferences": 2,
+        "recommended_frequency_kHz": 22.199786359962147,
+        "recommended_scan_speed_mm_s": 61.712016478320734
+      },
+      {
+        "step": 10,
+        "regret": 0.9747040668327998,
+        "applied_preferences": 2,
+        "recommended_frequency_kHz": 22.199786359962147,
+        "recommended_scan_speed_mm_s": 61.712016478320734
+      },
+      {
+        "step": 11,
+        "regret": 0.9747040668327998,
+        "applied_preferences": 2,
+        "recommended_frequency_kHz": 22.199786359962147,
+        "recommended_scan_speed_mm_s": 61.712016478320734
+      },
+      {
+        "step": 12,
+        "regret": 0.9747040668327998,
+        "applied_preferences": 2,
+        "recommended_frequency_kHz": 22.199786359962147,
+        "recommended_scan_speed_mm_s": 61.712016478320734
+      },
+      {
+        "step": 13,
+        "regret": 0.9747040668327998,
+        "applied_preferences": 2,
+        "recommended_frequency_kHz": 22.199786359962147,
+        "recommended_scan_speed_mm_s": 61.712016478320734
+      },
+      {
+        "step": 14,
+        "regret": 0.9747040668327998,
+        "applied_preferences": 2,
+        "recommended_frequency_kHz": 22.199786359962147,
+        "recommended_scan_speed_mm_s": 61.712016478320734
+      },
+      {
+        "step": 15,
+        "regret": 0.9747040668327998,
+        "applied_preferences": 2,
+        "recommended_frequency_kHz": 22.199786359962147,
+        "recommended_scan_speed_mm_s": 61.712016478320734
+      },
+      {
+        "step": 16,
+        "regret": 0.9747040668327998,
+        "applied_preferences": 2,
+        "recommended_frequency_kHz": 22.199786359962147,
+        "recommended_scan_speed_mm_s": 61.712016478320734
+      },
+      {
+        "step": 17,
+        "regret": 0.9747040668327998,
+        "applied_preferences": 2,
+        "recommended_frequency_kHz": 22.199786359962147,
+        "recommended_scan_speed_mm_s": 61.712016478320734
+      },
+      {
+        "step": 18,
+        "regret": 0.9747040668327998,
+        "applied_preferences": 2,
+        "recommended_frequency_kHz": 22.199786359962147,
+        "recommended_scan_speed_mm_s": 61.712016478320734
+      },
+      {
+        "step": 19,
+        "regret": 0.9747040668327998,
+        "applied_preferences": 2,
+        "recommended_frequency_kHz": 22.199786359962147,
+        "recommended_scan_speed_mm_s": 61.712016478320734
+      }
+    ],
+    "wrong_prior": [
+      {
+        "step": 0,
+        "regret": 7.3998750000000015,
+        "applied_preferences": 2,
+        "recommended_frequency_kHz": 71.3,
+        "recommended_scan_speed_mm_s": 70.64999999999999
+      },
+      {
+        "step": 1,
+        "regret": 7.3998750000000015,
+        "applied_preferences": 2,
+        "recommended_frequency_kHz": 71.3,
+        "recommended_scan_speed_mm_s": 70.64999999999999
+      },
+      {
+        "step": 2,
+        "regret": 7.3998750000000015,
+        "applied_preferences": 2,
+        "recommended_frequency_kHz": 71.3,
+        "recommended_scan_speed_mm_s": 70.64999999999999
+      },
+      {
+        "step": 3,
+        "regret": 7.3998750000000015,
+        "applied_preferences": 2,
+        "recommended_frequency_kHz": 71.3,
+        "recommended_scan_speed_mm_s": 70.64999999999999
+      },
+      {
+        "step": 4,
+        "regret": 7.3998750000000015,
+        "applied_preferences": 2,
+        "recommended_frequency_kHz": 71.3,
+        "recommended_scan_speed_mm_s": 70.64999999999999
+      },
+      {
+        "step": 5,
+        "regret": 4.130386636019367,
+        "applied_preferences": 2,
+        "recommended_frequency_kHz": 5.24669318543767,
+        "recommended_scan_speed_mm_s": 89.18551231208927
+      },
+      {
+        "step": 6,
+        "regret": 5.1326110633702555,
+        "applied_preferences": 2,
+        "recommended_frequency_kHz": 35.90438056095976,
+        "recommended_scan_speed_mm_s": 103.59016431903716
+      },
+      {
+        "step": 7,
+        "regret": 5.075765758296058,
+        "applied_preferences": 2,
+        "recommended_frequency_kHz": 34.27914239999367,
+        "recommended_scan_speed_mm_s": 105.90302571982248
+      },
+      {
+        "step": 8,
+        "regret": 5.075765758296058,
+        "applied_preferences": 2,
+        "recommended_frequency_kHz": 34.27914239999367,
+        "recommended_scan_speed_mm_s": 105.90302571982248
+      },
+      {
+        "step": 9,
+        "regret": 5.075765758296058,
+        "applied_preferences": 2,
+        "recommended_frequency_kHz": 34.27914239999367,
+        "recommended_scan_speed_mm_s": 105.90302571982248
+      },
+      {
+        "step": 10,
+        "regret": 5.1326110633702555,
+        "applied_preferences": 2,
+        "recommended_frequency_kHz": 35.90438056095976,
+        "recommended_scan_speed_mm_s": 103.59016431903716
+      },
+      {
+        "step": 11,
+        "regret": 5.1326110633702555,
+        "applied_preferences": 2,
+        "recommended_frequency_kHz": 35.90438056095976,
+        "recommended_scan_speed_mm_s": 103.59016431903716
+      },
+      {
+        "step": 12,
+        "regret": 5.1326110633702555,
+        "applied_preferences": 2,
+        "recommended_frequency_kHz": 35.90438056095976,
+        "recommended_scan_speed_mm_s": 103.59016431903716
+      },
+      {
+        "step": 13,
+        "regret": 5.1326110633702555,
+        "applied_preferences": 2,
+        "recommended_frequency_kHz": 35.90438056095976,
+        "recommended_scan_speed_mm_s": 103.59016431903716
+      },
+      {
+        "step": 14,
+        "regret": 5.1326110633702555,
+        "applied_preferences": 2,
+        "recommended_frequency_kHz": 35.90438056095976,
+        "recommended_scan_speed_mm_s": 103.59016431903716
+      },
+      {
+        "step": 15,
+        "regret": 5.1326110633702555,
+        "applied_preferences": 2,
+        "recommended_frequency_kHz": 35.90438056095976,
+        "recommended_scan_speed_mm_s": 103.59016431903716
+      },
+      {
+        "step": 16,
+        "regret": 5.1326110633702555,
+        "applied_preferences": 2,
+        "recommended_frequency_kHz": 35.90438056095976,
+        "recommended_scan_speed_mm_s": 103.59016431903716
+      },
+      {
+        "step": 17,
+        "regret": 5.1326110633702555,
+        "applied_preferences": 2,
+        "recommended_frequency_kHz": 35.90438056095976,
+        "recommended_scan_speed_mm_s": 103.59016431903716
+      },
+      {
+        "step": 18,
+        "regret": 5.1326110633702555,
+        "applied_preferences": 2,
+        "recommended_frequency_kHz": 35.90438056095976,
+        "recommended_scan_speed_mm_s": 103.59016431903716
+      },
+      {
+        "step": 19,
+        "regret": 5.1326110633702555,
+        "applied_preferences": 2,
+        "recommended_frequency_kHz": 35.90438056095976,
+        "recommended_scan_speed_mm_s": 103.59016431903716
+      },
+      {
+        "step": 0,
+        "regret": 7.3998750000000015,
+        "applied_preferences": 2,
+        "recommended_frequency_kHz": 71.3,
+        "recommended_scan_speed_mm_s": 70.64999999999999
+      },
+      {
+        "step": 1,
+        "regret": 7.3998750000000015,
+        "applied_preferences": 2,
+        "recommended_frequency_kHz": 71.3,
+        "recommended_scan_speed_mm_s": 70.64999999999999
+      },
+      {
+        "step": 2,
+        "regret": 7.3998750000000015,
+        "applied_preferences": 2,
+        "recommended_frequency_kHz": 71.3,
+        "recommended_scan_speed_mm_s": 70.64999999999999
+      },
+      {
+        "step": 3,
+        "regret": 7.3998750000000015,
+        "applied_preferences": 2,
+        "recommended_frequency_kHz": 71.3,
+        "recommended_scan_speed_mm_s": 70.64999999999999
+      },
+      {
+        "step": 4,
+        "regret": 7.3998750000000015,
+        "applied_preferences": 2,
+        "recommended_frequency_kHz": 71.3,
+        "recommended_scan_speed_mm_s": 70.64999999999999
+      },
+      {
+        "step": 5,
+        "regret": 4.040604780268886,
+        "applied_preferences": 2,
+        "recommended_frequency_kHz": 9.395689301907659,
+        "recommended_scan_speed_mm_s": 95.99907657102335
+      },
+      {
+        "step": 6,
+        "regret": 2.335084483558994,
+        "applied_preferences": 2,
+        "recommended_frequency_kHz": 21.536382859544517,
+        "recommended_scan_speed_mm_s": 85.89088782157152
+      },
+      {
+        "step": 7,
+        "regret": 4.918157027919243,
+        "applied_preferences": 2,
+        "recommended_frequency_kHz": 5.954614020335235,
+        "recommended_scan_speed_mm_s": 103.89279348284377
+      },
+      {
+        "step": 8,
+        "regret": 4.4609201559517615,
+        "applied_preferences": 2,
+        "recommended_frequency_kHz": 34.885922286172764,
+        "recommended_scan_speed_mm_s": 94.44286457669203
+      },
+      {
+        "step": 9,
+        "regret": 1.1614806050707926,
+        "applied_preferences": 2,
+        "recommended_frequency_kHz": 14.572652919556942,
+        "recommended_scan_speed_mm_s": 41.63131188758408
+      },
+      {
+        "step": 10,
+        "regret": 0.9747040668327998,
+        "applied_preferences": 2,
+        "recommended_frequency_kHz": 22.199786359962147,
+        "recommended_scan_speed_mm_s": 61.712016478320734
+      },
+      {
+        "step": 11,
+        "regret": 0.9747040668327998,
+        "applied_preferences": 2,
+        "recommended_frequency_kHz": 22.199786359962147,
+        "recommended_scan_speed_mm_s": 61.712016478320734
+      },
+      {
+        "step": 12,
+        "regret": 0.9747040668327998,
+        "applied_preferences": 2,
+        "recommended_frequency_kHz": 22.199786359962147,
+        "recommended_scan_speed_mm_s": 61.712016478320734
+      },
+      {
+        "step": 13,
+        "regret": 0.9747040668327998,
+        "applied_preferences": 2,
+        "recommended_frequency_kHz": 22.199786359962147,
+        "recommended_scan_speed_mm_s": 61.712016478320734
+      },
+      {
+        "step": 14,
+        "regret": 0.9747040668327998,
+        "applied_preferences": 2,
+        "recommended_frequency_kHz": 22.199786359962147,
+        "recommended_scan_speed_mm_s": 61.712016478320734
+      },
+      {
+        "step": 15,
+        "regret": 0.9747040668327998,
+        "applied_preferences": 2,
+        "recommended_frequency_kHz": 22.199786359962147,
+        "recommended_scan_speed_mm_s": 61.712016478320734
+      },
+      {
+        "step": 16,
+        "regret": 0.9747040668327998,
+        "applied_preferences": 2,
+        "recommended_frequency_kHz": 22.199786359962147,
+        "recommended_scan_speed_mm_s": 61.712016478320734
+      },
+      {
+        "step": 17,
+        "regret": 0.9747040668327998,
+        "applied_preferences": 2,
+        "recommended_frequency_kHz": 22.199786359962147,
+        "recommended_scan_speed_mm_s": 61.712016478320734
+      },
+      {
+        "step": 18,
+        "regret": 0.9747040668327998,
+        "applied_preferences": 2,
+        "recommended_frequency_kHz": 22.199786359962147,
+        "recommended_scan_speed_mm_s": 61.712016478320734
+      },
+      {
+        "step": 19,
+        "regret": 0.9747040668327998,
+        "applied_preferences": 2,
+        "recommended_frequency_kHz": 22.199786359962147,
+        "recommended_scan_speed_mm_s": 61.712016478320734
+      },
+      {
+        "step": 0,
+        "regret": 7.3998750000000015,
+        "applied_preferences": 2,
+        "recommended_frequency_kHz": 71.3,
+        "recommended_scan_speed_mm_s": 70.64999999999999
+      },
+      {
+        "step": 1,
+        "regret": 7.3998750000000015,
+        "applied_preferences": 2,
+        "recommended_frequency_kHz": 71.3,
+        "recommended_scan_speed_mm_s": 70.64999999999999
+      },
+      {
+        "step": 2,
+        "regret": 7.3998750000000015,
+        "applied_preferences": 2,
+        "recommended_frequency_kHz": 71.3,
+        "recommended_scan_speed_mm_s": 70.64999999999999
+      },
+      {
+        "step": 3,
+        "regret": 7.3998750000000015,
+        "applied_preferences": 2,
+        "recommended_frequency_kHz": 71.3,
+        "recommended_scan_speed_mm_s": 70.64999999999999
+      },
+      {
+        "step": 4,
+        "regret": 7.3998750000000015,
+        "applied_preferences": 2,
+        "recommended_frequency_kHz": 71.3,
+        "recommended_scan_speed_mm_s": 70.64999999999999
+      },
+      {
+        "step": 5,
+        "regret": 3.024944195493582,
+        "applied_preferences": 2,
+        "recommended_frequency_kHz": 4.131225674121126,
+        "recommended_scan_speed_mm_s": 68.53817033615253
+      },
+      {
+        "step": 6,
+        "regret": 4.4609201559517615,
+        "applied_preferences": 2,
+        "recommended_frequency_kHz": 34.885922286172764,
+        "recommended_scan_speed_mm_s": 94.44286457669203
+      },
+      {
+        "step": 7,
+        "regret": 2.396038208347491,
+        "applied_preferences": 2,
+        "recommended_frequency_kHz": 34.20215383008549,
+        "recommended_scan_speed_mm_s": 61.40273875431626
+      },
+      {
+        "step": 8,
+        "regret": 2.396038208347491,
+        "applied_preferences": 2,
+        "recommended_frequency_kHz": 34.20215383008549,
+        "recommended_scan_speed_mm_s": 61.40273875431626
+      },
+      {
+        "step": 9,
+        "regret": 2.396038208347491,
+        "applied_preferences": 2,
+        "recommended_frequency_kHz": 34.20215383008549,
+        "recommended_scan_speed_mm_s": 61.40273875431626
+      },
+      {
+        "step": 10,
+        "regret": 2.396038208347491,
+        "applied_preferences": 2,
+        "recommended_frequency_kHz": 34.20215383008549,
+        "recommended_scan_speed_mm_s": 61.40273875431626
+      },
+      {
+        "step": 11,
+        "regret": 2.396038208347491,
+        "applied_preferences": 2,
+        "recommended_frequency_kHz": 34.20215383008549,
+        "recommended_scan_speed_mm_s": 61.40273875431626
+      },
+      {
+        "step": 12,
+        "regret": 2.396038208347491,
+        "applied_preferences": 2,
+        "recommended_frequency_kHz": 34.20215383008549,
+        "recommended_scan_speed_mm_s": 61.40273875431626
+      },
+      {
+        "step": 13,
+        "regret": 2.396038208347491,
+        "applied_preferences": 2,
+        "recommended_frequency_kHz": 34.20215383008549,
+        "recommended_scan_speed_mm_s": 61.40273875431626
+      },
+      {
+        "step": 14,
+        "regret": 2.396038208347491,
+        "applied_preferences": 2,
+        "recommended_frequency_kHz": 34.20215383008549,
+        "recommended_scan_speed_mm_s": 61.40273875431626
+      },
+      {
+        "step": 15,
+        "regret": 2.396038208347491,
+        "applied_preferences": 2,
+        "recommended_frequency_kHz": 34.20215383008549,
+        "recommended_scan_speed_mm_s": 61.40273875431626
+      },
+      {
+        "step": 16,
+        "regret": 2.396038208347491,
+        "applied_preferences": 2,
+        "recommended_frequency_kHz": 34.20215383008549,
+        "recommended_scan_speed_mm_s": 61.40273875431626
+      },
+      {
+        "step": 17,
+        "regret": 2.396038208347491,
+        "applied_preferences": 2,
+        "recommended_frequency_kHz": 34.20215383008549,
+        "recommended_scan_speed_mm_s": 61.40273875431626
+      },
+      {
+        "step": 18,
+        "regret": 2.396038208347491,
+        "applied_preferences": 2,
+        "recommended_frequency_kHz": 34.20215383008549,
+        "recommended_scan_speed_mm_s": 61.40273875431626
+      },
+      {
+        "step": 19,
+        "regret": 2.396038208347491,
+        "applied_preferences": 2,
+        "recommended_frequency_kHz": 34.20215383008549,
+        "recommended_scan_speed_mm_s": 61.40273875431626
+      },
+      {
+        "step": 0,
+        "regret": 7.3998750000000015,
+        "applied_preferences": 2,
+        "recommended_frequency_kHz": 71.3,
+        "recommended_scan_speed_mm_s": 70.64999999999999
+      },
+      {
+        "step": 1,
+        "regret": 7.3998750000000015,
+        "applied_preferences": 2,
+        "recommended_frequency_kHz": 71.3,
+        "recommended_scan_speed_mm_s": 70.64999999999999
+      },
+      {
+        "step": 2,
+        "regret": 7.3998750000000015,
+        "applied_preferences": 2,
+        "recommended_frequency_kHz": 71.3,
+        "recommended_scan_speed_mm_s": 70.64999999999999
+      },
+      {
+        "step": 3,
+        "regret": 7.3998750000000015,
+        "applied_preferences": 2,
+        "recommended_frequency_kHz": 71.3,
+        "recommended_scan_speed_mm_s": 70.64999999999999
+      },
+      {
+        "step": 4,
+        "regret": 7.3998750000000015,
+        "applied_preferences": 2,
+        "recommended_frequency_kHz": 71.3,
+        "recommended_scan_speed_mm_s": 70.64999999999999
+      },
+      {
+        "step": 5,
+        "regret": 3.024944195493582,
+        "applied_preferences": 2,
+        "recommended_frequency_kHz": 4.131225674121126,
+        "recommended_scan_speed_mm_s": 68.53817033615253
+      },
+      {
+        "step": 6,
+        "regret": 1.9153859438127867,
+        "applied_preferences": 2,
+        "recommended_frequency_kHz": 23.718647468227058,
+        "recommended_scan_speed_mm_s": 74.53241999802877
+      },
+      {
+        "step": 7,
+        "regret": 1.9153859438127867,
+        "applied_preferences": 2,
+        "recommended_frequency_kHz": 23.718647468227058,
+        "recommended_scan_speed_mm_s": 74.53241999802877
+      },
+      {
+        "step": 8,
+        "regret": 1.9153859438127867,
+        "applied_preferences": 2,
+        "recommended_frequency_kHz": 23.718647468227058,
+        "recommended_scan_speed_mm_s": 74.53241999802877
+      },
+      {
+        "step": 9,
+        "regret": 1.9153859438127867,
+        "applied_preferences": 2,
+        "recommended_frequency_kHz": 23.718647468227058,
+        "recommended_scan_speed_mm_s": 74.53241999802877
+      },
+      {
+        "step": 10,
+        "regret": 1.9153859438127867,
+        "applied_preferences": 2,
+        "recommended_frequency_kHz": 23.718647468227058,
+        "recommended_scan_speed_mm_s": 74.53241999802877
+      },
+      {
+        "step": 11,
+        "regret": 1.9153859438127867,
+        "applied_preferences": 2,
+        "recommended_frequency_kHz": 23.718647468227058,
+        "recommended_scan_speed_mm_s": 74.53241999802877
+      },
+      {
+        "step": 12,
+        "regret": 1.9153859438127867,
+        "applied_preferences": 2,
+        "recommended_frequency_kHz": 23.718647468227058,
+        "recommended_scan_speed_mm_s": 74.53241999802877
+      },
+      {
+        "step": 13,
+        "regret": 1.9153859438127867,
+        "applied_preferences": 2,
+        "recommended_frequency_kHz": 23.718647468227058,
+        "recommended_scan_speed_mm_s": 74.53241999802877
+      },
+      {
+        "step": 14,
+        "regret": 1.9153859438127867,
+        "applied_preferences": 2,
+        "recommended_frequency_kHz": 23.718647468227058,
+        "recommended_scan_speed_mm_s": 74.53241999802877
+      },
+      {
+        "step": 15,
+        "regret": 1.9153859438127867,
+        "applied_preferences": 2,
+        "recommended_frequency_kHz": 23.718647468227058,
+        "recommended_scan_speed_mm_s": 74.53241999802877
+      },
+      {
+        "step": 16,
+        "regret": 1.9153859438127867,
+        "applied_preferences": 2,
+        "recommended_frequency_kHz": 23.718647468227058,
+        "recommended_scan_speed_mm_s": 74.53241999802877
+      },
+      {
+        "step": 17,
+        "regret": 1.9153859438127867,
+        "applied_preferences": 2,
+        "recommended_frequency_kHz": 23.718647468227058,
+        "recommended_scan_speed_mm_s": 74.53241999802877
+      },
+      {
+        "step": 18,
+        "regret": 1.9153859438127867,
+        "applied_preferences": 2,
+        "recommended_frequency_kHz": 23.718647468227058,
+        "recommended_scan_speed_mm_s": 74.53241999802877
+      },
+      {
+        "step": 19,
+        "regret": 1.9153859438127867,
+        "applied_preferences": 2,
+        "recommended_frequency_kHz": 23.718647468227058,
+        "recommended_scan_speed_mm_s": 74.53241999802877
+      },
+      {
+        "step": 0,
+        "regret": 7.3998750000000015,
+        "applied_preferences": 2,
+        "recommended_frequency_kHz": 71.3,
+        "recommended_scan_speed_mm_s": 70.64999999999999
+      },
+      {
+        "step": 1,
+        "regret": 7.3998750000000015,
+        "applied_preferences": 2,
+        "recommended_frequency_kHz": 71.3,
+        "recommended_scan_speed_mm_s": 70.64999999999999
+      },
+      {
+        "step": 2,
+        "regret": 7.3998750000000015,
+        "applied_preferences": 2,
+        "recommended_frequency_kHz": 71.3,
+        "recommended_scan_speed_mm_s": 70.64999999999999
+      },
+      {
+        "step": 3,
+        "regret": 7.3998750000000015,
+        "applied_preferences": 2,
+        "recommended_frequency_kHz": 71.3,
+        "recommended_scan_speed_mm_s": 70.64999999999999
+      },
+      {
+        "step": 4,
+        "regret": 7.3998750000000015,
+        "applied_preferences": 2,
+        "recommended_frequency_kHz": 71.3,
+        "recommended_scan_speed_mm_s": 70.64999999999999
+      },
+      {
+        "step": 5,
+        "regret": 5.904679752793108,
+        "applied_preferences": 2,
+        "recommended_frequency_kHz": 3.208908136817494,
+        "recommended_scan_speed_mm_s": 114.70807610124685
+      },
+      {
+        "step": 6,
+        "regret": 5.1326110633702555,
+        "applied_preferences": 2,
+        "recommended_frequency_kHz": 35.90438056095976,
+        "recommended_scan_speed_mm_s": 103.59016431903716
+      },
+      {
+        "step": 7,
+        "regret": 4.223145853625553,
+        "applied_preferences": 2,
+        "recommended_frequency_kHz": 36.417717436419586,
+        "recommended_scan_speed_mm_s": 12.586766805828796
+      },
+      {
+        "step": 8,
+        "regret": 3.9811719509070684,
+        "applied_preferences": 2,
+        "recommended_frequency_kHz": 42.53343829991817,
+        "recommended_scan_speed_mm_s": 70.96613437474974
+      },
+      {
+        "step": 9,
+        "regret": 1.4055611167505901,
+        "applied_preferences": 2,
+        "recommended_frequency_kHz": 27.29441436967731,
+        "recommended_scan_speed_mm_s": 58.71136493057625
+      },
+      {
+        "step": 10,
+        "regret": 1.9431935666483895,
+        "applied_preferences": 2,
+        "recommended_frequency_kHz": 6.196289584613022,
+        "recommended_scan_speed_mm_s": 54.615105281543336
+      },
+      {
+        "step": 11,
+        "regret": 1.4055611167505901,
+        "applied_preferences": 2,
+        "recommended_frequency_kHz": 27.29441436967731,
+        "recommended_scan_speed_mm_s": 58.71136493057625
+      },
+      {
+        "step": 12,
+        "regret": 1.4055611167505901,
+        "applied_preferences": 2,
+        "recommended_frequency_kHz": 27.29441436967731,
+        "recommended_scan_speed_mm_s": 58.71136493057625
+      },
+      {
+        "step": 13,
+        "regret": 1.4055611167505901,
+        "applied_preferences": 2,
+        "recommended_frequency_kHz": 27.29441436967731,
+        "recommended_scan_speed_mm_s": 58.71136493057625
+      },
+      {
+        "step": 14,
+        "regret": 1.4055611167505901,
+        "applied_preferences": 2,
+        "recommended_frequency_kHz": 27.29441436967731,
+        "recommended_scan_speed_mm_s": 58.71136493057625
+      },
+      {
+        "step": 15,
+        "regret": 1.4055611167505901,
+        "applied_preferences": 2,
+        "recommended_frequency_kHz": 27.29441436967731,
+        "recommended_scan_speed_mm_s": 58.71136493057625
+      },
+      {
+        "step": 16,
+        "regret": 1.4055611167505901,
+        "applied_preferences": 2,
+        "recommended_frequency_kHz": 27.29441436967731,
+        "recommended_scan_speed_mm_s": 58.71136493057625
+      },
+      {
+        "step": 17,
+        "regret": 1.4055611167505901,
+        "applied_preferences": 2,
+        "recommended_frequency_kHz": 27.29441436967731,
+        "recommended_scan_speed_mm_s": 58.71136493057625
+      },
+      {
+        "step": 18,
+        "regret": 1.4055611167505901,
+        "applied_preferences": 2,
+        "recommended_frequency_kHz": 27.29441436967731,
+        "recommended_scan_speed_mm_s": 58.71136493057625
+      },
+      {
+        "step": 19,
+        "regret": 1.4055611167505901,
+        "applied_preferences": 2,
+        "recommended_frequency_kHz": 27.29441436967731,
+        "recommended_scan_speed_mm_s": 58.71136493057625
+      }
+    ]
+  },
+  "best_so_far_mean": {
+    "vanilla": 0.7915736454648297,
+    "correct_prior": 1.1912337618322808,
+    "wrong_prior": 2.164415194352607
+  },
+  "cumulative_regret_mean": {
+    "vanilla": 64.46842130148984,
+    "correct_prior": 66.42832685917463,
+    "wrong_prior": 78.23833803055274
+  }
+}

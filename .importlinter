@@ -1,0 +1,78 @@
+[importlinter]
+include_external_packages = true
+root_packages =
+    process_contracts
+    ultrafast_bo
+    ultrafast_domain
+    ultrafast_e2p
+    ultrafast_physics
+    ultrafast_shared
+
+[importlinter:contract:physics-leaf]
+name = Physics must not depend on other project packages
+type = forbidden
+source_modules =
+    ultrafast_physics
+forbidden_modules =
+    process_contracts
+    ultrafast_bo
+    ultrafast_domain
+    ultrafast_e2p
+
+[importlinter:contract:domain-leaf]
+name = Domain must not depend on other project packages
+type = forbidden
+source_modules =
+    ultrafast_domain
+forbidden_modules =
+    process_contracts
+    ultrafast_bo
+    ultrafast_e2p
+    ultrafast_physics
+    ultrafast_shared
+
+[importlinter:contract:e2p-leaf]
+name = E2P must not depend on other project packages
+type = forbidden
+source_modules =
+    ultrafast_e2p
+forbidden_modules =
+    process_contracts
+    ultrafast_bo
+    ultrafast_domain
+    ultrafast_physics
+    ultrafast_shared
+
+[importlinter:contract:shared-leaf]
+name = Shared must not depend on other project packages
+type = forbidden
+source_modules =
+    ultrafast_shared
+forbidden_modules =
+    process_contracts
+    ultrafast_bo
+    ultrafast_domain
+    ultrafast_e2p
+    ultrafast_physics
+
+[importlinter:contract:contracts-leaf]
+name = process_contracts must not depend on project packages
+type = forbidden
+source_modules =
+    process_contracts
+forbidden_modules =
+    ultrafast_bo
+    ultrafast_domain
+    ultrafast_e2p
+    ultrafast_physics
+    ultrafast_shared
+
+[importlinter:contract:bo-not-on-domain-physics]
+name = BO must not depend on Domain/Physics/Contracts
+type = forbidden
+source_modules =
+    ultrafast_bo
+forbidden_modules =
+    process_contracts
+    ultrafast_domain
+    ultrafast_physics

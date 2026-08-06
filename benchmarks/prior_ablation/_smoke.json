@@ -1,0 +1,214 @@
+{
+  "config": {
+    "budget": 3,
+    "seeds": 2,
+    "init_samples": 5,
+    "objective": "depth_um(synthetic)",
+    "prior_lambda_0": 0.2
+  },
+  "true_optimum": 45.0,
+  "correct_prior": [
+    {
+      "approval_id": "ABLATION-frequency_kHz-20.0",
+      "parameter_name": "frequency_kHz",
+      "lower_bound": 15.0,
+      "upper_bound": 25.0
+    },
+    {
+      "approval_id": "ABLATION-scan_speed_mm_s-50.0",
+      "parameter_name": "scan_speed_mm_s",
+      "lower_bound": 40.0,
+      "upper_bound": 60.0
+    }
+  ],
+  "wrong_prior": [
+    {
+      "approval_id": "ABLATION-frequency_kHz-160.0",
+      "parameter_name": "frequency_kHz",
+      "lower_bound": 155.0,
+      "upper_bound": 165.0
+    },
+    {
+      "approval_id": "ABLATION-scan_speed_mm_s-160.0",
+      "parameter_name": "scan_speed_mm_s",
+      "lower_bound": 150.0,
+      "upper_bound": 170.0
+    }
+  ],
+  "aggregated": [
+    {
+      "step": 0,
+      "vanilla_regret_mean": 7.3998750000000015,
+      "vanilla_applied_preferences_mean": 0.0,
+      "correct_prior_regret_mean": 7.3998750000000015,
+      "correct_prior_applied_preferences_mean": 2.0,
+      "wrong_prior_regret_mean": 7.3998750000000015,
+      "wrong_prior_applied_preferences_mean": 2.0,
+      "prior_weight_lambda_t": 0.13333333333333333
+    },
+    {
+      "step": 1,
+      "vanilla_regret_mean": 7.3998750000000015,
+      "vanilla_applied_preferences_mean": 0.0,
+      "correct_prior_regret_mean": 7.3998750000000015,
+      "correct_prior_applied_preferences_mean": 2.0,
+      "wrong_prior_regret_mean": 7.3998750000000015,
+      "wrong_prior_applied_preferences_mean": 2.0,
+      "prior_weight_lambda_t": 0.125
+    },
+    {
+      "step": 2,
+      "vanilla_regret_mean": 7.3998750000000015,
+      "vanilla_applied_preferences_mean": 0.0,
+      "correct_prior_regret_mean": 7.3998750000000015,
+      "correct_prior_applied_preferences_mean": 2.0,
+      "wrong_prior_regret_mean": 7.3998750000000015,
+      "wrong_prior_applied_preferences_mean": 2.0,
+      "prior_weight_lambda_t": 0.11764705882352941
+    }
+  ],
+  "trajectories": {
+    "vanilla": [
+      {
+        "step": 0,
+        "regret": 7.3998750000000015,
+        "applied_preferences": 0,
+        "recommended_frequency_kHz": 71.3,
+        "recommended_scan_speed_mm_s": 70.64999999999999
+      },
+      {
+        "step": 1,
+        "regret": 7.3998750000000015,
+        "applied_preferences": 0,
+        "recommended_frequency_kHz": 71.3,
+        "recommended_scan_speed_mm_s": 70.64999999999999
+      },
+      {
+        "step": 2,
+        "regret": 7.3998750000000015,
+        "applied_preferences": 0,
+        "recommended_frequency_kHz": 71.3,
+        "recommended_scan_speed_mm_s": 70.64999999999999
+      },
+      {
+        "step": 0,
+        "regret": 7.3998750000000015,
+        "applied_preferences": 0,
+        "recommended_frequency_kHz": 71.3,
+        "recommended_scan_speed_mm_s": 70.64999999999999
+      },
+      {
+        "step": 1,
+        "regret": 7.3998750000000015,
+        "applied_preferences": 0,
+        "recommended_frequency_kHz": 71.3,
+        "recommended_scan_speed_mm_s": 70.64999999999999
+      },
+      {
+        "step": 2,
+        "regret": 7.3998750000000015,
+        "applied_preferences": 0,
+        "recommended_frequency_kHz": 71.3,
+        "recommended_scan_speed_mm_s": 70.64999999999999
+      }
+    ],
+    "correct_prior": [
+      {
+        "step": 0,
+        "regret": 7.3998750000000015,
+        "applied_preferences": 2,
+        "recommended_frequency_kHz": 71.3,
+        "recommended_scan_speed_mm_s": 70.64999999999999
+      },
+      {
+        "step": 1,
+        "regret": 7.3998750000000015,
+        "applied_preferences": 2,
+        "recommended_frequency_kHz": 71.3,
+        "recommended_scan_speed_mm_s": 70.64999999999999
+      },
+      {
+        "step": 2,
+        "regret": 7.3998750000000015,
+        "applied_preferences": 2,
+        "recommended_frequency_kHz": 71.3,
+        "recommended_scan_speed_mm_s": 70.64999999999999
+      },
+      {
+        "step": 0,
+        "regret": 7.3998750000000015,
+        "applied_preferences": 2,
+        "recommended_frequency_kHz": 71.3,
+        "recommended_scan_speed_mm_s": 70.64999999999999
+      },
+      {
+        "step": 1,
+        "regret": 7.3998750000000015,
+        "applied_preferences": 2,
+        "recommended_frequency_kHz": 71.3,
+        "recommended_scan_speed_mm_s": 70.64999999999999
+      },
+      {
+        "step": 2,
+        "regret": 7.3998750000000015,
+        "applied_preferences": 2,
+        "recommended_frequency_kHz": 71.3,
+        "recommended_scan_speed_mm_s": 70.64999999999999
+      }
+    ],
+    "wrong_prior": [
+      {
+        "step": 0,
+        "regret": 7.3998750000000015,
+        "applied_preferences": 2,
+        "recommended_frequency_kHz": 71.3,
+        "recommended_scan_speed_mm_s": 70.64999999999999
+      },
+      {
+        "step": 1,
+        "regret": 7.3998750000000015,
+        "applied_preferences": 2,
+        "recommended_frequency_kHz": 71.3,
+        "recommended_scan_speed_mm_s": 70.64999999999999
+      },
+      {
+        "step": 2,
+        "regret": 7.3998750000000015,
+        "applied_preferences": 2,
+        "recommended_frequency_kHz": 71.3,
+        "recommended_scan_speed_mm_s": 70.64999999999999
+      },
+      {
+        "step": 0,
+        "regret": 7.3998750000000015,
+        "applied_preferences": 2,
+        "recommended_frequency_kHz": 71.3,
+        "recommended_scan_speed_mm_s": 70.64999999999999
+      },
+      {
+        "step": 1,
+        "regret": 7.3998750000000015,
+        "applied_preferences": 2,
+        "recommended_frequency_kHz": 71.3,
+        "recommended_scan_speed_mm_s": 70.64999999999999
+      },
+      {
+        "step": 2,
+        "regret": 7.3998750000000015,
+        "applied_preferences": 2,
+        "recommended_frequency_kHz": 71.3,
+        "recommended_scan_speed_mm_s": 70.64999999999999
+      }
+    ]
+  },
+  "best_so_far_mean": {
+    "vanilla": 7.3998750000000015,
+    "correct_prior": 7.3998750000000015,
+    "wrong_prior": 7.3998750000000015
+  },
+  "cumulative_regret_mean": {
+    "vanilla": 22.199625000000005,
+    "correct_prior": 22.199625000000005,
+    "wrong_prior": 22.199625000000005
+  }
+}
