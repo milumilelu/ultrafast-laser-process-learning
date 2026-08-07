@@ -1,0 +1,4758 @@
+{
+ "captions": [
+  {
+   "bbox": [
+    146.04,
+    283.98,
+    465.95,
+    292.2
+   ],
+   "block_index": 3,
+   "block_type": "caption",
+   "document_version_id": "0b56b6d5ef26ae7a",
+   "page_index": 3,
+   "paper_id": "Flat-top picosecond laser texturing of CFRP.pdf",
+   "reading_order": 67,
+   "section_id": "",
+   "section_path": "",
+   "text": "FIG. 1. Adhesive bonding setup and single-lap joint. (a) Curing fixture and (b) Joint geometry and dimensions.",
+   "text_source": "native"
+  },
+  {
+   "bbox": [
+    210.22,
+    683.89,
+    401.79,
+    692.11
+   ],
+   "block_index": 5,
+   "block_type": "caption",
+   "document_version_id": "0b56b6d5ef26ae7a",
+   "page_index": 3,
+   "paper_id": "Flat-top picosecond laser texturing of CFRP.pdf",
+   "reading_order": 71,
+   "section_id": "",
+   "section_path": "",
+   "text": "FIG. 2. Schematic of the flat-top picosecond-laser texturing setup.",
+   "text_source": "native"
+  },
+  {
+   "bbox": [
+    53.01,
+    101.09,
+    142.61,
+    109.31
+   ],
+   "block_index": 7,
+   "block_type": "caption",
+   "document_version_id": "0b56b6d5ef26ae7a",
+   "page_index": 4,
+   "paper_id": "Flat-top picosecond laser texturing of CFRP.pdf",
+   "reading_order": 76,
+   "section_id": "",
+   "section_path": "",
+   "text": "TABLE I. Laser parameter list.",
+   "text_source": "native"
+  },
+  {
+   "bbox": [
+    354.44,
+    294.3,
+    519.58,
+    302.52
+   ],
+   "block_index": 13,
+   "block_type": "caption",
+   "document_version_id": "0b56b6d5ef26ae7a",
+   "page_index": 4,
+   "paper_id": "Flat-top picosecond laser texturing of CFRP.pdf",
+   "reading_order": 80,
+   "section_id": "",
+   "section_path": "",
+   "text": "FIG. 4. Schematic of lat-top laser texturing on the CFRP.",
+   "text_source": "native"
+  },
+  {
+   "bbox": [
+    59.02,
+    671.64,
+    552.97,
+    692.22
+   ],
+   "block_index": 11,
+   "block_type": "caption",
+   "document_version_id": "0b56b6d5ef26ae7a",
+   "page_index": 4,
+   "paper_id": "Flat-top picosecond laser texturing of CFRP.pdf",
+   "reading_order": 88,
+   "section_id": "",
+   "section_path": "",
+   "text": "FIG. 3. Bioinspiration from tree-frog toe pads.28 Reproduced with permission from Scholz et al., J. Exp. Biol. 212, 155–162 (2009). Copyright 2009 The Company of\nBiologists.",
+   "text_source": "native"
+  },
+  {
+   "bbox": [
+    59.02,
+    665.01,
+    552.96,
+    682.19
+   ],
+   "block_index": 1,
+   "block_type": "caption",
+   "document_version_id": "0b56b6d5ef26ae7a",
+   "page_index": 5,
+   "paper_id": "Flat-top picosecond laser texturing of CFRP.pdf",
+   "reading_order": 94,
+   "section_id": "",
+   "section_path": "",
+   "text": "FIG. 5. Confocal surface topographies of tree-frog–inspired hexagonal textures laser-fabricated on CFRP at representative fluences: (a) original, (b) 2.3, (c) 3.5, (d) 4.7,\n(d) 5.8, and (f) 7.0 J/cm2.",
+   "text_source": "native"
+  },
+  {
+   "bbox": [
+    94.45,
+    299.97,
+    517.53,
+    308.19
+   ],
+   "block_index": 5,
+   "block_type": "caption",
+   "document_version_id": "0b56b6d5ef26ae7a",
+   "page_index": 6,
+   "paper_id": "Flat-top picosecond laser texturing of CFRP.pdf",
+   "reading_order": 99,
+   "section_id": "",
+   "section_path": "",
+   "text": "FIG. 6. Effect of laser fluence on surface roughness and depth metrics: (a) areal arithmetical mean height (Sa); (b) surface profile depth variation.",
+   "text_source": "native"
+  },
+  {
+   "bbox": [
+    335.51,
+    683.89,
+    538.55,
+    692.11
+   ],
+   "block_index": 7,
+   "block_type": "caption",
+   "document_version_id": "0b56b6d5ef26ae7a",
+   "page_index": 6,
+   "paper_id": "Flat-top picosecond laser texturing of CFRP.pdf",
+   "reading_order": 105,
+   "section_id": "",
+   "section_path": "",
+   "text": "FIG. 7. Water contact angles on surfaces with different laser fluences.",
+   "text_source": "native"
+  },
+  {
+   "bbox": [
+    208.91,
+    296.45,
+    403.07,
+    304.67
+   ],
+   "block_index": 4,
+   "block_type": "caption",
+   "document_version_id": "0b56b6d5ef26ae7a",
+   "page_index": 7,
+   "paper_id": "Flat-top picosecond laser texturing of CFRP.pdf",
+   "reading_order": 110,
+   "section_id": "",
+   "section_path": "",
+   "text": "FIG. 8. Schematic of water invasion depth on laser-textured CFRP.",
+   "text_source": "native"
+  },
+  {
+   "bbox": [
+    53.01,
+    374.65,
+    297.01,
+    415.17
+   ],
+   "block_index": 1,
+   "block_type": "caption",
+   "document_version_id": "0b56b6d5ef26ae7a",
+   "page_index": 7,
+   "paper_id": "Flat-top picosecond laser texturing of CFRP.pdf",
+   "reading_order": 113,
+   "section_id": "",
+   "section_path": "",
+   "text": "Figure 9(a) presents the Raman spectra of the investigated sur-\nfaces. Two characteristic peaks are observed at ≈1355 (D band) and\n1585 cm−1 (G band), corresponding to the vibrational modes of\ngraphitic carbon.32 The intensity ratio I_D/I_G is commonly used",
+   "text_source": "native"
+  },
+  {
+   "bbox": [
+    59.02,
+    665.98,
+    553.0,
+    692.22
+   ],
+   "block_index": 6,
+   "block_type": "caption",
+   "document_version_id": "0b56b6d5ef26ae7a",
+   "page_index": 7,
+   "paper_id": "Flat-top picosecond laser texturing of CFRP.pdf",
+   "reading_order": 115,
+   "section_id": "",
+   "section_path": "",
+   "text": "FIG. 9. Raman and XPS analyses of the original and laser-textured “tree-frog” surfaces. (a) Raman spectra: Flat-top tree-frog (top trace) vs Original (bottom trace). (b) C\n1s XPS spectra ordered by panel: top—Flat-top tree-frog, middle—Gaussian tree-frog,31 bottom—Original (resin-covered). Reproduced with permission from Wang et al.,\nPolym. Compos. (published online 2025). Copyright 2025 Wiley.",
+   "text_source": "native"
+  },
+  {
+   "bbox": [
+    314.99,
+    198.33,
+    559.02,
+    396.35
+   ],
+   "block_index": 4,
+   "block_type": "caption",
+   "document_version_id": "0b56b6d5ef26ae7a",
+   "page_index": 8,
+   "paper_id": "Flat-top picosecond laser texturing of CFRP.pdf",
+   "reading_order": 122,
+   "section_id": "",
+   "section_path": "",
+   "text": "Figure 10 summarizes the single-lap-shear strength vs laser\nfluence. The untreated AA7075/CFRP joint shows a baseline\nstrength of 5.9 MPa. With laser texturing, the strength rises from\n14.2 MPa at 2.3 J/cm2 to a maximum of 19.6 MPa at 5.8 J/cm2 and\nthen slightly decreases to 18.9 MPa at 7.0 J/cm2. This non-\nmonotonic trend reflects the balance between beneficial texture/\nchemistry development and over-processing. In the rising regime\n(2.3–5.8 J/cm2), sharpening of boundary grooves and hierarchical\nroughness enhance mechanical interlocking, while XPS indicates\nthe increased oxygenated functionalities that raise interfacial polar-\nity and promote chemical coupling. Beyond the optimum, addi-\ntional material removal and ridge coarsening can degrade plateau\nintegrity or introduce stress concentrators, slightly reducing the\napparent strength. To consolidate the mechanism, Fig. 11 sketches\nthe two dominant effects of laser texturing on CFRP: removal of\nthe low-energy resin and incorporation of polar functionalities\n(improving\nwetting/chemical\ncoupling),\ntogether\nwith\ntexture-induced roughness/cavities that enable adhesive penetration\nand mechanical keying.",
+   "text_source": "native"
+  },
+  {
+   "bbox": [
+    59.02,
+    289.25,
+    291.0,
+    306.48
+   ],
+   "block_index": 7,
+   "block_type": "caption",
+   "document_version_id": "0b56b6d5ef26ae7a",
+   "page_index": 8,
+   "paper_id": "Flat-top picosecond laser texturing of CFRP.pdf",
+   "reading_order": 123,
+   "section_id": "",
+   "section_path": "",
+   "text": "FIG. 10. Effect of flat-top laser fluence on the interfacial shear strength of the\nCFRP.",
+   "text_source": "native"
+  },
+  {
+   "bbox": [
+    53.01,
+    386.89,
+    297.02,
+    490.35
+   ],
+   "block_index": 1,
+   "block_type": "caption",
+   "document_version_id": "0b56b6d5ef26ae7a",
+   "page_index": 8,
+   "paper_id": "Flat-top picosecond laser texturing of CFRP.pdf",
+   "reading_order": 126,
+   "section_id": "",
+   "section_path": "",
+   "text": "Figure 9(b) shows the C 1s spectra. Deconvolution resolves\nthree\ncomponents\nassigned\nto\nCZC\n(∼284.8 eV),\nCZO\n(∼286.0 eV), and CvO (∼288.8 eV).31,33 XPS covers three states:\noriginal\n(resin-covered,\nbottom\npanel),\nGaussian\ntree-frog\n(Gaussian-beam textured, middle panel), and flat-top tree-frog\n(flat-top-beam textured, top panel). The relative areas (CZC/\nCZO/CvO, %) are 71.7/22.6/5.7, 67.2/21.8/11.0, and 64.9/24.1/\n11.0, respectively; the total oxidized fraction (CZO + CvO)\nincreases from 28.3% to 32.82% (Gaussian) and 35.1% (flat-top).\nThese\nresults\nindicate\nan\nenrichment\nof\noxygen-containing",
+   "text_source": "native"
+  },
+  {
+   "bbox": [
+    314.99,
+    397.25,
+    559.01,
+    490.86
+   ],
+   "block_index": 5,
+   "block_type": "caption",
+   "document_version_id": "0b56b6d5ef26ae7a",
+   "page_index": 8,
+   "paper_id": "Flat-top picosecond laser texturing of CFRP.pdf",
+   "reading_order": 127,
+   "section_id": "",
+   "section_path": "",
+   "text": "Figures 12(a)–12(c) compare the fracture surfaces under dis-\ntinct surface states. The untreated specimen (a) exhibits a predomi-\nnantly adhesive failure, with the crack propagating along the\nCFRP–adhesive\ninterface.\nMinimal\nadhesive\nremains\non\nthe\nAA7075 side while a continuous adhesive film persists on the\nCFRP side, yielding a relatively flat, glossy fracture surface with\nnegligible fiber pull-out or tow imprints—indicative of poor inter-\nfacial wetting and limited mechanical interlocking. After bioins-\npired texturing, the surface resin is removed and hierarchical",
+   "text_source": "native"
+  },
+  {
+   "bbox": [
+    121.95,
+    683.89,
+    490.08,
+    692.11
+   ],
+   "block_index": 9,
+   "block_type": "caption",
+   "document_version_id": "0b56b6d5ef26ae7a",
+   "page_index": 8,
+   "paper_id": "Flat-top picosecond laser texturing of CFRP.pdf",
+   "reading_order": 128,
+   "section_id": "",
+   "section_path": "",
+   "text": "FIG. 11. Mechanistic illustration of adhesion enhancement on the CFRP: (a) chemical bonding and (b) mechanical interlocking.",
+   "text_source": "native"
+  },
+  {
+   "bbox": [
+    59.02,
+    308.7,
+    552.98,
+    325.93
+   ],
+   "block_index": 3,
+   "block_type": "caption",
+   "document_version_id": "0b56b6d5ef26ae7a",
+   "page_index": 9,
+   "paper_id": "Flat-top picosecond laser texturing of CFRP.pdf",
+   "reading_order": 133,
+   "section_id": "",
+   "section_path": "",
+   "text": "FIG. 12. Representative failure modes after lap-shear: (a) interfacial adhesive failure on the AA7075 side; (b) mixed interfacial–cohesive failure; (c) fiber-dominated\nco-failure on the CFRP side.",
+   "text_source": "native"
+  },
+  {
+   "bbox": [
+    134.14,
+    683.89,
+    477.87,
+    692.11
+   ],
+   "block_index": 5,
+   "block_type": "caption",
+   "document_version_id": "0b56b6d5ef26ae7a",
+   "page_index": 9,
+   "paper_id": "Flat-top picosecond laser texturing of CFRP.pdf",
+   "reading_order": 137,
+   "section_id": "",
+   "section_path": "",
+   "text": "FIG. 13. Mechanistic illustration of lap-shear response vs fluence: (a) low fluence, (b) optimal fluence, (c) high fluence.",
+   "text_source": "native"
+  }
+ ],
+ "config_hash": "39d53865ab3c2c47",
+ "document_version_id": "0b56b6d5ef26ae7a",
+ "pages": [
+  [
+   {
+    "bbox": [
+     119.7,
+     74.56,
+     305.8,
+     83.65
+    ],
+    "block_index": 4,
+    "block_type": "body",
+    "document_version_id": "0b56b6d5ef26ae7a",
+    "page_index": 0,
+    "paper_id": "Flat-top picosecond laser texturing of CFRP.pdf",
+    "reading_order": 0,
+    "section_id": "71e05af100f5b7d4",
+    "section_path": "0/preamble/1",
+    "text": "RESEARCH ARTICLE | DECEMBER 08 2025",
+    "text_source": "native"
+   },
+   {
+    "bbox": [
+     120.86,
+     87.32,
+     495.89,
+     137.76
+    ],
+    "block_index": 5,
+    "block_type": "body",
+    "document_version_id": "0b56b6d5ef26ae7a",
+    "page_index": 0,
+    "paper_id": "Flat-top picosecond laser texturing of CFRP.pdf",
+    "reading_order": 1,
+    "section_id": "71e05af100f5b7d4",
+    "section_path": "0/preamble/1",
+    "text": "Flat-top picosecond laser texturing of CFRP: Biomimetic\nhierarchy for tunable wettability and high-strength\nAA7075/CFRP bonding",
+    "text_source": "native"
+   },
+   {
+    "bbox": [
+     120.86,
+     143.45,
+     513.56,
+     162.68
+    ],
+    "block_index": 16,
+    "block_type": "body",
+    "document_version_id": "0b56b6d5ef26ae7a",
+    "page_index": 0,
+    "paper_id": "Flat-top picosecond laser texturing of CFRP.pdf",
+    "reading_order": 2,
+    "section_id": "71e05af100f5b7d4",
+    "section_path": "0/preamble/1",
+    "text": "; Changqing Li ;\nYongji Yu; Mo Zhang",
+    "text_source": "native"
+   },
+   {
+    "bbox": [
+     370.44,
+     143.45,
+     437.99,
+     152.8
+    ],
+    "block_index": 14,
+    "block_type": "body",
+    "document_version_id": "0b56b6d5ef26ae7a",
+    "page_index": 0,
+    "paper_id": "Flat-top picosecond laser texturing of CFRP.pdf",
+    "reading_order": 3,
+    "section_id": "71e05af100f5b7d4",
+    "section_path": "0/preamble/1",
+    "text": "; Chunting Wu ",
+    "text_source": "native"
+   },
+   {
+    "bbox": [
+     120.86,
+     143.71,
+     178.44,
+     152.8
+    ],
+    "block_index": 6,
+    "block_type": "body",
+    "document_version_id": "0b56b6d5ef26ae7a",
+    "page_index": 0,
+    "paper_id": "Flat-top picosecond laser texturing of CFRP.pdf",
+    "reading_order": 4,
+    "section_id": "71e05af100f5b7d4",
+    "section_path": "0/preamble/1",
+    "text": "Zhonghe Wang",
+    "text_source": "native"
+   },
+   {
+    "bbox": [
+     185.4,
+     143.71,
+     247.19,
+     152.8
+    ],
+    "block_index": 8,
+    "block_type": "body",
+    "document_version_id": "0b56b6d5ef26ae7a",
+    "page_index": 0,
+    "paper_id": "Flat-top picosecond laser texturing of CFRP.pdf",
+    "reading_order": 5,
+    "section_id": "71e05af100f5b7d4",
+    "section_path": "0/preamble/1",
+    "text": "; Di Liu; Yao Ma",
+    "text_source": "native"
+   },
+   {
+    "bbox": [
+     254.16,
+     143.71,
+     306.62,
+     152.8
+    ],
+    "block_index": 10,
+    "block_type": "body",
+    "document_version_id": "0b56b6d5ef26ae7a",
+    "page_index": 0,
+    "paper_id": "Flat-top picosecond laser texturing of CFRP.pdf",
+    "reading_order": 6,
+    "section_id": "71e05af100f5b7d4",
+    "section_path": "0/preamble/1",
+    "text": "; Shuwei Sun",
+    "text_source": "native"
+   },
+   {
+    "bbox": [
+     313.58,
+     143.71,
+     363.48,
+     152.8
+    ],
+    "block_index": 12,
+    "block_type": "body",
+    "document_version_id": "0b56b6d5ef26ae7a",
+    "page_index": 0,
+    "paper_id": "Flat-top picosecond laser texturing of CFRP.pdf",
+    "reading_order": 7,
+    "section_id": "71e05af100f5b7d4",
+    "section_path": "0/preamble/1",
+    "text": "; Yujie Wang",
+    "text_source": "native"
+   },
+   {
+    "bbox": [
+     120.86,
+     189.5,
+     226.28,
+     197.29
+    ],
+    "block_index": 18,
+    "block_type": "body",
+    "document_version_id": "0b56b6d5ef26ae7a",
+    "page_index": 0,
+    "paper_id": "Flat-top picosecond laser texturing of CFRP.pdf",
+    "reading_order": 8,
+    "section_id": "71e05af100f5b7d4",
+    "section_path": "0/preamble/1",
+    "text": "J. Appl. Phys. 138, 225301 (2025)",
+    "text_source": "native"
+   },
+   {
+    "bbox": [
+     120.86,
+     200.54,
+     225.14,
+     208.33
+    ],
+    "block_index": 19,
+    "block_type": "body",
+    "document_version_id": "0b56b6d5ef26ae7a",
+    "page_index": 0,
+    "paper_id": "Flat-top picosecond laser texturing of CFRP.pdf",
+    "reading_order": 9,
+    "section_id": "71e05af100f5b7d4",
+    "section_path": "0/preamble/1",
+    "text": "https://doi.org/10.1063/5.0299010",
+    "text_source": "native"
+   },
+   {
+    "bbox": [
+     445.09,
+     227.85,
+     474.14,
+     256.9
+    ],
+    "block_index": 1,
+    "block_type": "body",
+    "document_version_id": "0b56b6d5ef26ae7a",
+    "page_index": 0,
+    "paper_id": "Flat-top picosecond laser texturing of CFRP.pdf",
+    "reading_order": 10,
+    "section_id": "71e05af100f5b7d4",
+    "section_path": "0/preamble/1",
+    "text": "",
+    "text_source": "native"
+   },
+   {
+    "bbox": [
+     446.18,
+     227.85,
+     514.81,
+     275.65
+    ],
+    "block_index": 2,
+    "block_type": "body",
+    "document_version_id": "0b56b6d5ef26ae7a",
+    "page_index": 0,
+    "paper_id": "Flat-top picosecond laser texturing of CFRP.pdf",
+    "reading_order": 11,
+    "section_id": "71e05af100f5b7d4",
+    "section_path": "0/preamble/1",
+    "text": "View\nOnline ",
+    "text_source": "native"
+   },
+   {
+    "bbox": [
+     485.76,
+     255.96,
+     517.28,
+     275.65
+    ],
+    "block_index": 3,
+    "block_type": "body",
+    "document_version_id": "0b56b6d5ef26ae7a",
+    "page_index": 0,
+    "paper_id": "Flat-top picosecond laser texturing of CFRP.pdf",
+    "reading_order": 12,
+    "section_id": "71e05af100f5b7d4",
+    "section_path": "0/preamble/1",
+    "text": "Export\nCitation",
+    "text_source": "native"
+   },
+   {
+    "bbox": [
+     129.58,
+     300.81,
+     294.45,
+     312.5
+    ],
+    "block_index": 20,
+    "block_type": "body",
+    "document_version_id": "0b56b6d5ef26ae7a",
+    "page_index": 0,
+    "paper_id": "Flat-top picosecond laser texturing of CFRP.pdf",
+    "reading_order": 13,
+    "section_id": "71e05af100f5b7d4",
+    "section_path": "0/preamble/1",
+    "text": "Articles You May Be Interested In",
+    "text_source": "native"
+   },
+   {
+    "bbox": [
+     130.74,
+     325.0,
+     438.19,
+     334.09
+    ],
+    "block_index": 21,
+    "block_type": "body",
+    "document_version_id": "0b56b6d5ef26ae7a",
+    "page_index": 0,
+    "paper_id": "Flat-top picosecond laser texturing of CFRP.pdf",
+    "reading_order": 14,
+    "section_id": "71e05af100f5b7d4",
+    "section_path": "0/preamble/1",
+    "text": "Study of tapping process of carbon fiber reinforced plastic composites/AA7075 stacks",
+    "text_source": "native"
+   },
+   {
+    "bbox": [
+     130.74,
+     341.16,
+     215.98,
+     348.95
+    ],
+    "block_index": 22,
+    "block_type": "body",
+    "document_version_id": "0b56b6d5ef26ae7a",
+    "page_index": 0,
+    "paper_id": "Flat-top picosecond laser texturing of CFRP.pdf",
+    "reading_order": 15,
+    "section_id": "71e05af100f5b7d4",
+    "section_path": "0/preamble/1",
+    "text": "AIP Conf. Proc. (May 2018)",
+    "text_source": "native"
+   },
+   {
+    "bbox": [
+     130.74,
+     356.38,
+     451.73,
+     365.46
+    ],
+    "block_index": 23,
+    "block_type": "body",
+    "document_version_id": "0b56b6d5ef26ae7a",
+    "page_index": 0,
+    "paper_id": "Flat-top picosecond laser texturing of CFRP.pdf",
+    "reading_order": 16,
+    "section_id": "71e05af100f5b7d4",
+    "section_path": "0/preamble/1",
+    "text": "Investigations on tribological characteristics of AA7075/E-glass/cenosphere hybrid MMCs",
+    "text_source": "native"
+   },
+   {
+    "bbox": [
+     130.74,
+     372.54,
+     234.96,
+     380.33
+    ],
+    "block_index": 24,
+    "block_type": "body",
+    "document_version_id": "0b56b6d5ef26ae7a",
+    "page_index": 0,
+    "paper_id": "Flat-top picosecond laser texturing of CFRP.pdf",
+    "reading_order": 17,
+    "section_id": "71e05af100f5b7d4",
+    "section_path": "0/preamble/1",
+    "text": "AIP Conf. Proc. (December 2023)",
+    "text_source": "native"
+   },
+   {
+    "bbox": [
+     578.6,
+     381.4,
+     586.09,
+     460.6
+    ],
+    "block_index": 28,
+    "block_type": "heading",
+    "document_version_id": "0b56b6d5ef26ae7a",
+    "page_index": 0,
+    "paper_id": "Flat-top picosecond laser texturing of CFRP.pdf",
+    "reading_order": 18,
+    "section_id": "f7e46cd500b82d11",
+    "section_path": "1/section/2",
+    "text": "09 July 2026 15:48:05",
+    "text_source": "native"
+   },
+   {
+    "bbox": [
+     130.74,
+     387.75,
+     343.69,
+     396.84
+    ],
+    "block_index": 25,
+    "block_type": "body",
+    "document_version_id": "0b56b6d5ef26ae7a",
+    "page_index": 0,
+    "paper_id": "Flat-top picosecond laser texturing of CFRP.pdf",
+    "reading_order": 19,
+    "section_id": "f7e46cd500b82d11",
+    "section_path": "1/section/2",
+    "text": "FEA in high speed milling of AA7075 reinforced with Nb4cp",
+    "text_source": "native"
+   },
+   {
+    "bbox": [
+     130.74,
+     403.91,
+     215.2,
+     411.7
+    ],
+    "block_index": 26,
+    "block_type": "body",
+    "document_version_id": "0b56b6d5ef26ae7a",
+    "page_index": 0,
+    "paper_id": "Flat-top picosecond laser texturing of CFRP.pdf",
+    "reading_order": 20,
+    "section_id": "f7e46cd500b82d11",
+    "section_path": "1/section/2",
+    "text": "AIP Conf. Proc. (July 2024)",
+    "text_source": "native"
+   }
+  ],
+  [
+   {
+    "bbox": [
+     54.03,
+     38.83,
+     143.53,
+     64.83
+    ],
+    "block_index": 30,
+    "block_type": "body",
+    "document_version_id": "0b56b6d5ef26ae7a",
+    "page_index": 1,
+    "paper_id": "Flat-top picosecond laser texturing of CFRP.pdf",
+    "reading_order": 21,
+    "section_id": "f7e46cd500b82d11",
+    "section_path": "1/section/2",
+    "text": "Journal of\nApplied Physics",
+    "text_source": "native"
+   },
+   {
+    "bbox": [
+     376.67,
+     47.87,
+     535.05,
+     56.87
+    ],
+    "block_index": 31,
+    "block_type": "body",
+    "document_version_id": "0b56b6d5ef26ae7a",
+    "page_index": 1,
+    "paper_id": "Flat-top picosecond laser texturing of CFRP.pdf",
+    "reading_order": 22,
+    "section_id": "f7e46cd500b82d11",
+    "section_path": "1/section/2",
+    "text": "ARTICLE\npubs.aip.org/aip/jap",
+    "text_source": "native"
+   },
+   {
+    "bbox": [
+     53.01,
+     103.46,
+     537.9,
+     171.48
+    ],
+    "block_index": 0,
+    "block_type": "body",
+    "document_version_id": "0b56b6d5ef26ae7a",
+    "page_index": 1,
+    "paper_id": "Flat-top picosecond laser texturing of CFRP.pdf",
+    "reading_order": 23,
+    "section_id": "f7e46cd500b82d11",
+    "section_path": "1/section/2",
+    "text": "Flat-top picosecond laser texturing of CFRP:\nBiomimetic hierarchy for tunable wettability and\nhigh-strength AA7075/CFRP bonding",
+    "text_source": "native"
+   },
+   {
+    "bbox": [
+     53.01,
+     197.29,
+     333.38,
+     206.38
+    ],
+    "block_index": 1,
+    "block_type": "body",
+    "document_version_id": "0b56b6d5ef26ae7a",
+    "page_index": 1,
+    "paper_id": "Flat-top picosecond laser texturing of CFRP.pdf",
+    "reading_order": 24,
+    "section_id": "f7e46cd500b82d11",
+    "section_path": "1/section/2",
+    "text": "Cite as: J. Appl. Phys. 138, 225301 (2025); doi: 10.1063/5.0299010",
+    "text_source": "native"
+   },
+   {
+    "bbox": [
+     53.01,
+     209.4,
+     315.15,
+     230.36
+    ],
+    "block_index": 8,
+    "block_type": "body",
+    "document_version_id": "0b56b6d5ef26ae7a",
+    "page_index": 1,
+    "paper_id": "Flat-top picosecond laser texturing of CFRP.pdf",
+    "reading_order": 25,
+    "section_id": "f7e46cd500b82d11",
+    "section_path": "1/section/2",
+    "text": "Submitted: 25 August 2025 · Accepted: 17 November 2025 ·\nPublished Online: 8 December 2025",
+    "text_source": "native"
+   },
+   {
+    "bbox": [
+     495.78,
+     216.33,
+     523.62,
+     221.51
+    ],
+    "block_index": 4,
+    "block_type": "body",
+    "document_version_id": "0b56b6d5ef26ae7a",
+    "page_index": 1,
+    "paper_id": "Flat-top picosecond laser texturing of CFRP.pdf",
+    "reading_order": 26,
+    "section_id": "f7e46cd500b82d11",
+    "section_path": "1/section/2",
+    "text": "Export Citation",
+    "text_source": "native"
+   },
+   {
+    "bbox": [
+     458.36,
+     216.34,
+     480.94,
+     221.52
+    ],
+    "block_index": 2,
+    "block_type": "body",
+    "document_version_id": "0b56b6d5ef26ae7a",
+    "page_index": 1,
+    "paper_id": "Flat-top picosecond laser texturing of CFRP.pdf",
+    "reading_order": 27,
+    "section_id": "f7e46cd500b82d11",
+    "section_path": "1/section/2",
+    "text": "View Online",
+    "text_source": "native"
+   },
+   {
+    "bbox": [
+     538.47,
+     216.37,
+     558.98,
+     221.54
+    ],
+    "block_index": 6,
+    "block_type": "body",
+    "document_version_id": "0b56b6d5ef26ae7a",
+    "page_index": 1,
+    "paper_id": "Flat-top picosecond laser texturing of CFRP.pdf",
+    "reading_order": 28,
+    "section_id": "f7e46cd500b82d11",
+    "section_path": "1/section/2",
+    "text": "CrossMark",
+    "text_source": "native"
+   },
+   {
+    "bbox": [
+     142.3,
+     242.11,
+     214.36,
+     255.14
+    ],
+    "block_index": 11,
+    "block_type": "body",
+    "document_version_id": "0b56b6d5ef26ae7a",
+    "page_index": 1,
+    "paper_id": "Flat-top picosecond laser texturing of CFRP.pdf",
+    "reading_order": 29,
+    "section_id": "f7e46cd500b82d11",
+    "section_path": "1/section/2",
+    "text": "Di Liu,1 Yao Ma,1",
+    "text_source": "native"
+   },
+   {
+    "bbox": [
+     53.01,
+     244.19,
+     127.68,
+     255.14
+    ],
+    "block_index": 9,
+    "block_type": "body",
+    "document_version_id": "0b56b6d5ef26ae7a",
+    "page_index": 1,
+    "paper_id": "Flat-top picosecond laser texturing of CFRP.pdf",
+    "reading_order": 30,
+    "section_id": "f7e46cd500b82d11",
+    "section_path": "1/section/2",
+    "text": "Zhonghe Wang,1",
+    "text_source": "native"
+   },
+   {
+    "bbox": [
+     228.93,
+     244.19,
+     287.61,
+     255.14
+    ],
+    "block_index": 13,
+    "block_type": "body",
+    "document_version_id": "0b56b6d5ef26ae7a",
+    "page_index": 1,
+    "paper_id": "Flat-top picosecond laser texturing of CFRP.pdf",
+    "reading_order": 31,
+    "section_id": "f7e46cd500b82d11",
+    "section_path": "1/section/2",
+    "text": "Shuwei Sun,2",
+    "text_source": "native"
+   },
+   {
+    "bbox": [
+     302.23,
+     244.19,
+     358.36,
+     255.14
+    ],
+    "block_index": 15,
+    "block_type": "body",
+    "document_version_id": "0b56b6d5ef26ae7a",
+    "page_index": 1,
+    "paper_id": "Flat-top picosecond laser texturing of CFRP.pdf",
+    "reading_order": 32,
+    "section_id": "f7e46cd500b82d11",
+    "section_path": "1/section/2",
+    "text": "Yujie Wang,2",
+    "text_source": "native"
+   },
+   {
+    "bbox": [
+     372.93,
+     244.19,
+     445.9,
+     255.14
+    ],
+    "block_index": 17,
+    "block_type": "body",
+    "document_version_id": "0b56b6d5ef26ae7a",
+    "page_index": 1,
+    "paper_id": "Flat-top picosecond laser texturing of CFRP.pdf",
+    "reading_order": 33,
+    "section_id": "f7e46cd500b82d11",
+    "section_path": "1/section/2",
+    "text": "Chunting Wu,1,a)",
+    "text_source": "native"
+   },
+   {
+    "bbox": [
+     460.52,
+     244.19,
+     533.32,
+     255.14
+    ],
+    "block_index": 19,
+    "block_type": "body",
+    "document_version_id": "0b56b6d5ef26ae7a",
+    "page_index": 1,
+    "paper_id": "Flat-top picosecond laser texturing of CFRP.pdf",
+    "reading_order": 34,
+    "section_id": "f7e46cd500b82d11",
+    "section_path": "1/section/2",
+    "text": "Changqing Li,2,a)",
+    "text_source": "native"
+   },
+   {
+    "bbox": [
+     53.01,
+     254.13,
+     172.47,
+     267.15
+    ],
+    "block_index": 20,
+    "block_type": "body",
+    "document_version_id": "0b56b6d5ef26ae7a",
+    "page_index": 1,
+    "paper_id": "Flat-top picosecond laser texturing of CFRP.pdf",
+    "reading_order": 35,
+    "section_id": "f7e46cd500b82d11",
+    "section_path": "1/section/2",
+    "text": "Yongji Yu,1 and Mo Zhang2",
+    "text_source": "native"
+   },
+   {
+    "bbox": [
+     53.01,
+     278.92,
+     114.18,
+     287.92
+    ],
+    "block_index": 21,
+    "block_type": "body",
+    "document_version_id": "0b56b6d5ef26ae7a",
+    "page_index": 1,
+    "paper_id": "Flat-top picosecond laser texturing of CFRP.pdf",
+    "reading_order": 36,
+    "section_id": "f7e46cd500b82d11",
+    "section_path": "1/section/2",
+    "text": "AFFILIATIONS",
+    "text_source": "native"
+   },
+   {
+    "bbox": [
+     53.01,
+     294.99,
+     520.66,
+     328.69
+    ],
+    "block_index": 22,
+    "block_type": "body",
+    "document_version_id": "0b56b6d5ef26ae7a",
+    "page_index": 1,
+    "paper_id": "Flat-top picosecond laser texturing of CFRP.pdf",
+    "reading_order": 37,
+    "section_id": "f7e46cd500b82d11",
+    "section_path": "1/section/2",
+    "text": "1Jilin Key Laboratory of Solid-state Laser Technology and Application, Changchun University of Science and Technology,\nChangchun 130022, China\n2Scientific and Technological Innovation Center, Beijing 100012, China",
+    "text_source": "native"
+   },
+   {
+    "bbox": [
+     53.01,
+     341.5,
+     451.66,
+     351.24
+    ],
+    "block_index": 23,
+    "block_type": "body",
+    "document_version_id": "0b56b6d5ef26ae7a",
+    "page_index": 1,
+    "paper_id": "Flat-top picosecond laser texturing of CFRP.pdf",
+    "reading_order": 38,
+    "section_id": "f7e46cd500b82d11",
+    "section_path": "1/section/2",
+    "text": "a)Authors to whom correspondence should be addressed: bigsnow1@126.com and 13311327344@163.com",
+    "text_source": "native"
+   },
+   {
+    "bbox": [
+     53.01,
+     372.63,
+     100.95,
+     381.63
+    ],
+    "block_index": 24,
+    "block_type": "heading",
+    "document_version_id": "0b56b6d5ef26ae7a",
+    "page_index": 1,
+    "paper_id": "Flat-top picosecond laser texturing of CFRP.pdf",
+    "reading_order": 39,
+    "section_id": "7fbc64dc7cd7d4f1",
+    "section_path": "1/abstract/3",
+    "text": "ABSTRACT",
+    "text_source": "native"
+   },
+   {
+    "bbox": [
+     561.76,
+     382.3,
+     569.25,
+     461.5
+    ],
+    "block_index": 34,
+    "block_type": "heading",
+    "document_version_id": "0b56b6d5ef26ae7a",
+    "page_index": 1,
+    "paper_id": "Flat-top picosecond laser texturing of CFRP.pdf",
+    "reading_order": 40,
+    "section_id": "fc79c5fed45b1cf3",
+    "section_path": "1/section/4",
+    "text": "09 July 2026 15:48:05",
+    "text_source": "native"
+   },
+   {
+    "bbox": [
+     53.01,
+     388.14,
+     559.0,
+     544.15
+    ],
+    "block_index": 25,
+    "block_type": "body",
+    "document_version_id": "0b56b6d5ef26ae7a",
+    "page_index": 1,
+    "paper_id": "Flat-top picosecond laser texturing of CFRP.pdf",
+    "reading_order": 41,
+    "section_id": "fc79c5fed45b1cf3",
+    "section_path": "1/section/4",
+    "text": "Carbon-fiber-reinforced polymer (CFRP) composites are widely used in lightweight aerospace, automotive, and wind-energy structures\nowing to their high specific strength and stiffness and durability. However, dissimilar bonding is highly sensitive to surface conditions:\nCFRP surfaces exhibit low surface energy and may retain mold-release agents, and conventional pretreatments have limitations in control-\nling and homogenizing surface topography and chemical activation, which undermines interfacial adhesion and reliability. This work pre-\nsents a 355 nm flat-top picosecond-laser approach that integrates bioinspired hierarchical texturing with surface activation, enabling\nprogrammable construction of tree-frog–inspired “plateau-connected-groove” patterns and concomitantly enhancing surface polarity.\nRoughness and feature depth increase with fluence; the water contact angle decreases to 8.0°; and x-ray photoelectron spectroscopy indicates\nhigher fractions of oxidized carbon species, while the Raman I_D/I_G ratio remains essentially unchanged. In AA7075/CFRP single-lap-\nshear tests, the lap-shear strength increases from 5.9 to 19.6 MPa at 5.8 J cm−2, accompanied by a transition from interfacial adhesive failure\nto fiber-dominated mixed failure. Mechanistically, at an appropriate fluence, hierarchical micro-/nanostructures, together with enhanced\nsurface polarity, enable synergistic mechanical interlocking and chemical coupling; by contrast, excessive fluence can introduce voids and\nmicrocracks and promote partial Cassie wetting. The non-contact, programmable process is compatible with complex geometries and auto-\nmation, providing a high-throughput surface-engineering route for durable joining in CFRP–Al lap joints and stiffeners in aircraft, bonds\nbetween CFRP skins and aluminum honeycomb/cores; mixed-material joints in automotive body structures, and wind-turbine blade root–\ninsert interfaces.",
+    "text_source": "native"
+   },
+   {
+    "bbox": [
+     53.01,
+     556.12,
+     558.98,
+     575.67
+    ],
+    "block_index": 26,
+    "block_type": "body",
+    "document_version_id": "0b56b6d5ef26ae7a",
+    "page_index": 1,
+    "paper_id": "Flat-top picosecond laser texturing of CFRP.pdf",
+    "reading_order": 42,
+    "section_id": "fc79c5fed45b1cf3",
+    "section_path": "1/section/4",
+    "text": "© 2025 Author(s). All article content, except where otherwise noted, is licensed under a Creative Commons Attribution-NonCommercial-\nNoDerivs 4.0 International (CC BY-NC-ND) license (https://creativecommons.org/licenses/by-nc-nd/4.0/). https://doi.org/10.1063/5.0299010",
+    "text_source": "native"
+   },
+   {
+    "bbox": [
+     53.01,
+     600.77,
+     130.85,
+     609.77
+    ],
+    "block_index": 27,
+    "block_type": "heading",
+    "document_version_id": "0b56b6d5ef26ae7a",
+    "page_index": 1,
+    "paper_id": "Flat-top picosecond laser texturing of CFRP.pdf",
+    "reading_order": 43,
+    "section_id": "79616f00cf08c2f1",
+    "section_path": "1/introduction/5",
+    "text": "I. INTRODUCTION",
+    "text_source": "native"
+   },
+   {
+    "bbox": [
+     314.99,
+     601.25,
+     559.01,
+     698.8
+    ],
+    "block_index": 29,
+    "block_type": "body",
+    "document_version_id": "0b56b6d5ef26ae7a",
+    "page_index": 1,
+    "paper_id": "Flat-top picosecond laser texturing of CFRP.pdf",
+    "reading_order": 44,
+    "section_id": "79616f00cf08c2f1",
+    "section_path": "1/introduction/5",
+    "text": "adhesion is hindered by the intrinsically low surface energy of the\nresin matrix, hydrophobic surfaces, and residual mold-release\nagents.7 Conventional pretreatments—such as solvent cleaning,\nchemical etching, and mechanical abrasion—can improve bonding\nbut are constrained by low throughput, environmental burdens,\noperator dependence, and the risk of fiber damage and nonuniform\nsurface morphology.8,9 Against this backdrop, laser-based surface\ntreatments\nhave\nemerged\nas\nattractive\nalternatives,\noffering\nnon-contact, maskless processing, precise energy delivery, and",
+    "text_source": "native"
+   },
+   {
+    "bbox": [
+     53.01,
+     616.22,
+     297.01,
+     698.75
+    ],
+    "block_index": 28,
+    "block_type": "body",
+    "document_version_id": "0b56b6d5ef26ae7a",
+    "page_index": 1,
+    "paper_id": "Flat-top picosecond laser texturing of CFRP.pdf",
+    "reading_order": 45,
+    "section_id": "79616f00cf08c2f1",
+    "section_path": "1/introduction/5",
+    "text": "Carbon-fiber-reinforced polymer (CFRP) composites have\nbecome indispensable in weight-critical structures owing to their\nhigh specific strength and stiffness, fatigue and corrosion resistance,\nand multifunctional designability.1–3 Driven by declining fiber costs\nand stringent efficiency and emission targets, their adoption has\nexpanded from aerospace to automotive, wind energy, civil infra-\nstructure, and sports engineering.4–6 In practice, CFRP components\nare routinely co-assembled with dissimilar materials, where reliable",
+    "text_source": "native"
+   },
+   {
+    "bbox": [
+     39.0,
+     741.44,
+     572.95,
+     749.65
+    ],
+    "block_index": 32,
+    "block_type": "body",
+    "document_version_id": "0b56b6d5ef26ae7a",
+    "page_index": 1,
+    "paper_id": "Flat-top picosecond laser texturing of CFRP.pdf",
+    "reading_order": 46,
+    "section_id": "79616f00cf08c2f1",
+    "section_path": "1/introduction/5",
+    "text": "J. Appl. Phys. 138, 225301 (2025); doi: 10.1063/5.0299010\n138, 225301-1",
+    "text_source": "native"
+   },
+   {
+    "bbox": [
+     39.01,
+     754.69,
+     89.86,
+     762.69
+    ],
+    "block_index": 33,
+    "block_type": "body",
+    "document_version_id": "0b56b6d5ef26ae7a",
+    "page_index": 1,
+    "paper_id": "Flat-top picosecond laser texturing of CFRP.pdf",
+    "reading_order": 47,
+    "section_id": "79616f00cf08c2f1",
+    "section_path": "1/introduction/5",
+    "text": "© Author(s) 2025",
+    "text_source": "native"
+   }
+  ],
+  [
+   {
+    "bbox": [
+     54.03,
+     38.83,
+     143.53,
+     64.83
+    ],
+    "block_index": 12,
+    "block_type": "body",
+    "document_version_id": "0b56b6d5ef26ae7a",
+    "page_index": 2,
+    "paper_id": "Flat-top picosecond laser texturing of CFRP.pdf",
+    "reading_order": 48,
+    "section_id": "79616f00cf08c2f1",
+    "section_path": "1/introduction/5",
+    "text": "Journal of\nApplied Physics",
+    "text_source": "native"
+   },
+   {
+    "bbox": [
+     376.67,
+     47.87,
+     535.05,
+     56.87
+    ],
+    "block_index": 13,
+    "block_type": "body",
+    "document_version_id": "0b56b6d5ef26ae7a",
+    "page_index": 2,
+    "paper_id": "Flat-top picosecond laser texturing of CFRP.pdf",
+    "reading_order": 49,
+    "section_id": "79616f00cf08c2f1",
+    "section_path": "1/introduction/5",
+    "text": "ARTICLE\npubs.aip.org/aip/jap",
+    "text_source": "native"
+   },
+   {
+    "bbox": [
+     53.01,
+     101.67,
+     297.01,
+     121.22
+    ],
+    "block_index": 0,
+    "block_type": "body",
+    "document_version_id": "0b56b6d5ef26ae7a",
+    "page_index": 2,
+    "paper_id": "Flat-top picosecond laser texturing of CFRP.pdf",
+    "reading_order": 50,
+    "section_id": "79616f00cf08c2f1",
+    "section_path": "1/introduction/5",
+    "text": "compatibility with complex geometries and automated production\nlines.10,11",
+    "text_source": "native"
+   },
+   {
+    "bbox": [
+     314.99,
+     101.67,
+     559.1,
+     289.2
+    ],
+    "block_index": 5,
+    "block_type": "body",
+    "document_version_id": "0b56b6d5ef26ae7a",
+    "page_index": 2,
+    "paper_id": "Flat-top picosecond laser texturing of CFRP.pdf",
+    "reading_order": 51,
+    "section_id": "79616f00cf08c2f1",
+    "section_path": "1/introduction/5",
+    "text": "However, to the best of our knowledge, no systematic study has\ninvestigated laser surface treatment or (bioinspired) texturing of\nCFRP using a flat-top beam. Considering that the resin and carbon\nfibers in CFRP differ markedly in ablation threshold and thermal\nproperties—differences that amplify the spatial nonuniformity of\nGaussian beams, a 355 nm flat-top picosecond laser that simultane-\nously textures and activates CFRP surfaces is used to build a bioins-\npired “plateau-connected-groove” polygonal pattern derived from\ntree-frog toe pads, to enhance hydrophilicity. Fluence-dependent\nmorphology, wettability, and chemistry are systematically mapped\nand correlated with AA7075/CFRP lap-shear performance. The\nprocess\nyields\nhierarchical\nmicro-/nanotopographies,\nincreases\nsurface polarity without degrading graphitic integrity, and drives a\nfailure-mode transition from interfacial adhesion to fiber-dominated\nco-failure. Compared with Gaussian-based approaches, the flat-top\nprofile widens the processing window and improves reproducibility.\nThese results provide a high-throughput, automation-ready route for\ndurable multi-material joining of CFRP components.",
+    "text_source": "native"
+   },
+   {
+    "bbox": [
+     53.01,
+     122.7,
+     297.02,
+     247.19
+    ],
+    "block_index": 1,
+    "block_type": "body",
+    "document_version_id": "0b56b6d5ef26ae7a",
+    "page_index": 2,
+    "paper_id": "Flat-top picosecond laser texturing of CFRP.pdf",
+    "reading_order": 52,
+    "section_id": "79616f00cf08c2f1",
+    "section_path": "1/introduction/5",
+    "text": "Laser pretreatment improves the adhesion of CFRP by recon-\nstructing the fiber–matrix interface, removing weak resin-rich\nlayers and contaminants, activating surface chemistry, and engi-\nneering micro-/nanoscale textures that increase roughness and wet-\ntability.\nZuo\net\nal.12\ndemonstrated\nthat\nfemtosecond\nlaser\nprocessing can selectively remove the polymer matrix while pre-\nserving fiber integrity and fabricate hierarchical micro-/nanostruc-\ntures that enhance hydrophilicity (contact angle ≈28.1°). Building\non selective ablation, Yao et al.13 employed a two-color double-\npulse femtosecond scheme to achieve resin-targeted removal\nwithout fiber damage, thereby improving surface roughness and\nwettability. To further augment interfacial activation, Yuan et al.14",
+    "text_source": "native"
+   },
+   {
+    "bbox": [
+     53.01,
+     248.09,
+     297.01,
+     331.21
+    ],
+    "block_index": 2,
+    "block_type": "body",
+    "document_version_id": "0b56b6d5ef26ae7a",
+    "page_index": 2,
+    "paper_id": "Flat-top picosecond laser texturing of CFRP.pdf",
+    "reading_order": 53,
+    "section_id": "79616f00cf08c2f1",
+    "section_path": "1/introduction/5",
+    "text": "combined laser texturing with chemical–ultrasonic assistance,\nincreasing surface free energy (∼74.8 mJ/m2) and the O/C ratio\n(∼33.3%), and delivering ∼48% gains in tensile shear strength with\n∼226× areal throughput. From a processing-efficiency standpoint,\nLi et al.15 used response-surface optimization and defocus strategies\nto achieve ∼2.25× higher throughput while maintaining mechanical\nperformance, consistent with coupled matrix decomposition and\noxidation mechanisms. For unidirectional laminates, Teng et al.16",
+    "text_source": "native"
+   },
+   {
+    "bbox": [
+     314.99,
+     304.49,
+     519.81,
+     313.49
+    ],
+    "block_index": 6,
+    "block_type": "heading",
+    "document_version_id": "0b56b6d5ef26ae7a",
+    "page_index": 2,
+    "paper_id": "Flat-top picosecond laser texturing of CFRP.pdf",
+    "reading_order": 54,
+    "section_id": "7153f0fc3b1c6952",
+    "section_path": "1/methods/6",
+    "text": "II. EXPERIMENT EQUIPMENT AND DETECTION",
+    "text_source": "native"
+   },
+   {
+    "bbox": [
+     314.99,
+     319.52,
+     409.83,
+     328.52
+    ],
+    "block_index": 7,
+    "block_type": "body",
+    "document_version_id": "0b56b6d5ef26ae7a",
+    "page_index": 2,
+    "paper_id": "Flat-top picosecond laser texturing of CFRP.pdf",
+    "reading_order": 55,
+    "section_id": "7153f0fc3b1c6952",
+    "section_path": "1/methods/6",
+    "text": "A. Materials and laser",
+    "text_source": "native"
+   },
+   {
+    "bbox": [
+     53.01,
+     332.69,
+     297.02,
+     436.2
+    ],
+    "block_index": 3,
+    "block_type": "body",
+    "document_version_id": "0b56b6d5ef26ae7a",
+    "page_index": 2,
+    "paper_id": "Flat-top picosecond laser texturing of CFRP.pdf",
+    "reading_order": 56,
+    "section_id": "7153f0fc3b1c6952",
+    "section_path": "1/methods/6",
+    "text": "showed that controlling scan direction and speed (e.g., 45°,\n3000 mm/s) enables effective resin removal without fiber damage,\nimproves\nwettability,\nand\nraises\ntensile\nshear\nstrength\nto\n∼17.25 MPa with cohesive failure. In terms of photochemical acti-\nvation, Al-Mahdy et al.17 reported that incoherent UV exposure\nprovides an accessible route, yielding ∼75% improvement over\nuntreated surfaces and ∼10% over NIR-textured ones. Finally, in\ndirect co-bonding configurations without an added adhesive layer,\nLeone and Genna18 found that laser-treated CFRP surfaces approx-\nimately double the apparent lap-shear strength.",
+    "text_source": "native"
+   },
+   {
+    "bbox": [
+     314.98,
+     334.97,
+     559.01,
+     522.49
+    ],
+    "block_index": 8,
+    "block_type": "body",
+    "document_version_id": "0b56b6d5ef26ae7a",
+    "page_index": 2,
+    "paper_id": "Flat-top picosecond laser texturing of CFRP.pdf",
+    "reading_order": 57,
+    "section_id": "7153f0fc3b1c6952",
+    "section_path": "1/methods/6",
+    "text": "The CFRP used in this study employed an epoxy resin matrix\nreinforced with SYT49S plain-weave carbon fiber fabric, where\nboth the warp and fill yarns are 12 K carbon fiber yarns, composed\nof 12 000 individual carbon filaments. The single fiber diameter of\nthe T700 SYT49S is 7 μm, and therefore, the diameter of the 12 K\ncarbon fiber yarn is approximately 0.3– 0.4 mm. The structural\nadhesive was SW-9, an ambient-curing adhesive. Prior to surface\ntreatment, CFRP specimens were ultrasonically cleaned for 10 min,\nrinsed with anhydrous alcohol, and air-dried. Single-lap-shear\nspecimens prepared in accordance with GB/T 7124-2008 are shown\nin Fig. 1(a); each measured 100 × 25 mm with a thickness of\n1.6 mm. The bonding schematic is provided in Fig. 1(b). CFRP and\nAA7075 substrates were bonded with an epoxy adhesive both\nbefore and after surface treatment, with a bonding area of\n25 × 12.5 mm2. Except for laser texturing applied to the CFRP, the\nAA7075 surface was sanded to remove oxides and increase rough-\nness. Untreated CFRP and aluminum alloy were used as reference\nsamples.",
+    "text_source": "native"
+   },
+   {
+    "bbox": [
+     561.76,
+     382.3,
+     569.25,
+     461.5
+    ],
+    "block_index": 16,
+    "block_type": "heading",
+    "document_version_id": "0b56b6d5ef26ae7a",
+    "page_index": 2,
+    "paper_id": "Flat-top picosecond laser texturing of CFRP.pdf",
+    "reading_order": 58,
+    "section_id": "860c69cccf2503cb",
+    "section_path": "1/section/7",
+    "text": "09 July 2026 15:48:05",
+    "text_source": "native"
+   },
+   {
+    "bbox": [
+     53.01,
+     437.69,
+     297.01,
+     698.69
+    ],
+    "block_index": 4,
+    "block_type": "body",
+    "document_version_id": "0b56b6d5ef26ae7a",
+    "page_index": 2,
+    "paper_id": "Flat-top picosecond laser texturing of CFRP.pdf",
+    "reading_order": 59,
+    "section_id": "860c69cccf2503cb",
+    "section_path": "1/section/7",
+    "text": "Although laser processing has been widely applied in micro-\nfabrication and surface-quality control, current processes predomi-\nnantly rely on Gaussian beams, whose steep fluence gradients\nreadily induce overprocessing at the center and underprocessing at\nthe edges, thereby narrowing the process window and undermining\nconsistency and repeatability. Shaping the beam into a flat-top\n(top-hat) profile can significantly improve spatial energy unifor-\nmity, reduce the heat-affected zone (HAZ) and process variability,\nand such advantages are well documented in prior studies across\nmultiple material systems: achieving high-consistency, low-damage,\nhigh-aspect-ratio through-silicon via (TSV) drilling in Si;19 attenu-\nating elemental segregation and suppressing Laves-phase formation\nin Inconel 718 during laser-based deposition/melting,20 and in\nlaser powder bed fusion (LPBF) promoting stable, directional epi-\ntaxial growth with a widened process window21 forming homoge-\nneous nano-/micro-structures and ultra-smooth surfaces on Ti and\nGaN;22,23 significantly reducing laser-induced damage (LID) in\nsolar cells;24 and, via vector flat-top-beam shaping based on polari-\nzation\nsingularities,\nachieving\nefficient,\ncontrollable\nmaterial\nremoval and cleaning in comparative process studies.25,26 For\npolymer–matrix composites, adjustable flat-top rectangular beams\nhave\nbeen\nused\nfor\nthe\nlaser-assisted\njoining\nof\nsteel/\ncarbon-fiber-reinforced thermoplastic (CFRTP) to homogenize the\ninterfacial\nthermal\nhistory\nand\nimprove\njoint\nmechanical\nperformance.27",
+    "text_source": "native"
+   },
+   {
+    "bbox": [
+     314.99,
+     523.98,
+     559.02,
+     648.52
+    ],
+    "block_index": 9,
+    "block_type": "body",
+    "document_version_id": "0b56b6d5ef26ae7a",
+    "page_index": 2,
+    "paper_id": "Flat-top picosecond laser texturing of CFRP.pdf",
+    "reading_order": 60,
+    "section_id": "860c69cccf2503cb",
+    "section_path": "1/section/7",
+    "text": "A 355 nm picosecond-laser system based on a master oscilla-\ntor power amplifier configuration was employed for surface micro-/\nnanostructuring of CFRP substrates. The laser beam was expanded\nusing\na\nbeam\nexpander\nand\nsubsequently\nreshaped\nby\na\nFocal-πShaper_NUV-Q-5 flat-top beam shaper (AdlOptica GmbH,\nBerlin, Germany; Q-series focal flat-top, NUV, 355 nm) to produce\na flat-top irradiance distribution at focus. The shaped beam was\nguided to a scanning galvanometer via a pair of high-reflectivity\n45° mirrors and then focused onto the sample surface through an\nf-theta lens. The beam trajectory was precisely controlled by the\ngalvanometer system to achieve accurate surface patterning, as illus-\ntrated in Fig. 2 (Table I).",
+    "text_source": "native"
+   },
+   {
+    "bbox": [
+     314.99,
+     663.81,
+     555.69,
+     672.81
+    ],
+    "block_index": 10,
+    "block_type": "body",
+    "document_version_id": "0b56b6d5ef26ae7a",
+    "page_index": 2,
+    "paper_id": "Flat-top picosecond laser texturing of CFRP.pdf",
+    "reading_order": 61,
+    "section_id": "860c69cccf2503cb",
+    "section_path": "1/section/7",
+    "text": "B. Biomimetic rationale and implementation pathway",
+    "text_source": "native"
+   },
+   {
+    "bbox": [
+     314.99,
+     679.32,
+     558.99,
+     698.81
+    ],
+    "block_index": 11,
+    "block_type": "body",
+    "document_version_id": "0b56b6d5ef26ae7a",
+    "page_index": 2,
+    "paper_id": "Flat-top picosecond laser texturing of CFRP.pdf",
+    "reading_order": 62,
+    "section_id": "860c69cccf2503cb",
+    "section_path": "1/section/7",
+    "text": "As shown in Fig. 3, tree frogs (e.g., Litoria caerulea) can main-\ntain stable attachment on wet substrates. This capability is",
+    "text_source": "native"
+   },
+   {
+    "bbox": [
+     39.0,
+     741.44,
+     572.95,
+     749.65
+    ],
+    "block_index": 14,
+    "block_type": "body",
+    "document_version_id": "0b56b6d5ef26ae7a",
+    "page_index": 2,
+    "paper_id": "Flat-top picosecond laser texturing of CFRP.pdf",
+    "reading_order": 63,
+    "section_id": "860c69cccf2503cb",
+    "section_path": "1/section/7",
+    "text": "J. Appl. Phys. 138, 225301 (2025); doi: 10.1063/5.0299010\n138, 225301-2",
+    "text_source": "native"
+   },
+   {
+    "bbox": [
+     39.01,
+     754.69,
+     89.86,
+     762.69
+    ],
+    "block_index": 15,
+    "block_type": "body",
+    "document_version_id": "0b56b6d5ef26ae7a",
+    "page_index": 2,
+    "paper_id": "Flat-top picosecond laser texturing of CFRP.pdf",
+    "reading_order": 64,
+    "section_id": "860c69cccf2503cb",
+    "section_path": "1/section/7",
+    "text": "© Author(s) 2025",
+    "text_source": "native"
+   }
+  ],
+  [
+   {
+    "bbox": [
+     54.03,
+     38.83,
+     143.53,
+     64.83
+    ],
+    "block_index": 6,
+    "block_type": "body",
+    "document_version_id": "0b56b6d5ef26ae7a",
+    "page_index": 3,
+    "paper_id": "Flat-top picosecond laser texturing of CFRP.pdf",
+    "reading_order": 65,
+    "section_id": "860c69cccf2503cb",
+    "section_path": "1/section/7",
+    "text": "Journal of\nApplied Physics",
+    "text_source": "native"
+   },
+   {
+    "bbox": [
+     376.67,
+     47.87,
+     535.05,
+     56.87
+    ],
+    "block_index": 7,
+    "block_type": "body",
+    "document_version_id": "0b56b6d5ef26ae7a",
+    "page_index": 3,
+    "paper_id": "Flat-top picosecond laser texturing of CFRP.pdf",
+    "reading_order": 66,
+    "section_id": "860c69cccf2503cb",
+    "section_path": "1/section/7",
+    "text": "ARTICLE\npubs.aip.org/aip/jap",
+    "text_source": "native"
+   },
+   {
+    "bbox": [
+     146.04,
+     283.98,
+     465.95,
+     292.2
+    ],
+    "block_index": 3,
+    "block_type": "caption",
+    "document_version_id": "0b56b6d5ef26ae7a",
+    "page_index": 3,
+    "paper_id": "Flat-top picosecond laser texturing of CFRP.pdf",
+    "reading_order": 67,
+    "section_id": "",
+    "section_path": "",
+    "text": "FIG. 1. Adhesive bonding setup and single-lap joint. (a) Curing fixture and (b) Joint geometry and dimensions.",
+    "text_source": "native"
+   },
+   {
+    "bbox": [
+     53.01,
+     320.17,
+     297.02,
+     434.22
+    ],
+    "block_index": 0,
+    "block_type": "body",
+    "document_version_id": "0b56b6d5ef26ae7a",
+    "page_index": 3,
+    "paper_id": "Flat-top picosecond laser texturing of CFRP.pdf",
+    "reading_order": 68,
+    "section_id": "860c69cccf2503cb",
+    "section_path": "1/section/7",
+    "text": "attributed to the synergistic action of polygonal microunits on the\ntoe-pad surface and interconnected boundary grooves, which\ntogether facilitate rapid liquid drainage and increase the real\ncontact area.28,29 Inspired by this mechanism, a biomimetic two-\nlevel texture composed of regular polygonal units bridged by\nnarrow, connected grooves was designed; the characteristic unit size\nwas\n≈0.45 mm,\nwhereas\nthe\ngroove\nwidth\nwas\n≈0.03 mm.\nConsidering the laser spot size and processing efficiency, a geomet-\nrically similar but upscaled pattern was adopted. These dimensions\nwere carefully chosen to balance the trade-off between increasing\nthe contact area and maintaining sufficient drainage capacity. The",
+    "text_source": "native"
+   },
+   {
+    "bbox": [
+     314.99,
+     320.17,
+     559.02,
+     434.22
+    ],
+    "block_index": 1,
+    "block_type": "body",
+    "document_version_id": "0b56b6d5ef26ae7a",
+    "page_index": 3,
+    "paper_id": "Flat-top picosecond laser texturing of CFRP.pdf",
+    "reading_order": 69,
+    "section_id": "860c69cccf2503cb",
+    "section_path": "1/section/7",
+    "text": "unit size of 0.45 mm was selected to ensure that each polygonal\nunit contributes effectively to the increase in the real contact area\nwithout overcrowding the surface, thus allowing optimal interaction\nbetween the surface and the substrate. Similarly, the groove width\nof 0.03 mm was selected to create narrow channels that would facil-\nitate rapid capillary drainage, while still preserving the polygonal\ncells intact to maintain adhesion performance. Furthermore, the\nbiomimetic polygonal pattern was implemented on CFRP using a\n355 nm flat-top picosecond-laser ultraviolet source, as schematized\nin Fig. 4. A top-hat beam (355 nm, 10 ps, 1 MHz) was scanned to\nselectively\nablate\nthe\nresin-rich\nsurface\nand\nform\nnarrow,",
+    "text_source": "native"
+   },
+   {
+    "bbox": [
+     561.76,
+     382.3,
+     569.25,
+     461.5
+    ],
+    "block_index": 10,
+    "block_type": "heading",
+    "document_version_id": "0b56b6d5ef26ae7a",
+    "page_index": 3,
+    "paper_id": "Flat-top picosecond laser texturing of CFRP.pdf",
+    "reading_order": 70,
+    "section_id": "be33b188351b8ed7",
+    "section_path": "1/section/8",
+    "text": "09 July 2026 15:48:05",
+    "text_source": "native"
+   },
+   {
+    "bbox": [
+     210.22,
+     683.89,
+     401.79,
+     692.11
+    ],
+    "block_index": 5,
+    "block_type": "caption",
+    "document_version_id": "0b56b6d5ef26ae7a",
+    "page_index": 3,
+    "paper_id": "Flat-top picosecond laser texturing of CFRP.pdf",
+    "reading_order": 71,
+    "section_id": "",
+    "section_path": "",
+    "text": "FIG. 2. Schematic of the flat-top picosecond-laser texturing setup.",
+    "text_source": "native"
+   },
+   {
+    "bbox": [
+     39.0,
+     741.44,
+     572.95,
+     749.65
+    ],
+    "block_index": 8,
+    "block_type": "body",
+    "document_version_id": "0b56b6d5ef26ae7a",
+    "page_index": 3,
+    "paper_id": "Flat-top picosecond laser texturing of CFRP.pdf",
+    "reading_order": 72,
+    "section_id": "be33b188351b8ed7",
+    "section_path": "1/section/8",
+    "text": "J. Appl. Phys. 138, 225301 (2025); doi: 10.1063/5.0299010\n138, 225301-3",
+    "text_source": "native"
+   },
+   {
+    "bbox": [
+     39.01,
+     754.69,
+     89.86,
+     762.69
+    ],
+    "block_index": 9,
+    "block_type": "body",
+    "document_version_id": "0b56b6d5ef26ae7a",
+    "page_index": 3,
+    "paper_id": "Flat-top picosecond laser texturing of CFRP.pdf",
+    "reading_order": 73,
+    "section_id": "be33b188351b8ed7",
+    "section_path": "1/section/8",
+    "text": "© Author(s) 2025",
+    "text_source": "native"
+   }
+  ],
+  [
+   {
+    "bbox": [
+     54.03,
+     38.83,
+     143.53,
+     64.83
+    ],
+    "block_index": 14,
+    "block_type": "body",
+    "document_version_id": "0b56b6d5ef26ae7a",
+    "page_index": 4,
+    "paper_id": "Flat-top picosecond laser texturing of CFRP.pdf",
+    "reading_order": 74,
+    "section_id": "be33b188351b8ed7",
+    "section_path": "1/section/8",
+    "text": "Journal of\nApplied Physics",
+    "text_source": "native"
+   },
+   {
+    "bbox": [
+     376.67,
+     47.87,
+     535.05,
+     56.87
+    ],
+    "block_index": 15,
+    "block_type": "body",
+    "document_version_id": "0b56b6d5ef26ae7a",
+    "page_index": 4,
+    "paper_id": "Flat-top picosecond laser texturing of CFRP.pdf",
+    "reading_order": 75,
+    "section_id": "be33b188351b8ed7",
+    "section_path": "1/section/8",
+    "text": "ARTICLE\npubs.aip.org/aip/jap",
+    "text_source": "native"
+   },
+   {
+    "bbox": [
+     53.01,
+     101.09,
+     142.61,
+     109.31
+    ],
+    "block_index": 7,
+    "block_type": "caption",
+    "document_version_id": "0b56b6d5ef26ae7a",
+    "page_index": 4,
+    "paper_id": "Flat-top picosecond laser texturing of CFRP.pdf",
+    "reading_order": 76,
+    "section_id": "",
+    "section_path": "",
+    "text": "TABLE I. Laser parameter list.",
+    "text_source": "native"
+   },
+   {
+    "bbox": [
+     89.01,
+     119.87,
+     260.07,
+     128.87
+    ],
+    "block_index": 8,
+    "block_type": "body",
+    "document_version_id": "0b56b6d5ef26ae7a",
+    "page_index": 4,
+    "paper_id": "Flat-top picosecond laser texturing of CFRP.pdf",
+    "reading_order": 77,
+    "section_id": "be33b188351b8ed7",
+    "section_path": "1/section/8",
+    "text": "Parameters\nValues",
+    "text_source": "native"
+   },
+   {
+    "bbox": [
+     89.01,
+     136.14,
+     261.0,
+     197.64
+    ],
+    "block_index": 9,
+    "block_type": "body",
+    "document_version_id": "0b56b6d5ef26ae7a",
+    "page_index": 4,
+    "paper_id": "Flat-top picosecond laser texturing of CFRP.pdf",
+    "reading_order": 78,
+    "section_id": "be33b188351b8ed7",
+    "section_path": "1/section/8",
+    "text": "Wavelength(nm)\n355\nFluence range (J/cm2)\n2.3–7.0\nPulse width (ps)\n10\nSpot diameter (μm)\n19\nScanning speed (m/s)\n1\nPulse repetition rate (MHz)\n1",
+    "text_source": "native"
+   },
+   {
+    "bbox": [
+     53.01,
+     226.96,
+     297.0,
+     309.44
+    ],
+    "block_index": 0,
+    "block_type": "body",
+    "document_version_id": "0b56b6d5ef26ae7a",
+    "page_index": 4,
+    "paper_id": "Flat-top picosecond laser texturing of CFRP.pdf",
+    "reading_order": 79,
+    "section_id": "be33b188351b8ed7",
+    "section_path": "1/section/8",
+    "text": "interconnected boundary grooves, while the polygonal cells were\npreserved. The short pulse width confines energy deposition and\nminimizes heat-affected zone damage to the underlying fibers, and\nthe resulting texture conforms to the woven laminate (warp/weft).\nMechanistically, the grooves provide rapid capillary drainage and\npin the three-phase contact line, whereas the polygonal cells\nincrease the real contact area, together enhancing wet adhesion and\nfriction on wet substrates.",
+    "text_source": "native"
+   },
+   {
+    "bbox": [
+     354.44,
+     294.3,
+     519.58,
+     302.52
+    ],
+    "block_index": 13,
+    "block_type": "caption",
+    "document_version_id": "0b56b6d5ef26ae7a",
+    "page_index": 4,
+    "paper_id": "Flat-top picosecond laser texturing of CFRP.pdf",
+    "reading_order": 80,
+    "section_id": "",
+    "section_path": "",
+    "text": "FIG. 4. Schematic of lat-top laser texturing on the CFRP.",
+    "text_source": "native"
+   },
+   {
+    "bbox": [
+     314.99,
+     330.49,
+     558.96,
+     350.03
+    ],
+    "block_index": 3,
+    "block_type": "body",
+    "document_version_id": "0b56b6d5ef26ae7a",
+    "page_index": 4,
+    "paper_id": "Flat-top picosecond laser texturing of CFRP.pdf",
+    "reading_order": 81,
+    "section_id": "be33b188351b8ed7",
+    "section_path": "1/section/8",
+    "text": "measurements were conducted using a tensile testing machine\n(Shimadzu AG-250KNIS).",
+    "text_source": "native"
+   },
+   {
+    "bbox": [
+     53.01,
+     334.03,
+     175.53,
+     343.03
+    ],
+    "block_index": 1,
+    "block_type": "body",
+    "document_version_id": "0b56b6d5ef26ae7a",
+    "page_index": 4,
+    "paper_id": "Flat-top picosecond laser texturing of CFRP.pdf",
+    "reading_order": 82,
+    "section_id": "be33b188351b8ed7",
+    "section_path": "1/section/8",
+    "text": "C. Characterization method",
+    "text_source": "native"
+   },
+   {
+    "bbox": [
+     53.01,
+     349.53,
+     297.02,
+     474.02
+    ],
+    "block_index": 2,
+    "block_type": "body",
+    "document_version_id": "0b56b6d5ef26ae7a",
+    "page_index": 4,
+    "paper_id": "Flat-top picosecond laser texturing of CFRP.pdf",
+    "reading_order": 83,
+    "section_id": "be33b188351b8ed7",
+    "section_path": "1/section/8",
+    "text": "All characterization and measurement procedures were con-\nducted using a range of advanced analytical instruments to ensure\nthe comprehensive evaluation of the samples. The surface morphol-\nogy and three-dimensional topography were observed using a laser\nconfocal microscope (DCM8, Leica), with an X–Y lateral resolution\nof no less than 0.14 μm and a Z (height) resolution of up to\n0.1 nm. A contact angle goniometer (LSA 100) measured the\ncontact angle to assess surface wettability. An x-ray photoelectron\nspectrometer (XPS, ESCALAB Xi+, Thermo Fisher Scientific) ana-\nlyzed surface chemical composition after laser activation, while a\nRaman spectrometer (Renishaw inVia Qontor) identified structural\nchanges\nand\nchemical\ncomposition.\nTensile\nshear\nstrength",
+    "text_source": "native"
+   },
+   {
+    "bbox": [
+     314.99,
+     371.56,
+     449.79,
+     380.56
+    ],
+    "block_index": 4,
+    "block_type": "heading",
+    "document_version_id": "0b56b6d5ef26ae7a",
+    "page_index": 4,
+    "paper_id": "Flat-top picosecond laser texturing of CFRP.pdf",
+    "reading_order": 84,
+    "section_id": "5473566563dcfea5",
+    "section_path": "1/discussion/9",
+    "text": "III. RESULTS AND DISCUSSION",
+    "text_source": "native"
+   },
+   {
+    "bbox": [
+     561.76,
+     382.3,
+     569.25,
+     461.5
+    ],
+    "block_index": 18,
+    "block_type": "heading",
+    "document_version_id": "0b56b6d5ef26ae7a",
+    "page_index": 4,
+    "paper_id": "Flat-top picosecond laser texturing of CFRP.pdf",
+    "reading_order": 85,
+    "section_id": "28c0c4016db49ca5",
+    "section_path": "1/section/10",
+    "text": "09 July 2026 15:48:05",
+    "text_source": "native"
+   },
+   {
+    "bbox": [
+     314.99,
+     386.43,
+     525.8,
+     406.07
+    ],
+    "block_index": 5,
+    "block_type": "body",
+    "document_version_id": "0b56b6d5ef26ae7a",
+    "page_index": 4,
+    "paper_id": "Flat-top picosecond laser texturing of CFRP.pdf",
+    "reading_order": 86,
+    "section_id": "28c0c4016db49ca5",
+    "section_path": "1/section/10",
+    "text": "A. Flat-top picosecond-laser–driven hierarchical\ntexturing and wettability tuning of CFRP",
+    "text_source": "native"
+   },
+   {
+    "bbox": [
+     314.99,
+     412.52,
+     559.02,
+     474.02
+    ],
+    "block_index": 6,
+    "block_type": "body",
+    "document_version_id": "0b56b6d5ef26ae7a",
+    "page_index": 4,
+    "paper_id": "Flat-top picosecond laser texturing of CFRP.pdf",
+    "reading_order": 87,
+    "section_id": "28c0c4016db49ca5",
+    "section_path": "1/section/10",
+    "text": "After laser processing, the CFRP surface exhibits a well-\nordered, tree-frog–inspired hexagonal array. Figure 5 presents the\nconfocal topographies at representative fluences (2.3, 3.5, 4.7, and\n5.8 J cm−2), with 3D height maps in the main panels and 2D pro-\njections in the upper-right insets. At the macroscale, the texture\nunits are clearly delineated, and the boundary grooves remain",
+    "text_source": "native"
+   },
+   {
+    "bbox": [
+     59.02,
+     671.64,
+     552.97,
+     692.22
+    ],
+    "block_index": 11,
+    "block_type": "caption",
+    "document_version_id": "0b56b6d5ef26ae7a",
+    "page_index": 4,
+    "paper_id": "Flat-top picosecond laser texturing of CFRP.pdf",
+    "reading_order": 88,
+    "section_id": "",
+    "section_path": "",
+    "text": "FIG. 3. Bioinspiration from tree-frog toe pads.28 Reproduced with permission from Scholz et al., J. Exp. Biol. 212, 155–162 (2009). Copyright 2009 The Company of\nBiologists.",
+    "text_source": "native"
+   },
+   {
+    "bbox": [
+     39.0,
+     741.44,
+     572.95,
+     749.65
+    ],
+    "block_index": 16,
+    "block_type": "body",
+    "document_version_id": "0b56b6d5ef26ae7a",
+    "page_index": 4,
+    "paper_id": "Flat-top picosecond laser texturing of CFRP.pdf",
+    "reading_order": 89,
+    "section_id": "28c0c4016db49ca5",
+    "section_path": "1/section/10",
+    "text": "J. Appl. Phys. 138, 225301 (2025); doi: 10.1063/5.0299010\n138, 225301-4",
+    "text_source": "native"
+   },
+   {
+    "bbox": [
+     39.01,
+     754.69,
+     89.86,
+     762.69
+    ],
+    "block_index": 17,
+    "block_type": "body",
+    "document_version_id": "0b56b6d5ef26ae7a",
+    "page_index": 4,
+    "paper_id": "Flat-top picosecond laser texturing of CFRP.pdf",
+    "reading_order": 90,
+    "section_id": "28c0c4016db49ca5",
+    "section_path": "1/section/10",
+    "text": "© Author(s) 2025",
+    "text_source": "native"
+   }
+  ],
+  [
+   {
+    "bbox": [
+     54.03,
+     38.83,
+     143.53,
+     64.83
+    ],
+    "block_index": 2,
+    "block_type": "body",
+    "document_version_id": "0b56b6d5ef26ae7a",
+    "page_index": 5,
+    "paper_id": "Flat-top picosecond laser texturing of CFRP.pdf",
+    "reading_order": 91,
+    "section_id": "28c0c4016db49ca5",
+    "section_path": "1/section/10",
+    "text": "Journal of\nApplied Physics",
+    "text_source": "native"
+   },
+   {
+    "bbox": [
+     376.67,
+     47.87,
+     535.05,
+     56.87
+    ],
+    "block_index": 3,
+    "block_type": "body",
+    "document_version_id": "0b56b6d5ef26ae7a",
+    "page_index": 5,
+    "paper_id": "Flat-top picosecond laser texturing of CFRP.pdf",
+    "reading_order": 92,
+    "section_id": "28c0c4016db49ca5",
+    "section_path": "1/section/10",
+    "text": "ARTICLE\npubs.aip.org/aip/jap",
+    "text_source": "native"
+   },
+   {
+    "bbox": [
+     561.76,
+     382.3,
+     569.25,
+     461.5
+    ],
+    "block_index": 6,
+    "block_type": "heading",
+    "document_version_id": "0b56b6d5ef26ae7a",
+    "page_index": 5,
+    "paper_id": "Flat-top picosecond laser texturing of CFRP.pdf",
+    "reading_order": 93,
+    "section_id": "545556552108ddb4",
+    "section_path": "1/section/11",
+    "text": "09 July 2026 15:48:05",
+    "text_source": "native"
+   },
+   {
+    "bbox": [
+     59.02,
+     665.01,
+     552.96,
+     682.19
+    ],
+    "block_index": 1,
+    "block_type": "caption",
+    "document_version_id": "0b56b6d5ef26ae7a",
+    "page_index": 5,
+    "paper_id": "Flat-top picosecond laser texturing of CFRP.pdf",
+    "reading_order": 94,
+    "section_id": "",
+    "section_path": "",
+    "text": "FIG. 5. Confocal surface topographies of tree-frog–inspired hexagonal textures laser-fabricated on CFRP at representative fluences: (a) original, (b) 2.3, (c) 3.5, (d) 4.7,\n(d) 5.8, and (f) 7.0 J/cm2.",
+    "text_source": "native"
+   },
+   {
+    "bbox": [
+     39.0,
+     741.44,
+     572.95,
+     749.65
+    ],
+    "block_index": 4,
+    "block_type": "body",
+    "document_version_id": "0b56b6d5ef26ae7a",
+    "page_index": 5,
+    "paper_id": "Flat-top picosecond laser texturing of CFRP.pdf",
+    "reading_order": 95,
+    "section_id": "545556552108ddb4",
+    "section_path": "1/section/11",
+    "text": "J. Appl. Phys. 138, 225301 (2025); doi: 10.1063/5.0299010\n138, 225301-5",
+    "text_source": "native"
+   },
+   {
+    "bbox": [
+     39.01,
+     754.69,
+     89.86,
+     762.69
+    ],
+    "block_index": 5,
+    "block_type": "body",
+    "document_version_id": "0b56b6d5ef26ae7a",
+    "page_index": 5,
+    "paper_id": "Flat-top picosecond laser texturing of CFRP.pdf",
+    "reading_order": 96,
+    "section_id": "545556552108ddb4",
+    "section_path": "1/section/11",
+    "text": "© Author(s) 2025",
+    "text_source": "native"
+   }
+  ],
+  [
+   {
+    "bbox": [
+     54.03,
+     38.83,
+     143.53,
+     64.83
+    ],
+    "block_index": 8,
+    "block_type": "body",
+    "document_version_id": "0b56b6d5ef26ae7a",
+    "page_index": 6,
+    "paper_id": "Flat-top picosecond laser texturing of CFRP.pdf",
+    "reading_order": 97,
+    "section_id": "545556552108ddb4",
+    "section_path": "1/section/11",
+    "text": "Journal of\nApplied Physics",
+    "text_source": "native"
+   },
+   {
+    "bbox": [
+     376.67,
+     47.87,
+     535.05,
+     56.87
+    ],
+    "block_index": 9,
+    "block_type": "body",
+    "document_version_id": "0b56b6d5ef26ae7a",
+    "page_index": 6,
+    "paper_id": "Flat-top picosecond laser texturing of CFRP.pdf",
+    "reading_order": 98,
+    "section_id": "545556552108ddb4",
+    "section_path": "1/section/11",
+    "text": "ARTICLE\npubs.aip.org/aip/jap",
+    "text_source": "native"
+   },
+   {
+    "bbox": [
+     94.45,
+     299.97,
+     517.53,
+     308.19
+    ],
+    "block_index": 5,
+    "block_type": "caption",
+    "document_version_id": "0b56b6d5ef26ae7a",
+    "page_index": 6,
+    "paper_id": "Flat-top picosecond laser texturing of CFRP.pdf",
+    "reading_order": 99,
+    "section_id": "",
+    "section_path": "",
+    "text": "FIG. 6. Effect of laser fluence on surface roughness and depth metrics: (a) areal arithmetical mean height (Sa); (b) surface profile depth variation.",
+    "text_source": "native"
+   },
+   {
+    "bbox": [
+     53.01,
+     343.24,
+     297.0,
+     520.22
+    ],
+    "block_index": 0,
+    "block_type": "body",
+    "document_version_id": "0b56b6d5ef26ae7a",
+    "page_index": 6,
+    "paper_id": "Flat-top picosecond laser texturing of CFRP.pdf",
+    "reading_order": 100,
+    "section_id": "545556552108ddb4",
+    "section_path": "1/section/11",
+    "text": "continuous, closely following the programmed toolpath. At the\nmicroscale, transient thermo-matter coupling promotes directional\nmicro-ridges along the scan tracks and sharper, deeper boundary\ngrooves, jointly establishing hierarchical roughness. Although this\nthermally driven microreconstruction introduces slight deviations\nfrom the nominal geometry, it markedly amplifies height undula-\ntions and plateau–groove contrast, thereby enhancing interfacial\nmechanical interlocking and offering tunability for wetting and\nadhesion. Consistent with these observations (Fig. 6), as fluence\nincreases from 2.3 to 7.0 J cm−2, the areal arithmetical mean height\n(Sa) rises from 10.7 to 39.5 μm, and the surface profile depth varia-\ntion (SPD) increases from 22.3 to 61.0 μm, showing an overall posi-\ntive dependence on fluence. For reference, the untreated surface\nexhibits Sa ≈1 μm. This response stems from intensified material\nremoval and redeposition, which render polygonal plateaus more\ncomplete, boundary grooves sharper, and intra-unit ridges more\nregular, culminating in multiscale roughness amplification.",
+    "text_source": "native"
+   },
+   {
+    "bbox": [
+     314.99,
+     343.24,
+     559.0,
+     467.72
+    ],
+    "block_index": 3,
+    "block_type": "body",
+    "document_version_id": "0b56b6d5ef26ae7a",
+    "page_index": 6,
+    "paper_id": "Flat-top picosecond laser texturing of CFRP.pdf",
+    "reading_order": 101,
+    "section_id": "545556552108ddb4",
+    "section_path": "1/section/11",
+    "text": "the local groove depth), which sustains Wenzel-state wetting and,\nthus, reduces contact angles. By contrast, at excessive fluence,\nfurther groove deepening and apparent widening, together with\nthermally induced remelting and ridge rounding, favor air entrap-\nment beneath the droplet; water then fails to infiltrate those sites\n(y_3 and y_4 become small or approach zero). Accordingly, within\nthe high-fluence regime, the surface can exhibit nonpenetrable\nzones characterized by y_3/y_4, which lowers the effective solid–\nliquid area fraction f and partially shifts wetting toward a Cassie–\nBaxter state, thereby increasing the contact angle.30 As shown by\nthe water contact angle measurements, as the laser fluence increases\nfrom 5.8 to 7.0 J cm−2, the contact angle increases from 8° to 14°.",
+    "text_source": "native"
+   },
+   {
+    "bbox": [
+     561.76,
+     382.3,
+     569.25,
+     461.5
+    ],
+    "block_index": 12,
+    "block_type": "heading",
+    "document_version_id": "0b56b6d5ef26ae7a",
+    "page_index": 6,
+    "paper_id": "Flat-top picosecond laser texturing of CFRP.pdf",
+    "reading_order": 102,
+    "section_id": "6897ad9e66d27022",
+    "section_path": "1/section/12",
+    "text": "09 July 2026 15:48:05",
+    "text_source": "native"
+   },
+   {
+    "bbox": [
+     53.01,
+     521.71,
+     297.03,
+     667.23
+    ],
+    "block_index": 1,
+    "block_type": "body",
+    "document_version_id": "0b56b6d5ef26ae7a",
+    "page_index": 6,
+    "paper_id": "Flat-top picosecond laser texturing of CFRP.pdf",
+    "reading_order": 103,
+    "section_id": "6897ad9e66d27022",
+    "section_path": "1/section/12",
+    "text": "Driven by the synergistic effects of hierarchical morphological\nreconstruction and surface chemical activation induced by a\n355 nm flat-top picosecond laser, the wettability of the CFRP\nsurface is markedly enhanced. As shown in Fig. 7, the water contact\nangle of the untreated surface is 81.0°. With increasing fluence\nfrom 2.3 to 3.5 to 4.7 J cm−2, the angle decreases sequentially to\n40.2°, 29.5°, and 18.1°, reaching a minimum of 8.0° at 5.8 J cm−2,\nand is followed by a slight increase to 14.0° at 7.0 J cm−2. This non-\nmonotonic “decrease–then–increase” trend indicates that the bio-\nmimetic texture does not necessarily benefit from ever-greater\nfeature depth or laser fluence. At moderate fluence, multiscale\nridges and sharpened boundary grooves enlarge the true solid–\nliquid contact area and expose oxygen-containing functional\ngroups, consistent with Wenzel-state wetting amplification.30",
+    "text_source": "native"
+   },
+   {
+    "bbox": [
+     53.01,
+     668.71,
+     297.0,
+     698.75
+    ],
+    "block_index": 2,
+    "block_type": "body",
+    "document_version_id": "0b56b6d5ef26ae7a",
+    "page_index": 6,
+    "paper_id": "Flat-top picosecond laser texturing of CFRP.pdf",
+    "reading_order": 104,
+    "section_id": "6897ad9e66d27022",
+    "section_path": "1/section/12",
+    "text": "To mechanistically link this trend, Fig. 8 introduces local\nwater\npenetration\ndepths\ny_i.\nIn\nshallow,\nconnected,\nand\nsharp-edged grooves, water fully penetrates (y_1 and y_2 approach",
+    "text_source": "native"
+   },
+   {
+    "bbox": [
+     335.51,
+     683.89,
+     538.55,
+     692.11
+    ],
+    "block_index": 7,
+    "block_type": "caption",
+    "document_version_id": "0b56b6d5ef26ae7a",
+    "page_index": 6,
+    "paper_id": "Flat-top picosecond laser texturing of CFRP.pdf",
+    "reading_order": 105,
+    "section_id": "",
+    "section_path": "",
+    "text": "FIG. 7. Water contact angles on surfaces with different laser fluences.",
+    "text_source": "native"
+   },
+   {
+    "bbox": [
+     39.0,
+     741.44,
+     572.95,
+     749.65
+    ],
+    "block_index": 10,
+    "block_type": "body",
+    "document_version_id": "0b56b6d5ef26ae7a",
+    "page_index": 6,
+    "paper_id": "Flat-top picosecond laser texturing of CFRP.pdf",
+    "reading_order": 106,
+    "section_id": "6897ad9e66d27022",
+    "section_path": "1/section/12",
+    "text": "J. Appl. Phys. 138, 225301 (2025); doi: 10.1063/5.0299010\n138, 225301-6",
+    "text_source": "native"
+   },
+   {
+    "bbox": [
+     39.01,
+     754.69,
+     89.86,
+     762.69
+    ],
+    "block_index": 11,
+    "block_type": "body",
+    "document_version_id": "0b56b6d5ef26ae7a",
+    "page_index": 6,
+    "paper_id": "Flat-top picosecond laser texturing of CFRP.pdf",
+    "reading_order": 107,
+    "section_id": "6897ad9e66d27022",
+    "section_path": "1/section/12",
+    "text": "© Author(s) 2025",
+    "text_source": "native"
+   }
+  ],
+  [
+   {
+    "bbox": [
+     54.03,
+     38.83,
+     143.53,
+     64.83
+    ],
+    "block_index": 7,
+    "block_type": "body",
+    "document_version_id": "0b56b6d5ef26ae7a",
+    "page_index": 7,
+    "paper_id": "Flat-top picosecond laser texturing of CFRP.pdf",
+    "reading_order": 108,
+    "section_id": "6897ad9e66d27022",
+    "section_path": "1/section/12",
+    "text": "Journal of\nApplied Physics",
+    "text_source": "native"
+   },
+   {
+    "bbox": [
+     376.67,
+     47.87,
+     535.05,
+     56.87
+    ],
+    "block_index": 8,
+    "block_type": "body",
+    "document_version_id": "0b56b6d5ef26ae7a",
+    "page_index": 7,
+    "paper_id": "Flat-top picosecond laser texturing of CFRP.pdf",
+    "reading_order": 109,
+    "section_id": "6897ad9e66d27022",
+    "section_path": "1/section/12",
+    "text": "ARTICLE\npubs.aip.org/aip/jap",
+    "text_source": "native"
+   },
+   {
+    "bbox": [
+     208.91,
+     296.45,
+     403.07,
+     304.67
+    ],
+    "block_index": 4,
+    "block_type": "caption",
+    "document_version_id": "0b56b6d5ef26ae7a",
+    "page_index": 7,
+    "paper_id": "Flat-top picosecond laser texturing of CFRP.pdf",
+    "reading_order": 110,
+    "section_id": "",
+    "section_path": "",
+    "text": "FIG. 8. Schematic of water invasion depth on laser-textured CFRP.",
+    "text_source": "native"
+   },
+   {
+    "bbox": [
+     314.99,
+     332.69,
+     559.01,
+     415.17
+    ],
+    "block_index": 2,
+    "block_type": "body",
+    "document_version_id": "0b56b6d5ef26ae7a",
+    "page_index": 7,
+    "paper_id": "Flat-top picosecond laser texturing of CFRP.pdf",
+    "reading_order": 111,
+    "section_id": "6897ad9e66d27022",
+    "section_path": "1/section/12",
+    "text": "to assess graphitization and defect density. For the untreated condi-\ntion, because the as-received CFRP is covered by an epoxy layer,\nRaman was acquired on a resin-free plain-weave carbon fabric to\nprovide a fiber reference (“original”). In contrast, for the tree-frog–\ntextured condition, the laser process removes the resin-rich layer\nand exposes the fiber at the cell tops; therefore, Raman was col-\nlected directly on the textured CFRP surface (“tree frog”). The pris-\ntine surface exhibits I_D/I_G ≈0.94, while the tree-frog–textured",
+    "text_source": "native"
+   },
+   {
+    "bbox": [
+     53.01,
+     332.69,
+     296.98,
+     373.16
+    ],
+    "block_index": 0,
+    "block_type": "body",
+    "document_version_id": "0b56b6d5ef26ae7a",
+    "page_index": 7,
+    "paper_id": "Flat-top picosecond laser texturing of CFRP.pdf",
+    "reading_order": 112,
+    "section_id": "6897ad9e66d27022",
+    "section_path": "1/section/12",
+    "text": "This suggests a shift toward a less penetrative wetting state, likely\ndue to the surface structure becoming more favorable for air\nentrapment beneath the droplet, thus impeding water infiltration\nand promoting the Cassie–Baxter state.",
+    "text_source": "native"
+   },
+   {
+    "bbox": [
+     53.01,
+     374.65,
+     297.01,
+     415.17
+    ],
+    "block_index": 1,
+    "block_type": "caption",
+    "document_version_id": "0b56b6d5ef26ae7a",
+    "page_index": 7,
+    "paper_id": "Flat-top picosecond laser texturing of CFRP.pdf",
+    "reading_order": 113,
+    "section_id": "",
+    "section_path": "",
+    "text": "Figure 9(a) presents the Raman spectra of the investigated sur-\nfaces. Two characteristic peaks are observed at ≈1355 (D band) and\n1585 cm−1 (G band), corresponding to the vibrational modes of\ngraphitic carbon.32 The intensity ratio I_D/I_G is commonly used",
+    "text_source": "native"
+   },
+   {
+    "bbox": [
+     561.76,
+     382.3,
+     569.25,
+     461.5
+    ],
+    "block_index": 11,
+    "block_type": "heading",
+    "document_version_id": "0b56b6d5ef26ae7a",
+    "page_index": 7,
+    "paper_id": "Flat-top picosecond laser texturing of CFRP.pdf",
+    "reading_order": 114,
+    "section_id": "eefcb16051ecc59f",
+    "section_path": "1/section/13",
+    "text": "09 July 2026 15:48:05",
+    "text_source": "native"
+   },
+   {
+    "bbox": [
+     59.02,
+     665.98,
+     553.0,
+     692.22
+    ],
+    "block_index": 6,
+    "block_type": "caption",
+    "document_version_id": "0b56b6d5ef26ae7a",
+    "page_index": 7,
+    "paper_id": "Flat-top picosecond laser texturing of CFRP.pdf",
+    "reading_order": 115,
+    "section_id": "",
+    "section_path": "",
+    "text": "FIG. 9. Raman and XPS analyses of the original and laser-textured “tree-frog” surfaces. (a) Raman spectra: Flat-top tree-frog (top trace) vs Original (bottom trace). (b) C\n1s XPS spectra ordered by panel: top—Flat-top tree-frog, middle—Gaussian tree-frog,31 bottom—Original (resin-covered). Reproduced with permission from Wang et al.,\nPolym. Compos. (published online 2025). Copyright 2025 Wiley.",
+    "text_source": "native"
+   },
+   {
+    "bbox": [
+     39.0,
+     741.44,
+     572.95,
+     749.65
+    ],
+    "block_index": 9,
+    "block_type": "body",
+    "document_version_id": "0b56b6d5ef26ae7a",
+    "page_index": 7,
+    "paper_id": "Flat-top picosecond laser texturing of CFRP.pdf",
+    "reading_order": 116,
+    "section_id": "eefcb16051ecc59f",
+    "section_path": "1/section/13",
+    "text": "J. Appl. Phys. 138, 225301 (2025); doi: 10.1063/5.0299010\n138, 225301-7",
+    "text_source": "native"
+   },
+   {
+    "bbox": [
+     39.01,
+     754.69,
+     89.86,
+     762.69
+    ],
+    "block_index": 10,
+    "block_type": "body",
+    "document_version_id": "0b56b6d5ef26ae7a",
+    "page_index": 7,
+    "paper_id": "Flat-top picosecond laser texturing of CFRP.pdf",
+    "reading_order": 117,
+    "section_id": "eefcb16051ecc59f",
+    "section_path": "1/section/13",
+    "text": "© Author(s) 2025",
+    "text_source": "native"
+   }
+  ],
+  [
+   {
+    "bbox": [
+     54.03,
+     38.83,
+     143.53,
+     64.83
+    ],
+    "block_index": 10,
+    "block_type": "body",
+    "document_version_id": "0b56b6d5ef26ae7a",
+    "page_index": 8,
+    "paper_id": "Flat-top picosecond laser texturing of CFRP.pdf",
+    "reading_order": 118,
+    "section_id": "eefcb16051ecc59f",
+    "section_path": "1/section/13",
+    "text": "Journal of\nApplied Physics",
+    "text_source": "native"
+   },
+   {
+    "bbox": [
+     376.67,
+     47.87,
+     535.05,
+     56.87
+    ],
+    "block_index": 11,
+    "block_type": "body",
+    "document_version_id": "0b56b6d5ef26ae7a",
+    "page_index": 8,
+    "paper_id": "Flat-top picosecond laser texturing of CFRP.pdf",
+    "reading_order": 119,
+    "section_id": "eefcb16051ecc59f",
+    "section_path": "1/section/13",
+    "text": "ARTICLE\npubs.aip.org/aip/jap",
+    "text_source": "native"
+   },
+   {
+    "bbox": [
+     314.99,
+     101.67,
+     559.02,
+     152.68
+    ],
+    "block_index": 2,
+    "block_type": "body",
+    "document_version_id": "0b56b6d5ef26ae7a",
+    "page_index": 8,
+    "paper_id": "Flat-top picosecond laser texturing of CFRP.pdf",
+    "reading_order": 120,
+    "section_id": "eefcb16051ecc59f",
+    "section_path": "1/section/13",
+    "text": "functional groups (e.g., hydroxyl and carbonyl), which enhances\nsurface polarity and chemical reactivity, thereby improving wetta-\nbility and interfacial adhesion.34 On this basis, in our data, the\nflat-top sample shows a slightly higher total oxidized fraction than\nthe Gaussian sample (35.1% vs 32.8%; CvO/CZC 0.170 vs 0.164).",
+    "text_source": "native"
+   },
+   {
+    "bbox": [
+     314.99,
+     172.34,
+     517.39,
+     191.88
+    ],
+    "block_index": 3,
+    "block_type": "body",
+    "document_version_id": "0b56b6d5ef26ae7a",
+    "page_index": 8,
+    "paper_id": "Flat-top picosecond laser texturing of CFRP.pdf",
+    "reading_order": 121,
+    "section_id": "eefcb16051ecc59f",
+    "section_path": "1/section/13",
+    "text": "B. Laser-induced adhesion enhancement and\nfailure-mode transition",
+    "text_source": "native"
+   },
+   {
+    "bbox": [
+     314.99,
+     198.33,
+     559.02,
+     396.35
+    ],
+    "block_index": 4,
+    "block_type": "caption",
+    "document_version_id": "0b56b6d5ef26ae7a",
+    "page_index": 8,
+    "paper_id": "Flat-top picosecond laser texturing of CFRP.pdf",
+    "reading_order": 122,
+    "section_id": "",
+    "section_path": "",
+    "text": "Figure 10 summarizes the single-lap-shear strength vs laser\nfluence. The untreated AA7075/CFRP joint shows a baseline\nstrength of 5.9 MPa. With laser texturing, the strength rises from\n14.2 MPa at 2.3 J/cm2 to a maximum of 19.6 MPa at 5.8 J/cm2 and\nthen slightly decreases to 18.9 MPa at 7.0 J/cm2. This non-\nmonotonic trend reflects the balance between beneficial texture/\nchemistry development and over-processing. In the rising regime\n(2.3–5.8 J/cm2), sharpening of boundary grooves and hierarchical\nroughness enhance mechanical interlocking, while XPS indicates\nthe increased oxygenated functionalities that raise interfacial polar-\nity and promote chemical coupling. Beyond the optimum, addi-\ntional material removal and ridge coarsening can degrade plateau\nintegrity or introduce stress concentrators, slightly reducing the\napparent strength. To consolidate the mechanism, Fig. 11 sketches\nthe two dominant effects of laser texturing on CFRP: removal of\nthe low-energy resin and incorporation of polar functionalities\n(improving\nwetting/chemical\ncoupling),\ntogether\nwith\ntexture-induced roughness/cavities that enable adhesive penetration\nand mechanical keying.",
+    "text_source": "native"
+   },
+   {
+    "bbox": [
+     59.02,
+     289.25,
+     291.0,
+     306.48
+    ],
+    "block_index": 7,
+    "block_type": "caption",
+    "document_version_id": "0b56b6d5ef26ae7a",
+    "page_index": 8,
+    "paper_id": "Flat-top picosecond laser texturing of CFRP.pdf",
+    "reading_order": 123,
+    "section_id": "",
+    "section_path": "",
+    "text": "FIG. 10. Effect of flat-top laser fluence on the interfacial shear strength of the\nCFRP.",
+    "text_source": "native"
+   },
+   {
+    "bbox": [
+     53.01,
+     333.81,
+     297.0,
+     385.35
+    ],
+    "block_index": 0,
+    "block_type": "body",
+    "document_version_id": "0b56b6d5ef26ae7a",
+    "page_index": 8,
+    "paper_id": "Flat-top picosecond laser texturing of CFRP.pdf",
+    "reading_order": 124,
+    "section_id": "eefcb16051ecc59f",
+    "section_path": "1/section/13",
+    "text": "surface shows ≈0.95. This negligible change indicates that laser tex-\nturing does not introduce appreciable additional defects nor alter\nthe overall degree of graphitization, i.e., the process primarily engi-\nneers\nsurface\nperiodicity\nwithout\ncompromising\nthe\ncarbon\nframework.",
+    "text_source": "native"
+   },
+   {
+    "bbox": [
+     561.76,
+     382.3,
+     569.25,
+     461.5
+    ],
+    "block_index": 14,
+    "block_type": "heading",
+    "document_version_id": "0b56b6d5ef26ae7a",
+    "page_index": 8,
+    "paper_id": "Flat-top picosecond laser texturing of CFRP.pdf",
+    "reading_order": 125,
+    "section_id": "b2970a6d05629670",
+    "section_path": "1/section/14",
+    "text": "09 July 2026 15:48:05",
+    "text_source": "native"
+   },
+   {
+    "bbox": [
+     53.01,
+     386.89,
+     297.02,
+     490.35
+    ],
+    "block_index": 1,
+    "block_type": "caption",
+    "document_version_id": "0b56b6d5ef26ae7a",
+    "page_index": 8,
+    "paper_id": "Flat-top picosecond laser texturing of CFRP.pdf",
+    "reading_order": 126,
+    "section_id": "",
+    "section_path": "",
+    "text": "Figure 9(b) shows the C 1s spectra. Deconvolution resolves\nthree\ncomponents\nassigned\nto\nCZC\n(∼284.8 eV),\nCZO\n(∼286.0 eV), and CvO (∼288.8 eV).31,33 XPS covers three states:\noriginal\n(resin-covered,\nbottom\npanel),\nGaussian\ntree-frog\n(Gaussian-beam textured, middle panel), and flat-top tree-frog\n(flat-top-beam textured, top panel). The relative areas (CZC/\nCZO/CvO, %) are 71.7/22.6/5.7, 67.2/21.8/11.0, and 64.9/24.1/\n11.0, respectively; the total oxidized fraction (CZO + CvO)\nincreases from 28.3% to 32.82% (Gaussian) and 35.1% (flat-top).\nThese\nresults\nindicate\nan\nenrichment\nof\noxygen-containing",
+    "text_source": "native"
+   },
+   {
+    "bbox": [
+     314.99,
+     397.25,
+     559.01,
+     490.86
+    ],
+    "block_index": 5,
+    "block_type": "caption",
+    "document_version_id": "0b56b6d5ef26ae7a",
+    "page_index": 8,
+    "paper_id": "Flat-top picosecond laser texturing of CFRP.pdf",
+    "reading_order": 127,
+    "section_id": "",
+    "section_path": "",
+    "text": "Figures 12(a)–12(c) compare the fracture surfaces under dis-\ntinct surface states. The untreated specimen (a) exhibits a predomi-\nnantly adhesive failure, with the crack propagating along the\nCFRP–adhesive\ninterface.\nMinimal\nadhesive\nremains\non\nthe\nAA7075 side while a continuous adhesive film persists on the\nCFRP side, yielding a relatively flat, glossy fracture surface with\nnegligible fiber pull-out or tow imprints—indicative of poor inter-\nfacial wetting and limited mechanical interlocking. After bioins-\npired texturing, the surface resin is removed and hierarchical",
+    "text_source": "native"
+   },
+   {
+    "bbox": [
+     121.95,
+     683.89,
+     490.08,
+     692.11
+    ],
+    "block_index": 9,
+    "block_type": "caption",
+    "document_version_id": "0b56b6d5ef26ae7a",
+    "page_index": 8,
+    "paper_id": "Flat-top picosecond laser texturing of CFRP.pdf",
+    "reading_order": 128,
+    "section_id": "",
+    "section_path": "",
+    "text": "FIG. 11. Mechanistic illustration of adhesion enhancement on the CFRP: (a) chemical bonding and (b) mechanical interlocking.",
+    "text_source": "native"
+   },
+   {
+    "bbox": [
+     39.0,
+     741.44,
+     572.95,
+     749.65
+    ],
+    "block_index": 12,
+    "block_type": "body",
+    "document_version_id": "0b56b6d5ef26ae7a",
+    "page_index": 8,
+    "paper_id": "Flat-top picosecond laser texturing of CFRP.pdf",
+    "reading_order": 129,
+    "section_id": "b2970a6d05629670",
+    "section_path": "1/section/14",
+    "text": "J. Appl. Phys. 138, 225301 (2025); doi: 10.1063/5.0299010\n138, 225301-8",
+    "text_source": "native"
+   },
+   {
+    "bbox": [
+     39.01,
+     754.69,
+     89.86,
+     762.69
+    ],
+    "block_index": 13,
+    "block_type": "body",
+    "document_version_id": "0b56b6d5ef26ae7a",
+    "page_index": 8,
+    "paper_id": "Flat-top picosecond laser texturing of CFRP.pdf",
+    "reading_order": 130,
+    "section_id": "b2970a6d05629670",
+    "section_path": "1/section/14",
+    "text": "© Author(s) 2025",
+    "text_source": "native"
+   }
+  ],
+  [
+   {
+    "bbox": [
+     54.03,
+     38.83,
+     143.53,
+     64.83
+    ],
+    "block_index": 6,
+    "block_type": "body",
+    "document_version_id": "0b56b6d5ef26ae7a",
+    "page_index": 9,
+    "paper_id": "Flat-top picosecond laser texturing of CFRP.pdf",
+    "reading_order": 131,
+    "section_id": "b2970a6d05629670",
+    "section_path": "1/section/14",
+    "text": "Journal of\nApplied Physics",
+    "text_source": "native"
+   },
+   {
+    "bbox": [
+     376.67,
+     47.87,
+     535.05,
+     56.87
+    ],
+    "block_index": 7,
+    "block_type": "body",
+    "document_version_id": "0b56b6d5ef26ae7a",
+    "page_index": 9,
+    "paper_id": "Flat-top picosecond laser texturing of CFRP.pdf",
+    "reading_order": 132,
+    "section_id": "b2970a6d05629670",
+    "section_path": "1/section/14",
+    "text": "ARTICLE\npubs.aip.org/aip/jap",
+    "text_source": "native"
+   },
+   {
+    "bbox": [
+     59.02,
+     308.7,
+     552.98,
+     325.93
+    ],
+    "block_index": 3,
+    "block_type": "caption",
+    "document_version_id": "0b56b6d5ef26ae7a",
+    "page_index": 9,
+    "paper_id": "Flat-top picosecond laser texturing of CFRP.pdf",
+    "reading_order": 133,
+    "section_id": "",
+    "section_path": "",
+    "text": "FIG. 12. Representative failure modes after lap-shear: (a) interfacial adhesive failure on the AA7075 side; (b) mixed interfacial–cohesive failure; (c) fiber-dominated\nco-failure on the CFRP side.",
+    "text_source": "native"
+   },
+   {
+    "bbox": [
+     53.01,
+     340.8,
+     296.99,
+     385.29
+    ],
+    "block_index": 0,
+    "block_type": "body",
+    "document_version_id": "0b56b6d5ef26ae7a",
+    "page_index": 9,
+    "paper_id": "Flat-top picosecond laser texturing of CFRP.pdf",
+    "reading_order": 134,
+    "section_id": "b2970a6d05629670",
+    "section_path": "1/section/14",
+    "text": "grooves/ridges are formed at the fiber/tow scale. At 3.5 J/cm2 (b), a\nmixed failure mode is observed: fibers are exposed, but grooves are\nshallow and discontinuous, leading to discrete cohesive tearing\npatches in the adhesive on the AA7075 side together with limited",
+    "text_source": "native"
+   },
+   {
+    "bbox": [
+     314.99,
+     344.83,
+     559.0,
+     385.29
+    ],
+    "block_index": 1,
+    "block_type": "body",
+    "document_version_id": "0b56b6d5ef26ae7a",
+    "page_index": 9,
+    "paper_id": "Flat-top picosecond laser texturing of CFRP.pdf",
+    "reading_order": 135,
+    "section_id": "b2970a6d05629670",
+    "section_path": "1/section/14",
+    "text": "fiber pull-out and tow imprints; residual interfacial glossy bands\nremain locally, evidencing insufficient anchoring depth and lateral\n“keying,” so the crack alternates between the interface, the adhesive\nlayer, and fiber peripheries. At 5.8 J/cm2 (c), the texture becomes",
+    "text_source": "native"
+   },
+   {
+    "bbox": [
+     561.76,
+     382.3,
+     569.25,
+     461.5
+    ],
+    "block_index": 10,
+    "block_type": "heading",
+    "document_version_id": "0b56b6d5ef26ae7a",
+    "page_index": 9,
+    "paper_id": "Flat-top picosecond laser texturing of CFRP.pdf",
+    "reading_order": 136,
+    "section_id": "ec7e32949f52860e",
+    "section_path": "1/section/15",
+    "text": "09 July 2026 15:48:05",
+    "text_source": "native"
+   },
+   {
+    "bbox": [
+     134.14,
+     683.89,
+     477.87,
+     692.11
+    ],
+    "block_index": 5,
+    "block_type": "caption",
+    "document_version_id": "0b56b6d5ef26ae7a",
+    "page_index": 9,
+    "paper_id": "Flat-top picosecond laser texturing of CFRP.pdf",
+    "reading_order": 137,
+    "section_id": "",
+    "section_path": "",
+    "text": "FIG. 13. Mechanistic illustration of lap-shear response vs fluence: (a) low fluence, (b) optimal fluence, (c) high fluence.",
+    "text_source": "native"
+   },
+   {
+    "bbox": [
+     39.0,
+     741.44,
+     572.95,
+     749.65
+    ],
+    "block_index": 8,
+    "block_type": "body",
+    "document_version_id": "0b56b6d5ef26ae7a",
+    "page_index": 9,
+    "paper_id": "Flat-top picosecond laser texturing of CFRP.pdf",
+    "reading_order": 138,
+    "section_id": "ec7e32949f52860e",
+    "section_path": "1/section/15",
+    "text": "J. Appl. Phys. 138, 225301 (2025); doi: 10.1063/5.0299010\n138, 225301-9",
+    "text_source": "native"
+   },
+   {
+    "bbox": [
+     39.01,
+     754.69,
+     89.86,
+     762.69
+    ],
+    "block_index": 9,
+    "block_type": "body",
+    "document_version_id": "0b56b6d5ef26ae7a",
+    "page_index": 9,
+    "paper_id": "Flat-top picosecond laser texturing of CFRP.pdf",
+    "reading_order": 139,
+    "section_id": "ec7e32949f52860e",
+    "section_path": "1/section/15",
+    "text": "© Author(s) 2025",
+    "text_source": "native"
+   }
+  ],
+  [
+   {
+    "bbox": [
+     54.03,
+     38.83,
+     143.53,
+     64.83
+    ],
+    "block_index": 13,
+    "block_type": "body",
+    "document_version_id": "0b56b6d5ef26ae7a",
+    "page_index": 10,
+    "paper_id": "Flat-top picosecond laser texturing of CFRP.pdf",
+    "reading_order": 140,
+    "section_id": "ec7e32949f52860e",
+    "section_path": "1/section/15",
+    "text": "Journal of\nApplied Physics",
+    "text_source": "native"
+   },
+   {
+    "bbox": [
+     376.67,
+     47.87,
+     535.05,
+     56.87
+    ],
+    "block_index": 14,
+    "block_type": "body",
+    "document_version_id": "0b56b6d5ef26ae7a",
+    "page_index": 10,
+    "paper_id": "Flat-top picosecond laser texturing of CFRP.pdf",
+    "reading_order": 141,
+    "section_id": "ec7e32949f52860e",
+    "section_path": "1/section/15",
+    "text": "ARTICLE\npubs.aip.org/aip/jap",
+    "text_source": "native"
+   },
+   {
+    "bbox": [
+     314.99,
+     101.19,
+     409.97,
+     110.19
+    ],
+    "block_index": 7,
+    "block_type": "body",
+    "document_version_id": "0b56b6d5ef26ae7a",
+    "page_index": 10,
+    "paper_id": "Flat-top picosecond laser texturing of CFRP.pdf",
+    "reading_order": 142,
+    "section_id": "ec7e32949f52860e",
+    "section_path": "1/section/15",
+    "text": "Author Contributions",
+    "text_source": "native"
+   },
+   {
+    "bbox": [
+     53.01,
+     101.67,
+     297.02,
+     205.18
+    ],
+    "block_index": 0,
+    "block_type": "body",
+    "document_version_id": "0b56b6d5ef26ae7a",
+    "page_index": 10,
+    "paper_id": "Flat-top picosecond laser texturing of CFRP.pdf",
+    "reading_order": 143,
+    "section_id": "ec7e32949f52860e",
+    "section_path": "1/section/15",
+    "text": "deeper and continuous, establishing effective three-dimensional\nmechanical interlocking at the tow scale. The fracture surface is\ncharacterized by a fiber-dominated co-failure of CFRP matrix/adhe-\nsive: extensive tow imprints, dense pull-out trajectories, and local\nfiber fractures are evident, accompanied by pronounced transfer of\nthe CFRP surface layer (fiber-rich) to the AA7075 side. Interfacial\nglossy bands nearly disappear, and the crack is forced away from\nthe original interface, meandering through the adhesive and\naround fiber bundles—consistent with the transition from interfa-\ncial/mixed failure to fiber-dominated co-failure.",
+    "text_source": "native"
+   },
+   {
+    "bbox": [
+     314.98,
+     116.11,
+     559.01,
+     262.22
+    ],
+    "block_index": 8,
+    "block_type": "body",
+    "document_version_id": "0b56b6d5ef26ae7a",
+    "page_index": 10,
+    "paper_id": "Flat-top picosecond laser texturing of CFRP.pdf",
+    "reading_order": 144,
+    "section_id": "ec7e32949f52860e",
+    "section_path": "1/section/15",
+    "text": "Zhonghe Wang: Validation (equal); Visualization (equal); Writing\n– original draft (equal); Writing – review & editing (equal). Di Liu:\nValidation (equal); Visualization (equal); Writing – original draft\n(equal).\nYao\nMa:\nSupervision\n(equal);\nValidation\n(equal);\nVisualization (equal). Shuwei Sun: Methodology (equal); Project\nadministration\n(equal).\nYujie\nWang:\nInvestigation\n(equal);\nMethodology (equal). Chunting Wu: Conceptualization (equal);\nData curation (equal); Formal analysis (equal); Funding acquisition\n(equal); Investigation (equal). Changqing Li: Investigation (equal);\nMethodology (equal); Project administration (equal); Resources\n(equal); Software (equal); Supervision (equal); Validation (equal).\nYongji Yu: Resources (equal); Software (equal); Supervision\n(equal). Mo Zhang: Resources (equal); Software (equal); Validation\n(equal).",
+    "text_source": "native"
+   },
+   {
+    "bbox": [
+     53.01,
+     206.67,
+     297.02,
+     341.7
+    ],
+    "block_index": 1,
+    "block_type": "body",
+    "document_version_id": "0b56b6d5ef26ae7a",
+    "page_index": 10,
+    "paper_id": "Flat-top picosecond laser texturing of CFRP.pdf",
+    "reading_order": 145,
+    "section_id": "ec7e32949f52860e",
+    "section_path": "1/section/15",
+    "text": "Building on the strength gains and fracture-surface evidence,\nFig. 13 clarifies how biomimetic structuring enhances the AA7075/\nCFRP interface in a fluence-dependent manner. Biomimetic\nmicro-/nanotopographies promote deeper adhesive penetration\ninto the CFRP, improving mechanical interlocking and stress trans-\nfer. At low fluence, shallow features limit infiltration and interlock-\ning, yielding weak interfaces. At an optimal fluence, well-defined\nhierarchical textures enable maximum penetration and robust\nanchoring, consistent with the increased lap-shear strength and the\nfailure-mode transition in Fig. 12. At excessive fluence, voids/\nmicrocracks and disrupted interfacial continuity can reduce the\neffective bonding area and introduce stress concentrators, thereby\ndegrading strength.",
+    "text_source": "native"
+   },
+   {
+    "bbox": [
+     314.98,
+     275.24,
+     401.8,
+     284.24
+    ],
+    "block_index": 9,
+    "block_type": "body",
+    "document_version_id": "0b56b6d5ef26ae7a",
+    "page_index": 10,
+    "paper_id": "Flat-top picosecond laser texturing of CFRP.pdf",
+    "reading_order": 146,
+    "section_id": "ec7e32949f52860e",
+    "section_path": "1/section/15",
+    "text": "DATA AVAILABILITY",
+    "text_source": "native"
+   },
+   {
+    "bbox": [
+     314.98,
+     290.75,
+     558.96,
+     310.24
+    ],
+    "block_index": 10,
+    "block_type": "body",
+    "document_version_id": "0b56b6d5ef26ae7a",
+    "page_index": 10,
+    "paper_id": "Flat-top picosecond laser texturing of CFRP.pdf",
+    "reading_order": 147,
+    "section_id": "ec7e32949f52860e",
+    "section_path": "1/section/15",
+    "text": "The data that support the findings of this study are available\nfrom the corresponding authors upon reasonable request.",
+    "text_source": "native"
+   },
+   {
+    "bbox": [
+     314.98,
+     323.32,
+     375.51,
+     332.32
+    ],
+    "block_index": 11,
+    "block_type": "heading",
+    "document_version_id": "0b56b6d5ef26ae7a",
+    "page_index": 10,
+    "paper_id": "Flat-top picosecond laser texturing of CFRP.pdf",
+    "reading_order": 148,
+    "section_id": "b54d61e466243d9c",
+    "section_path": "1/references/16",
+    "text": "REFERENCES",
+    "text_source": "native"
+   },
+   {
+    "bbox": [
+     314.98,
+     337.58,
+     559.07,
+     698.4
+    ],
+    "block_index": 12,
+    "block_type": "body",
+    "document_version_id": "0b56b6d5ef26ae7a",
+    "page_index": 10,
+    "paper_id": "Flat-top picosecond laser texturing of CFRP.pdf",
+    "reading_order": 149,
+    "section_id": "b54d61e466243d9c",
+    "section_path": "1/references/16",
+    "text": "1P. Song, J. Liu, Z. Li, S. Wu, X. Sun, H. Yue, and M. Pawlak, “All-optical laser\nultrasonic technique for imaging of subsurface defects in carbon fiber reinforced\npolymer (CFRP) using an optical microphone,” J. Appl. Phys. 131(16), 165106\n(2022).\n2Y. Wu, Y. Zhang, Z. Yang, X. Huang, S. Chen, J. Li, G. Huang, W. Wei, G. Gao,\nand G. Wu, “In situ growth of silver nanoparticles on carbon fiber by plasma–\nliquid interaction to improve performance of epoxy composites,” J. Appl. Phys.\n136(6), 065304 (2024).\n3J. Li, Y. Ding, Y. Guan, L. Wang, H. Xie, Y. Wang, and L. Yang, “Investigations\non 355 nm nanosecond-picosecond dual-pulse laser enhanced ablation of carbon\nfiber reinforced polymer,” Opt. Laser Technol. 185, 112576 (2025).\n4T. V. Kononenko, C. Freitag, M. S. Komlenok, V. Onuseit, R. Weber, T. Graf,\nand V. I. Konov, “Oxygen-assisted multipass cutting of carbon fiber reinforced\nplastics with ultra-short laser pulses,” J. Appl. Phys. 115(10), 103107 (2014).\n5Z. Cao, F. Shi, and B. Zhang, “Layer-by-layer acoustic travel time approximation\nusing ray theory for total focusing method imaging in carbon fiber reinforced\npolymer,” J. Appl. Phys. 134(12), 124902 (2023).\n6J. Zhang, G. Lin, U. Vaidya, and H. Wang, “Past, present and future prospective\nof global carbon fibre composite developments and applications,” Composites,\nPart B 250, 110463 (2023).\n7J. Gu, X. Su, Y. Jin, D. Zhang, W. Li, J. Xu, and B. Guo, “Research progress and\nprospects of laser cleaning for CFRP: A review,” Composites, Part A 185, 108349\n(2024).\n8S. Wang, W. Wang, Y. Xu, Y. Tian, X. Zhang, and H. Huang, “Enhancing\nbonding synergy and mechanical response of metal/composite hybrid joints\nthrough physicochemical surface pretreatment,” J. Mater. Process. Technol. 315,\n117923 (2023).\n9Y. Song, S. Wang, Y. Pan, Z. Li, and L. Yu, “Current research status of laser\ncleaning of carbon fiber reinforced polymers,” Mater. Today Commun. 39,\n109312 (2024).\n10l. Y. Xu, J. R. Lu, K. M. Li, and J. Hu, “Experimental study of CFRP laser\nsurface modification and bonding characteristics of CFRP/Al6061 heterogeneous\njoints,” Compos. Struct. 283, 115030 (2022).\n11Y. Xie, B. Yang, L. Lu, Z. Wan, and X. Liu, “Shear strength of bonded joints of\ncarbon fiber reinforced plastic (CFRP) laminates enhanced by a two-step laser\nsurface treatment,” Compos. Struct. 232, 111559 (2020).\n12P. Zuo, T. Liu, F. Li, G. Wang, K. Zhang, X. Li, W. Han, H. Tian, L. Hu,\nH. Huang, D. Zhu, and L. Jiang, “Controllable fabrication of hydrophilic surface",
+    "text_source": "native"
+   },
+   {
+    "bbox": [
+     53.01,
+     362.27,
+     132.26,
+     371.27
+    ],
+    "block_index": 2,
+    "block_type": "heading",
+    "document_version_id": "0b56b6d5ef26ae7a",
+    "page_index": 10,
+    "paper_id": "Flat-top picosecond laser texturing of CFRP.pdf",
+    "reading_order": 150,
+    "section_id": "8e015d2cb380ea83",
+    "section_path": "1/conclusion/17",
+    "text": "IV. CONCLUSIONS",
+    "text_source": "native"
+   },
+   {
+    "bbox": [
+     53.01,
+     377.77,
+     297.02,
+     638.77
+    ],
+    "block_index": 3,
+    "block_type": "body",
+    "document_version_id": "0b56b6d5ef26ae7a",
+    "page_index": 10,
+    "paper_id": "Flat-top picosecond laser texturing of CFRP.pdf",
+    "reading_order": 151,
+    "section_id": "8e015d2cb380ea83",
+    "section_path": "1/conclusion/17",
+    "text": "In this work, a 355 nm flat-top (top-hat) picosecond laser was\nemployed to realize integrated biomimetic texturing and surface\nactivation\nof\nCFRP.\nA\ntree-frog–inspired\npolygonal\n“plateau-connected-groove” pattern was programmed onto the lam-\ninate with minimal heat-affected impact. Relative to the pristine\nsurface (Sa ≈1 μm), laser processing markedly amplified surface\ntopography (Sa up to ≈39.5 μm) and established hierarchical\nroughness\ncomprising\ncontinuous\nboundary\ngrooves\nand\nscan-induced ridges. Wettability was substantially improved (the\nwater contact angle decreased from 81.0° to a minimum of 8.0°).\nXPS revealed increased oxygenated functional groups (CZO/\nCvO), while Raman I_D/I_G remained essentially unchanged,\nindicating enhanced polarity without the degradation of the carbon\nframework. Consequently, AA7075/CFRP single-lap-shear strength\nincreased from 5.9 to 19.6 MPa at 5.8 J cm−2, accompanied by a\ntransition from interfacial adhesive failure to fiber-dominated\nmixed failure. The performance gains are attributed to the synergy\nbetween hierarchical micro-/nanostructures, which promote three-\ndimensional mechanical interlocking and adhesive infiltration, and\nelevated surface polarity, which enhances wetting and chemical\ncoupling. The proposed non-contact, computer-controlled flat-top\nlaser route scales to curved parts and automation, enabling durable\nCFRP multimaterial joints in aircraft (CFRP–Al lap joints/string-\ners) and automotive body structures (CFRP skin–honeycomb\nbonding/repairs).",
+    "text_source": "native"
+   },
+   {
+    "bbox": [
+     561.76,
+     382.3,
+     569.25,
+     461.5
+    ],
+    "block_index": 17,
+    "block_type": "heading",
+    "document_version_id": "0b56b6d5ef26ae7a",
+    "page_index": 10,
+    "paper_id": "Flat-top picosecond laser texturing of CFRP.pdf",
+    "reading_order": 152,
+    "section_id": "a6f840410a844edf",
+    "section_path": "1/section/18",
+    "text": "09 July 2026 15:48:05",
+    "text_source": "native"
+   },
+   {
+    "bbox": [
+     53.01,
+     659.33,
+     165.88,
+     668.33
+    ],
+    "block_index": 4,
+    "block_type": "body",
+    "document_version_id": "0b56b6d5ef26ae7a",
+    "page_index": 10,
+    "paper_id": "Flat-top picosecond laser texturing of CFRP.pdf",
+    "reading_order": 153,
+    "section_id": "a6f840410a844edf",
+    "section_path": "1/section/18",
+    "text": "AUTHOR DECLARATIONS",
+    "text_source": "native"
+   },
+   {
+    "bbox": [
+     53.01,
+     674.3,
+     135.29,
+     683.3
+    ],
+    "block_index": 5,
+    "block_type": "body",
+    "document_version_id": "0b56b6d5ef26ae7a",
+    "page_index": 10,
+    "paper_id": "Flat-top picosecond laser texturing of CFRP.pdf",
+    "reading_order": 154,
+    "section_id": "a6f840410a844edf",
+    "section_path": "1/section/18",
+    "text": "Conflict of Interest",
+    "text_source": "native"
+   },
+   {
+    "bbox": [
+     70.98,
+     689.81,
+     219.75,
+     698.81
+    ],
+    "block_index": 6,
+    "block_type": "body",
+    "document_version_id": "0b56b6d5ef26ae7a",
+    "page_index": 10,
+    "paper_id": "Flat-top picosecond laser texturing of CFRP.pdf",
+    "reading_order": 155,
+    "section_id": "a6f840410a844edf",
+    "section_path": "1/section/18",
+    "text": "The authors have no conflicts to disclose.",
+    "text_source": "native"
+   },
+   {
+    "bbox": [
+     39.0,
+     741.44,
+     572.94,
+     749.65
+    ],
+    "block_index": 15,
+    "block_type": "body",
+    "document_version_id": "0b56b6d5ef26ae7a",
+    "page_index": 10,
+    "paper_id": "Flat-top picosecond laser texturing of CFRP.pdf",
+    "reading_order": 156,
+    "section_id": "a6f840410a844edf",
+    "section_path": "1/section/18",
+    "text": "J. Appl. Phys. 138, 225301 (2025); doi: 10.1063/5.0299010\n138, 225301-10",
+    "text_source": "native"
+   },
+   {
+    "bbox": [
+     39.0,
+     754.69,
+     89.86,
+     762.69
+    ],
+    "block_index": 16,
+    "block_type": "body",
+    "document_version_id": "0b56b6d5ef26ae7a",
+    "page_index": 10,
+    "paper_id": "Flat-top picosecond laser texturing of CFRP.pdf",
+    "reading_order": 157,
+    "section_id": "a6f840410a844edf",
+    "section_path": "1/section/18",
+    "text": "© Author(s) 2025",
+    "text_source": "native"
+   }
+  ],
+  [
+   {
+    "bbox": [
+     54.03,
+     38.83,
+     143.53,
+     64.83
+    ],
+    "block_index": 2,
+    "block_type": "body",
+    "document_version_id": "0b56b6d5ef26ae7a",
+    "page_index": 11,
+    "paper_id": "Flat-top picosecond laser texturing of CFRP.pdf",
+    "reading_order": 158,
+    "section_id": "a6f840410a844edf",
+    "section_path": "1/section/18",
+    "text": "Journal of\nApplied Physics",
+    "text_source": "native"
+   },
+   {
+    "bbox": [
+     376.67,
+     47.87,
+     535.05,
+     56.87
+    ],
+    "block_index": 3,
+    "block_type": "body",
+    "document_version_id": "0b56b6d5ef26ae7a",
+    "page_index": 11,
+    "paper_id": "Flat-top picosecond laser texturing of CFRP.pdf",
+    "reading_order": 159,
+    "section_id": "a6f840410a844edf",
+    "section_path": "1/section/18",
+    "text": "ARTICLE\npubs.aip.org/aip/jap",
+    "text_source": "native"
+   },
+   {
+    "bbox": [
+     53.01,
+     101.26,
+     297.01,
+     441.76
+    ],
+    "block_index": 0,
+    "block_type": "body",
+    "document_version_id": "0b56b6d5ef26ae7a",
+    "page_index": 11,
+    "paper_id": "Flat-top picosecond laser texturing of CFRP.pdf",
+    "reading_order": 160,
+    "section_id": "a6f840410a844edf",
+    "section_path": "1/section/18",
+    "text": "micro/nanostructures of CFRP by femtosecond laser,” ACS Omega 9(19),\n20988–20996 (2024).\n13H. Yao, M. Chen, L. Jiang, B. Guo, Z. Yu, G. Wang, and S. Song, “Selective\nprocessing of CFRP by two-color double-pulse femtosecond laser,” Opt. Express\n33(2), 3101–3111 (2025).\n14Y. Yuan, X. Guo, Y. Gu, D. Li, K. Zhang, and W. Han, “Rapid surface modifi-\ncation of CFRP via femtosecond laser-assisted by chemical approach to enhance\nadhesive performance,” Compos. Commun. 53, 102200 (2025).\n15S. Li, W. Wang, L. Wang, Z. Li, Z. Teng, Y. Yang, C. Zhang, Y. Hu, L. Feng,\nD. Wang, and W. Yang, “Process optimization and performance verification of\nCFRP laser surface modification,” Polym. Compos. 45(8), 7284–7300 (2024).\n16Z. Teng, Z. Li, W. Yang, Y. Yang, C. Zhang, R. Jian, C. Zhou, Y. Cao, and\nS. Li, “The effect of laser scanning direction on the bonding properties of unidi-\nrectional CFRP,” Opt. Laser Technol. 190, 113199 (2025).\n17A. Al-Mahdy, J. I. Ahuir-Torres, T. T. Öpöz, H. R. Kotadia, J. Mullett, and\nM. C. Sharp, “An investigation into the use of incoherent UV light to augment\nIR nanosecond pulsed laser texturing of CFRP composites for improved adhe-\nsion,” Opt. Laser Technol. 181, 111626 (2025).\n18C. Leone and S. Genna, “Effects of surface laser treatment on direct\nco-bonding strength of CFRP laminates,” Compos. Struct. 194, 240–251 (2018).\n19Z. Huang, Q. Li, Z. Lei, L. Gu, C. Liang, J. Su, X. Nan, and J. Liao, “Study on\nultrafast laser drilling with a flat-top beam in silicon wafer,” Opt. Laser Technol.\n186, 112707 (2025).\n20Y. Chen, Y. Guo, M. Xu, C. Ma, Q. Zhang, L. Wang, J. Yao, and Z. Li, “Study\non the element segregation and laves phase formation in the laser metal depos-\nited IN718 superalloy by flat top laser and Gaussian distribution laser,” Mater.\nSci. Eng. A 754, 339–347 (2019).\n21W. Yuan, H. Chen, S. Li, Y. Heng, S. Yin, and Q. Wei, “Understanding of\nadopting flat-top laser in laser powder bed fusion processed Inconel 718 alloy:\nSimulation of single-track scanning and experiment,” J. Mater. Res. Technol. 16,\n1388–1401 (2022).\n22T. Sumimoto and G. Miyaji, “Formation of homogeneous nanostructure via\ninterference of square flattop femtosecond laser pulses,” Nanomaterials 15(5),\n355 (2025).\n23G. Chen, Q. Peng, J. Long, H. Luo, Y. Zhou, X. Xie, G. Pan, and X. Wang, “A\nnovel strategy achieving GaN ultra-smooth surface via a square, flat top beam",
+    "text_source": "native"
+   },
+   {
+    "bbox": [
+     314.99,
+     101.75,
+     559.01,
+     441.76
+    ],
+    "block_index": 1,
+    "block_type": "body",
+    "document_version_id": "0b56b6d5ef26ae7a",
+    "page_index": 11,
+    "paper_id": "Flat-top picosecond laser texturing of CFRP.pdf",
+    "reading_order": 161,
+    "section_id": "a6f840410a844edf",
+    "section_path": "1/section/18",
+    "text": "shaped femtosecond laser processing combined with chemical mechanical pol-\nishing,” ECS J. Solid State Sci. Technol. 11(5), 054005 (2022).\n24F. Qian, H. Shen, G. Huang, B. Liu, and J. Hong, “Improvement of laser-\ninduced damage on high-efficiency solar cells via top-hat beam ablation,”\nEnergies 17(4), 858 (2024).\n25E. Nacius, O. Ulčinas, S. Orlov, and V. Jukna, “Polarization singularities for\nshaping of vector flat-top beams in utilization for high-power laser microma-\nchining of various materials,” Opt. Laser Technol. 177, 111133 (2024).\n26Y. Tong, J. ShangGuan, X. Ren, A. Yuan, J. Liu, Z. Lian, X. Hu, J. Ma, Z. Yang,\nand D. Wang, “Surface quality of laser paint removal of marine steel: A compar-\native study using a Gaussian beam and a flat-top beam.,” Appl. Opt. 61(9),\n2237–2246 (2022).\n27J. Chen, J. Bai, S. Zu, Z. Lin, and S. Yang, “Effect of interfacial thermal history\non bonding mechanism of laser assisted joining of QP980-CFRTP with adjust-\nable flat-top rectangular laser beam,” Compos. Struct. 323, 117488 (2023).\n28I. Scholz, W. J. P. Barnes, J. M. Smith, and W. Baumgartner, “Ultrastructure\nand physical properties of an adhesive surface, the toe pad epithelium of the tree\nfrog, Litoria caerulea white,” J. Exp. Biol. 212(1), 155–162 (2009).\n29l. Xue, B. Sanz, A. Luo et al., “Hybrid surface patterns mimicking the design\nof the adhesive toe pad of tree frog,” ACS Nano 11(10), 9711–9719 (2017).\n30S. Li, Z. Cao, R. Chen, X. Long, C. Li, P. Li, and W. Peng, “Strengthening\nthe bonding interfaces of hybrid titanium carbon laminates by bionic micro\ntexture and carbon nanotube pinning,” Compos. Sci. Technol. 232, 109865\n(2023).\n31Z. Wang, Y. Ma, S. Sun et al., “Bioinspired laser-induced hierarchical textures\nfor enhanced interfacial adhesion in CFRP composites,” Polym. Compos.\n(published online 2025).\n32J. Li, Y. Ding, C. Ge, X. Sun, L. Yang, Y. Wang, W. Zhang, and Y. Lu,\n“Investigations on 355 nm picosecond laser machining of carbon fiber reinforced\npolymer composites,” J. Manuf. Process. 101, 854–866 (2023).\n33M. Delkowski, C. T. Smith, J. V. Anguita, and S. R. P. Silva, “Radiation and\nelectrostatic resistance for ultra-stable polymer composites reinforced with\ncarbon fibers.,” Sci. Adv. 9(11), eadd6947 (2023).\n34Y. Yuan, X. Guo, H. He et al., “Rapid surface patterning to strengthen adhesive\nbonding of carbon fiber reinforced polymer by spatial shaping femtosecond\nlaser,” Opt. Laser Technol. 180, 111562 (2025).",
+    "text_source": "native"
+   },
+   {
+    "bbox": [
+     561.76,
+     382.3,
+     569.25,
+     461.5
+    ],
+    "block_index": 6,
+    "block_type": "heading",
+    "document_version_id": "0b56b6d5ef26ae7a",
+    "page_index": 11,
+    "paper_id": "Flat-top picosecond laser texturing of CFRP.pdf",
+    "reading_order": 162,
+    "section_id": "332ef811a68c454b",
+    "section_path": "1/section/19",
+    "text": "09 July 2026 15:48:05",
+    "text_source": "native"
+   },
+   {
+    "bbox": [
+     39.0,
+     741.44,
+     573.0,
+     749.65
+    ],
+    "block_index": 4,
+    "block_type": "body",
+    "document_version_id": "0b56b6d5ef26ae7a",
+    "page_index": 11,
+    "paper_id": "Flat-top picosecond laser texturing of CFRP.pdf",
+    "reading_order": 163,
+    "section_id": "332ef811a68c454b",
+    "section_path": "1/section/19",
+    "text": "J. Appl. Phys. 138, 225301 (2025); doi: 10.1063/5.0299010\n138, 225301-11",
+    "text_source": "native"
+   },
+   {
+    "bbox": [
+     39.01,
+     754.69,
+     89.86,
+     762.69
+    ],
+    "block_index": 5,
+    "block_type": "body",
+    "document_version_id": "0b56b6d5ef26ae7a",
+    "page_index": 11,
+    "paper_id": "Flat-top picosecond laser texturing of CFRP.pdf",
+    "reading_order": 164,
+    "section_id": "332ef811a68c454b",
+    "section_path": "1/section/19",
+    "text": "© Author(s) 2025",
+    "text_source": "native"
+   }
+  ]
+ ],
+ "paper_id": "Flat-top picosecond laser texturing of CFRP.pdf",
+ "parser_name": "pymupdf",
+ "parser_version": "0.1.0",
+ "pdf_path": "C:\\Users\\RZF\\Desktop\\博士课题资料\\ultrafast agent\\ultrafast_laser_memory\\data\\literature_archive\\185a6a0667e0b43d_Flat-top picosecond laser texturing of CFRP.pdf",
+ "pdf_sha256": "185a6a0667e0b43d9c88996a818fbc6aa2f094810142b557ccb71a09c23e4bb3",
+ "schema_version": "document-v0.1",
+ "sections": [
+  {
+   "block_ids": [
+    "Flat-top picosecond laser texturing of CFRP.pdf:p0:b4",
+    "Flat-top picosecond laser texturing of CFRP.pdf:p0:b5",
+    "Flat-top picosecond laser texturing of CFRP.pdf:p0:b16",
+    "Flat-top picosecond laser texturing of CFRP.pdf:p0:b14",
+    "Flat-top picosecond laser texturing of CFRP.pdf:p0:b6",
+    "Flat-top picosecond laser texturing of CFRP.pdf:p0:b8",
+    "Flat-top picosecond laser texturing of CFRP.pdf:p0:b10",
+    "Flat-top picosecond laser texturing of CFRP.pdf:p0:b12",
+    "Flat-top picosecond laser texturing of CFRP.pdf:p0:b18",
+    "Flat-top picosecond laser texturing of CFRP.pdf:p0:b19",
+    "Flat-top picosecond laser texturing of CFRP.pdf:p0:b1",
+    "Flat-top picosecond laser texturing of CFRP.pdf:p0:b2",
+    "Flat-top picosecond laser texturing of CFRP.pdf:p0:b3",
+    "Flat-top picosecond laser texturing of CFRP.pdf:p0:b20",
+    "Flat-top picosecond laser texturing of CFRP.pdf:p0:b21",
+    "Flat-top picosecond laser texturing of CFRP.pdf:p0:b22",
+    "Flat-top picosecond laser texturing of CFRP.pdf:p0:b23",
+    "Flat-top picosecond laser texturing of CFRP.pdf:p0:b24"
+   ],
+   "level": 0,
+   "page_end": 0,
+   "page_start": 0,
+   "paragraphs": [
+    {
+     "block_ids": [
+      "Flat-top picosecond laser texturing of CFRP.pdf:p0:b4"
+     ],
+     "paragraph_id": "4d26c99204d87639",
+     "section_path": "0/preamble/1",
+     "text": "RESEARCH ARTICLE | DECEMBER 08 2025"
+    },
+    {
+     "block_ids": [
+      "Flat-top picosecond laser texturing of CFRP.pdf:p0:b5"
+     ],
+     "paragraph_id": "035f87ba2a05c9c2",
+     "section_path": "0/preamble/1",
+     "text": "Flat-top picosecond laser texturing of CFRP: Biomimetic\nhierarchy for tunable wettability and high-strength\nAA7075/CFRP bonding"
+    },
+    {
+     "block_ids": [
+      "Flat-top picosecond laser texturing of CFRP.pdf:p0:b16"
+     ],
+     "paragraph_id": "23268294ee5cb3c8",
+     "section_path": "0/preamble/1",
+     "text": "; Changqing Li ;\nYongji Yu; Mo Zhang"
+    },
+    {
+     "block_ids": [
+      "Flat-top picosecond laser texturing of CFRP.pdf:p0:b14"
+     ],
+     "paragraph_id": "9337478ca402efad",
+     "section_path": "0/preamble/1",
+     "text": "; Chunting Wu "
+    },
+    {
+     "block_ids": [
+      "Flat-top picosecond laser texturing of CFRP.pdf:p0:b6"
+     ],
+     "paragraph_id": "ca48732f46e99507",
+     "section_path": "0/preamble/1",
+     "text": "Zhonghe Wang"
+    },
+    {
+     "block_ids": [
+      "Flat-top picosecond laser texturing of CFRP.pdf:p0:b8"
+     ],
+     "paragraph_id": "89141611fdbac297",
+     "section_path": "0/preamble/1",
+     "text": "; Di Liu; Yao Ma"
+    },
+    {
+     "block_ids": [
+      "Flat-top picosecond laser texturing of CFRP.pdf:p0:b10"
+     ],
+     "paragraph_id": "ed33a4b90d2c5cad",
+     "section_path": "0/preamble/1",
+     "text": "; Shuwei Sun"
+    },
+    {
+     "block_ids": [
+      "Flat-top picosecond laser texturing of CFRP.pdf:p0:b12"
+     ],
+     "paragraph_id": "e0843bab06ae2a1e",
+     "section_path": "0/preamble/1",
+     "text": "; Yujie Wang"
+    },
+    {
+     "block_ids": [
+      "Flat-top picosecond laser texturing of CFRP.pdf:p0:b18"
+     ],
+     "paragraph_id": "e9dd36387c0a9ec6",
+     "section_path": "0/preamble/1",
+     "text": "J. Appl. Phys. 138, 225301 (2025)"
+    },
+    {
+     "block_ids": [
+      "Flat-top picosecond laser texturing of CFRP.pdf:p0:b19"
+     ],
+     "paragraph_id": "40b795c92c42bece",
+     "section_path": "0/preamble/1",
+     "text": "https://doi.org/10.1063/5.0299010"
+    },
+    {
+     "block_ids": [
+      "Flat-top picosecond laser texturing of CFRP.pdf:p0:b1"
+     ],
+     "paragraph_id": "ad127c192a4159aa",
+     "section_path": "0/preamble/1",
+     "text": ""
+    },
+    {
+     "block_ids": [
+      "Flat-top picosecond laser texturing of CFRP.pdf:p0:b2"
+     ],
+     "paragraph_id": "20749f40c4360cc9",
+     "section_path": "0/preamble/1",
+     "text": "View\nOnline "
+    },
+    {
+     "block_ids": [
+      "Flat-top picosecond laser texturing of CFRP.pdf:p0:b3"
+     ],
+     "paragraph_id": "29b17e2df66b2d96",
+     "section_path": "0/preamble/1",
+     "text": "Export\nCitation"
+    },
+    {
+     "block_ids": [
+      "Flat-top picosecond laser texturing of CFRP.pdf:p0:b20"
+     ],
+     "paragraph_id": "4a21a4c8af1153c8",
+     "section_path": "0/preamble/1",
+     "text": "Articles You May Be Interested In"
+    },
+    {
+     "block_ids": [
+      "Flat-top picosecond laser texturing of CFRP.pdf:p0:b21"
+     ],
+     "paragraph_id": "aa40f4506ecde993",
+     "section_path": "0/preamble/1",
+     "text": "Study of tapping process of carbon fiber reinforced plastic composites/AA7075 stacks"
+    },
+    {
+     "block_ids": [
+      "Flat-top picosecond laser texturing of CFRP.pdf:p0:b22"
+     ],
+     "paragraph_id": "26eaea202646ad17",
+     "section_path": "0/preamble/1",
+     "text": "AIP Conf. Proc. (May 2018)"
+    },
+    {
+     "block_ids": [
+      "Flat-top picosecond laser texturing of CFRP.pdf:p0:b23"
+     ],
+     "paragraph_id": "467d849d9622038c",
+     "section_path": "0/preamble/1",
+     "text": "Investigations on tribological characteristics of AA7075/E-glass/cenosphere hybrid MMCs"
+    },
+    {
+     "block_ids": [
+      "Flat-top picosecond laser texturing of CFRP.pdf:p0:b24"
+     ],
+     "paragraph_id": "f55a9bbb40a1ede0",
+     "section_path": "0/preamble/1",
+     "text": "AIP Conf. Proc. (December 2023)"
+    }
+   ],
+   "path": "0/preamble/1",
+   "section_id": "71e05af100f5b7d4",
+   "section_type": "preamble",
+   "title": "preamble"
+  },
+  {
+   "block_ids": [
+    "Flat-top picosecond laser texturing of CFRP.pdf:p0:b28",
+    "Flat-top picosecond laser texturing of CFRP.pdf:p0:b25",
+    "Flat-top picosecond laser texturing of CFRP.pdf:p0:b26",
+    "Flat-top picosecond laser texturing of CFRP.pdf:p1:b30",
+    "Flat-top picosecond laser texturing of CFRP.pdf:p1:b31",
+    "Flat-top picosecond laser texturing of CFRP.pdf:p1:b0",
+    "Flat-top picosecond laser texturing of CFRP.pdf:p1:b1",
+    "Flat-top picosecond laser texturing of CFRP.pdf:p1:b8",
+    "Flat-top picosecond laser texturing of CFRP.pdf:p1:b4",
+    "Flat-top picosecond laser texturing of CFRP.pdf:p1:b2",
+    "Flat-top picosecond laser texturing of CFRP.pdf:p1:b6",
+    "Flat-top picosecond laser texturing of CFRP.pdf:p1:b11",
+    "Flat-top picosecond laser texturing of CFRP.pdf:p1:b9",
+    "Flat-top picosecond laser texturing of CFRP.pdf:p1:b13",
+    "Flat-top picosecond laser texturing of CFRP.pdf:p1:b15",
+    "Flat-top picosecond laser texturing of CFRP.pdf:p1:b17",
+    "Flat-top picosecond laser texturing of CFRP.pdf:p1:b19",
+    "Flat-top picosecond laser texturing of CFRP.pdf:p1:b20",
+    "Flat-top picosecond laser texturing of CFRP.pdf:p1:b21",
+    "Flat-top picosecond laser texturing of CFRP.pdf:p1:b22",
+    "Flat-top picosecond laser texturing of CFRP.pdf:p1:b23"
+   ],
+   "level": 1,
+   "page_end": 1,
+   "page_start": 0,
+   "paragraphs": [
+    {
+     "block_ids": [
+      "Flat-top picosecond laser texturing of CFRP.pdf:p0:b25"
+     ],
+     "paragraph_id": "ec0fa422c9a3f1d7",
+     "section_path": "1/section/2",
+     "text": "FEA in high speed milling of AA7075 reinforced with Nb4cp"
+    },
+    {
+     "block_ids": [
+      "Flat-top picosecond laser texturing of CFRP.pdf:p0:b26"
+     ],
+     "paragraph_id": "8796219f70358f84",
+     "section_path": "1/section/2",
+     "text": "AIP Conf. Proc. (July 2024)"
+    },
+    {
+     "block_ids": [
+      "Flat-top picosecond laser texturing of CFRP.pdf:p1:b30"
+     ],
+     "paragraph_id": "fb2989d26cc0ed7d",
+     "section_path": "1/section/2",
+     "text": "Journal of\nApplied Physics"
+    },
+    {
+     "block_ids": [
+      "Flat-top picosecond laser texturing of CFRP.pdf:p1:b31"
+     ],
+     "paragraph_id": "e5211ff3ac35f638",
+     "section_path": "1/section/2",
+     "text": "ARTICLE\npubs.aip.org/aip/jap"
+    },
+    {
+     "block_ids": [
+      "Flat-top picosecond laser texturing of CFRP.pdf:p1:b0"
+     ],
+     "paragraph_id": "4964a249bceae980",
+     "section_path": "1/section/2",
+     "text": "Flat-top picosecond laser texturing of CFRP:\nBiomimetic hierarchy for tunable wettability and\nhigh-strength AA7075/CFRP bonding"
+    },
+    {
+     "block_ids": [
+      "Flat-top picosecond laser texturing of CFRP.pdf:p1:b1"
+     ],
+     "paragraph_id": "a6bb7783fab8e1ad",
+     "section_path": "1/section/2",
+     "text": "Cite as: J. Appl. Phys. 138, 225301 (2025); doi: 10.1063/5.0299010"
+    },
+    {
+     "block_ids": [
+      "Flat-top picosecond laser texturing of CFRP.pdf:p1:b8"
+     ],
+     "paragraph_id": "1ef09badabb8edf4",
+     "section_path": "1/section/2",
+     "text": "Submitted: 25 August 2025 · Accepted: 17 November 2025 ·\nPublished Online: 8 December 2025"
+    },
+    {
+     "block_ids": [
+      "Flat-top picosecond laser texturing of CFRP.pdf:p1:b4"
+     ],
+     "paragraph_id": "f75b18b0426304db",
+     "section_path": "1/section/2",
+     "text": "Export Citation"
+    },
+    {
+     "block_ids": [
+      "Flat-top picosecond laser texturing of CFRP.pdf:p1:b2"
+     ],
+     "paragraph_id": "55d78fa8f2fe5145",
+     "section_path": "1/section/2",
+     "text": "View Online"
+    },
+    {
+     "block_ids": [
+      "Flat-top picosecond laser texturing of CFRP.pdf:p1:b6"
+     ],
+     "paragraph_id": "9b10d0b285adae3d",
+     "section_path": "1/section/2",
+     "text": "CrossMark"
+    },
+    {
+     "block_ids": [
+      "Flat-top picosecond laser texturing of CFRP.pdf:p1:b11"
+     ],
+     "paragraph_id": "a284de15fd38c1f5",
+     "section_path": "1/section/2",
+     "text": "Di Liu,1 Yao Ma,1"
+    },
+    {
+     "block_ids": [
+      "Flat-top picosecond laser texturing of CFRP.pdf:p1:b9"
+     ],
+     "paragraph_id": "876b48dacaf52330",
+     "section_path": "1/section/2",
+     "text": "Zhonghe Wang,1"
+    },
+    {
+     "block_ids": [
+      "Flat-top picosecond laser texturing of CFRP.pdf:p1:b13"
+     ],
+     "paragraph_id": "e27c6f6fd3a52aad",
+     "section_path": "1/section/2",
+     "text": "Shuwei Sun,2"
+    },
+    {
+     "block_ids": [
+      "Flat-top picosecond laser texturing of CFRP.pdf:p1:b15"
+     ],
+     "paragraph_id": "f48381a53357de33",
+     "section_path": "1/section/2",
+     "text": "Yujie Wang,2"
+    },
+    {
+     "block_ids": [
+      "Flat-top picosecond laser texturing of CFRP.pdf:p1:b17"
+     ],
+     "paragraph_id": "a2aa60d2bba6c9de",
+     "section_path": "1/section/2",
+     "text": "Chunting Wu,1,a)"
+    },
+    {
+     "block_ids": [
+      "Flat-top picosecond laser texturing of CFRP.pdf:p1:b19"
+     ],
+     "paragraph_id": "857a3065aaaa34c1",
+     "section_path": "1/section/2",
+     "text": "Changqing Li,2,a)"
+    },
+    {
+     "block_ids": [
+      "Flat-top picosecond laser texturing of CFRP.pdf:p1:b20"
+     ],
+     "paragraph_id": "e5bbc8e8c48851ab",
+     "section_path": "1/section/2",
+     "text": "Yongji Yu,1 and Mo Zhang2"
+    },
+    {
+     "block_ids": [
+      "Flat-top picosecond laser texturing of CFRP.pdf:p1:b21"
+     ],
+     "paragraph_id": "a8db92984ef16883",
+     "section_path": "1/section/2",
+     "text": "AFFILIATIONS"
+    },
+    {
+     "block_ids": [
+      "Flat-top picosecond laser texturing of CFRP.pdf:p1:b22"
+     ],
+     "paragraph_id": "885213c330139c6e",
+     "section_path": "1/section/2",
+     "text": "1Jilin Key Laboratory of Solid-state Laser Technology and Application, Changchun University of Science and Technology,\nChangchun 130022, China\n2Scientific and Technological Innovation Center, Beijing 100012, China"
+    },
+    {
+     "block_ids": [
+      "Flat-top picosecond laser texturing of CFRP.pdf:p1:b23"
+     ],
+     "paragraph_id": "5fe6f35f03e76669",
+     "section_path": "1/section/2",
+     "text": "a)Authors to whom correspondence should be addressed: bigsnow1@126.com and 13311327344@163.com"
+    }
+   ],
+   "path": "1/section/2",
+   "section_id": "f7e46cd500b82d11",
+   "section_type": "section",
+   "title": "July 2026 15:48:05"
+  },
+  {
+   "block_ids": [
+    "Flat-top picosecond laser texturing of CFRP.pdf:p1:b24"
+   ],
+   "level": 1,
+   "page_end": 1,
+   "page_start": 1,
+   "paragraphs": [],
+   "path": "1/abstract/3",
+   "section_id": "7fbc64dc7cd7d4f1",
+   "section_type": "abstract",
+   "title": "ABSTRACT"
+  },
+  {
+   "block_ids": [
+    "Flat-top picosecond laser texturing of CFRP.pdf:p1:b34",
+    "Flat-top picosecond laser texturing of CFRP.pdf:p1:b25",
+    "Flat-top picosecond laser texturing of CFRP.pdf:p1:b26"
+   ],
+   "level": 1,
+   "page_end": 1,
+   "page_start": 1,
+   "paragraphs": [
+    {
+     "block_ids": [
+      "Flat-top picosecond laser texturing of CFRP.pdf:p1:b25"
+     ],
+     "paragraph_id": "83b111079f7bb28c",
+     "section_path": "1/section/4",
+     "text": "Carbon-fiber-reinforced polymer (CFRP) composites are widely used in lightweight aerospace, automotive, and wind-energy structures\nowing to their high specific strength and stiffness and durability. However, dissimilar bonding is highly sensitive to surface conditions:\nCFRP surfaces exhibit low surface energy and may retain mold-release agents, and conventional pretreatments have limitations in control-\nling and homogenizing surface topography and chemical activation, which undermines interfacial adhesion and reliability. This work pre-\nsents a 355 nm flat-top picosecond-laser approach that integrates bioinspired hierarchical texturing with surface activation, enabling\nprogrammable construction of tree-frog–inspired “plateau-connected-groove” patterns and concomitantly enhancing surface polarity.\nRoughness and feature depth increase with fluence; the water contact angle decreases to 8.0°; and x-ray photoelectron spectroscopy indicates\nhigher fractions of oxidized carbon species, while the Raman I_D/I_G ratio remains essentially unchanged. In AA7075/CFRP single-lap-\nshear tests, the lap-shear strength increases from 5.9 to 19.6 MPa at 5.8 J cm−2, accompanied by a transition from interfacial adhesive failure\nto fiber-dominated mixed failure. Mechanistically, at an appropriate fluence, hierarchical micro-/nanostructures, together with enhanced\nsurface polarity, enable synergistic mechanical interlocking and chemical coupling; by contrast, excessive fluence can introduce voids and\nmicrocracks and promote partial Cassie wetting. The non-contact, programmable process is compatible with complex geometries and auto-\nmation, providing a high-throughput surface-engineering route for durable joining in CFRP–Al lap joints and stiffeners in aircraft, bonds\nbetween CFRP skins and aluminum honeycomb/cores; mixed-material joints in automotive body structures, and wind-turbine blade root–\ninsert interfaces."
+    },
+    {
+     "block_ids": [
+      "Flat-top picosecond laser texturing of CFRP.pdf:p1:b26"
+     ],
+     "paragraph_id": "22f8c9abcde28434",
+     "section_path": "1/section/4",
+     "text": "© 2025 Author(s). All article content, except where otherwise noted, is licensed under a Creative Commons Attribution-NonCommercial-\nNoDerivs 4.0 International (CC BY-NC-ND) license (https://creativecommons.org/licenses/by-nc-nd/4.0/). https://doi.org/10.1063/5.0299010"
+    }
+   ],
+   "path": "1/section/4",
+   "section_id": "fc79c5fed45b1cf3",
+   "section_type": "section",
+   "title": "July 2026 15:48:05"
+  },
+  {
+   "block_ids": [
+    "Flat-top picosecond laser texturing of CFRP.pdf:p1:b27",
+    "Flat-top picosecond laser texturing of CFRP.pdf:p1:b29",
+    "Flat-top picosecond laser texturing of CFRP.pdf:p1:b28",
+    "Flat-top picosecond laser texturing of CFRP.pdf:p1:b32",
+    "Flat-top picosecond laser texturing of CFRP.pdf:p1:b33",
+    "Flat-top picosecond laser texturing of CFRP.pdf:p2:b12",
+    "Flat-top picosecond laser texturing of CFRP.pdf:p2:b13",
+    "Flat-top picosecond laser texturing of CFRP.pdf:p2:b0",
+    "Flat-top picosecond laser texturing of CFRP.pdf:p2:b5",
+    "Flat-top picosecond laser texturing of CFRP.pdf:p2:b1",
+    "Flat-top picosecond laser texturing of CFRP.pdf:p2:b2"
+   ],
+   "level": 1,
+   "page_end": 2,
+   "page_start": 1,
+   "paragraphs": [
+    {
+     "block_ids": [
+      "Flat-top picosecond laser texturing of CFRP.pdf:p1:b29"
+     ],
+     "paragraph_id": "6b67581d33708c87",
+     "section_path": "1/introduction/5",
+     "text": "adhesion is hindered by the intrinsically low surface energy of the\nresin matrix, hydrophobic surfaces, and residual mold-release\nagents.7 Conventional pretreatments—such as solvent cleaning,\nchemical etching, and mechanical abrasion—can improve bonding\nbut are constrained by low throughput, environmental burdens,\noperator dependence, and the risk of fiber damage and nonuniform\nsurface morphology.8,9 Against this backdrop, laser-based surface\ntreatments\nhave\nemerged\nas\nattractive\nalternatives,\noffering\nnon-contact, maskless processing, precise energy delivery, and"
+    },
+    {
+     "block_ids": [
+      "Flat-top picosecond laser texturing of CFRP.pdf:p1:b28"
+     ],
+     "paragraph_id": "0a5d74e151212d38",
+     "section_path": "1/introduction/5",
+     "text": "Carbon-fiber-reinforced polymer (CFRP) composites have\nbecome indispensable in weight-critical structures owing to their\nhigh specific strength and stiffness, fatigue and corrosion resistance,\nand multifunctional designability.1–3 Driven by declining fiber costs\nand stringent efficiency and emission targets, their adoption has\nexpanded from aerospace to automotive, wind energy, civil infra-\nstructure, and sports engineering.4–6 In practice, CFRP components\nare routinely co-assembled with dissimilar materials, where reliable"
+    },
+    {
+     "block_ids": [
+      "Flat-top picosecond laser texturing of CFRP.pdf:p1:b32"
+     ],
+     "paragraph_id": "e48fc7dea8bcddf3",
+     "section_path": "1/introduction/5",
+     "text": "J. Appl. Phys. 138, 225301 (2025); doi: 10.1063/5.0299010\n138, 225301-1"
+    },
+    {
+     "block_ids": [
+      "Flat-top picosecond laser texturing of CFRP.pdf:p1:b33"
+     ],
+     "paragraph_id": "65bfd8f84bcd22f4",
+     "section_path": "1/introduction/5",
+     "text": "© Author(s) 2025"
+    },
+    {
+     "block_ids": [
+      "Flat-top picosecond laser texturing of CFRP.pdf:p2:b12"
+     ],
+     "paragraph_id": "61a7a4434bff2427",
+     "section_path": "1/introduction/5",
+     "text": "Journal of\nApplied Physics"
+    },
+    {
+     "block_ids": [
+      "Flat-top picosecond laser texturing of CFRP.pdf:p2:b13"
+     ],
+     "paragraph_id": "301a27693588316c",
+     "section_path": "1/introduction/5",
+     "text": "ARTICLE\npubs.aip.org/aip/jap"
+    },
+    {
+     "block_ids": [
+      "Flat-top picosecond laser texturing of CFRP.pdf:p2:b0"
+     ],
+     "paragraph_id": "c09160fd7eb5db58",
+     "section_path": "1/introduction/5",
+     "text": "compatibility with complex geometries and automated production\nlines.10,11"
+    },
+    {
+     "block_ids": [
+      "Flat-top picosecond laser texturing of CFRP.pdf:p2:b5"
+     ],
+     "paragraph_id": "c110aa1e634bcb55",
+     "section_path": "1/introduction/5",
+     "text": "However, to the best of our knowledge, no systematic study has\ninvestigated laser surface treatment or (bioinspired) texturing of\nCFRP using a flat-top beam. Considering that the resin and carbon\nfibers in CFRP differ markedly in ablation threshold and thermal\nproperties—differences that amplify the spatial nonuniformity of\nGaussian beams, a 355 nm flat-top picosecond laser that simultane-\nously textures and activates CFRP surfaces is used to build a bioins-\npired “plateau-connected-groove” polygonal pattern derived from\ntree-frog toe pads, to enhance hydrophilicity. Fluence-dependent\nmorphology, wettability, and chemistry are systematically mapped\nand correlated with AA7075/CFRP lap-shear performance. The\nprocess\nyields\nhierarchical\nmicro-/nanotopographies,\nincreases\nsurface polarity without degrading graphitic integrity, and drives a\nfailure-mode transition from interfacial adhesion to fiber-dominated\nco-failure. Compared with Gaussian-based approaches, the flat-top\nprofile widens the processing window and improves reproducibility.\nThese results provide a high-throughput, automation-ready route for\ndurable multi-material joining of CFRP components."
+    },
+    {
+     "block_ids": [
+      "Flat-top picosecond laser texturing of CFRP.pdf:p2:b1"
+     ],
+     "paragraph_id": "3a5980f50cdf9290",
+     "section_path": "1/introduction/5",
+     "text": "Laser pretreatment improves the adhesion of CFRP by recon-\nstructing the fiber–matrix interface, removing weak resin-rich\nlayers and contaminants, activating surface chemistry, and engi-\nneering micro-/nanoscale textures that increase roughness and wet-\ntability.\nZuo\net\nal.12\ndemonstrated\nthat\nfemtosecond\nlaser\nprocessing can selectively remove the polymer matrix while pre-\nserving fiber integrity and fabricate hierarchical micro-/nanostruc-\ntures that enhance hydrophilicity (contact angle ≈28.1°). Building\non selective ablation, Yao et al.13 employed a two-color double-\npulse femtosecond scheme to achieve resin-targeted removal\nwithout fiber damage, thereby improving surface roughness and\nwettability. To further augment interfacial activation, Yuan et al.14"
+    },
+    {
+     "block_ids": [
+      "Flat-top picosecond laser texturing of CFRP.pdf:p2:b2"
+     ],
+     "paragraph_id": "9bba8f975dbceb22",
+     "section_path": "1/introduction/5",
+     "text": "combined laser texturing with chemical–ultrasonic assistance,\nincreasing surface free energy (∼74.8 mJ/m2) and the O/C ratio\n(∼33.3%), and delivering ∼48% gains in tensile shear strength with\n∼226× areal throughput. From a processing-efficiency standpoint,\nLi et al.15 used response-surface optimization and defocus strategies\nto achieve ∼2.25× higher throughput while maintaining mechanical\nperformance, consistent with coupled matrix decomposition and\noxidation mechanisms. For unidirectional laminates, Teng et al.16"
+    }
+   ],
+   "path": "1/introduction/5",
+   "section_id": "79616f00cf08c2f1",
+   "section_type": "introduction",
+   "title": "INTRODUCTION"
+  },
+  {
+   "block_ids": [
+    "Flat-top picosecond laser texturing of CFRP.pdf:p2:b6",
+    "Flat-top picosecond laser texturing of CFRP.pdf:p2:b7",
+    "Flat-top picosecond laser texturing of CFRP.pdf:p2:b3",
+    "Flat-top picosecond laser texturing of CFRP.pdf:p2:b8"
+   ],
+   "level": 1,
+   "page_end": 2,
+   "page_start": 2,
+   "paragraphs": [
+    {
+     "block_ids": [
+      "Flat-top picosecond laser texturing of CFRP.pdf:p2:b7"
+     ],
+     "paragraph_id": "10bc7003d76f1edb",
+     "section_path": "1/methods/6",
+     "text": "A. Materials and laser"
+    },
+    {
+     "block_ids": [
+      "Flat-top picosecond laser texturing of CFRP.pdf:p2:b3"
+     ],
+     "paragraph_id": "2dea0cc24fe2a593",
+     "section_path": "1/methods/6",
+     "text": "showed that controlling scan direction and speed (e.g., 45°,\n3000 mm/s) enables effective resin removal without fiber damage,\nimproves\nwettability,\nand\nraises\ntensile\nshear\nstrength\nto\n∼17.25 MPa with cohesive failure. In terms of photochemical acti-\nvation, Al-Mahdy et al.17 reported that incoherent UV exposure\nprovides an accessible route, yielding ∼75% improvement over\nuntreated surfaces and ∼10% over NIR-textured ones. Finally, in\ndirect co-bonding configurations without an added adhesive layer,\nLeone and Genna18 found that laser-treated CFRP surfaces approx-\nimately double the apparent lap-shear strength."
+    },
+    {
+     "block_ids": [
+      "Flat-top picosecond laser texturing of CFRP.pdf:p2:b8"
+     ],
+     "paragraph_id": "fbb1014fc7b7c4c5",
+     "section_path": "1/methods/6",
+     "text": "The CFRP used in this study employed an epoxy resin matrix\nreinforced with SYT49S plain-weave carbon fiber fabric, where\nboth the warp and fill yarns are 12 K carbon fiber yarns, composed\nof 12 000 individual carbon filaments. The single fiber diameter of\nthe T700 SYT49S is 7 μm, and therefore, the diameter of the 12 K\ncarbon fiber yarn is approximately 0.3– 0.4 mm. The structural\nadhesive was SW-9, an ambient-curing adhesive. Prior to surface\ntreatment, CFRP specimens were ultrasonically cleaned for 10 min,\nrinsed with anhydrous alcohol, and air-dried. Single-lap-shear\nspecimens prepared in accordance with GB/T 7124-2008 are shown\nin Fig. 1(a); each measured 100 × 25 mm with a thickness of\n1.6 mm. The bonding schematic is provided in Fig. 1(b). CFRP and\nAA7075 substrates were bonded with an epoxy adhesive both\nbefore and after surface treatment, with a bonding area of\n25 × 12.5 mm2. Except for laser texturing applied to the CFRP, the\nAA7075 surface was sanded to remove oxides and increase rough-\nness. Untreated CFRP and aluminum alloy were used as reference\nsamples."
+    }
+   ],
+   "path": "1/methods/6",
+   "section_id": "7153f0fc3b1c6952",
+   "section_type": "methods",
+   "title": "EXPERIMENT EQUIPMENT AND DETECTION"
+  },
+  {
+   "block_ids": [
+    "Flat-top picosecond laser texturing of CFRP.pdf:p2:b16",
+    "Flat-top picosecond laser texturing of CFRP.pdf:p2:b4",
+    "Flat-top picosecond laser texturing of CFRP.pdf:p2:b9",
+    "Flat-top picosecond laser texturing of CFRP.pdf:p2:b10",
+    "Flat-top picosecond laser texturing of CFRP.pdf:p2:b11",
+    "Flat-top picosecond laser texturing of CFRP.pdf:p2:b14",
+    "Flat-top picosecond laser texturing of CFRP.pdf:p2:b15",
+    "Flat-top picosecond laser texturing of CFRP.pdf:p3:b6",
+    "Flat-top picosecond laser texturing of CFRP.pdf:p3:b7",
+    "Flat-top picosecond laser texturing of CFRP.pdf:p3:b0",
+    "Flat-top picosecond laser texturing of CFRP.pdf:p3:b1"
+   ],
+   "level": 1,
+   "page_end": 3,
+   "page_start": 2,
+   "paragraphs": [
+    {
+     "block_ids": [
+      "Flat-top picosecond laser texturing of CFRP.pdf:p2:b4"
+     ],
+     "paragraph_id": "42705bfee80f2ada",
+     "section_path": "1/section/7",
+     "text": "Although laser processing has been widely applied in micro-\nfabrication and surface-quality control, current processes predomi-\nnantly rely on Gaussian beams, whose steep fluence gradients\nreadily induce overprocessing at the center and underprocessing at\nthe edges, thereby narrowing the process window and undermining\nconsistency and repeatability. Shaping the beam into a flat-top\n(top-hat) profile can significantly improve spatial energy unifor-\nmity, reduce the heat-affected zone (HAZ) and process variability,\nand such advantages are well documented in prior studies across\nmultiple material systems: achieving high-consistency, low-damage,\nhigh-aspect-ratio through-silicon via (TSV) drilling in Si;19 attenu-\nating elemental segregation and suppressing Laves-phase formation\nin Inconel 718 during laser-based deposition/melting,20 and in\nlaser powder bed fusion (LPBF) promoting stable, directional epi-\ntaxial growth with a widened process window21 forming homoge-\nneous nano-/micro-structures and ultra-smooth surfaces on Ti and\nGaN;22,23 significantly reducing laser-induced damage (LID) in\nsolar cells;24 and, via vector flat-top-beam shaping based on polari-\nzation\nsingularities,\nachieving\nefficient,\ncontrollable\nmaterial\nremoval and cleaning in comparative process studies.25,26 For\npolymer–matrix composites, adjustable flat-top rectangular beams\nhave\nbeen\nused\nfor\nthe\nlaser-assisted\njoining\nof\nsteel/\ncarbon-fiber-reinforced thermoplastic (CFRTP) to homogenize the\ninterfacial\nthermal\nhistory\nand\nimprove\njoint\nmechanical\nperformance.27"
+    },
+    {
+     "block_ids": [
+      "Flat-top picosecond laser texturing of CFRP.pdf:p2:b9"
+     ],
+     "paragraph_id": "2981f0290d94c0a7",
+     "section_path": "1/section/7",
+     "text": "A 355 nm picosecond-laser system based on a master oscilla-\ntor power amplifier configuration was employed for surface micro-/\nnanostructuring of CFRP substrates. The laser beam was expanded\nusing\na\nbeam\nexpander\nand\nsubsequently\nreshaped\nby\na\nFocal-πShaper_NUV-Q-5 flat-top beam shaper (AdlOptica GmbH,\nBerlin, Germany; Q-series focal flat-top, NUV, 355 nm) to produce\na flat-top irradiance distribution at focus. The shaped beam was\nguided to a scanning galvanometer via a pair of high-reflectivity\n45° mirrors and then focused onto the sample surface through an\nf-theta lens. The beam trajectory was precisely controlled by the\ngalvanometer system to achieve accurate surface patterning, as illus-\ntrated in Fig. 2 (Table I)."
+    },
+    {
+     "block_ids": [
+      "Flat-top picosecond laser texturing of CFRP.pdf:p2:b10"
+     ],
+     "paragraph_id": "b5bad17f5ec684a6",
+     "section_path": "1/section/7",
+     "text": "B. Biomimetic rationale and implementation pathway"
+    },
+    {
+     "block_ids": [
+      "Flat-top picosecond laser texturing of CFRP.pdf:p2:b11"
+     ],
+     "paragraph_id": "82f8e12074a15e77",
+     "section_path": "1/section/7",
+     "text": "As shown in Fig. 3, tree frogs (e.g., Litoria caerulea) can main-\ntain stable attachment on wet substrates. This capability is"
+    },
+    {
+     "block_ids": [
+      "Flat-top picosecond laser texturing of CFRP.pdf:p2:b14"
+     ],
+     "paragraph_id": "789363e788ade1b0",
+     "section_path": "1/section/7",
+     "text": "J. Appl. Phys. 138, 225301 (2025); doi: 10.1063/5.0299010\n138, 225301-2"
+    },
+    {
+     "block_ids": [
+      "Flat-top picosecond laser texturing of CFRP.pdf:p2:b15"
+     ],
+     "paragraph_id": "f76ca465a11ea740",
+     "section_path": "1/section/7",
+     "text": "© Author(s) 2025"
+    },
+    {
+     "block_ids": [
+      "Flat-top picosecond laser texturing of CFRP.pdf:p3:b6"
+     ],
+     "paragraph_id": "5270db2d4ff71764",
+     "section_path": "1/section/7",
+     "text": "Journal of\nApplied Physics"
+    },
+    {
+     "block_ids": [
+      "Flat-top picosecond laser texturing of CFRP.pdf:p3:b7"
+     ],
+     "paragraph_id": "7518884466c114fa",
+     "section_path": "1/section/7",
+     "text": "ARTICLE\npubs.aip.org/aip/jap"
+    },
+    {
+     "block_ids": [
+      "Flat-top picosecond laser texturing of CFRP.pdf:p3:b0"
+     ],
+     "paragraph_id": "84118c323f90a623",
+     "section_path": "1/section/7",
+     "text": "attributed to the synergistic action of polygonal microunits on the\ntoe-pad surface and interconnected boundary grooves, which\ntogether facilitate rapid liquid drainage and increase the real\ncontact area.28,29 Inspired by this mechanism, a biomimetic two-\nlevel texture composed of regular polygonal units bridged by\nnarrow, connected grooves was designed; the characteristic unit size\nwas\n≈0.45 mm,\nwhereas\nthe\ngroove\nwidth\nwas\n≈0.03 mm.\nConsidering the laser spot size and processing efficiency, a geomet-\nrically similar but upscaled pattern was adopted. These dimensions\nwere carefully chosen to balance the trade-off between increasing\nthe contact area and maintaining sufficient drainage capacity. The"
+    },
+    {
+     "block_ids": [
+      "Flat-top picosecond laser texturing of CFRP.pdf:p3:b1"
+     ],
+     "paragraph_id": "85954fdfac0105ed",
+     "section_path": "1/section/7",
+     "text": "unit size of 0.45 mm was selected to ensure that each polygonal\nunit contributes effectively to the increase in the real contact area\nwithout overcrowding the surface, thus allowing optimal interaction\nbetween the surface and the substrate. Similarly, the groove width\nof 0.03 mm was selected to create narrow channels that would facil-\nitate rapid capillary drainage, while still preserving the polygonal\ncells intact to maintain adhesion performance. Furthermore, the\nbiomimetic polygonal pattern was implemented on CFRP using a\n355 nm flat-top picosecond-laser ultraviolet source, as schematized\nin Fig. 4. A top-hat beam (355 nm, 10 ps, 1 MHz) was scanned to\nselectively\nablate\nthe\nresin-rich\nsurface\nand\nform\nnarrow,"
+    }
+   ],
+   "path": "1/section/7",
+   "section_id": "860c69cccf2503cb",
+   "section_type": "section",
+   "title": "July 2026 15:48:05"
+  },
+  {
+   "block_ids": [
+    "Flat-top picosecond laser texturing of CFRP.pdf:p3:b10",
+    "Flat-top picosecond laser texturing of CFRP.pdf:p3:b8",
+    "Flat-top picosecond laser texturing of CFRP.pdf:p3:b9",
+    "Flat-top picosecond laser texturing of CFRP.pdf:p4:b14",
+    "Flat-top picosecond laser texturing of CFRP.pdf:p4:b15",
+    "Flat-top picosecond laser texturing of CFRP.pdf:p4:b8",
+    "Flat-top picosecond laser texturing of CFRP.pdf:p4:b9",
+    "Flat-top picosecond laser texturing of CFRP.pdf:p4:b0",
+    "Flat-top picosecond laser texturing of CFRP.pdf:p4:b3",
+    "Flat-top picosecond laser texturing of CFRP.pdf:p4:b1",
+    "Flat-top picosecond laser texturing of CFRP.pdf:p4:b2"
+   ],
+   "level": 1,
+   "page_end": 4,
+   "page_start": 3,
+   "paragraphs": [
+    {
+     "block_ids": [
+      "Flat-top picosecond laser texturing of CFRP.pdf:p3:b8"
+     ],
+     "paragraph_id": "9b03e937705979dc",
+     "section_path": "1/section/8",
+     "text": "J. Appl. Phys. 138, 225301 (2025); doi: 10.1063/5.0299010\n138, 225301-3"
+    },
+    {
+     "block_ids": [
+      "Flat-top picosecond laser texturing of CFRP.pdf:p3:b9"
+     ],
+     "paragraph_id": "a47b294ac09c8c52",
+     "section_path": "1/section/8",
+     "text": "© Author(s) 2025"
+    },
+    {
+     "block_ids": [
+      "Flat-top picosecond laser texturing of CFRP.pdf:p4:b14"
+     ],
+     "paragraph_id": "90d1a1d9bbc0572f",
+     "section_path": "1/section/8",
+     "text": "Journal of\nApplied Physics"
+    },
+    {
+     "block_ids": [
+      "Flat-top picosecond laser texturing of CFRP.pdf:p4:b15"
+     ],
+     "paragraph_id": "0d55aff41f3a5975",
+     "section_path": "1/section/8",
+     "text": "ARTICLE\npubs.aip.org/aip/jap"
+    },
+    {
+     "block_ids": [
+      "Flat-top picosecond laser texturing of CFRP.pdf:p4:b8"
+     ],
+     "paragraph_id": "4602da6ae671750f",
+     "section_path": "1/section/8",
+     "text": "Parameters\nValues"
+    },
+    {
+     "block_ids": [
+      "Flat-top picosecond laser texturing of CFRP.pdf:p4:b9"
+     ],
+     "paragraph_id": "71da626b928660d5",
+     "section_path": "1/section/8",
+     "text": "Wavelength(nm)\n355\nFluence range (J/cm2)\n2.3–7.0\nPulse width (ps)\n10\nSpot diameter (μm)\n19\nScanning speed (m/s)\n1\nPulse repetition rate (MHz)\n1"
+    },
+    {
+     "block_ids": [
+      "Flat-top picosecond laser texturing of CFRP.pdf:p4:b0"
+     ],
+     "paragraph_id": "66c7f5be1c2b0fda",
+     "section_path": "1/section/8",
+     "text": "interconnected boundary grooves, while the polygonal cells were\npreserved. The short pulse width confines energy deposition and\nminimizes heat-affected zone damage to the underlying fibers, and\nthe resulting texture conforms to the woven laminate (warp/weft).\nMechanistically, the grooves provide rapid capillary drainage and\npin the three-phase contact line, whereas the polygonal cells\nincrease the real contact area, together enhancing wet adhesion and\nfriction on wet substrates."
+    },
+    {
+     "block_ids": [
+      "Flat-top picosecond laser texturing of CFRP.pdf:p4:b3"
+     ],
+     "paragraph_id": "886fef98aa2ea042",
+     "section_path": "1/section/8",
+     "text": "measurements were conducted using a tensile testing machine\n(Shimadzu AG-250KNIS)."
+    },
+    {
+     "block_ids": [
+      "Flat-top picosecond laser texturing of CFRP.pdf:p4:b1"
+     ],
+     "paragraph_id": "0ba16a15cd4e36a6",
+     "section_path": "1/section/8",
+     "text": "C. Characterization method"
+    },
+    {
+     "block_ids": [
+      "Flat-top picosecond laser texturing of CFRP.pdf:p4:b2"
+     ],
+     "paragraph_id": "3ea683b84f5c6b08",
+     "section_path": "1/section/8",
+     "text": "All characterization and measurement procedures were con-\nducted using a range of advanced analytical instruments to ensure\nthe comprehensive evaluation of the samples. The surface morphol-\nogy and three-dimensional topography were observed using a laser\nconfocal microscope (DCM8, Leica), with an X–Y lateral resolution\nof no less than 0.14 μm and a Z (height) resolution of up to\n0.1 nm. A contact angle goniometer (LSA 100) measured the\ncontact angle to assess surface wettability. An x-ray photoelectron\nspectrometer (XPS, ESCALAB Xi+, Thermo Fisher Scientific) ana-\nlyzed surface chemical composition after laser activation, while a\nRaman spectrometer (Renishaw inVia Qontor) identified structural\nchanges\nand\nchemical\ncomposition.\nTensile\nshear\nstrength"
+    }
+   ],
+   "path": "1/section/8",
+   "section_id": "be33b188351b8ed7",
+   "section_type": "section",
+   "title": "July 2026 15:48:05"
+  },
+  {
+   "block_ids": [
+    "Flat-top picosecond laser texturing of CFRP.pdf:p4:b4"
+   ],
+   "level": 1,
+   "page_end": 4,
+   "page_start": 4,
+   "paragraphs": [],
+   "path": "1/discussion/9",
+   "section_id": "5473566563dcfea5",
+   "section_type": "discussion",
+   "title": "RESULTS AND DISCUSSION"
+  },
+  {
+   "block_ids": [
+    "Flat-top picosecond laser texturing of CFRP.pdf:p4:b18",
+    "Flat-top picosecond laser texturing of CFRP.pdf:p4:b5",
+    "Flat-top picosecond laser texturing of CFRP.pdf:p4:b6",
+    "Flat-top picosecond laser texturing of CFRP.pdf:p4:b16",
+    "Flat-top picosecond laser texturing of CFRP.pdf:p4:b17",
+    "Flat-top picosecond laser texturing of CFRP.pdf:p5:b2",
+    "Flat-top picosecond laser texturing of CFRP.pdf:p5:b3"
+   ],
+   "level": 1,
+   "page_end": 5,
+   "page_start": 4,
+   "paragraphs": [
+    {
+     "block_ids": [
+      "Flat-top picosecond laser texturing of CFRP.pdf:p4:b5"
+     ],
+     "paragraph_id": "07dcdae7210ea00c",
+     "section_path": "1/section/10",
+     "text": "A. Flat-top picosecond-laser–driven hierarchical\ntexturing and wettability tuning of CFRP"
+    },
+    {
+     "block_ids": [
+      "Flat-top picosecond laser texturing of CFRP.pdf:p4:b6"
+     ],
+     "paragraph_id": "b375d8266b126fa3",
+     "section_path": "1/section/10",
+     "text": "After laser processing, the CFRP surface exhibits a well-\nordered, tree-frog–inspired hexagonal array. Figure 5 presents the\nconfocal topographies at representative fluences (2.3, 3.5, 4.7, and\n5.8 J cm−2), with 3D height maps in the main panels and 2D pro-\njections in the upper-right insets. At the macroscale, the texture\nunits are clearly delineated, and the boundary grooves remain"
+    },
+    {
+     "block_ids": [
+      "Flat-top picosecond laser texturing of CFRP.pdf:p4:b16"
+     ],
+     "paragraph_id": "36e119a90ae4c866",
+     "section_path": "1/section/10",
+     "text": "J. Appl. Phys. 138, 225301 (2025); doi: 10.1063/5.0299010\n138, 225301-4"
+    },
+    {
+     "block_ids": [
+      "Flat-top picosecond laser texturing of CFRP.pdf:p4:b17"
+     ],
+     "paragraph_id": "66322fe01d228666",
+     "section_path": "1/section/10",
+     "text": "© Author(s) 2025"
+    },
+    {
+     "block_ids": [
+      "Flat-top picosecond laser texturing of CFRP.pdf:p5:b2"
+     ],
+     "paragraph_id": "bef3117da93ab91e",
+     "section_path": "1/section/10",
+     "text": "Journal of\nApplied Physics"
+    },
+    {
+     "block_ids": [
+      "Flat-top picosecond laser texturing of CFRP.pdf:p5:b3"
+     ],
+     "paragraph_id": "3f05cb07786a6f9b",
+     "section_path": "1/section/10",
+     "text": "ARTICLE\npubs.aip.org/aip/jap"
+    }
+   ],
+   "path": "1/section/10",
+   "section_id": "28c0c4016db49ca5",
+   "section_type": "section",
+   "title": "July 2026 15:48:05"
+  },
+  {
+   "block_ids": [
+    "Flat-top picosecond laser texturing of CFRP.pdf:p5:b6",
+    "Flat-top picosecond laser texturing of CFRP.pdf:p5:b4",
+    "Flat-top picosecond laser texturing of CFRP.pdf:p5:b5",
+    "Flat-top picosecond laser texturing of CFRP.pdf:p6:b8",
+    "Flat-top picosecond laser texturing of CFRP.pdf:p6:b9",
+    "Flat-top picosecond laser texturing of CFRP.pdf:p6:b0",
+    "Flat-top picosecond laser texturing of CFRP.pdf:p6:b3"
+   ],
+   "level": 1,
+   "page_end": 6,
+   "page_start": 5,
+   "paragraphs": [
+    {
+     "block_ids": [
+      "Flat-top picosecond laser texturing of CFRP.pdf:p5:b4"
+     ],
+     "paragraph_id": "6dd0e099b14ef7ce",
+     "section_path": "1/section/11",
+     "text": "J. Appl. Phys. 138, 225301 (2025); doi: 10.1063/5.0299010\n138, 225301-5"
+    },
+    {
+     "block_ids": [
+      "Flat-top picosecond laser texturing of CFRP.pdf:p5:b5"
+     ],
+     "paragraph_id": "3bdc75e9736c0908",
+     "section_path": "1/section/11",
+     "text": "© Author(s) 2025"
+    },
+    {
+     "block_ids": [
+      "Flat-top picosecond laser texturing of CFRP.pdf:p6:b8"
+     ],
+     "paragraph_id": "b3f0b6417c0393f5",
+     "section_path": "1/section/11",
+     "text": "Journal of\nApplied Physics"
+    },
+    {
+     "block_ids": [
+      "Flat-top picosecond laser texturing of CFRP.pdf:p6:b9"
+     ],
+     "paragraph_id": "11c8056405ae48ff",
+     "section_path": "1/section/11",
+     "text": "ARTICLE\npubs.aip.org/aip/jap"
+    },
+    {
+     "block_ids": [
+      "Flat-top picosecond laser texturing of CFRP.pdf:p6:b0"
+     ],
+     "paragraph_id": "d4ffa007799ac67f",
+     "section_path": "1/section/11",
+     "text": "continuous, closely following the programmed toolpath. At the\nmicroscale, transient thermo-matter coupling promotes directional\nmicro-ridges along the scan tracks and sharper, deeper boundary\ngrooves, jointly establishing hierarchical roughness. Although this\nthermally driven microreconstruction introduces slight deviations\nfrom the nominal geometry, it markedly amplifies height undula-\ntions and plateau–groove contrast, thereby enhancing interfacial\nmechanical interlocking and offering tunability for wetting and\nadhesion. Consistent with these observations (Fig. 6), as fluence\nincreases from 2.3 to 7.0 J cm−2, the areal arithmetical mean height\n(Sa) rises from 10.7 to 39.5 μm, and the surface profile depth varia-\ntion (SPD) increases from 22.3 to 61.0 μm, showing an overall posi-\ntive dependence on fluence. For reference, the untreated surface\nexhibits Sa ≈1 μm. This response stems from intensified material\nremoval and redeposition, which render polygonal plateaus more\ncomplete, boundary grooves sharper, and intra-unit ridges more\nregular, culminating in multiscale roughness amplification."
+    },
+    {
+     "block_ids": [
+      "Flat-top picosecond laser texturing of CFRP.pdf:p6:b3"
+     ],
+     "paragraph_id": "893c88a735e410ab",
+     "section_path": "1/section/11",
+     "text": "the local groove depth), which sustains Wenzel-state wetting and,\nthus, reduces contact angles. By contrast, at excessive fluence,\nfurther groove deepening and apparent widening, together with\nthermally induced remelting and ridge rounding, favor air entrap-\nment beneath the droplet; water then fails to infiltrate those sites\n(y_3 and y_4 become small or approach zero). Accordingly, within\nthe high-fluence regime, the surface can exhibit nonpenetrable\nzones characterized by y_3/y_4, which lowers the effective solid–\nliquid area fraction f and partially shifts wetting toward a Cassie–\nBaxter state, thereby increasing the contact angle.30 As shown by\nthe water contact angle measurements, as the laser fluence increases\nfrom 5.8 to 7.0 J cm−2, the contact angle increases from 8° to 14°."
+    }
+   ],
+   "path": "1/section/11",
+   "section_id": "545556552108ddb4",
+   "section_type": "section",
+   "title": "July 2026 15:48:05"
+  },
+  {
+   "block_ids": [
+    "Flat-top picosecond laser texturing of CFRP.pdf:p6:b12",
+    "Flat-top picosecond laser texturing of CFRP.pdf:p6:b1",
+    "Flat-top picosecond laser texturing of CFRP.pdf:p6:b2",
+    "Flat-top picosecond laser texturing of CFRP.pdf:p6:b10",
+    "Flat-top picosecond laser texturing of CFRP.pdf:p6:b11",
+    "Flat-top picosecond laser texturing of CFRP.pdf:p7:b7",
+    "Flat-top picosecond laser texturing of CFRP.pdf:p7:b8",
+    "Flat-top picosecond laser texturing of CFRP.pdf:p7:b2",
+    "Flat-top picosecond laser texturing of CFRP.pdf:p7:b0"
+   ],
+   "level": 1,
+   "page_end": 7,
+   "page_start": 6,
+   "paragraphs": [
+    {
+     "block_ids": [
+      "Flat-top picosecond laser texturing of CFRP.pdf:p6:b1"
+     ],
+     "paragraph_id": "cac0e1cb596eb029",
+     "section_path": "1/section/12",
+     "text": "Driven by the synergistic effects of hierarchical morphological\nreconstruction and surface chemical activation induced by a\n355 nm flat-top picosecond laser, the wettability of the CFRP\nsurface is markedly enhanced. As shown in Fig. 7, the water contact\nangle of the untreated surface is 81.0°. With increasing fluence\nfrom 2.3 to 3.5 to 4.7 J cm−2, the angle decreases sequentially to\n40.2°, 29.5°, and 18.1°, reaching a minimum of 8.0° at 5.8 J cm−2,\nand is followed by a slight increase to 14.0° at 7.0 J cm−2. This non-\nmonotonic “decrease–then–increase” trend indicates that the bio-\nmimetic texture does not necessarily benefit from ever-greater\nfeature depth or laser fluence. At moderate fluence, multiscale\nridges and sharpened boundary grooves enlarge the true solid–\nliquid contact area and expose oxygen-containing functional\ngroups, consistent with Wenzel-state wetting amplification.30"
+    },
+    {
+     "block_ids": [
+      "Flat-top picosecond laser texturing of CFRP.pdf:p6:b2"
+     ],
+     "paragraph_id": "361ced78438cbc10",
+     "section_path": "1/section/12",
+     "text": "To mechanistically link this trend, Fig. 8 introduces local\nwater\npenetration\ndepths\ny_i.\nIn\nshallow,\nconnected,\nand\nsharp-edged grooves, water fully penetrates (y_1 and y_2 approach"
+    },
+    {
+     "block_ids": [
+      "Flat-top picosecond laser texturing of CFRP.pdf:p6:b10"
+     ],
+     "paragraph_id": "4fe1f80e7ff7789f",
+     "section_path": "1/section/12",
+     "text": "J. Appl. Phys. 138, 225301 (2025); doi: 10.1063/5.0299010\n138, 225301-6"
+    },
+    {
+     "block_ids": [
+      "Flat-top picosecond laser texturing of CFRP.pdf:p6:b11"
+     ],
+     "paragraph_id": "8a504eff4bc61e35",
+     "section_path": "1/section/12",
+     "text": "© Author(s) 2025"
+    },
+    {
+     "block_ids": [
+      "Flat-top picosecond laser texturing of CFRP.pdf:p7:b7"
+     ],
+     "paragraph_id": "77d97e6735d0a284",
+     "section_path": "1/section/12",
+     "text": "Journal of\nApplied Physics"
+    },
+    {
+     "block_ids": [
+      "Flat-top picosecond laser texturing of CFRP.pdf:p7:b8"
+     ],
+     "paragraph_id": "014d590a38ce0e89",
+     "section_path": "1/section/12",
+     "text": "ARTICLE\npubs.aip.org/aip/jap"
+    },
+    {
+     "block_ids": [
+      "Flat-top picosecond laser texturing of CFRP.pdf:p7:b2"
+     ],
+     "paragraph_id": "a255dad4e29c0032",
+     "section_path": "1/section/12",
+     "text": "to assess graphitization and defect density. For the untreated condi-\ntion, because the as-received CFRP is covered by an epoxy layer,\nRaman was acquired on a resin-free plain-weave carbon fabric to\nprovide a fiber reference (“original”). In contrast, for the tree-frog–\ntextured condition, the laser process removes the resin-rich layer\nand exposes the fiber at the cell tops; therefore, Raman was col-\nlected directly on the textured CFRP surface (“tree frog”). The pris-\ntine surface exhibits I_D/I_G ≈0.94, while the tree-frog–textured"
+    },
+    {
+     "block_ids": [
+      "Flat-top picosecond laser texturing of CFRP.pdf:p7:b0"
+     ],
+     "paragraph_id": "12133807b9b95c98",
+     "section_path": "1/section/12",
+     "text": "This suggests a shift toward a less penetrative wetting state, likely\ndue to the surface structure becoming more favorable for air\nentrapment beneath the droplet, thus impeding water infiltration\nand promoting the Cassie–Baxter state."
+    }
+   ],
+   "path": "1/section/12",
+   "section_id": "6897ad9e66d27022",
+   "section_type": "section",
+   "title": "July 2026 15:48:05"
+  },
+  {
+   "block_ids": [
+    "Flat-top picosecond laser texturing of CFRP.pdf:p7:b11",
+    "Flat-top picosecond laser texturing of CFRP.pdf:p7:b9",
+    "Flat-top picosecond laser texturing of CFRP.pdf:p7:b10",
+    "Flat-top picosecond laser texturing of CFRP.pdf:p8:b10",
+    "Flat-top picosecond laser texturing of CFRP.pdf:p8:b11",
+    "Flat-top picosecond laser texturing of CFRP.pdf:p8:b2",
+    "Flat-top picosecond laser texturing of CFRP.pdf:p8:b3",
+    "Flat-top picosecond laser texturing of CFRP.pdf:p8:b0"
+   ],
+   "level": 1,
+   "page_end": 8,
+   "page_start": 7,
+   "paragraphs": [
+    {
+     "block_ids": [
+      "Flat-top picosecond laser texturing of CFRP.pdf:p7:b9"
+     ],
+     "paragraph_id": "49017a00a7e410fb",
+     "section_path": "1/section/13",
+     "text": "J. Appl. Phys. 138, 225301 (2025); doi: 10.1063/5.0299010\n138, 225301-7"
+    },
+    {
+     "block_ids": [
+      "Flat-top picosecond laser texturing of CFRP.pdf:p7:b10"
+     ],
+     "paragraph_id": "6833eb1a15fc0dc9",
+     "section_path": "1/section/13",
+     "text": "© Author(s) 2025"
+    },
+    {
+     "block_ids": [
+      "Flat-top picosecond laser texturing of CFRP.pdf:p8:b10"
+     ],
+     "paragraph_id": "76d520c75dd83a2d",
+     "section_path": "1/section/13",
+     "text": "Journal of\nApplied Physics"
+    },
+    {
+     "block_ids": [
+      "Flat-top picosecond laser texturing of CFRP.pdf:p8:b11"
+     ],
+     "paragraph_id": "204f45ee27c85c0e",
+     "section_path": "1/section/13",
+     "text": "ARTICLE\npubs.aip.org/aip/jap"
+    },
+    {
+     "block_ids": [
+      "Flat-top picosecond laser texturing of CFRP.pdf:p8:b2"
+     ],
+     "paragraph_id": "8258220a22ec38d0",
+     "section_path": "1/section/13",
+     "text": "functional groups (e.g., hydroxyl and carbonyl), which enhances\nsurface polarity and chemical reactivity, thereby improving wetta-\nbility and interfacial adhesion.34 On this basis, in our data, the\nflat-top sample shows a slightly higher total oxidized fraction than\nthe Gaussian sample (35.1% vs 32.8%; CvO/CZC 0.170 vs 0.164)."
+    },
+    {
+     "block_ids": [
+      "Flat-top picosecond laser texturing of CFRP.pdf:p8:b3"
+     ],
+     "paragraph_id": "0029e2e769181ad5",
+     "section_path": "1/section/13",
+     "text": "B. Laser-induced adhesion enhancement and\nfailure-mode transition"
+    },
+    {
+     "block_ids": [
+      "Flat-top picosecond laser texturing of CFRP.pdf:p8:b0"
+     ],
+     "paragraph_id": "69a321b2ad9afca1",
+     "section_path": "1/section/13",
+     "text": "surface shows ≈0.95. This negligible change indicates that laser tex-\nturing does not introduce appreciable additional defects nor alter\nthe overall degree of graphitization, i.e., the process primarily engi-\nneers\nsurface\nperiodicity\nwithout\ncompromising\nthe\ncarbon\nframework."
+    }
+   ],
+   "path": "1/section/13",
+   "section_id": "eefcb16051ecc59f",
+   "section_type": "section",
+   "title": "July 2026 15:48:05"
+  },
+  {
+   "block_ids": [
+    "Flat-top picosecond laser texturing of CFRP.pdf:p8:b14",
+    "Flat-top picosecond laser texturing of CFRP.pdf:p8:b12",
+    "Flat-top picosecond laser texturing of CFRP.pdf:p8:b13",
+    "Flat-top picosecond laser texturing of CFRP.pdf:p9:b6",
+    "Flat-top picosecond laser texturing of CFRP.pdf:p9:b7",
+    "Flat-top picosecond laser texturing of CFRP.pdf:p9:b0",
+    "Flat-top picosecond laser texturing of CFRP.pdf:p9:b1"
+   ],
+   "level": 1,
+   "page_end": 9,
+   "page_start": 8,
+   "paragraphs": [
+    {
+     "block_ids": [
+      "Flat-top picosecond laser texturing of CFRP.pdf:p8:b12"
+     ],
+     "paragraph_id": "8895150fb84ddbaa",
+     "section_path": "1/section/14",
+     "text": "J. Appl. Phys. 138, 225301 (2025); doi: 10.1063/5.0299010\n138, 225301-8"
+    },
+    {
+     "block_ids": [
+      "Flat-top picosecond laser texturing of CFRP.pdf:p8:b13"
+     ],
+     "paragraph_id": "bc0b50d8b4955fab",
+     "section_path": "1/section/14",
+     "text": "© Author(s) 2025"
+    },
+    {
+     "block_ids": [
+      "Flat-top picosecond laser texturing of CFRP.pdf:p9:b6"
+     ],
+     "paragraph_id": "4b5281120e3e611c",
+     "section_path": "1/section/14",
+     "text": "Journal of\nApplied Physics"
+    },
+    {
+     "block_ids": [
+      "Flat-top picosecond laser texturing of CFRP.pdf:p9:b7"
+     ],
+     "paragraph_id": "41832bb48e811f9b",
+     "section_path": "1/section/14",
+     "text": "ARTICLE\npubs.aip.org/aip/jap"
+    },
+    {
+     "block_ids": [
+      "Flat-top picosecond laser texturing of CFRP.pdf:p9:b0"
+     ],
+     "paragraph_id": "fba639d90252171b",
+     "section_path": "1/section/14",
+     "text": "grooves/ridges are formed at the fiber/tow scale. At 3.5 J/cm2 (b), a\nmixed failure mode is observed: fibers are exposed, but grooves are\nshallow and discontinuous, leading to discrete cohesive tearing\npatches in the adhesive on the AA7075 side together with limited"
+    },
+    {
+     "block_ids": [
+      "Flat-top picosecond laser texturing of CFRP.pdf:p9:b1"
+     ],
+     "paragraph_id": "8ea6221bb32a74c9",
+     "section_path": "1/section/14",
+     "text": "fiber pull-out and tow imprints; residual interfacial glossy bands\nremain locally, evidencing insufficient anchoring depth and lateral\n“keying,” so the crack alternates between the interface, the adhesive\nlayer, and fiber peripheries. At 5.8 J/cm2 (c), the texture becomes"
+    }
+   ],
+   "path": "1/section/14",
+   "section_id": "b2970a6d05629670",
+   "section_type": "section",
+   "title": "July 2026 15:48:05"
+  },
+  {
+   "block_ids": [
+    "Flat-top picosecond laser texturing of CFRP.pdf:p9:b10",
+    "Flat-top picosecond laser texturing of CFRP.pdf:p9:b8",
+    "Flat-top picosecond laser texturing of CFRP.pdf:p9:b9",
+    "Flat-top picosecond laser texturing of CFRP.pdf:p10:b13",
+    "Flat-top picosecond laser texturing of CFRP.pdf:p10:b14",
+    "Flat-top picosecond laser texturing of CFRP.pdf:p10:b7",
+    "Flat-top picosecond laser texturing of CFRP.pdf:p10:b0",
+    "Flat-top picosecond laser texturing of CFRP.pdf:p10:b8",
+    "Flat-top picosecond laser texturing of CFRP.pdf:p10:b1",
+    "Flat-top picosecond laser texturing of CFRP.pdf:p10:b9",
+    "Flat-top picosecond laser texturing of CFRP.pdf:p10:b10"
+   ],
+   "level": 1,
+   "page_end": 10,
+   "page_start": 9,
+   "paragraphs": [
+    {
+     "block_ids": [
+      "Flat-top picosecond laser texturing of CFRP.pdf:p9:b8"
+     ],
+     "paragraph_id": "1e3894bd0e7a3502",
+     "section_path": "1/section/15",
+     "text": "J. Appl. Phys. 138, 225301 (2025); doi: 10.1063/5.0299010\n138, 225301-9"
+    },
+    {
+     "block_ids": [
+      "Flat-top picosecond laser texturing of CFRP.pdf:p9:b9"
+     ],
+     "paragraph_id": "bc920824fbab454d",
+     "section_path": "1/section/15",
+     "text": "© Author(s) 2025"
+    },
+    {
+     "block_ids": [
+      "Flat-top picosecond laser texturing of CFRP.pdf:p10:b13"
+     ],
+     "paragraph_id": "cfc5c6542a7f7acc",
+     "section_path": "1/section/15",
+     "text": "Journal of\nApplied Physics"
+    },
+    {
+     "block_ids": [
+      "Flat-top picosecond laser texturing of CFRP.pdf:p10:b14"
+     ],
+     "paragraph_id": "fa498266d0764860",
+     "section_path": "1/section/15",
+     "text": "ARTICLE\npubs.aip.org/aip/jap"
+    },
+    {
+     "block_ids": [
+      "Flat-top picosecond laser texturing of CFRP.pdf:p10:b7"
+     ],
+     "paragraph_id": "b083f16bd553cb73",
+     "section_path": "1/section/15",
+     "text": "Author Contributions"
+    },
+    {
+     "block_ids": [
+      "Flat-top picosecond laser texturing of CFRP.pdf:p10:b0"
+     ],
+     "paragraph_id": "ac779430b0c8c3b5",
+     "section_path": "1/section/15",
+     "text": "deeper and continuous, establishing effective three-dimensional\nmechanical interlocking at the tow scale. The fracture surface is\ncharacterized by a fiber-dominated co-failure of CFRP matrix/adhe-\nsive: extensive tow imprints, dense pull-out trajectories, and local\nfiber fractures are evident, accompanied by pronounced transfer of\nthe CFRP surface layer (fiber-rich) to the AA7075 side. Interfacial\nglossy bands nearly disappear, and the crack is forced away from\nthe original interface, meandering through the adhesive and\naround fiber bundles—consistent with the transition from interfa-\ncial/mixed failure to fiber-dominated co-failure."
+    },
+    {
+     "block_ids": [
+      "Flat-top picosecond laser texturing of CFRP.pdf:p10:b8"
+     ],
+     "paragraph_id": "1cc9a324c674e176",
+     "section_path": "1/section/15",
+     "text": "Zhonghe Wang: Validation (equal); Visualization (equal); Writing\n– original draft (equal); Writing – review & editing (equal). Di Liu:\nValidation (equal); Visualization (equal); Writing – original draft\n(equal).\nYao\nMa:\nSupervision\n(equal);\nValidation\n(equal);\nVisualization (equal). Shuwei Sun: Methodology (equal); Project\nadministration\n(equal).\nYujie\nWang:\nInvestigation\n(equal);\nMethodology (equal). Chunting Wu: Conceptualization (equal);\nData curation (equal); Formal analysis (equal); Funding acquisition\n(equal); Investigation (equal). Changqing Li: Investigation (equal);\nMethodology (equal); Project administration (equal); Resources\n(equal); Software (equal); Supervision (equal); Validation (equal).\nYongji Yu: Resources (equal); Software (equal); Supervision\n(equal). Mo Zhang: Resources (equal); Software (equal); Validation\n(equal)."
+    },
+    {
+     "block_ids": [
+      "Flat-top picosecond laser texturing of CFRP.pdf:p10:b1"
+     ],
+     "paragraph_id": "23be00ae98089764",
+     "section_path": "1/section/15",
+     "text": "Building on the strength gains and fracture-surface evidence,\nFig. 13 clarifies how biomimetic structuring enhances the AA7075/\nCFRP interface in a fluence-dependent manner. Biomimetic\nmicro-/nanotopographies promote deeper adhesive penetration\ninto the CFRP, improving mechanical interlocking and stress trans-\nfer. At low fluence, shallow features limit infiltration and interlock-\ning, yielding weak interfaces. At an optimal fluence, well-defined\nhierarchical textures enable maximum penetration and robust\nanchoring, consistent with the increased lap-shear strength and the\nfailure-mode transition in Fig. 12. At excessive fluence, voids/\nmicrocracks and disrupted interfacial continuity can reduce the\neffective bonding area and introduce stress concentrators, thereby\ndegrading strength."
+    },
+    {
+     "block_ids": [
+      "Flat-top picosecond laser texturing of CFRP.pdf:p10:b9"
+     ],
+     "paragraph_id": "0e81ba45da55da43",
+     "section_path": "1/section/15",
+     "text": "DATA AVAILABILITY"
+    },
+    {
+     "block_ids": [
+      "Flat-top picosecond laser texturing of CFRP.pdf:p10:b10"
+     ],
+     "paragraph_id": "f49d93e470eab5b0",
+     "section_path": "1/section/15",
+     "text": "The data that support the findings of this study are available\nfrom the corresponding authors upon reasonable request."
+    }
+   ],
+   "path": "1/section/15",
+   "section_id": "ec7e32949f52860e",
+   "section_type": "section",
+   "title": "July 2026 15:48:05"
+  },
+  {
+   "block_ids": [
+    "Flat-top picosecond laser texturing of CFRP.pdf:p10:b11",
+    "Flat-top picosecond laser texturing of CFRP.pdf:p10:b12"
+   ],
+   "level": 1,
+   "page_end": 10,
+   "page_start": 10,
+   "paragraphs": [
+    {
+     "block_ids": [
+      "Flat-top picosecond laser texturing of CFRP.pdf:p10:b12"
+     ],
+     "paragraph_id": "7ba21c33a66b2e55",
+     "section_path": "1/references/16",
+     "text": "1P. Song, J. Liu, Z. Li, S. Wu, X. Sun, H. Yue, and M. Pawlak, “All-optical laser\nultrasonic technique for imaging of subsurface defects in carbon fiber reinforced\npolymer (CFRP) using an optical microphone,” J. Appl. Phys. 131(16), 165106\n(2022).\n2Y. Wu, Y. Zhang, Z. Yang, X. Huang, S. Chen, J. Li, G. Huang, W. Wei, G. Gao,\nand G. Wu, “In situ growth of silver nanoparticles on carbon fiber by plasma–\nliquid interaction to improve performance of epoxy composites,” J. Appl. Phys.\n136(6), 065304 (2024).\n3J. Li, Y. Ding, Y. Guan, L. Wang, H. Xie, Y. Wang, and L. Yang, “Investigations\non 355 nm nanosecond-picosecond dual-pulse laser enhanced ablation of carbon\nfiber reinforced polymer,” Opt. Laser Technol. 185, 112576 (2025).\n4T. V. Kononenko, C. Freitag, M. S. Komlenok, V. Onuseit, R. Weber, T. Graf,\nand V. I. Konov, “Oxygen-assisted multipass cutting of carbon fiber reinforced\nplastics with ultra-short laser pulses,” J. Appl. Phys. 115(10), 103107 (2014).\n5Z. Cao, F. Shi, and B. Zhang, “Layer-by-layer acoustic travel time approximation\nusing ray theory for total focusing method imaging in carbon fiber reinforced\npolymer,” J. Appl. Phys. 134(12), 124902 (2023).\n6J. Zhang, G. Lin, U. Vaidya, and H. Wang, “Past, present and future prospective\nof global carbon fibre composite developments and applications,” Composites,\nPart B 250, 110463 (2023).\n7J. Gu, X. Su, Y. Jin, D. Zhang, W. Li, J. Xu, and B. Guo, “Research progress and\nprospects of laser cleaning for CFRP: A review,” Composites, Part A 185, 108349\n(2024).\n8S. Wang, W. Wang, Y. Xu, Y. Tian, X. Zhang, and H. Huang, “Enhancing\nbonding synergy and mechanical response of metal/composite hybrid joints\nthrough physicochemical surface pretreatment,” J. Mater. Process. Technol. 315,\n117923 (2023).\n9Y. Song, S. Wang, Y. Pan, Z. Li, and L. Yu, “Current research status of laser\ncleaning of carbon fiber reinforced polymers,” Mater. Today Commun. 39,\n109312 (2024).\n10l. Y. Xu, J. R. Lu, K. M. Li, and J. Hu, “Experimental study of CFRP laser\nsurface modification and bonding characteristics of CFRP/Al6061 heterogeneous\njoints,” Compos. Struct. 283, 115030 (2022).\n11Y. Xie, B. Yang, L. Lu, Z. Wan, and X. Liu, “Shear strength of bonded joints of\ncarbon fiber reinforced plastic (CFRP) laminates enhanced by a two-step laser\nsurface treatment,” Compos. Struct. 232, 111559 (2020).\n12P. Zuo, T. Liu, F. Li, G. Wang, K. Zhang, X. Li, W. Han, H. Tian, L. Hu,\nH. Huang, D. Zhu, and L. Jiang, “Controllable fabrication of hydrophilic surface"
+    }
+   ],
+   "path": "1/references/16",
+   "section_id": "b54d61e466243d9c",
+   "section_type": "references",
+   "title": "REFERENCES"
+  },
+  {
+   "block_ids": [
+    "Flat-top picosecond laser texturing of CFRP.pdf:p10:b2",
+    "Flat-top picosecond laser texturing of CFRP.pdf:p10:b3"
+   ],
+   "level": 1,
+   "page_end": 10,
+   "page_start": 10,
+   "paragraphs": [
+    {
+     "block_ids": [
+      "Flat-top picosecond laser texturing of CFRP.pdf:p10:b3"
+     ],
+     "paragraph_id": "aa54088ed6e436f6",
+     "section_path": "1/conclusion/17",
+     "text": "In this work, a 355 nm flat-top (top-hat) picosecond laser was\nemployed to realize integrated biomimetic texturing and surface\nactivation\nof\nCFRP.\nA\ntree-frog–inspired\npolygonal\n“plateau-connected-groove” pattern was programmed onto the lam-\ninate with minimal heat-affected impact. Relative to the pristine\nsurface (Sa ≈1 μm), laser processing markedly amplified surface\ntopography (Sa up to ≈39.5 μm) and established hierarchical\nroughness\ncomprising\ncontinuous\nboundary\ngrooves\nand\nscan-induced ridges. Wettability was substantially improved (the\nwater contact angle decreased from 81.0° to a minimum of 8.0°).\nXPS revealed increased oxygenated functional groups (CZO/\nCvO), while Raman I_D/I_G remained essentially unchanged,\nindicating enhanced polarity without the degradation of the carbon\nframework. Consequently, AA7075/CFRP single-lap-shear strength\nincreased from 5.9 to 19.6 MPa at 5.8 J cm−2, accompanied by a\ntransition from interfacial adhesive failure to fiber-dominated\nmixed failure. The performance gains are attributed to the synergy\nbetween hierarchical micro-/nanostructures, which promote three-\ndimensional mechanical interlocking and adhesive infiltration, and\nelevated surface polarity, which enhances wetting and chemical\ncoupling. The proposed non-contact, computer-controlled flat-top\nlaser route scales to curved parts and automation, enabling durable\nCFRP multimaterial joints in aircraft (CFRP–Al lap joints/string-\ners) and automotive body structures (CFRP skin–honeycomb\nbonding/repairs)."
+    }
+   ],
+   "path": "1/conclusion/17",
+   "section_id": "8e015d2cb380ea83",
+   "section_type": "conclusion",
+   "title": "CONCLUSIONS"
+  },
+  {
+   "block_ids": [
+    "Flat-top picosecond laser texturing of CFRP.pdf:p10:b17",
+    "Flat-top picosecond laser texturing of CFRP.pdf:p10:b4",
+    "Flat-top picosecond laser texturing of CFRP.pdf:p10:b5",
+    "Flat-top picosecond laser texturing of CFRP.pdf:p10:b6",
+    "Flat-top picosecond laser texturing of CFRP.pdf:p10:b15",
+    "Flat-top picosecond laser texturing of CFRP.pdf:p10:b16",
+    "Flat-top picosecond laser texturing of CFRP.pdf:p11:b2",
+    "Flat-top picosecond laser texturing of CFRP.pdf:p11:b3",
+    "Flat-top picosecond laser texturing of CFRP.pdf:p11:b0",
+    "Flat-top picosecond laser texturing of CFRP.pdf:p11:b1"
+   ],
+   "level": 1,
+   "page_end": 11,
+   "page_start": 10,
+   "paragraphs": [
+    {
+     "block_ids": [
+      "Flat-top picosecond laser texturing of CFRP.pdf:p10:b4"
+     ],
+     "paragraph_id": "801f85d68f2406ee",
+     "section_path": "1/section/18",
+     "text": "AUTHOR DECLARATIONS"
+    },
+    {
+     "block_ids": [
+      "Flat-top picosecond laser texturing of CFRP.pdf:p10:b5"
+     ],
+     "paragraph_id": "cb6384678815e8d1",
+     "section_path": "1/section/18",
+     "text": "Conflict of Interest"
+    },
+    {
+     "block_ids": [
+      "Flat-top picosecond laser texturing of CFRP.pdf:p10:b6"
+     ],
+     "paragraph_id": "b32844e1468948b1",
+     "section_path": "1/section/18",
+     "text": "The authors have no conflicts to disclose."
+    },
+    {
+     "block_ids": [
+      "Flat-top picosecond laser texturing of CFRP.pdf:p10:b15"
+     ],
+     "paragraph_id": "fbd88c07481b89e3",
+     "section_path": "1/section/18",
+     "text": "J. Appl. Phys. 138, 225301 (2025); doi: 10.1063/5.0299010\n138, 225301-10"
+    },
+    {
+     "block_ids": [
+      "Flat-top picosecond laser texturing of CFRP.pdf:p10:b16"
+     ],
+     "paragraph_id": "cbd2e6ecfac18a25",
+     "section_path": "1/section/18",
+     "text": "© Author(s) 2025"
+    },
+    {
+     "block_ids": [
+      "Flat-top picosecond laser texturing of CFRP.pdf:p11:b2"
+     ],
+     "paragraph_id": "3e1287952a7670b8",
+     "section_path": "1/section/18",
+     "text": "Journal of\nApplied Physics"
+    },
+    {
+     "block_ids": [
+      "Flat-top picosecond laser texturing of CFRP.pdf:p11:b3"
+     ],
+     "paragraph_id": "3edbc755b8cc6c98",
+     "section_path": "1/section/18",
+     "text": "ARTICLE\npubs.aip.org/aip/jap"
+    },
+    {
+     "block_ids": [
+      "Flat-top picosecond laser texturing of CFRP.pdf:p11:b0"
+     ],
+     "paragraph_id": "37959800e5418a77",
+     "section_path": "1/section/18",
+     "text": "micro/nanostructures of CFRP by femtosecond laser,” ACS Omega 9(19),\n20988–20996 (2024).\n13H. Yao, M. Chen, L. Jiang, B. Guo, Z. Yu, G. Wang, and S. Song, “Selective\nprocessing of CFRP by two-color double-pulse femtosecond laser,” Opt. Express\n33(2), 3101–3111 (2025).\n14Y. Yuan, X. Guo, Y. Gu, D. Li, K. Zhang, and W. Han, “Rapid surface modifi-\ncation of CFRP via femtosecond laser-assisted by chemical approach to enhance\nadhesive performance,” Compos. Commun. 53, 102200 (2025).\n15S. Li, W. Wang, L. Wang, Z. Li, Z. Teng, Y. Yang, C. Zhang, Y. Hu, L. Feng,\nD. Wang, and W. Yang, “Process optimization and performance verification of\nCFRP laser surface modification,” Polym. Compos. 45(8), 7284–7300 (2024).\n16Z. Teng, Z. Li, W. Yang, Y. Yang, C. Zhang, R. Jian, C. Zhou, Y. Cao, and\nS. Li, “The effect of laser scanning direction on the bonding properties of unidi-\nrectional CFRP,” Opt. Laser Technol. 190, 113199 (2025).\n17A. Al-Mahdy, J. I. Ahuir-Torres, T. T. Öpöz, H. R. Kotadia, J. Mullett, and\nM. C. Sharp, “An investigation into the use of incoherent UV light to augment\nIR nanosecond pulsed laser texturing of CFRP composites for improved adhe-\nsion,” Opt. Laser Technol. 181, 111626 (2025).\n18C. Leone and S. Genna, “Effects of surface laser treatment on direct\nco-bonding strength of CFRP laminates,” Compos. Struct. 194, 240–251 (2018).\n19Z. Huang, Q. Li, Z. Lei, L. Gu, C. Liang, J. Su, X. Nan, and J. Liao, “Study on\nultrafast laser drilling with a flat-top beam in silicon wafer,” Opt. Laser Technol.\n186, 112707 (2025).\n20Y. Chen, Y. Guo, M. Xu, C. Ma, Q. Zhang, L. Wang, J. Yao, and Z. Li, “Study\non the element segregation and laves phase formation in the laser metal depos-\nited IN718 superalloy by flat top laser and Gaussian distribution laser,” Mater.\nSci. Eng. A 754, 339–347 (2019).\n21W. Yuan, H. Chen, S. Li, Y. Heng, S. Yin, and Q. Wei, “Understanding of\nadopting flat-top laser in laser powder bed fusion processed Inconel 718 alloy:\nSimulation of single-track scanning and experiment,” J. Mater. Res. Technol. 16,\n1388–1401 (2022).\n22T. Sumimoto and G. Miyaji, “Formation of homogeneous nanostructure via\ninterference of square flattop femtosecond laser pulses,” Nanomaterials 15(5),\n355 (2025).\n23G. Chen, Q. Peng, J. Long, H. Luo, Y. Zhou, X. Xie, G. Pan, and X. Wang, “A\nnovel strategy achieving GaN ultra-smooth surface via a square, flat top beam"
+    },
+    {
+     "block_ids": [
+      "Flat-top picosecond laser texturing of CFRP.pdf:p11:b1"
+     ],
+     "paragraph_id": "ba16f20a3e6fb1b0",
+     "section_path": "1/section/18",
+     "text": "shaped femtosecond laser processing combined with chemical mechanical pol-\nishing,” ECS J. Solid State Sci. Technol. 11(5), 054005 (2022).\n24F. Qian, H. Shen, G. Huang, B. Liu, and J. Hong, “Improvement of laser-\ninduced damage on high-efficiency solar cells via top-hat beam ablation,”\nEnergies 17(4), 858 (2024).\n25E. Nacius, O. Ulčinas, S. Orlov, and V. Jukna, “Polarization singularities for\nshaping of vector flat-top beams in utilization for high-power laser microma-\nchining of various materials,” Opt. Laser Technol. 177, 111133 (2024).\n26Y. Tong, J. ShangGuan, X. Ren, A. Yuan, J. Liu, Z. Lian, X. Hu, J. Ma, Z. Yang,\nand D. Wang, “Surface quality of laser paint removal of marine steel: A compar-\native study using a Gaussian beam and a flat-top beam.,” Appl. Opt. 61(9),\n2237–2246 (2022).\n27J. Chen, J. Bai, S. Zu, Z. Lin, and S. Yang, “Effect of interfacial thermal history\non bonding mechanism of laser assisted joining of QP980-CFRTP with adjust-\nable flat-top rectangular laser beam,” Compos. Struct. 323, 117488 (2023).\n28I. Scholz, W. J. P. Barnes, J. M. Smith, and W. Baumgartner, “Ultrastructure\nand physical properties of an adhesive surface, the toe pad epithelium of the tree\nfrog, Litoria caerulea white,” J. Exp. Biol. 212(1), 155–162 (2009).\n29l. Xue, B. Sanz, A. Luo et al., “Hybrid surface patterns mimicking the design\nof the adhesive toe pad of tree frog,” ACS Nano 11(10), 9711–9719 (2017).\n30S. Li, Z. Cao, R. Chen, X. Long, C. Li, P. Li, and W. Peng, “Strengthening\nthe bonding interfaces of hybrid titanium carbon laminates by bionic micro\ntexture and carbon nanotube pinning,” Compos. Sci. Technol. 232, 109865\n(2023).\n31Z. Wang, Y. Ma, S. Sun et al., “Bioinspired laser-induced hierarchical textures\nfor enhanced interfacial adhesion in CFRP composites,” Polym. Compos.\n(published online 2025).\n32J. Li, Y. Ding, C. Ge, X. Sun, L. Yang, Y. Wang, W. Zhang, and Y. Lu,\n“Investigations on 355 nm picosecond laser machining of carbon fiber reinforced\npolymer composites,” J. Manuf. Process. 101, 854–866 (2023).\n33M. Delkowski, C. T. Smith, J. V. Anguita, and S. R. P. Silva, “Radiation and\nelectrostatic resistance for ultra-stable polymer composites reinforced with\ncarbon fibers.,” Sci. Adv. 9(11), eadd6947 (2023).\n34Y. Yuan, X. Guo, H. He et al., “Rapid surface patterning to strengthen adhesive\nbonding of carbon fiber reinforced polymer by spatial shaping femtosecond\nlaser,” Opt. Laser Technol. 180, 111562 (2025)."
+    }
+   ],
+   "path": "1/section/18",
+   "section_id": "a6f840410a844edf",
+   "section_type": "section",
+   "title": "July 2026 15:48:05"
+  },
+  {
+   "block_ids": [
+    "Flat-top picosecond laser texturing of CFRP.pdf:p11:b6",
+    "Flat-top picosecond laser texturing of CFRP.pdf:p11:b4",
+    "Flat-top picosecond laser texturing of CFRP.pdf:p11:b5"
+   ],
+   "level": 1,
+   "page_end": 11,
+   "page_start": 11,
+   "paragraphs": [
+    {
+     "block_ids": [
+      "Flat-top picosecond laser texturing of CFRP.pdf:p11:b4"
+     ],
+     "paragraph_id": "5b611c7e1c270997",
+     "section_path": "1/section/19",
+     "text": "J. Appl. Phys. 138, 225301 (2025); doi: 10.1063/5.0299010\n138, 225301-11"
+    },
+    {
+     "block_ids": [
+      "Flat-top picosecond laser texturing of CFRP.pdf:p11:b5"
+     ],
+     "paragraph_id": "40e299eeaf768a96",
+     "section_path": "1/section/19",
+     "text": "© Author(s) 2025"
+    }
+   ],
+   "path": "1/section/19",
+   "section_id": "332ef811a68c454b",
+   "section_type": "section",
+   "title": "July 2026 15:48:05"
+  }
+ ]
+}
