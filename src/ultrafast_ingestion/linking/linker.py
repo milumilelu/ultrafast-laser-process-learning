@@ -136,10 +136,48 @@ def run_recorded(record_path: Path, graph: CandidateGraph, paper_id: str, doc_ve
         for line in record_path.read_text(encoding="utf-8").splitlines()
         if line.strip()
     ]
-    proposals = []
+    proposals: list[LinkProposal] = []
     for row in rows:
-        if row.get("type") == "proposal":
-            proposals.append(LinkProposal.from_dict(row["proposal"]))
+        if row.get("type") != "proposal":
+            continue
+        proposal = dict(row["proposal"])
+        # resolve match-specs (parameter/unit/values/role) to mention ids so
+        # recorded fixtures stay stable across extraction changes
+        mention_ids: list[str] = []
+        for spec in proposal.pop("mention_specs", []):
+            hits = [
+                m.mention_id
+                for m in graph.mentions.values()
+                if m.parameter == spec["parameter"]
+                and m.normalized_unit == spec.get("unit")
+                and any(abs(v - spec["value"]) < 1e-9 for v in m.values)
+                and graph.roles.get(m.mention_id) is not None
+            ]
+            if spec.get("role"):
+                hits = [
+                    mid
+                    for mid in hits
+                    if graph.roles.get(mid) is not None
+                    and graph.roles[mid].value == spec["role"]
+                ]
+            if not hits:
+                raise KeyError(f"recorded mention spec unresolved: {spec}")
+            mention_ids.append(hits[0])
+        if not mention_ids:
+            mention_ids = [str(x) for x in proposal.get("mention_ids") or []]
+        proposal["mention_ids"] = mention_ids
+        if not proposal.get("supporting_edge_ids"):
+            # attach actual edges between the resolved mentions so the
+            # validator's edge-existence check operates on the real graph
+            if len(mention_ids) == 2:
+                refs = []
+                for i, e in enumerate(graph.edges):
+                    if {e.source_mention_id, e.target_mention_id} == set(mention_ids):
+                        refs.append(f"E{i}")
+                proposal["supporting_edge_ids"] = refs
+            else:
+                proposal["supporting_edge_ids"] = []
+        proposals.append(LinkProposal.from_dict(proposal))
     return LinkingResult(
         paper_id=paper_id,
         document_version_id=doc_version,

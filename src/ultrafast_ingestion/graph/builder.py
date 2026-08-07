@@ -184,30 +184,36 @@ def build_candidate_graph(
                         ]
             if len(block_mentions) < 2:
                 continue
-            role = graph.roles[block_mentions[0].mention_id]
-            if role == MentionRole.MEASUREMENT:
-                edge_type = EdgeType.MEASUREMENT_ONLY
-            elif role == MentionRole.PROCESSING:
-                edge_type = EdgeType.SAME_PARAMETER_GROUP
-            else:
-                continue
-            strength = EdgeStrength.WEAK
-            source_ids = [block.block_id()]
-            if continuation and prev_block is not None:
-                source_ids.append(prev_block.block_id())
-            for i, ma in enumerate(block_mentions):
-                for mb in block_mentions[i + 1:]:
-                    graph.add_edge(
-                        CandidateEdge(
-                            source_mention_id=ma.mention_id,
-                            target_mention_id=mb.mention_id,
-                            type=edge_type,
-                            source_rule="SAME_BLOCK_PARAMETER_GROUP",
-                            edge_strength=strength,
-                            source_block_ids=tuple(source_ids),
-                            source_quote=ma.raw_text,
+            # partition by role: cross-role co-location must never merge
+            by_role: dict[MentionRole, list] = {}
+            for m in block_mentions:
+                by_role.setdefault(graph.roles[m.mention_id], []).append(m)
+            for role, group in by_role.items():
+                if len(group) < 2:
+                    continue
+                if role == MentionRole.MEASUREMENT:
+                    edge_type = EdgeType.MEASUREMENT_ONLY
+                elif role == MentionRole.PROCESSING:
+                    edge_type = EdgeType.SAME_PARAMETER_GROUP
+                else:
+                    continue
+                strength = EdgeStrength.WEAK
+                source_ids = [block.block_id()]
+                if continuation and prev_block is not None:
+                    source_ids.append(prev_block.block_id())
+                for i, ma in enumerate(group):
+                    for mb in group[i + 1:]:
+                        graph.add_edge(
+                            CandidateEdge(
+                                source_mention_id=ma.mention_id,
+                                target_mention_id=mb.mention_id,
+                                type=edge_type,
+                                source_rule="SAME_BLOCK_PARAMETER_GROUP",
+                                edge_strength=strength,
+                                source_block_ids=tuple(source_ids),
+                                source_quote=ma.raw_text,
+                            )
                         )
-                    )
 
     # ---- global statement (R6) ----------------------------------------
     for page in document.pages:
@@ -227,7 +233,11 @@ def build_candidate_graph(
             if not target_block_ids:
                 continue
             targets = [
-                m for m in active if m.anchor and m.anchor.block_id in target_block_ids
+                m
+                for m in active
+                if m.anchor
+                and m.anchor.block_id in target_block_ids
+                and graph.roles[m.mention_id] == MentionRole.PROCESSING
             ]
             for m in block_mentions:
                 for t in targets:

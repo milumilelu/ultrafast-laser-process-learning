@@ -32,7 +32,7 @@ _NA_RE = re.compile(
 _M2_RE = re.compile(
     r"(?<![a-z])M\s*[²2]\s*[=:≈~]?\s*(\d+(?:\.\d+)?)\b", re.IGNORECASE
 )
-_MAGNIFICATION_RE = re.compile(r"(\d+)\s*[×x](?!\s*(?:ray|axis|y|z))", re.IGNORECASE)
+_MAGNIFICATION_RE = re.compile(r"(\d+)\s*[×x](?!\s*\d)(?!\s*(?:ray|axis|y|z))", re.IGNORECASE)
 
 # parameter tables: "Spot diameter (um) 19" / "Fluence range (J/cm2) 2.3-7.0"
 _TABLE_CELL_RE = re.compile(
