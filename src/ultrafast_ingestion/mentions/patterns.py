@@ -142,8 +142,13 @@ def find_mentions(text: str) -> list[RawMention]:
     # drop mentions fully contained inside another mention (range/list wins)
     mentions.sort(key=lambda x: (x.start, -(x.end - x.start)))
     filtered: list[RawMention] = []
-    for m in mentions:
-        if any(m.start >= o.start and m.end <= o.end and m is not o for o in mentions):
+    for mention in mentions:
+        if any(
+            mention.start >= other.start
+            and mention.end <= other.end
+            and mention is not other
+            for other in mentions
+        ):
             continue
-        filtered.append(m)
+        filtered.append(mention)
     return filtered

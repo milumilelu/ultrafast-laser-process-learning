@@ -1,3 +1,10 @@
+from __future__ import annotations
+
+import pytest
+
+pytestmark = pytest.mark.pilot
+
+
 """Layer 2 hard regression: paper 13 counter-examples (permanent fixtures).
 
 - 200 kHz (writing) ACCEPT frequency
@@ -6,8 +13,6 @@
 - ZPL emission wavelengths (1132/1038/1241 nm) -> REJECTED
 - 515 nm laser -> ACCEPT wavelength
 """
-
-from __future__ import annotations
 
 from ultrafast_ingestion import PyMuPDFDocumentParser
 from ultrafast_ingestion.mentions.extractor import extract_mentions

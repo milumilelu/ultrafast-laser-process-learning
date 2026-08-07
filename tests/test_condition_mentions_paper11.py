@@ -1,6 +1,11 @@
-"""Layer 2 mention extraction on paper 11 (extraction only, no linking)."""
-
 from __future__ import annotations
+
+import pytest
+
+pytestmark = pytest.mark.pilot
+
+
+"""Layer 2 mention extraction on paper 11 (extraction only, no linking)."""
 
 from ultrafast_ingestion import PyMuPDFDocumentParser
 from ultrafast_ingestion.mentions.extractor import extract_mentions

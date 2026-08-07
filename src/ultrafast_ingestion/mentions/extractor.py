@@ -7,7 +7,6 @@ Never answers: "which ExperimentalCondition does it belong to?"
 from __future__ import annotations
 
 import hashlib
-import re
 
 from ultrafast_ingestion.mentions.context import classify
 from ultrafast_ingestion.mentions.models import ConditionMention

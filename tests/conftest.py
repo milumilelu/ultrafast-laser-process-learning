@@ -1,15 +1,32 @@
-"""Shared fixtures: pilot paper PDFs from the legacy archive (read-only)."""
+"""Shared fixtures: pilot paper PDFs (env-configured, no absolute paths).
+
+Archive resolution order:
+1. env ULTRAFAST_PILOT_ARCHIVE (explicit)
+2. sibling directory "ultrafast agent" next to this repository
+3. otherwise pilot fixtures skip (never silently pass)
+"""
 
 from __future__ import annotations
 
+import os
 from pathlib import Path
 
 import pytest
 
-ARCHIVE = Path(
-    r"C:\Users\RZF\Desktop\博士课题资料\ultrafast agent"
-    r"\ultrafast_laser_memory\data\literature_archive"
-)
+REPO_ROOT = Path(__file__).resolve().parents[1]
+
+
+def _archive_path() -> Path | None:
+    env = os.environ.get("ULTRAFAST_PILOT_ARCHIVE")
+    if env:
+        return Path(env)
+    sibling = REPO_ROOT.parent / "ultrafast agent" / "ultrafast_laser_memory" / "data" / "literature_archive"
+    if sibling.is_dir():
+        return sibling
+    return None
+
+
+ARCHIVE = _archive_path()
 
 PILOT_FILES = {
     "04_arxiv_2502.16530.pdf": "2dbee78cde23f8f0_04_arxiv_2502.16530.pdf",
@@ -23,7 +40,15 @@ PILOT_FILES = {
 
 
 def pilot_pdf(paper_id: str) -> Path:
-    return ARCHIVE / PILOT_FILES[paper_id]
+    if ARCHIVE is None:
+        pytest.skip(
+            "pilot PDF archive not found "
+            "(set ULTRAFAST_PILOT_ARCHIVE or place 'ultrafast agent' as sibling)"
+        )
+    path = ARCHIVE / PILOT_FILES[paper_id]
+    if not path.exists():
+        pytest.skip(f"pilot PDF missing: {path}")
+    return path
 
 
 @pytest.fixture()

@@ -18,7 +18,7 @@ dependencies = [
 ]
 
 [project.optional-dependencies]
-dev = ["pytest==9.1.1", "ruff==0.16.1", "import-linter==2.13", "pymupdf==1.28.2"]
+dev = ["pytest==9.1.1", "ruff==0.16.1", "import-linter==2.13", "pymupdf==1.28.2", "mypy==1.17.1", "pyyaml==6.0.3"]
 
 [tool.setuptools.packages.find]
 where = ["src"]
@@ -26,6 +26,14 @@ where = ["src"]
 [tool.pytest.ini_options]
 pythonpath = ["src"]
 testpaths = ["tests"]
+addopts = "-m 'not pilot and not benchmark'"
+markers = [
+    "unit: fast offline tests without external fixtures",
+    "integration: multi-component tests",
+    "pilot: requires the pilot PDF archive (5 papers); skipped when missing",
+    "benchmark: evaluation jobs, not part of default CI",
+    "slow: long-running tests",
+]
 
 [tool.ruff]
 line-length = 100

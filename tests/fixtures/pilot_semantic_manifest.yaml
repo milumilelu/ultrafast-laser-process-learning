@@ -1,0 +1,72 @@
+# Pilot semantic manifest (human-frozen, authoritative oracle).
+#
+# This is the small, auditable oracle for parser correctness. The full
+# ScientificDocument JSON artifacts (artifacts/scientific_documents/) are
+# for debug/replay/inspection and are NOT byte-compared in tests.
+#
+# bbox_region: [x0, y0, x1, y1] approximate page region for the quote.
+
+paper_04_arxiv_2502_16530:
+  pages: 23
+  required_sections: [methods, discussion]
+  required_captions: ["FIG."]
+  # NOTE: Table I (femtosecond laser parameter summary) is image-only in
+  # this PDF (no text layer) -> selective-OCR fallback test case.
+  anchors:
+    - quote: "focal spot diameter, Df, of ~15"
+      page: 4
+    - quote: "central wavelength of 800 nm"
+      page: 4
+  invariants:
+    reading_order_monotonic: true
+
+paper_10_arxiv_2411_18093:
+  pages: 22
+  required_sections: [methods, references]
+  required_captions: ["FIG."]
+  anchors:
+    - quote: "Multi-focal Picosecond laser vertical slicing"
+      page: 0
+  invariants:
+    reading_order_monotonic: true
+
+paper_11_arxiv_2404_09906:
+  pages: 8
+  required_sections: [introduction, methods]
+  required_captions: ["FIG.", "TABLE"]
+  anchors:
+    - quote: "repetition rate 10 kHz"
+      page: 1
+    - quote: "2.4 µm (1/e2)"
+      page: 1
+    - quote: "using for this sample a repetition rate of 100 kHz"
+      page: 2
+  invariants:
+    reading_order_monotonic: true
+
+paper_13_arxiv_2411_18868:
+  pages: 22
+  required_sections: [introduction, methods, references]
+  required_captions: ["FIG."]
+  anchors:
+    - quote: "515 nm, 230 fs duration, and repetition rate of 200 kHz"
+      page: 3
+    - quote: "2 nJ/pulse to 445 nJ/pulse"
+      page: 4
+    - quote: "dots were written 5 µm apart"
+      page: 4
+  invariants:
+    reading_order_monotonic: true
+
+paper_flat_top_cfrp:
+  paper_id: "Flat-top picosecond laser texturing of CFRP.pdf"
+  pages: 12
+  required_sections: [methods]
+  required_captions: ["FIG.", "TABLE"]
+  anchors:
+    - quote: "Spot diameter (μm)"
+      page: 4
+    - quote: "Fluence range (J/cm2) 2.3–7.0"
+      page: 4
+  invariants:
+    reading_order_monotonic: true

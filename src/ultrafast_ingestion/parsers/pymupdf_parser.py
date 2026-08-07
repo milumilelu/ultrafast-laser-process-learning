@@ -67,7 +67,13 @@ class PyMuPDFDocumentParser:
                 text = _block_text(block)
                 if not text.strip():
                     continue
-                bbox = tuple(float(v) for v in block["bbox"])
+                raw_bbox = block["bbox"]
+                bbox = (
+                    float(raw_bbox[0]),
+                    float(raw_bbox[1]),
+                    float(raw_bbox[2]),
+                    float(raw_bbox[3]),
+                )
                 pb = PageBlock(
                     paper_id=paper_id,
                     document_version_id=version_id,

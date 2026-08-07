@@ -1,3 +1,10 @@
+from __future__ import annotations
+
+import pytest
+
+pytestmark = pytest.mark.pilot
+
+
 """False-negative regression fixtures (S0-2B7 mention audit).
 
 Permanent fixtures for the systematic gaps found in the audit:
@@ -8,8 +15,6 @@ Permanent fixtures for the systematic gaps found in the audit:
 - NA dimensionless extraction
 - ODMR/spin frequencies rejected; "V1" labels not matched as numbers
 """
-
-from __future__ import annotations
 
 from ultrafast_ingestion import PyMuPDFDocumentParser
 from ultrafast_ingestion.mentions.extractor import extract_mentions

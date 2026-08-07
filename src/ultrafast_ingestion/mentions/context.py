@@ -112,8 +112,8 @@ def classify(
                 "emission/ZPL wavelength, not laser parameter",
             )
 
-    if any(_nearest(lower, start, _CAPABILITY_WORDS) is not None and _nearest(lower, start, _CAPABILITY_WORDS) <= 60
-           for _ in (0,)):
+    cap_dist = _nearest(lower, start, _CAPABILITY_WORDS)
+    if cap_dist is not None and cap_dist <= 60:
         return (
             AcceptanceStatus.AMBIGUOUS_CONTEXT,
             ContextClass.CAPABILITY_SPEC,

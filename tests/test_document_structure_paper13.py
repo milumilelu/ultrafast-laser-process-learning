@@ -1,6 +1,11 @@
-"""Layer 1 DoD checks on pilot paper 13 (SiC NIR emitters)."""
-
 from __future__ import annotations
+
+import pytest
+
+pytestmark = pytest.mark.pilot
+
+
+"""Layer 1 DoD checks on pilot paper 13 (SiC NIR emitters)."""
 
 from ultrafast_ingestion import PyMuPDFDocumentParser
 from tests.conftest import pilot_pdf

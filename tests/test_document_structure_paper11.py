@@ -1,6 +1,11 @@
-"""Layer 1 DoD checks on pilot paper 11 (SiC PL, multi-condition)."""
-
 from __future__ import annotations
+
+import pytest
+
+pytestmark = pytest.mark.pilot
+
+
+"""Layer 1 DoD checks on pilot paper 11 (SiC PL, multi-condition)."""
 
 from ultrafast_ingestion import PyMuPDFDocumentParser
 from ultrafast_ingestion.models.document import PARSER_CONFIG, parser_config_hash

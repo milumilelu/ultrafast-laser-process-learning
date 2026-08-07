@@ -33,7 +33,6 @@ _ALIASES: dict[str, str] = {
     "μm": "um",
     "mm": "mm",
     "cm": "cm",
-    "µm": "um",
 }
 
 
