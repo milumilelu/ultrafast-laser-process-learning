@@ -7,7 +7,7 @@
 | GAP-01 | 已知（来自旧仓库） | E2P prepare → GovernedPriorArtifact → BO 未形成真实完整链；无 artifact 时 Vanilla BO fail-closed（该行为**保留**） | M3：backend integration test 打通；前端后接 |
 | GAP-02 | 已知 | 前端参数辨识页走 Agent 侧 identification-v2，与后端 /parameter-identification/run 双轨 | 统一到 ultrafast_learning |
 | GAP-03 | 已知 | 真实 CSV 无功率列 / spot=5.0 未核实 / process_capability_config 空 | S0-3 Target Physics Readiness |
-| GAP-04 | 已知 | 文献元数据不可重建（wavelength 0/226、pulse_width 14/226…） | S0-2 Metadata Re-extraction（旧仓库已有 pilot 资产，见下） |
+| GAP-04 | 已审阅（S0-2A 结论） | 文献元数据不可重建（wavelength 0/226 等）；**但已确认是 gold schema 缺物理字段，非 extraction pipeline 失效**；dev score 仅为 development score | S0-2B：三态标注 + schema 扩展；Gate C 当前=C2 PASS_WITH_EXTENSION（C4 风险待 S0-2B 测定） |
 | GAP-05 | 已知 | 旧 `src/acquisition.py` 与 ultrafast_bo UCB 双 acquisition 并存 | 旧仓库退役时清除 |
 | GAP-06 | S0-8 发现 | `ultrafast_knowledge` 依赖 `ultrafast_memory`（db.session/core.ids/core.config/chat.session_state）与 `ultrafast_integrations.storage`，**不是干净可分离包** | 独立 re-home 工作流（memory core/db 子集 + storage 迁移后并入） |
 | GAP-07 | S0-8 发现 | `ultrafast_e2p/application/prior_artifact.py` 原为 sys.path 注入垫片，指向旧仓库 `packages/e2p`；**治理链权威实现在旧 packages 层** | 已解决：新仓库直接内置 canonical 实现（迁移自 packages/e2p/application/prior_artifact.py） |
@@ -18,10 +18,11 @@
 ## S0-2 相关重大发现（旧仓库既有资产，勿重复造）
 
 `ultrafast_laser_memory/benchmarks/literature_metadata/` 已存在：
-- `gold/annotations.jsonl`（gold 标注）
+- `gold/annotations.jsonl`（203 篇 AI 策展 silver 标注）
 - `dev/pilot2_manifest.json` + `pilot2_predictions.jsonl`（已跑 pilot）
 - `runs/20260805T112820Z|113444Z|130649Z/`（已跑评估 + predictions）
 - `scripts/run_llm_benchmark.py` / `evaluate_extraction.py` / `prepare_annotations.py`
 - `work/texts/`：100+ 篇全文 txt（含 task2_*、sc04_*、diamond/CFRP/SiC 相关）
+- `audit/audit_worksheet.md`：40 篇人工盲审工作表（字段空白，未完成）
 
-**S0-2 的第一步应是审阅这些既有 pilot 结果（recall/unit/ambiguity），而不是重新开始抽取。**
+**S0-2A 完整审阅结论见 `docs/feasibility/S0-2_METADATA_REEXTRACTION_AUDIT.md`（Gate C=C2 PASS_WITH_EXTENSION，C4 风险待 S0-2B）。**
