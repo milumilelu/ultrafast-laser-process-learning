@@ -5,6 +5,20 @@ root_packages =
     ultrafast_bo
     ultrafast_domain
     ultrafast_e2p
+    ultrafast_ingestion
+    ultrafast_physics
+    ultrafast_shared
+
+[importlinter:contract:ingestion-leaf]
+name = Ingestion must not depend on project packages
+type = forbidden
+source_modules =
+    ultrafast_ingestion
+forbidden_modules =
+    process_contracts
+    ultrafast_bo
+    ultrafast_domain
+    ultrafast_e2p
     ultrafast_physics
     ultrafast_shared
 
