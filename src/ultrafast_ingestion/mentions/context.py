@@ -17,14 +17,17 @@ from ultrafast_ingestion.mentions.units import infer_parameter
 _MODEL_TOKEN_RE = re.compile(r"[A-Za-z0-9]+(?:-[A-Za-z0-9+()]+)+")
 
 _CAPABILITY_WORDS = (
-    "up to", "maximum", "max ", "can reach", "capability", "capable",
-    "up to 1 mhz", "rated",
+    "up to", "can reach", "capability", "capable",
+    "rated", "maximum pulse energy", "maximum power",
+    "maximum repetition rate",
 )
 _EMISSION_WORDS = (
     "emission", "zpl", "zero phonon", "zero-phonon", "peak", "peaks",
     "fluorescence line", "detected at", "luminescence", "emitters",
     "pl1", "pl2", "pl3", "pl4", "pl5", "pl6", "pl7", "resonance line",
     "on-axis", "off-axis", "c-axis", "basal plane", "zpls",
+    "divacanc", "defect", "colour centre", "color center", "colour centers",
+    "colour centres", "color centers", "center", "centre", "ensemble",
 )
 _MEASUREMENT_WORDS = (
     "excitation", "excite", "detector", "spectrometer", "dichroic",
@@ -34,6 +37,10 @@ _MEASUREMENT_WORDS = (
 _NON_PROCESS_EQUIPMENT_WORDS = (
     "amplifier", "amplified", "microwave", "signal generator", "copper wire",
     "counter", "correlator", "timeharp", "whiteLase".lower(), "supercontinuum",
+)
+_SPIN_FREQUENCY_WORDS = (
+    "zero field splitting", "odmr", "rabi", "ramsey", "spin echo", "spin coherence",
+    "microwave sequence", "splitting", "resonance frequency",
 )
 _LASER_WORDS = ("laser", "laser beam", "wavelength", "pulse", "repetition rate",
                 "energy", "fluence", "power", "fluence ", "scanning speed",
@@ -47,6 +54,18 @@ def _is_inside_model_token(text: str, start: int, end: int) -> bool:
     return token is not None and token.start() < start and token.end() > end
 
 
+def _nearest(text: str, pos: int, words: tuple[str, ...]) -> int | None:
+    best: int | None = None
+    for w in words:
+        i = text.find(w)
+        while i != -1:
+            d = abs(i - pos)
+            if best is None or d < best:
+                best = d
+            i = text.find(w, i + 1)
+    return best
+
+
 def classify(
     raw_text: str,
     unit: str,
@@ -58,7 +77,7 @@ def classify(
 ) -> tuple[AcceptanceStatus, ContextClass, str, str]:
     """Return (status, context_class, parameter, rejection_reason)."""
     lower = window.lower()
-    param = parameter_hint or infer_parameter(unit, window)
+    param = parameter_hint or infer_parameter(unit, window, start)
 
     # F3 hard rules -------------------------------------------------------
     if _is_inside_model_token(window, start, end) or any(
@@ -71,11 +90,21 @@ def classify(
             "equipment model / non-process power",
         )
 
+    if param in ("frequency", "na", "m2") and any(w in lower for w in _SPIN_FREQUENCY_WORDS):
+        return (
+            AcceptanceStatus.REJECTED_CONTEXT,
+            ContextClass.EQUIPMENT_MODEL,
+            param,
+            "ODMR/spin resonance frequency, not laser parameter",
+        )
+
     if param == "wavelength" and any(w in lower for w in _EMISSION_WORDS):
-        if any(w in lower for w in ("laser", "excitation laser", "wavelength")):
-            # keep mentions that are clearly laser-side even in PL papers
-            pass
-        else:
+        # reject when the nearest keyword to the mention is an emission word
+        # (e.g. "PL6 divacancies (1038 nm)"); keep when the nearest is the
+        # laser itself (e.g. "515 nm laser")
+        d_em = _nearest(lower, start, _EMISSION_WORDS)
+        d_laser = _nearest(lower, start, ("laser",))
+        if d_em is not None and (d_laser is None or d_em < d_laser):
             return (
                 AcceptanceStatus.REJECTED_CONTEXT,
                 ContextClass.EMISSION_WAVELENGTH,
@@ -83,7 +112,8 @@ def classify(
                 "emission/ZPL wavelength, not laser parameter",
             )
 
-    if any(w in lower for w in _CAPABILITY_WORDS):
+    if any(_nearest(lower, start, _CAPABILITY_WORDS) is not None and _nearest(lower, start, _CAPABILITY_WORDS) <= 60
+           for _ in (0,)):
         return (
             AcceptanceStatus.AMBIGUOUS_CONTEXT,
             ContextClass.CAPABILITY_SPEC,

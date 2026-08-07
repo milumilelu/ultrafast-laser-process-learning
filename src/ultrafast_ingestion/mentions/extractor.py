@@ -34,13 +34,19 @@ def extract_mentions(doc: ScientificDocument) -> list[ConditionMention]:
             next_head = page[idx + 1].text[:140] if idx + 1 < len(page) else ""
             context = prev_tail + text + next_head
             ctx_offset = len(prev_tail)
-            for raw in find_mentions(text):
+            # cross-block continuation: ranges/mentions may finish in the
+            # next block ("2 nJ/pulse to 445 nJ/pulse" split by wrap)
+            search_text = text + " " + next_head[:60]
+            for raw in find_mentions(search_text):
+                if raw.start >= len(text):
+                    continue  # belongs to the next block
                 unit = normalize_unit(raw.unit)
                 if unit is None:
                     continue
+                # window extends into cross-block context on BOTH sides
                 win_start = max(0, raw.start - WINDOW_CHARS)
-                win_end = min(len(text), raw.end + WINDOW_CHARS)
-                window = context[max(0, ctx_offset + win_start) : ctx_offset + win_end]
+                win_end = min(len(context), ctx_offset + raw.end + WINDOW_CHARS)
+                window = context[max(0, ctx_offset + win_start) : win_end]
                 # offsets relative to the window slice (context matching)
                 rel_start = ctx_offset + raw.start - max(0, ctx_offset + win_start)
                 rel_end = ctx_offset + raw.end - max(0, ctx_offset + win_start)
@@ -50,6 +56,7 @@ def extract_mentions(doc: ScientificDocument) -> list[ConditionMention]:
                     rel_start,
                     rel_end,
                     window=window,
+                    parameter_hint=raw.parameter_hint,
                 )
                 anchor = doc.anchor_for(block, raw.start, raw.end)
                 mentions.append(
