@@ -1,0 +1,321 @@
+{
+ "capture": "post-classify-word-boundary-fix",
+ "condition_count": 3,
+ "conditions": [
+  {
+   "fields": {
+    "average_power": {
+     "anchors": [
+      "a95b03fbe5b329b1"
+     ],
+     "status": "REPORTED_CLEAR",
+     "unit": "W",
+     "values": [
+      0.9
+     ]
+    },
+    "depth": {
+     "anchors": [
+      "c5c3d86e1d93e859"
+     ],
+     "status": "REPORTED_CLEAR",
+     "unit": "um",
+     "values": [
+      2.0,
+      4.0
+     ]
+    },
+    "frequency": {
+     "anchors": [
+      "f4f0a7b1c67ce1b8"
+     ],
+     "status": "REPORTED_CLEAR",
+     "unit": "kHz",
+     "values": [
+      200.0
+     ]
+    },
+    "length": {
+     "anchors": [
+      "90ec06e21138374a",
+      "b8fec7a930ea715f"
+     ],
+     "status": "CONFLICT_PRESERVED",
+     "unit": "cm",
+     "values": [
+      1019.0,
+      1.3
+     ]
+    },
+    "magnification": {
+     "anchors": [
+      "a95b03fbe5b329b1"
+     ],
+     "status": "REPORTED_CLEAR",
+     "unit": "MAG",
+     "values": [
+      100.0
+     ]
+    },
+    "na": {
+     "anchors": [
+      "a95b03fbe5b329b1"
+     ],
+     "status": "REPORTED_CLEAR",
+     "unit": "NA",
+     "values": [
+      0.9
+     ]
+    },
+    "pitch": {
+     "anchors": [
+      "c5c3d86e1d93e859"
+     ],
+     "status": "REPORTED_CLEAR",
+     "unit": "um",
+     "values": [
+      5.0
+     ]
+    },
+    "pulse_energy": {
+     "anchors": [
+      "5f9a8451424422f0"
+     ],
+     "status": "REPORTED_CLEAR",
+     "unit": "nJ",
+     "values": [
+      2.0,
+      445.0
+     ]
+    },
+    "pulse_width": {
+     "anchors": [
+      "f4f0a7b1c67ce1b8"
+     ],
+     "status": "REPORTED_CLEAR",
+     "unit": "fs",
+     "values": [
+      230.0
+     ]
+    },
+    "wavelength": {
+     "anchors": [
+      "bc92e25164ff1b12"
+     ],
+     "status": "REPORTED_CLEAR",
+     "unit": "nm",
+     "values": [
+      515.0
+     ]
+    }
+   },
+   "mention_ids": [
+    "624a11c837ed",
+    "77fad3521c21",
+    "92830ea2d335",
+    "6df71ced3b6f",
+    "954a6621aec2",
+    "60dfe165c342",
+    "5c70f0e9f11e",
+    "3e1b7b340f75",
+    "0bfee2a8b0da",
+    "beed1f941740",
+    "3c650fcde627"
+   ],
+   "role": "PROCESSING",
+   "scope": "EXPERIMENT_GROUP"
+  },
+  {
+   "fields": {
+    "average_power": {
+     "anchors": [
+      "03caae2e0e16008e"
+     ],
+     "status": "REPORTED_CLEAR",
+     "unit": "W",
+     "values": [
+      34.0
+     ]
+    },
+    "fluence": {
+     "anchors": [
+      "766c801e1f5598a1",
+      "817b1493c6353cf3"
+     ],
+     "status": "CONFLICT_PRESERVED",
+     "unit": "J/cm2",
+     "values": [
+      1.0,
+      7.0
+     ]
+    },
+    "na": {
+     "anchors": [
+      "03caae2e0e16008e"
+     ],
+     "status": "REPORTED_CLEAR",
+     "unit": "NA",
+     "values": [
+      0.9
+     ]
+    },
+    "pulse_energy": {
+     "anchors": [
+      "817b1493c6353cf3"
+     ],
+     "status": "REPORTED_CLEAR",
+     "unit": "nJ",
+     "values": [
+      31.0
+     ]
+    },
+    "pulse_width": {
+     "anchors": [
+      "03caae2e0e16008e"
+     ],
+     "status": "REPORTED_CLEAR",
+     "unit": "fs",
+     "values": [
+      230.0
+     ]
+    },
+    "wavelength": {
+     "anchors": [
+      "03caae2e0e16008e"
+     ],
+     "status": "REPORTED_CLEAR",
+     "unit": "nm",
+     "values": [
+      515.0
+     ]
+    }
+   },
+   "mention_ids": [
+    "7495d34943f4",
+    "496ed1bb62f7",
+    "830a6925bfe8",
+    "c77591fd84f0",
+    "4a1400b0c9de",
+    "7ac353495aa8",
+    "cdc27de8239c"
+   ],
+   "role": "PROCESSING",
+   "scope": "EXPERIMENT_GROUP"
+  },
+  {
+   "fields": {
+    "pulse_energy": {
+     "anchors": [
+      "b3f84d23be212495"
+     ],
+     "status": "REPORTED_CLEAR",
+     "unit": "nJ",
+     "values": [
+      22.0
+     ]
+    },
+    "wavelength": {
+     "anchors": [
+      "b3f84d23be212495"
+     ],
+     "status": "REPORTED_CLEAR",
+     "unit": "nm",
+     "values": [
+      1000.0
+     ]
+    }
+   },
+   "mention_ids": [
+    "6d3d8d0e9c53",
+    "069aed1f9495"
+   ],
+   "role": "PROCESSING",
+   "scope": "EXPERIMENT_GROUP"
+  }
+ ],
+ "document_version_id": "54ff0f11c275dff9",
+ "paper_id": "13_arxiv_2411.18868.pdf",
+ "synthetic_condition_count": 0,
+ "unassigned_mentions": [
+  "9ad967a76efc",
+  "9cf09b96805d",
+  "cd7048997462",
+  "6e714356bb9f",
+  "91602ed1741c",
+  "6998b47598d4",
+  "adbf9bde08b3",
+  "b8a6f6b2eafb",
+  "69c901deda28",
+  "998b8c0bb152",
+  "0c91b4ac1692",
+  "18b0b97d584a",
+  "d21430324963",
+  "f9bb1539ca7e",
+  "ee2fbb698890",
+  "4f210a40807e",
+  "da1fa007c22a",
+  "ccc59dc95c59",
+  "db32df589175",
+  "a9ca41410ff5",
+  "1a5027827c80",
+  "071cfc48e3a9",
+  "4cdbc159cf4b",
+  "a9c8d5886739",
+  "b88b9fe8ae02",
+  "1f1193feeb33",
+  "0d575bef9d14",
+  "dab6f8477192",
+  "061ccaa1ab09",
+  "ce867fc0e795",
+  "0afedcc674df",
+  "58349f75d2e7",
+  "5c78534d848b",
+  "74cf572eb847",
+  "720e0643493c",
+  "89168ddf9293",
+  "979f0d6713c9",
+  "b93aaadaa81d",
+  "63629810c05a",
+  "0652cf96882e",
+  "8f17d44d1e8c",
+  "ca8165772233",
+  "94bc0c855e73",
+  "70609201a712",
+  "6ba893f44cad",
+  "01baa60c1a68",
+  "ddbb917ac9a8",
+  "97ec6331def9",
+  "45a0549aaeea",
+  "caef108de312",
+  "6b69ae9df797",
+  "e8f77c530ba4",
+  "f1b147512ca8",
+  "6f79161cddda",
+  "980892c04231",
+  "35b815aca5c3",
+  "dc0f3060a8af",
+  "1a8d079e5deb",
+  "c2bac41cc763",
+  "5ec89cd60d35",
+  "ad51c66076a2",
+  "0b0a808e80d6",
+  "91c2c37e2d08",
+  "a949966da5c6",
+  "c6ec1b2f4fe2",
+  "ee077b2bf635",
+  "514d7d65b92f",
+  "a6dcbd633ec2",
+  "dbe2a61e4e4e",
+  "fbd2c8212f89",
+  "7bf9c9fa3750",
+  "54d6da04ceb1",
+  "0a4a3687e237",
+  "08e07e631ab4",
+  "4423821c4279",
+  "888abda5ce62",
+  "4428605992a3",
+  "f0bc75d33a62",
+  "7f5e4172991b",
+  "537e74b7d0ca"
+ ]
+}

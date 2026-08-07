@@ -26,3 +26,11 @@
 - `audit/audit_worksheet.md`：40 篇人工盲审工作表（字段空白，未完成）
 
 **S0-2A 完整审阅结论见 `docs/feasibility/S0-2_METADATA_REEXTRACTION_AUDIT.md`（Gate C=C2 PASS_WITH_EXTENSION，C4 风险待 S0-2B）。**
+
+## 2026-08-07 迁移记录（legacy runtime 迁入后新增）
+
+- MIG-01: `tests/legacy_agent/test_builder_builds_real_corpus_for_sic` 与
+  `test_build_corpus_api_endpoint` 依赖 RAG 索引就绪（raw_hit_count>0）；
+  新仓库尚无索引，待数据/索引构建后恢复。
+- MIG-02: `test_web_bootstrap_has_no_implicit_mock_source` 单独运行通过，
+  全量运行时受测试顺序/全局状态污染（旧仓库环境隐藏依赖），测试隔离待优化。

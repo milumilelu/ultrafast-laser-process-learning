@@ -108,6 +108,8 @@ class BORecommendationService:
             "audit_trace": engine_result.get("audit_trace") or [],
             "bo_invoked": bool(engine_result.get("bo_invoked")),
             "acquisition": engine_result.get("acquisition") or {},
+            "search_prior_applied": engine_result.get("search_prior_applied"),
+            "prior_spec": engine_result.get("prior_spec"),
             "sample_count": len(scoped),
             "machine_bounds_revision": machine_context.get("revision_id"),
             "knowledge_approval_ids": engine_result.get("knowledge_approval_ids") or [],

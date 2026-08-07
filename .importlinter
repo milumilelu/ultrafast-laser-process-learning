@@ -3,11 +3,44 @@ include_external_packages = true
 root_packages =
     process_contracts
     ultrafast_bo
+    ultrafast_cfa
     ultrafast_domain
     ultrafast_e2p
     ultrafast_ingestion
+    ultrafast_interaction
     ultrafast_physics
+    ultrafast_reconstructibility
     ultrafast_shared
+
+[importlinter:contract:cfa-leaf]
+name = CFA must not depend on BO/Domain/Contracts
+type = forbidden
+source_modules =
+    ultrafast_cfa
+forbidden_modules =
+    process_contracts
+    ultrafast_bo
+    ultrafast_domain
+
+[importlinter:contract:interaction-leaf]
+name = Interaction must not depend on BO/Domain/Contracts
+type = forbidden
+source_modules =
+    ultrafast_interaction
+forbidden_modules =
+    process_contracts
+    ultrafast_bo
+    ultrafast_domain
+
+[importlinter:contract:reconstructibility-leaf]
+name = Reconstructibility must not depend on BO/Domain/Contracts
+type = forbidden
+source_modules =
+    ultrafast_reconstructibility
+forbidden_modules =
+    process_contracts
+    ultrafast_bo
+    ultrafast_domain
 
 [importlinter:contract:ingestion-leaf]
 name = Ingestion must not depend on project packages

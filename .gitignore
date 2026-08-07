@@ -9,3 +9,17 @@ build/
 data/
 model_artifacts/
 outputs/
+
+# migration noise (batch 2): local runtime state, never committed
+apps/*/node_modules/
+configs/secrets/
+configs/llm.local.json
+configs/*.local.json
+.mypy_cache/
+.import_linter_cache/
+
+# holdout PDF copies are reproducible from the external literature_archive
+# (contracts record paper_ids); only traceability records (json/md) go in git
+artifacts/**/papers/
+artifacts/**/papers_v2/
+verify.jsonl

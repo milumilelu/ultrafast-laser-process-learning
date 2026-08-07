@@ -1,0 +1,316 @@
+{
+ "capture": "post-classify-word-boundary-fix",
+ "condition_count": 7,
+ "conditions": [
+  {
+   "fields": {
+    "magnification": {
+     "anchors": [
+      "1c70c146fcedf371"
+     ],
+     "status": "CONFLICT_PRESERVED",
+     "unit": "MAG",
+     "values": [
+      226.0,
+      25.0
+     ]
+    },
+    "pulse_energy": {
+     "anchors": [
+      "1c70c146fcedf371"
+     ],
+     "status": "REPORTED_CLEAR",
+     "unit": "mJ",
+     "values": [
+      74.8
+     ]
+    }
+   },
+   "mention_ids": [
+    "c2a4ba98b4d2",
+    "103a125dd50d",
+    "d66f797b4ecc"
+   ],
+   "role": "PROCESSING",
+   "scope": "EXPERIMENT_GROUP"
+  },
+  {
+   "fields": {
+    "frequency": {
+     "anchors": [
+      "a1c45cc76710720a"
+     ],
+     "status": "REPORTED_CLEAR",
+     "unit": "MHz",
+     "values": [
+      1.0
+     ]
+    },
+    "pulse_width": {
+     "anchors": [
+      "a1c45cc76710720a"
+     ],
+     "status": "REPORTED_CLEAR",
+     "unit": "ps",
+     "values": [
+      10.0
+     ]
+    },
+    "spot_size": {
+     "anchors": [
+      "36d05a0878f93c10"
+     ],
+     "status": "CONFLICT_PRESERVED",
+     "unit": "mm",
+     "values": [
+      0.45,
+      0.03
+     ]
+    },
+    "wavelength": {
+     "anchors": [
+      "a1c45cc76710720a"
+     ],
+     "status": "REPORTED_CLEAR",
+     "unit": "nm",
+     "values": [
+      355.0
+     ]
+    }
+   },
+   "mention_ids": [
+    "41f77ae81723",
+    "23301886a8c4",
+    "7836b8cd3427",
+    "ec5d27859124",
+    "8e51e393bb19",
+    "6df685ca369b"
+   ],
+   "role": "PROCESSING",
+   "scope": "EXPERIMENT_GROUP"
+  },
+  {
+   "fields": {
+    "fluence": {
+     "anchors": [
+      "bc09373b909bcada"
+     ],
+     "status": "REPORTED_CLEAR",
+     "unit": "J/cm2",
+     "values": [
+      2.3,
+      7.0
+     ]
+    },
+    "frequency": {
+     "anchors": [
+      "bc09373b909bcada"
+     ],
+     "status": "REPORTED_CLEAR",
+     "unit": "MHz",
+     "values": [
+      1.0
+     ]
+    },
+    "pulse_width": {
+     "anchors": [
+      "bc09373b909bcada"
+     ],
+     "status": "REPORTED_CLEAR",
+     "unit": "ps",
+     "values": [
+      10.0
+     ]
+    },
+    "scan_speed": {
+     "anchors": [
+      "bc09373b909bcada"
+     ],
+     "status": "REPORTED_CLEAR",
+     "unit": "m/s",
+     "values": [
+      1.0
+     ]
+    },
+    "spot_size": {
+     "anchors": [
+      "bc09373b909bcada"
+     ],
+     "status": "REPORTED_CLEAR",
+     "unit": "um",
+     "values": [
+      19.0
+     ]
+    },
+    "wavelength": {
+     "anchors": [
+      "bc09373b909bcada"
+     ],
+     "status": "REPORTED_CLEAR",
+     "unit": "nm",
+     "values": [
+      355.0
+     ]
+    }
+   },
+   "mention_ids": [
+    "38116ee00793",
+    "0c04fc7565c1",
+    "37922b86561b",
+    "87cb08b3aa2c",
+    "9aa803a34301",
+    "ea2c9c1b39db"
+   ],
+   "role": "PROCESSING",
+   "scope": "EXPERIMENT_GROUP"
+  },
+  {
+   "fields": {
+    "depth": {
+     "anchors": [
+      "973a49c33cf513f6"
+     ],
+     "status": "CONFLICT_PRESERVED",
+     "unit": "um",
+     "values": [
+      10.7,
+      39.5,
+      22.3,
+      61.0
+     ]
+    },
+    "length": {
+     "anchors": [
+      "973a49c33cf513f6"
+     ],
+     "status": "REPORTED_CLEAR",
+     "unit": "um",
+     "values": [
+      1.0
+     ]
+    }
+   },
+   "mention_ids": [
+    "a901a2e03d1d",
+    "ddc68f625d7b",
+    "0e1842d2055e"
+   ],
+   "role": "PROCESSING",
+   "scope": "EXPERIMENT_GROUP"
+  },
+  {
+   "fields": {
+    "fluence": {
+     "anchors": [
+      "8c0fe42fa76f8ddf"
+     ],
+     "status": "CONFLICT_PRESERVED",
+     "unit": "J/cm2",
+     "values": [
+      2.3,
+      5.8,
+      7.0
+     ]
+    }
+   },
+   "mention_ids": [
+    "38535b015e9c",
+    "0be79c579d1e",
+    "16875c2f69ad",
+    "6dea61dd7f66"
+   ],
+   "role": "PROCESSING",
+   "scope": "EXPERIMENT_GROUP"
+  },
+  {
+   "fields": {
+    "length": {
+     "anchors": [
+      "a1b10fa3fca3d23e"
+     ],
+     "status": "REPORTED_CLEAR",
+     "unit": "um",
+     "values": [
+      1.0
+     ]
+    },
+    "wavelength": {
+     "anchors": [
+      "a1b10fa3fca3d23e"
+     ],
+     "status": "REPORTED_CLEAR",
+     "unit": "nm",
+     "values": [
+      355.0
+     ]
+    }
+   },
+   "mention_ids": [
+    "370996b5aa93",
+    "f74733c29959"
+   ],
+   "role": "PROCESSING",
+   "scope": "EXPERIMENT_GROUP"
+  },
+  {
+   "fields": {
+    "average_power": {
+     "anchors": [
+      "5d1eed8b9edbf98d"
+     ],
+     "status": "REPORTED_CLEAR",
+     "unit": "W",
+     "values": [
+      21.0
+     ]
+    },
+    "wavelength": {
+     "anchors": [
+      "5d8e0461477058de"
+     ],
+     "status": "REPORTED_CLEAR",
+     "unit": "nm",
+     "values": [
+      355.0
+     ]
+    }
+   },
+   "mention_ids": [
+    "9bb2cdf7bc9a",
+    "bafe74da4747"
+   ],
+   "role": "PROCESSING",
+   "scope": "EXPERIMENT_GROUP"
+  }
+ ],
+ "document_version_id": "0b56b6d5ef26ae7a",
+ "paper_id": "Flat-top picosecond laser texturing of CFRP.pdf",
+ "synthetic_condition_count": 0,
+ "unassigned_mentions": [
+  "537090f25e4c",
+  "040d65c47fe9",
+  "91b4508b731e",
+  "f6ae8f13a350",
+  "4efae941c0e1",
+  "681cd218c51b",
+  "b6f375b86e7f",
+  "71f70d03a1fe",
+  "befeb21a68f2",
+  "930607d03218",
+  "afd5f8b38eac",
+  "7d1a8621eb79",
+  "75f211d9662b",
+  "79b5cb17f2c0",
+  "a0add1ca0b4d",
+  "05e52bf6f2d1",
+  "75810da5333b",
+  "2b9bf6325101",
+  "ee77b4393cf0",
+  "c098b10805c9",
+  "eaa5c97d5ed4",
+  "60dc80c99c8a",
+  "f5c512570e6a",
+  "ed8108b88037",
+  "0eed016f008a"
+ ]
+}

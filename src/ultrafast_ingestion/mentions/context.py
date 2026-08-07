@@ -55,14 +55,21 @@ def _is_inside_model_token(text: str, start: int, end: int) -> bool:
 
 
 def _nearest(text: str, pos: int, words: tuple[str, ...]) -> int | None:
+    """Nearest word-boundary match distance.
+
+    Word boundaries are mandatory: "rated" must never match inside
+    "operated" (a sub-string false positive that flips a genuine
+    processing mention into CAPABILITY_SPEC).
+    """
     best: int | None = None
     for w in words:
-        i = text.find(w)
-        while i != -1:
-            d = abs(i - pos)
+        pattern = re.compile(
+            rf"(?<![A-Za-z0-9]){re.escape(w)}(?![A-Za-z0-9])"
+        )
+        for match in pattern.finditer(text):
+            d = abs(match.start() - pos)
             if best is None or d < best:
                 best = d
-            i = text.find(w, i + 1)
     return best
 
 

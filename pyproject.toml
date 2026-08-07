@@ -31,7 +31,7 @@ where = ["src"]
 [tool.pytest.ini_options]
 pythonpath = ["src"]
 testpaths = ["tests"]
-addopts = "-m 'not pilot and not benchmark'"
+addopts = "-m 'not pilot and not benchmark' --import-mode=importlib"
 markers = [
     "unit: fast offline tests without external fixtures",
     "integration: multi-component tests",

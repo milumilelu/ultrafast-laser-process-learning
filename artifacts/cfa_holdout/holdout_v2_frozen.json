@@ -1,0 +1,89 @@
+{
+ "freeze": "2026-08-07",
+ "version": "cfa-v2.0-holdout-v0",
+ "criteria": "CFA_V2_0_BUGFIX_CONTRACT.md §5.1 (content facts only, no pipeline)",
+ "selected": [
+  {
+   "paper_id": "1aec7d2a60f2905e_23_arxiv_1701.05885.pdf",
+   "material": "diamond",
+   "process_type": "micromachining",
+   "laser_type": "fs",
+   "metadata": true
+  },
+  {
+   "paper_id": "34af64b5d6873555_07_arxiv_2401.02340.pdf",
+   "material": "diamond",
+   "process_type": "micromachining",
+   "laser_type": "",
+   "metadata": true
+  },
+  {
+   "paper_id": "4005b70df86a07f7_29_arxiv_1711.09140.pdf",
+   "material": "diamond",
+   "process_type": "micromachining",
+   "laser_type": "fs",
+   "metadata": true
+  },
+  {
+   "paper_id": "bbe6d425e060b3f4_22_arxiv_1806.05412.pdf",
+   "material": "diamond",
+   "process_type": "micromachining",
+   "laser_type": "fs",
+   "metadata": true
+  },
+  {
+   "paper_id": "dd2760857e788d47_02_arxiv_2103.00491.pdf",
+   "material": "diamond",
+   "process_type": "micromachining",
+   "laser_type": "fs",
+   "metadata": true
+  },
+  {
+   "paper_id": "179b114fb0325d4a_Simulation_of_ultrashort_pulse_laser_drilling_of_glass_considering_hea_2020.pdf",
+   "material": "glass",
+   "process_type": "drilling",
+   "laser_type": "",
+   "metadata": true
+  },
+  {
+   "paper_id": "3262a778d2a320a2_Optodynamic_monitoring_of_laser_micro-drilling_of_glass_by_using_a_las_2008.pdf",
+   "material": "glass",
+   "process_type": "drilling",
+   "laser_type": "",
+   "metadata": true
+  },
+  {
+   "paper_id": "4ae395a7cb947897_sc04_032_Efficient Water-Assisted Glass Cutting with 355 nm Picosecond Laser Pulses.pdf",
+   "material": "glass",
+   "process_type": "cutting",
+   "laser_type": "ps",
+   "metadata": true
+  },
+  {
+   "paper_id": "3c0cf5859d4f9a93_Universal threshold for femtosecond laser ablation with oblique illumination.pdf",
+   "material": "unknown",
+   "process_type": "",
+   "laser_type": "",
+   "metadata": false
+  },
+  {
+   "paper_id": "5b039bf3654767ec_Optimization of femtosecond laser processing in liquids.pdf",
+   "material": "unknown",
+   "process_type": "",
+   "laser_type": "",
+   "metadata": false
+  },
+  {
+   "paper_id": "86ddae97eec55fb0_Femtosecond Laser Processing of Germanium_ An Ab Initio Molecular Dynamics Study.pdf",
+   "material": "unknown",
+   "process_type": "",
+   "laser_type": "",
+   "metadata": false
+  }
+ ],
+ "layering": {
+  "diamond": 5,
+  "glass": 3,
+  "unknown": 3
+ }
+}

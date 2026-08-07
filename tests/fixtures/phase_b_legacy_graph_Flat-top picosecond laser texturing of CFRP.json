@@ -1,0 +1,998 @@
+{
+ "capture": "post-classify-word-boundary-fix",
+ "document_version_id": "0b56b6d5ef26ae7a",
+ "edges": [
+  {
+   "block_ids": [
+    "Flat-top picosecond laser texturing of CFRP.pdf:p4:b9"
+   ],
+   "quote": "Wavelength(nm)\n355",
+   "row": null,
+   "rule": "KEY_VALUE_TABLE_WHOLE",
+   "source": "cell:Flat-top picosecond laser texturing of CFRP.pdf:p4:b9:0:wavelength:355.0",
+   "strength": "STRONG",
+   "table_id": "fc47b2f8b697e3c8",
+   "target": "cell:Flat-top picosecond laser texturing of CFRP.pdf:p4:b9:2:fluence:2.3",
+   "type": "SAME_EXPERIMENT_CANDIDATE"
+  },
+  {
+   "block_ids": [
+    "Flat-top picosecond laser texturing of CFRP.pdf:p4:b9"
+   ],
+   "quote": "Wavelength(nm)\n355",
+   "row": null,
+   "rule": "KEY_VALUE_TABLE_WHOLE",
+   "source": "cell:Flat-top picosecond laser texturing of CFRP.pdf:p4:b9:0:wavelength:355.0",
+   "strength": "STRONG",
+   "table_id": "fc47b2f8b697e3c8",
+   "target": "cell:Flat-top picosecond laser texturing of CFRP.pdf:p4:b9:4:pulse_width:10.0",
+   "type": "SAME_EXPERIMENT_CANDIDATE"
+  },
+  {
+   "block_ids": [
+    "Flat-top picosecond laser texturing of CFRP.pdf:p4:b9"
+   ],
+   "quote": "Wavelength(nm)\n355",
+   "row": null,
+   "rule": "KEY_VALUE_TABLE_WHOLE",
+   "source": "cell:Flat-top picosecond laser texturing of CFRP.pdf:p4:b9:0:wavelength:355.0",
+   "strength": "STRONG",
+   "table_id": "fc47b2f8b697e3c8",
+   "target": "cell:Flat-top picosecond laser texturing of CFRP.pdf:p4:b9:6:spot_size:19.0",
+   "type": "SAME_EXPERIMENT_CANDIDATE"
+  },
+  {
+   "block_ids": [
+    "Flat-top picosecond laser texturing of CFRP.pdf:p4:b9"
+   ],
+   "quote": "Wavelength(nm)\n355",
+   "row": null,
+   "rule": "KEY_VALUE_TABLE_WHOLE",
+   "source": "cell:Flat-top picosecond laser texturing of CFRP.pdf:p4:b9:0:wavelength:355.0",
+   "strength": "STRONG",
+   "table_id": "fc47b2f8b697e3c8",
+   "target": "cell:Flat-top picosecond laser texturing of CFRP.pdf:p4:b9:8:scan_speed:1.0",
+   "type": "SAME_EXPERIMENT_CANDIDATE"
+  },
+  {
+   "block_ids": [
+    "Flat-top picosecond laser texturing of CFRP.pdf:p4:b9"
+   ],
+   "quote": "Wavelength(nm)\n355",
+   "row": null,
+   "rule": "KEY_VALUE_TABLE_WHOLE",
+   "source": "cell:Flat-top picosecond laser texturing of CFRP.pdf:p4:b9:0:wavelength:355.0",
+   "strength": "STRONG",
+   "table_id": "fc47b2f8b697e3c8",
+   "target": "cell:Flat-top picosecond laser texturing of CFRP.pdf:p4:b9:10:frequency:1.0",
+   "type": "SAME_EXPERIMENT_CANDIDATE"
+  },
+  {
+   "block_ids": [
+    "Flat-top picosecond laser texturing of CFRP.pdf:p4:b9"
+   ],
+   "quote": "Wavelength(nm)\n355",
+   "row": null,
+   "rule": "KEY_VALUE_TABLE_WHOLE",
+   "source": "cell:Flat-top picosecond laser texturing of CFRP.pdf:p4:b9:2:fluence:2.3",
+   "strength": "STRONG",
+   "table_id": "fc47b2f8b697e3c8",
+   "target": "cell:Flat-top picosecond laser texturing of CFRP.pdf:p4:b9:4:pulse_width:10.0",
+   "type": "SAME_EXPERIMENT_CANDIDATE"
+  },
+  {
+   "block_ids": [
+    "Flat-top picosecond laser texturing of CFRP.pdf:p4:b9"
+   ],
+   "quote": "Wavelength(nm)\n355",
+   "row": null,
+   "rule": "KEY_VALUE_TABLE_WHOLE",
+   "source": "cell:Flat-top picosecond laser texturing of CFRP.pdf:p4:b9:2:fluence:2.3",
+   "strength": "STRONG",
+   "table_id": "fc47b2f8b697e3c8",
+   "target": "cell:Flat-top picosecond laser texturing of CFRP.pdf:p4:b9:6:spot_size:19.0",
+   "type": "SAME_EXPERIMENT_CANDIDATE"
+  },
+  {
+   "block_ids": [
+    "Flat-top picosecond laser texturing of CFRP.pdf:p4:b9"
+   ],
+   "quote": "Wavelength(nm)\n355",
+   "row": null,
+   "rule": "KEY_VALUE_TABLE_WHOLE",
+   "source": "cell:Flat-top picosecond laser texturing of CFRP.pdf:p4:b9:2:fluence:2.3",
+   "strength": "STRONG",
+   "table_id": "fc47b2f8b697e3c8",
+   "target": "cell:Flat-top picosecond laser texturing of CFRP.pdf:p4:b9:8:scan_speed:1.0",
+   "type": "SAME_EXPERIMENT_CANDIDATE"
+  },
+  {
+   "block_ids": [
+    "Flat-top picosecond laser texturing of CFRP.pdf:p4:b9"
+   ],
+   "quote": "Wavelength(nm)\n355",
+   "row": null,
+   "rule": "KEY_VALUE_TABLE_WHOLE",
+   "source": "cell:Flat-top picosecond laser texturing of CFRP.pdf:p4:b9:2:fluence:2.3",
+   "strength": "STRONG",
+   "table_id": "fc47b2f8b697e3c8",
+   "target": "cell:Flat-top picosecond laser texturing of CFRP.pdf:p4:b9:10:frequency:1.0",
+   "type": "SAME_EXPERIMENT_CANDIDATE"
+  },
+  {
+   "block_ids": [
+    "Flat-top picosecond laser texturing of CFRP.pdf:p4:b9"
+   ],
+   "quote": "Wavelength(nm)\n355",
+   "row": null,
+   "rule": "KEY_VALUE_TABLE_WHOLE",
+   "source": "cell:Flat-top picosecond laser texturing of CFRP.pdf:p4:b9:4:pulse_width:10.0",
+   "strength": "STRONG",
+   "table_id": "fc47b2f8b697e3c8",
+   "target": "cell:Flat-top picosecond laser texturing of CFRP.pdf:p4:b9:6:spot_size:19.0",
+   "type": "SAME_EXPERIMENT_CANDIDATE"
+  },
+  {
+   "block_ids": [
+    "Flat-top picosecond laser texturing of CFRP.pdf:p4:b9"
+   ],
+   "quote": "Wavelength(nm)\n355",
+   "row": null,
+   "rule": "KEY_VALUE_TABLE_WHOLE",
+   "source": "cell:Flat-top picosecond laser texturing of CFRP.pdf:p4:b9:4:pulse_width:10.0",
+   "strength": "STRONG",
+   "table_id": "fc47b2f8b697e3c8",
+   "target": "cell:Flat-top picosecond laser texturing of CFRP.pdf:p4:b9:8:scan_speed:1.0",
+   "type": "SAME_EXPERIMENT_CANDIDATE"
+  },
+  {
+   "block_ids": [
+    "Flat-top picosecond laser texturing of CFRP.pdf:p4:b9"
+   ],
+   "quote": "Wavelength(nm)\n355",
+   "row": null,
+   "rule": "KEY_VALUE_TABLE_WHOLE",
+   "source": "cell:Flat-top picosecond laser texturing of CFRP.pdf:p4:b9:4:pulse_width:10.0",
+   "strength": "STRONG",
+   "table_id": "fc47b2f8b697e3c8",
+   "target": "cell:Flat-top picosecond laser texturing of CFRP.pdf:p4:b9:10:frequency:1.0",
+   "type": "SAME_EXPERIMENT_CANDIDATE"
+  },
+  {
+   "block_ids": [
+    "Flat-top picosecond laser texturing of CFRP.pdf:p4:b9"
+   ],
+   "quote": "Wavelength(nm)\n355",
+   "row": null,
+   "rule": "KEY_VALUE_TABLE_WHOLE",
+   "source": "cell:Flat-top picosecond laser texturing of CFRP.pdf:p4:b9:6:spot_size:19.0",
+   "strength": "STRONG",
+   "table_id": "fc47b2f8b697e3c8",
+   "target": "cell:Flat-top picosecond laser texturing of CFRP.pdf:p4:b9:8:scan_speed:1.0",
+   "type": "SAME_EXPERIMENT_CANDIDATE"
+  },
+  {
+   "block_ids": [
+    "Flat-top picosecond laser texturing of CFRP.pdf:p4:b9"
+   ],
+   "quote": "Wavelength(nm)\n355",
+   "row": null,
+   "rule": "KEY_VALUE_TABLE_WHOLE",
+   "source": "cell:Flat-top picosecond laser texturing of CFRP.pdf:p4:b9:6:spot_size:19.0",
+   "strength": "STRONG",
+   "table_id": "fc47b2f8b697e3c8",
+   "target": "cell:Flat-top picosecond laser texturing of CFRP.pdf:p4:b9:10:frequency:1.0",
+   "type": "SAME_EXPERIMENT_CANDIDATE"
+  },
+  {
+   "block_ids": [
+    "Flat-top picosecond laser texturing of CFRP.pdf:p4:b9"
+   ],
+   "quote": "Wavelength(nm)\n355",
+   "row": null,
+   "rule": "KEY_VALUE_TABLE_WHOLE",
+   "source": "cell:Flat-top picosecond laser texturing of CFRP.pdf:p4:b9:8:scan_speed:1.0",
+   "strength": "STRONG",
+   "table_id": "fc47b2f8b697e3c8",
+   "target": "cell:Flat-top picosecond laser texturing of CFRP.pdf:p4:b9:10:frequency:1.0",
+   "type": "SAME_EXPERIMENT_CANDIDATE"
+  },
+  {
+   "block_ids": [
+    "Flat-top picosecond laser texturing of CFRP.pdf:p2:b2",
+    "Flat-top picosecond laser texturing of CFRP.pdf:p2:b1"
+   ],
+   "quote": "226×",
+   "row": null,
+   "rule": "SAME_BLOCK_PARAMETER_GROUP",
+   "source": "103a125dd50d",
+   "strength": "WEAK",
+   "table_id": "",
+   "target": "d66f797b4ecc",
+   "type": "SAME_PARAMETER_GROUP"
+  },
+  {
+   "block_ids": [
+    "Flat-top picosecond laser texturing of CFRP.pdf:p2:b2",
+    "Flat-top picosecond laser texturing of CFRP.pdf:p2:b1"
+   ],
+   "quote": "226×",
+   "row": null,
+   "rule": "SAME_BLOCK_PARAMETER_GROUP",
+   "source": "103a125dd50d",
+   "strength": "WEAK",
+   "table_id": "",
+   "target": "c2a4ba98b4d2",
+   "type": "SAME_PARAMETER_GROUP"
+  },
+  {
+   "block_ids": [
+    "Flat-top picosecond laser texturing of CFRP.pdf:p2:b2",
+    "Flat-top picosecond laser texturing of CFRP.pdf:p2:b1"
+   ],
+   "quote": "25×",
+   "row": null,
+   "rule": "SAME_BLOCK_PARAMETER_GROUP",
+   "source": "d66f797b4ecc",
+   "strength": "WEAK",
+   "table_id": "",
+   "target": "c2a4ba98b4d2",
+   "type": "SAME_PARAMETER_GROUP"
+  },
+  {
+   "block_ids": [
+    "Flat-top picosecond laser texturing of CFRP.pdf:p3:b0"
+   ],
+   "quote": "0.03 mm",
+   "row": null,
+   "rule": "SAME_BLOCK_PARAMETER_GROUP",
+   "source": "23301886a8c4",
+   "strength": "WEAK",
+   "table_id": "",
+   "target": "41f77ae81723",
+   "type": "SAME_PARAMETER_GROUP"
+  },
+  {
+   "block_ids": [
+    "Flat-top picosecond laser texturing of CFRP.pdf:p3:b1",
+    "Flat-top picosecond laser texturing of CFRP.pdf:p3:b0"
+   ],
+   "quote": "1 MHz",
+   "row": null,
+   "rule": "SAME_BLOCK_PARAMETER_GROUP",
+   "source": "8e51e393bb19",
+   "strength": "WEAK",
+   "table_id": "",
+   "target": "ec5d27859124",
+   "type": "SAME_PARAMETER_GROUP"
+  },
+  {
+   "block_ids": [
+    "Flat-top picosecond laser texturing of CFRP.pdf:p3:b1",
+    "Flat-top picosecond laser texturing of CFRP.pdf:p3:b0"
+   ],
+   "quote": "1 MHz",
+   "row": null,
+   "rule": "SAME_BLOCK_PARAMETER_GROUP",
+   "source": "8e51e393bb19",
+   "strength": "WEAK",
+   "table_id": "",
+   "target": "7836b8cd3427",
+   "type": "SAME_PARAMETER_GROUP"
+  },
+  {
+   "block_ids": [
+    "Flat-top picosecond laser texturing of CFRP.pdf:p3:b1",
+    "Flat-top picosecond laser texturing of CFRP.pdf:p3:b0"
+   ],
+   "quote": "1 MHz",
+   "row": null,
+   "rule": "SAME_BLOCK_PARAMETER_GROUP",
+   "source": "8e51e393bb19",
+   "strength": "WEAK",
+   "table_id": "",
+   "target": "6df685ca369b",
+   "type": "SAME_PARAMETER_GROUP"
+  },
+  {
+   "block_ids": [
+    "Flat-top picosecond laser texturing of CFRP.pdf:p3:b1",
+    "Flat-top picosecond laser texturing of CFRP.pdf:p3:b0"
+   ],
+   "quote": "1 MHz",
+   "row": null,
+   "rule": "SAME_BLOCK_PARAMETER_GROUP",
+   "source": "8e51e393bb19",
+   "strength": "WEAK",
+   "table_id": "",
+   "target": "23301886a8c4",
+   "type": "SAME_PARAMETER_GROUP"
+  },
+  {
+   "block_ids": [
+    "Flat-top picosecond laser texturing of CFRP.pdf:p3:b1",
+    "Flat-top picosecond laser texturing of CFRP.pdf:p3:b0"
+   ],
+   "quote": "1 MHz",
+   "row": null,
+   "rule": "SAME_BLOCK_PARAMETER_GROUP",
+   "source": "8e51e393bb19",
+   "strength": "WEAK",
+   "table_id": "",
+   "target": "41f77ae81723",
+   "type": "SAME_PARAMETER_GROUP"
+  },
+  {
+   "block_ids": [
+    "Flat-top picosecond laser texturing of CFRP.pdf:p3:b1",
+    "Flat-top picosecond laser texturing of CFRP.pdf:p3:b0"
+   ],
+   "quote": "10 ps",
+   "row": null,
+   "rule": "SAME_BLOCK_PARAMETER_GROUP",
+   "source": "ec5d27859124",
+   "strength": "WEAK",
+   "table_id": "",
+   "target": "7836b8cd3427",
+   "type": "SAME_PARAMETER_GROUP"
+  },
+  {
+   "block_ids": [
+    "Flat-top picosecond laser texturing of CFRP.pdf:p3:b1",
+    "Flat-top picosecond laser texturing of CFRP.pdf:p3:b0"
+   ],
+   "quote": "10 ps",
+   "row": null,
+   "rule": "SAME_BLOCK_PARAMETER_GROUP",
+   "source": "ec5d27859124",
+   "strength": "WEAK",
+   "table_id": "",
+   "target": "6df685ca369b",
+   "type": "SAME_PARAMETER_GROUP"
+  },
+  {
+   "block_ids": [
+    "Flat-top picosecond laser texturing of CFRP.pdf:p3:b1",
+    "Flat-top picosecond laser texturing of CFRP.pdf:p3:b0"
+   ],
+   "quote": "10 ps",
+   "row": null,
+   "rule": "SAME_BLOCK_PARAMETER_GROUP",
+   "source": "ec5d27859124",
+   "strength": "WEAK",
+   "table_id": "",
+   "target": "23301886a8c4",
+   "type": "SAME_PARAMETER_GROUP"
+  },
+  {
+   "block_ids": [
+    "Flat-top picosecond laser texturing of CFRP.pdf:p3:b1",
+    "Flat-top picosecond laser texturing of CFRP.pdf:p3:b0"
+   ],
+   "quote": "10 ps",
+   "row": null,
+   "rule": "SAME_BLOCK_PARAMETER_GROUP",
+   "source": "ec5d27859124",
+   "strength": "WEAK",
+   "table_id": "",
+   "target": "41f77ae81723",
+   "type": "SAME_PARAMETER_GROUP"
+  },
+  {
+   "block_ids": [
+    "Flat-top picosecond laser texturing of CFRP.pdf:p3:b1",
+    "Flat-top picosecond laser texturing of CFRP.pdf:p3:b0"
+   ],
+   "quote": "355 nm",
+   "row": null,
+   "rule": "SAME_BLOCK_PARAMETER_GROUP",
+   "source": "7836b8cd3427",
+   "strength": "WEAK",
+   "table_id": "",
+   "target": "6df685ca369b",
+   "type": "SAME_PARAMETER_GROUP"
+  },
+  {
+   "block_ids": [
+    "Flat-top picosecond laser texturing of CFRP.pdf:p3:b1",
+    "Flat-top picosecond laser texturing of CFRP.pdf:p3:b0"
+   ],
+   "quote": "355 nm",
+   "row": null,
+   "rule": "SAME_BLOCK_PARAMETER_GROUP",
+   "source": "7836b8cd3427",
+   "strength": "WEAK",
+   "table_id": "",
+   "target": "23301886a8c4",
+   "type": "SAME_PARAMETER_GROUP"
+  },
+  {
+   "block_ids": [
+    "Flat-top picosecond laser texturing of CFRP.pdf:p3:b1",
+    "Flat-top picosecond laser texturing of CFRP.pdf:p3:b0"
+   ],
+   "quote": "355 nm",
+   "row": null,
+   "rule": "SAME_BLOCK_PARAMETER_GROUP",
+   "source": "7836b8cd3427",
+   "strength": "WEAK",
+   "table_id": "",
+   "target": "41f77ae81723",
+   "type": "SAME_PARAMETER_GROUP"
+  },
+  {
+   "block_ids": [
+    "Flat-top picosecond laser texturing of CFRP.pdf:p3:b1",
+    "Flat-top picosecond laser texturing of CFRP.pdf:p3:b0"
+   ],
+   "quote": "355 nm",
+   "row": null,
+   "rule": "SAME_BLOCK_PARAMETER_GROUP",
+   "source": "6df685ca369b",
+   "strength": "WEAK",
+   "table_id": "",
+   "target": "23301886a8c4",
+   "type": "SAME_PARAMETER_GROUP"
+  },
+  {
+   "block_ids": [
+    "Flat-top picosecond laser texturing of CFRP.pdf:p3:b1",
+    "Flat-top picosecond laser texturing of CFRP.pdf:p3:b0"
+   ],
+   "quote": "355 nm",
+   "row": null,
+   "rule": "SAME_BLOCK_PARAMETER_GROUP",
+   "source": "6df685ca369b",
+   "strength": "WEAK",
+   "table_id": "",
+   "target": "41f77ae81723",
+   "type": "SAME_PARAMETER_GROUP"
+  },
+  {
+   "block_ids": [
+    "Flat-top picosecond laser texturing of CFRP.pdf:p4:b9"
+   ],
+   "quote": "Fluence range (J/cm2)\n2.3–7.0",
+   "row": null,
+   "rule": "SAME_BLOCK_PARAMETER_GROUP",
+   "source": "ea2c9c1b39db",
+   "strength": "WEAK",
+   "table_id": "",
+   "target": "38116ee00793",
+   "type": "SAME_PARAMETER_GROUP"
+  },
+  {
+   "block_ids": [
+    "Flat-top picosecond laser texturing of CFRP.pdf:p4:b9"
+   ],
+   "quote": "Fluence range (J/cm2)\n2.3–7.0",
+   "row": null,
+   "rule": "SAME_BLOCK_PARAMETER_GROUP",
+   "source": "ea2c9c1b39db",
+   "strength": "WEAK",
+   "table_id": "",
+   "target": "9aa803a34301",
+   "type": "SAME_PARAMETER_GROUP"
+  },
+  {
+   "block_ids": [
+    "Flat-top picosecond laser texturing of CFRP.pdf:p4:b9"
+   ],
+   "quote": "Fluence range (J/cm2)\n2.3–7.0",
+   "row": null,
+   "rule": "SAME_BLOCK_PARAMETER_GROUP",
+   "source": "ea2c9c1b39db",
+   "strength": "WEAK",
+   "table_id": "",
+   "target": "0c04fc7565c1",
+   "type": "SAME_PARAMETER_GROUP"
+  },
+  {
+   "block_ids": [
+    "Flat-top picosecond laser texturing of CFRP.pdf:p4:b9"
+   ],
+   "quote": "Fluence range (J/cm2)\n2.3–7.0",
+   "row": null,
+   "rule": "SAME_BLOCK_PARAMETER_GROUP",
+   "source": "ea2c9c1b39db",
+   "strength": "WEAK",
+   "table_id": "",
+   "target": "37922b86561b",
+   "type": "SAME_PARAMETER_GROUP"
+  },
+  {
+   "block_ids": [
+    "Flat-top picosecond laser texturing of CFRP.pdf:p4:b9"
+   ],
+   "quote": "Fluence range (J/cm2)\n2.3–7.0",
+   "row": null,
+   "rule": "SAME_BLOCK_PARAMETER_GROUP",
+   "source": "ea2c9c1b39db",
+   "strength": "WEAK",
+   "table_id": "",
+   "target": "87cb08b3aa2c",
+   "type": "SAME_PARAMETER_GROUP"
+  },
+  {
+   "block_ids": [
+    "Flat-top picosecond laser texturing of CFRP.pdf:p4:b9"
+   ],
+   "quote": "Pulse repetition rate (MHz)\n1",
+   "row": null,
+   "rule": "SAME_BLOCK_PARAMETER_GROUP",
+   "source": "38116ee00793",
+   "strength": "WEAK",
+   "table_id": "",
+   "target": "9aa803a34301",
+   "type": "SAME_PARAMETER_GROUP"
+  },
+  {
+   "block_ids": [
+    "Flat-top picosecond laser texturing of CFRP.pdf:p4:b9"
+   ],
+   "quote": "Pulse repetition rate (MHz)\n1",
+   "row": null,
+   "rule": "SAME_BLOCK_PARAMETER_GROUP",
+   "source": "38116ee00793",
+   "strength": "WEAK",
+   "table_id": "",
+   "target": "0c04fc7565c1",
+   "type": "SAME_PARAMETER_GROUP"
+  },
+  {
+   "block_ids": [
+    "Flat-top picosecond laser texturing of CFRP.pdf:p4:b9"
+   ],
+   "quote": "Pulse repetition rate (MHz)\n1",
+   "row": null,
+   "rule": "SAME_BLOCK_PARAMETER_GROUP",
+   "source": "38116ee00793",
+   "strength": "WEAK",
+   "table_id": "",
+   "target": "37922b86561b",
+   "type": "SAME_PARAMETER_GROUP"
+  },
+  {
+   "block_ids": [
+    "Flat-top picosecond laser texturing of CFRP.pdf:p4:b9"
+   ],
+   "quote": "Pulse repetition rate (MHz)\n1",
+   "row": null,
+   "rule": "SAME_BLOCK_PARAMETER_GROUP",
+   "source": "38116ee00793",
+   "strength": "WEAK",
+   "table_id": "",
+   "target": "87cb08b3aa2c",
+   "type": "SAME_PARAMETER_GROUP"
+  },
+  {
+   "block_ids": [
+    "Flat-top picosecond laser texturing of CFRP.pdf:p4:b9"
+   ],
+   "quote": "Pulse width (ps)\n10",
+   "row": null,
+   "rule": "SAME_BLOCK_PARAMETER_GROUP",
+   "source": "9aa803a34301",
+   "strength": "WEAK",
+   "table_id": "",
+   "target": "0c04fc7565c1",
+   "type": "SAME_PARAMETER_GROUP"
+  },
+  {
+   "block_ids": [
+    "Flat-top picosecond laser texturing of CFRP.pdf:p4:b9"
+   ],
+   "quote": "Pulse width (ps)\n10",
+   "row": null,
+   "rule": "SAME_BLOCK_PARAMETER_GROUP",
+   "source": "9aa803a34301",
+   "strength": "WEAK",
+   "table_id": "",
+   "target": "37922b86561b",
+   "type": "SAME_PARAMETER_GROUP"
+  },
+  {
+   "block_ids": [
+    "Flat-top picosecond laser texturing of CFRP.pdf:p4:b9"
+   ],
+   "quote": "Pulse width (ps)\n10",
+   "row": null,
+   "rule": "SAME_BLOCK_PARAMETER_GROUP",
+   "source": "9aa803a34301",
+   "strength": "WEAK",
+   "table_id": "",
+   "target": "87cb08b3aa2c",
+   "type": "SAME_PARAMETER_GROUP"
+  },
+  {
+   "block_ids": [
+    "Flat-top picosecond laser texturing of CFRP.pdf:p4:b9"
+   ],
+   "quote": "Scanning speed (m/s)\n1",
+   "row": null,
+   "rule": "SAME_BLOCK_PARAMETER_GROUP",
+   "source": "0c04fc7565c1",
+   "strength": "WEAK",
+   "table_id": "",
+   "target": "37922b86561b",
+   "type": "SAME_PARAMETER_GROUP"
+  },
+  {
+   "block_ids": [
+    "Flat-top picosecond laser texturing of CFRP.pdf:p4:b9"
+   ],
+   "quote": "Scanning speed (m/s)\n1",
+   "row": null,
+   "rule": "SAME_BLOCK_PARAMETER_GROUP",
+   "source": "0c04fc7565c1",
+   "strength": "WEAK",
+   "table_id": "",
+   "target": "87cb08b3aa2c",
+   "type": "SAME_PARAMETER_GROUP"
+  },
+  {
+   "block_ids": [
+    "Flat-top picosecond laser texturing of CFRP.pdf:p4:b9"
+   ],
+   "quote": "Spot diameter (μm)\n19",
+   "row": null,
+   "rule": "SAME_BLOCK_PARAMETER_GROUP",
+   "source": "37922b86561b",
+   "strength": "WEAK",
+   "table_id": "",
+   "target": "87cb08b3aa2c",
+   "type": "SAME_PARAMETER_GROUP"
+  },
+  {
+   "block_ids": [
+    "Flat-top picosecond laser texturing of CFRP.pdf:p6:b0"
+   ],
+   "quote": "1 μm",
+   "row": null,
+   "rule": "SAME_BLOCK_PARAMETER_GROUP",
+   "source": "0e1842d2055e",
+   "strength": "WEAK",
+   "table_id": "",
+   "target": "a901a2e03d1d",
+   "type": "SAME_PARAMETER_GROUP"
+  },
+  {
+   "block_ids": [
+    "Flat-top picosecond laser texturing of CFRP.pdf:p6:b0"
+   ],
+   "quote": "1 μm",
+   "row": null,
+   "rule": "SAME_BLOCK_PARAMETER_GROUP",
+   "source": "0e1842d2055e",
+   "strength": "WEAK",
+   "table_id": "",
+   "target": "ddc68f625d7b",
+   "type": "SAME_PARAMETER_GROUP"
+  },
+  {
+   "block_ids": [
+    "Flat-top picosecond laser texturing of CFRP.pdf:p6:b0"
+   ],
+   "quote": "10.7 to 39.5 μm",
+   "row": null,
+   "rule": "SAME_BLOCK_PARAMETER_GROUP",
+   "source": "a901a2e03d1d",
+   "strength": "WEAK",
+   "table_id": "",
+   "target": "ddc68f625d7b",
+   "type": "SAME_PARAMETER_GROUP"
+  },
+  {
+   "block_ids": [
+    "Flat-top picosecond laser texturing of CFRP.pdf:p8:b4"
+   ],
+   "quote": "2.3 J/cm2",
+   "row": null,
+   "rule": "SAME_BLOCK_PARAMETER_GROUP",
+   "source": "0be79c579d1e",
+   "strength": "WEAK",
+   "table_id": "",
+   "target": "38535b015e9c",
+   "type": "SAME_PARAMETER_GROUP"
+  },
+  {
+   "block_ids": [
+    "Flat-top picosecond laser texturing of CFRP.pdf:p8:b4"
+   ],
+   "quote": "2.3 J/cm2",
+   "row": null,
+   "rule": "SAME_BLOCK_PARAMETER_GROUP",
+   "source": "0be79c579d1e",
+   "strength": "WEAK",
+   "table_id": "",
+   "target": "16875c2f69ad",
+   "type": "SAME_PARAMETER_GROUP"
+  },
+  {
+   "block_ids": [
+    "Flat-top picosecond laser texturing of CFRP.pdf:p8:b4"
+   ],
+   "quote": "2.3 J/cm2",
+   "row": null,
+   "rule": "SAME_BLOCK_PARAMETER_GROUP",
+   "source": "0be79c579d1e",
+   "strength": "WEAK",
+   "table_id": "",
+   "target": "6dea61dd7f66",
+   "type": "SAME_PARAMETER_GROUP"
+  },
+  {
+   "block_ids": [
+    "Flat-top picosecond laser texturing of CFRP.pdf:p8:b4"
+   ],
+   "quote": "2.3–5.8 J/cm2",
+   "row": null,
+   "rule": "SAME_BLOCK_PARAMETER_GROUP",
+   "source": "38535b015e9c",
+   "strength": "WEAK",
+   "table_id": "",
+   "target": "16875c2f69ad",
+   "type": "SAME_PARAMETER_GROUP"
+  },
+  {
+   "block_ids": [
+    "Flat-top picosecond laser texturing of CFRP.pdf:p8:b4"
+   ],
+   "quote": "2.3–5.8 J/cm2",
+   "row": null,
+   "rule": "SAME_BLOCK_PARAMETER_GROUP",
+   "source": "38535b015e9c",
+   "strength": "WEAK",
+   "table_id": "",
+   "target": "6dea61dd7f66",
+   "type": "SAME_PARAMETER_GROUP"
+  },
+  {
+   "block_ids": [
+    "Flat-top picosecond laser texturing of CFRP.pdf:p8:b4"
+   ],
+   "quote": "5.8 J/cm2",
+   "row": null,
+   "rule": "SAME_BLOCK_PARAMETER_GROUP",
+   "source": "16875c2f69ad",
+   "strength": "WEAK",
+   "table_id": "",
+   "target": "6dea61dd7f66",
+   "type": "SAME_PARAMETER_GROUP"
+  },
+  {
+   "block_ids": [
+    "Flat-top picosecond laser texturing of CFRP.pdf:p10:b3"
+   ],
+   "quote": "1 μm",
+   "row": null,
+   "rule": "SAME_BLOCK_PARAMETER_GROUP",
+   "source": "f74733c29959",
+   "strength": "WEAK",
+   "table_id": "",
+   "target": "370996b5aa93",
+   "type": "SAME_PARAMETER_GROUP"
+  },
+  {
+   "block_ids": [
+    "Flat-top picosecond laser texturing of CFRP.pdf:p11:b1",
+    "Flat-top picosecond laser texturing of CFRP.pdf:p11:b0"
+   ],
+   "quote": "355 nm",
+   "row": null,
+   "rule": "SAME_BLOCK_PARAMETER_GROUP",
+   "source": "9bb2cdf7bc9a",
+   "strength": "WEAK",
+   "table_id": "",
+   "target": "bafe74da4747",
+   "type": "SAME_PARAMETER_GROUP"
+  }
+ ],
+ "nodes": [
+  [
+   "537090f25e4c",
+   "PROCESSING"
+  ],
+  [
+   "040d65c47fe9",
+   "UNCLEAR"
+  ],
+  [
+   "91b4508b731e",
+   "UNCLEAR"
+  ],
+  [
+   "f6ae8f13a350",
+   "PROCESSING"
+  ],
+  [
+   "103a125dd50d",
+   "PROCESSING"
+  ],
+  [
+   "4efae941c0e1",
+   "UNCLEAR"
+  ],
+  [
+   "d66f797b4ecc",
+   "PROCESSING"
+  ],
+  [
+   "681cd218c51b",
+   "UNCLEAR"
+  ],
+  [
+   "b6f375b86e7f",
+   "PROCESSING"
+  ],
+  [
+   "71f70d03a1fe",
+   "PROCESSING"
+  ],
+  [
+   "befeb21a68f2",
+   "UNCLEAR"
+  ],
+  [
+   "930607d03218",
+   "UNCLEAR"
+  ],
+  [
+   "c2a4ba98b4d2",
+   "PROCESSING"
+  ],
+  [
+   "afd5f8b38eac",
+   "PROCESSING"
+  ],
+  [
+   "23301886a8c4",
+   "PROCESSING"
+  ],
+  [
+   "7d1a8621eb79",
+   "UNCLEAR"
+  ],
+  [
+   "41f77ae81723",
+   "PROCESSING"
+  ],
+  [
+   "75f211d9662b",
+   "UNCLEAR"
+  ],
+  [
+   "8e51e393bb19",
+   "PROCESSING"
+  ],
+  [
+   "ec5d27859124",
+   "PROCESSING"
+  ],
+  [
+   "7836b8cd3427",
+   "PROCESSING"
+  ],
+  [
+   "6df685ca369b",
+   "PROCESSING"
+  ],
+  [
+   "79b5cb17f2c0",
+   "MEASUREMENT"
+  ],
+  [
+   "a0add1ca0b4d",
+   "MEASUREMENT"
+  ],
+  [
+   "ea2c9c1b39db",
+   "PROCESSING"
+  ],
+  [
+   "38116ee00793",
+   "PROCESSING"
+  ],
+  [
+   "9aa803a34301",
+   "PROCESSING"
+  ],
+  [
+   "0c04fc7565c1",
+   "PROCESSING"
+  ],
+  [
+   "37922b86561b",
+   "PROCESSING"
+  ],
+  [
+   "05e52bf6f2d1",
+   "PROCESSING"
+  ],
+  [
+   "87cb08b3aa2c",
+   "PROCESSING"
+  ],
+  [
+   "75810da5333b",
+   "PROCESSING"
+  ],
+  [
+   "0e1842d2055e",
+   "PROCESSING"
+  ],
+  [
+   "a901a2e03d1d",
+   "PROCESSING"
+  ],
+  [
+   "ddc68f625d7b",
+   "PROCESSING"
+  ],
+  [
+   "2b9bf6325101",
+   "PROCESSING"
+  ],
+  [
+   "ee77b4393cf0",
+   "MEASUREMENT"
+  ],
+  [
+   "c098b10805c9",
+   "UNCLEAR"
+  ],
+  [
+   "0be79c579d1e",
+   "PROCESSING"
+  ],
+  [
+   "38535b015e9c",
+   "PROCESSING"
+  ],
+  [
+   "eaa5c97d5ed4",
+   "UNCLEAR"
+  ],
+  [
+   "16875c2f69ad",
+   "PROCESSING"
+  ],
+  [
+   "6dea61dd7f66",
+   "PROCESSING"
+  ],
+  [
+   "60dc80c99c8a",
+   "UNCLEAR"
+  ],
+  [
+   "f5c512570e6a",
+   "UNCLEAR"
+  ],
+  [
+   "f74733c29959",
+   "PROCESSING"
+  ],
+  [
+   "ed8108b88037",
+   "PROCESSING"
+  ],
+  [
+   "370996b5aa93",
+   "PROCESSING"
+  ],
+  [
+   "0eed016f008a",
+   "PROCESSING"
+  ],
+  [
+   "bafe74da4747",
+   "PROCESSING"
+  ],
+  [
+   "9bb2cdf7bc9a",
+   "PROCESSING"
+  ]
+ ],
+ "paper_id": "Flat-top picosecond laser texturing of CFRP.pdf"
+}

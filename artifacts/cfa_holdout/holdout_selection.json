@@ -1,0 +1,91 @@
+{
+ "freeze": "2026-08-07",
+ "pool_size": 107,
+ "no_metadata_candidates": 46,
+ "selected": [
+  {
+   "paper_id": "0216892338424d19_Optimization_of_Parameters_CO2_Laser_for_Drilling_Different_Types_of_G_2015.pdf",
+   "material": "glass",
+   "process": "drilling",
+   "laser_type": null,
+   "metadata_available": true
+  },
+  {
+   "paper_id": "026f19105fe9a533_30_arxiv_1605.01854.pdf",
+   "material": "diamond",
+   "process": "micromachining",
+   "laser_type": "fs",
+   "metadata_available": true
+  },
+  {
+   "paper_id": "02ec3c3c503bb999_epmc_2026_fs_glass_thermal_cycling.pdf",
+   "material": "glass",
+   "process": "surface_texturing",
+   "laser_type": "fs",
+   "metadata_available": true
+  },
+  {
+   "paper_id": "0732fd41b0491a9b_0732fd41b0491a9b_先进光源装置用碳化硅反射镜性能研究.pdf",
+   "material": "sic",
+   "process": null,
+   "laser_type": null,
+   "metadata_available": true
+  },
+  {
+   "paper_id": "1aec7d2a60f2905e_23_arxiv_1701.05885.pdf",
+   "material": "diamond",
+   "process": "micromachining",
+   "laser_type": "fs",
+   "metadata_available": true
+  },
+  {
+   "paper_id": "20c5939dbf386984_21_arxiv_2507.14047.pdf",
+   "material": "diamond",
+   "process": "micromachining",
+   "laser_type": "fs",
+   "metadata_available": true
+  },
+  {
+   "paper_id": "2a9940f1229e8f8d_20_arxiv_1812.04284.pdf",
+   "material": "sic",
+   "process": "micromachining",
+   "laser_type": null,
+   "metadata_available": true
+  },
+  {
+   "paper_id": "31cf796d86b6576a_01_arxiv_1506.04016.pdf",
+   "material": "diamond",
+   "process": "micromachining",
+   "laser_type": "fs",
+   "metadata_available": true
+  },
+  {
+   "paper_id": "67825f80b6cf2eba_epmc_2026_cfrp_tc4_hygrothermal_scirep.pdf",
+   "material": "cfrp",
+   "process": "bonding",
+   "laser_type": null,
+   "metadata_available": true
+  },
+  {
+   "paper_id": "6e76249bdb3311ed_Effect of Process Parameters on Plasma-Enhanced Solvolysis of CFRPs.pdf",
+   "material": "cfrp",
+   "process": "non_laser_reference",
+   "laser_type": null,
+   "metadata_available": true
+  },
+  {
+   "paper_id": "eaf23bb875dc2f05_eaf23bb875dc2f05_高重复频率飞秒激光高效加工硬X射线复合折射透镜.pdf",
+   "material": "sic",
+   "process": "micromachining",
+   "laser_type": "fs",
+   "metadata_available": true
+  },
+  {
+   "paper_id": "f613aab9bdcdaed5_12_arxiv_2310.16315.pdf",
+   "material": "sic",
+   "process": null,
+   "laser_type": "fs",
+   "metadata_available": true
+  }
+ ]
+}

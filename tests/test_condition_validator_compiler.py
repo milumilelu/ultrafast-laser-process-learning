@@ -8,8 +8,8 @@ import pytest
 from ultrafast_ingestion.conditions.compiler import compile_conditions
 from ultrafast_ingestion.conditions.models import (
     FieldStatus,
-    ValidationErrorCode,
     ValidatedRelationGraph,
+    ValidationErrorCode,
 )
 from ultrafast_ingestion.conditions.validator import validate
 from ultrafast_ingestion.graph.models import (
@@ -45,7 +45,7 @@ def _graph(mentions: list[ConditionMention], edges: list[CandidateEdge]) -> Cand
     g = CandidateGraph()
     for m in mentions:
         role = MentionRole.REJECTED if m.acceptance_status == AcceptanceStatus.REJECTED_CONTEXT else MentionRole.PROCESSING
-        g.add_mention(m, role)
+        g.add_mention(m.mention_id, m, role)
     for e in edges:
         g.add_edge(e)
     return g
@@ -99,8 +99,8 @@ def test_comparison_pollution_rejected() -> None:
 def test_measurement_processing_pollution_rejected() -> None:
     a, b = _mention("a", "wavelength", "nm", 976.0), _mention("b", "wavelength", "nm", 515.0)
     g = CandidateGraph()
-    g.add_mention(a, MentionRole.MEASUREMENT)
-    g.add_mention(b, MentionRole.PROCESSING)
+    g.add_mention(a.mention_id, a, MentionRole.MEASUREMENT)
+    g.add_mention(b.mention_id, b, MentionRole.PROCESSING)
     vr = ValidatedRelationGraph(graph=g, accepted=[_proposal("P1", LinkDecision.LINK, ["a", "b"], RelationType.SAME_EXPERIMENT)])
     validate(vr)
     assert any(r.error_code == ValidationErrorCode.MEASUREMENT_POLLUTION for r in vr.rejected)

@@ -51,6 +51,8 @@ class BORecommendation:
     governed_prior: dict[str, Any] | None = None
     warnings: list[str] = field(default_factory=list)
     audit_trace: list[dict[str, Any]] = field(default_factory=list)
+    search_prior_applied: bool | None = None
+    prior_spec: dict[str, Any] | None = None
 
     def to_dict(self) -> dict[str, Any]:
         return asdict(self)

@@ -1,0 +1,27 @@
+{
+  "freeze": "2026-08-07",
+  "version": "cfa-v1.1-holdout-v0",
+  "policy": "人工审阅分层冻结（material x task x laser x metadata）；选定后不增删；未参与 B1-25 与任何规则调整",
+  "selected": [
+    {"paper_id": "2a9940f1229e8f8d_20_arxiv_1812.04284.pdf", "material": "sic", "process": "micromachining", "laser": "fs", "metadata": true},
+    {"paper_id": "f613aab9bdcdaed5_12_arxiv_2310.16315.pdf", "material": "sic", "process": null, "laser": "fs", "metadata": true},
+    {"paper_id": "026f19105fe9a533_30_arxiv_1605.01854.pdf", "material": "diamond", "process": "micromachining", "laser": "fs", "metadata": true},
+    {"paper_id": "31cf796d86b6576a_01_arxiv_1506.04016.pdf", "material": "diamond", "process": "micromachining", "laser": "fs", "metadata": true},
+    {"paper_id": "20c5939dbf386984_21_arxiv_2507.14047.pdf", "material": "diamond", "process": "micromachining", "laser": "fs", "metadata": true},
+    {"paper_id": "7fe49eb97512c592_Effects of drilling strategies for CFRP.pdf", "material": "cfrp", "process": "drilling", "laser": null, "metadata": true},
+    {"paper_id": "da1887a7a15fa9bc_epmc_2025_bioinspired_microcavities_fe_cfrp.pdf", "material": "cfrp", "process": "surface_texturing", "laser": null, "metadata": true},
+    {"paper_id": "7a03b9a912f4256c_Polarization dependence of laser interaction.pdf", "material": "cfrp", "process": null, "laser": null, "metadata": true},
+    {"paper_id": "0d101f2253587ce5_Liquid-assisted_femtosecond_laser_drilling_of_straight_and_three-dim.pdf", "material": "glass", "process": "drilling", "laser": "fs", "metadata": true},
+    {"paper_id": "1057b6fc4dee66a6_sc04_003_Efficient milling and cutting of b.pdf", "material": "glass", "process": "cutting", "laser": "ps", "metadata": true},
+    {"paper_id": "1b61e636dd544f87_Near-field_enhanced_femtosecond_laser_nano-", "material": "glass", "process": "drilling", "laser": "fs", "metadata": true},
+    {"paper_id": "269fe3f12c1ed071_sc04_037_Fast and efficient bottom-up cutti.pdf", "material": "glass", "process": "cutting", "laser": "ps", "metadata": true},
+    {"paper_id": "2c0e839904022976_Thermal Shock Performance of Femtosecond Laser-Drilled Fil.pdf", "material": "metal", "process": "drilling", "laser": "fs", "metadata": false}
+  ],
+  "layering": {
+    "material": {"sic": 2, "diamond": 3, "cfrp": 3, "glass": 4, "metal": 1},
+    "task": {"micromachining": 4, "drilling": 5, "cutting": 2, "texturing": 2},
+    "laser": {"fs": 9, "ps": 2, "unknown": 2},
+    "metadata": {"available": 12, "missing": 1}
+  },
+  "notes": "1 篇无 metadata（2c0e83，metal）覆盖 UNKNOWN 路径（H2）。glass 占比高是 metadata-gold 池的固有分布；metal/polymer 无 gold 覆盖（登记）。"
+}

@@ -48,6 +48,9 @@ class ConditionField:
     unit: str
     provenance_anchor_ids: list[str] = field(default_factory=list)
     evidence_strength: str = ""
+    # V2-2: reported value shape (POINT/RANGE/LIST) propagated from the
+    # mention value_type - a range/set must never degrade to a point value.
+    value_shape: str = "POINT"
 
     def to_dict(self) -> dict[str, Any]:
         return {
@@ -57,6 +60,7 @@ class ConditionField:
             "unit": self.unit,
             "provenance_anchor_ids": list(self.provenance_anchor_ids),
             "evidence_strength": self.evidence_strength,
+            "value_shape": self.value_shape,
         }
 
 

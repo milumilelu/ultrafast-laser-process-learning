@@ -40,6 +40,28 @@ def _is_implicit_keyvalue_block(block: PageBlock) -> bool:
     return _is_row_block(block) and len(first) <= 60 and len(list(_TABLE_CELL_RE.finditer(block.text))) >= 3
 
 
+def _is_table_like_block(block: PageBlock) -> bool:
+    """Compact numeric table rows inside a caption window.
+
+    Some PDFs render experiment tables as blocks whose first line is a row
+    number (e.g. "1 / 1000 / 50 / 950 / 3 / 120 ..."), which section_builder
+    mislabels as heading. Such blocks carry mostly-numeric short rows with
+    very few unit-attached mentions, so _is_row_block rejects them. We accept
+    them inside a caption window only (risk-controlled).
+    """
+    lines = [line.strip() for line in block.text.splitlines() if line.strip()]
+    if len(lines) < 3:
+        return False
+    tokens = [tok for line in lines for tok in line.split()]
+    if not tokens or len(tokens) > 200:
+        return False
+    numeric = sum(1 for tok in tokens if _NUMERIC_TOKEN_RE.match(tok))
+    return numeric / len(tokens) >= 0.5 and all(len(line.split()) <= 24 for line in lines)
+
+
+_NUMERIC_TOKEN_RE = re.compile(r"^\d+(?:[.,]\d+)?[A-Za-zµ]*$|^[vVxX/]$")
+
+
 def detect_table_regions(document: ScientificDocument) -> list:
     from ultrafast_ingestion.tables.models import TableRegion, TableSemanticType
 
@@ -66,20 +88,22 @@ def detect_table_regions(document: ScientificDocument) -> list:
     for i, block in enumerate(blocks):
         if block.block_type != "caption" or not _TABLE_CAPTION_RE.match(block.text.strip()):
             continue
-        row_blocks = []
+        row_blocks: list[PageBlock] = []
         window_start = max(0, i - 5)
         window_end = min(n, i + 1 + _MAX_SCAN)
         for j in range(window_start, window_end):
             if j == i:
                 continue
             nb = blocks[j]
-            if nb.block_type == "heading":
+            # heading-labelled compact numeric rows inside the caption window
+            # are table bodies (section_builder mislabels row-numbered blocks)
+            if nb.block_type == "heading" and not _is_table_like_block(nb):
                 continue
             if nb.block_id() in used:
                 continue
             if _TABLE_CAPTION_RE.match(nb.text.strip()):
                 continue
-            if _is_row_block(nb):
+            if _is_row_block(nb) or _is_table_like_block(nb):
                 row_blocks.append(nb)
         if row_blocks:
             regions.append(make_region(block, row_blocks, f"caption-{len(regions) + 1}"))

@@ -8,12 +8,13 @@
 from __future__ import annotations
 
 from collections.abc import Callable
+from typing import Any
 
 from ultrafast_physics.registry import FeatureValue, get_formula
 from ultrafast_shared.units import convert
 
 # 派生链：feature 可由上游物理特征提供（避免重复计算）
-DERIVED_FROM_FORMULA: dict[str, dict[str, str]] = {
+DERIVED_FROM_FORMULA: dict[str, dict[str, Any]] = {
     "pulse_energy_J": {"formula": "pulse_energy", "from": {"laser_power_W", "frequency_Hz"}},
     "pulse_spacing_m": {"formula": "pulse_spacing", "from": {"scan_speed_m_s", "frequency_Hz"}},
     "peak_fluence_J_m2": {"formula": "peak_fluence", "from": {"pulse_energy_J", "beam_radius_m"}},
@@ -97,6 +98,33 @@ class PhysicsFeatureEngine:
         for feature_id in feature_ids:
             results[feature_id] = self.compute(feature_id, inputs)
         return results
+
+    def compute_chain(
+        self,
+        feature_id: str,
+        inputs: dict[str, tuple[float, str]],
+        depth: int = 0,
+    ) -> FeatureValue:
+        """Compute with derived-input resolution (DERIVED_FROM_FORMULA chain).
+
+        Formula outputs feed later formulas as inputs (pulse_spacing_m,
+        pulse_energy_J, peak_fluence_J_m2). Still registry-driven - no
+        hand-written math here.
+        """
+        if depth > 8:
+            return self.compute(feature_id, inputs)
+        result = self.compute(feature_id, inputs)
+        if result.available or not result.missing_inputs:
+            return result
+        derived_inputs = dict(inputs)
+        for name in result.missing_inputs:
+            derived = DERIVED_FROM_FORMULA.get(name)
+            if derived is None:
+                continue
+            sub = self.compute_chain(derived["formula"], derived_inputs, depth + 1)
+            if sub.available and sub.value is not None and sub.unit is not None:
+                derived_inputs[name] = (sub.value, sub.unit)
+        return self.compute(feature_id, derived_inputs)
 
     def _resolve_input(
         self, name: str, inputs: dict[str, tuple[float, str]] | None

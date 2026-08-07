@@ -57,17 +57,19 @@ def _check(proposal, graph: ValidatedRelationGraph) -> list[ValidationRejection]
         for m in proposal.mention_ids
         if m in graph.graph.mentions
     ]
+    # roles keyed by graph node id (Phase B: candidate ids)
     roles = {
-        m.mention_id: graph.graph.roles.get(m.mention_id, MentionRole.UNCLEAR)
-        for m in mentions
+        mid: graph.graph.roles.get(mid, MentionRole.UNCLEAR)
+        for mid in proposal.mention_ids
+        if mid in graph.graph.mentions
     }
     edges = graph.graph.edges
 
     # 3. rejected mentions never enter conditions
     if proposal.decision in (LinkDecision.LINK, LinkDecision.ASSIGN_SCOPE):
-        for m in mentions:
-            if roles[m.mention_id] == MentionRole.REJECTED:
-                reject(ValidationErrorCode.REJECTED_MENTION_IN_CONDITION, m.mention_id)
+        for mid in proposal.mention_ids:
+            if roles.get(mid) == MentionRole.REJECTED:
+                reject(ValidationErrorCode.REJECTED_MENTION_IN_CONDITION, mid)
 
     if proposal.decision == LinkDecision.LINK:
         if proposal.relation != RelationType.SAME_EXPERIMENT and proposal.relation != RelationType.SEPARATE_EXPERIMENT:

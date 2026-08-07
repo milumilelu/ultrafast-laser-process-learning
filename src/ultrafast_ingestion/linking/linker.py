@@ -141,17 +141,18 @@ def run_recorded(record_path: Path, graph: CandidateGraph, paper_id: str, doc_ve
         if row.get("type") != "proposal":
             continue
         proposal = dict(row["proposal"])
-        # resolve match-specs (parameter/unit/values/role) to mention ids so
-        # recorded fixtures stay stable across extraction changes
+        # resolve match-specs (parameter/unit/values/role) to graph node ids
+        # (Phase B: candidate ids) so recorded fixtures stay stable across
+        # extraction and identity changes
         mention_ids: list[str] = []
         for spec in proposal.pop("mention_specs", []):
             hits = [
-                m.mention_id
-                for m in graph.mentions.values()
+                mid
+                for mid, m in graph.mentions.items()
                 if m.parameter == spec["parameter"]
                 and m.normalized_unit == spec.get("unit")
                 and any(abs(v - spec["value"]) < 1e-9 for v in m.values)
-                and graph.roles.get(m.mention_id) is not None
+                and graph.roles.get(mid) is not None
             ]
             if spec.get("role"):
                 hits = [

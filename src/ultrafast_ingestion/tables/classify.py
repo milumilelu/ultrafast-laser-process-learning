@@ -32,6 +32,95 @@ _ROW_LEAD_RE = re.compile(
     re.IGNORECASE,
 )
 
+# ---- header-column parsing (A1 fix) -------------------------------------
+# Known parameter labels that may appear as separated table headers
+# ("Frequency" block + "(Hz)" block + numeric row blocks). Used only as a
+# fallback when the standard cell parsing produced no rows.
+_HEADER_LABEL_PATTERNS: tuple[tuple[re.Pattern, str], ...] = (
+    (re.compile(r"repetition\s*(?:rate|frequency)\b", re.IGNORECASE), "frequency"),
+    (re.compile(r"^\s*frequency\b", re.IGNORECASE), "frequency"),
+    (re.compile(r"scan(?:ning)?\s*speed\b", re.IGNORECASE), "scan_speed"),
+    (re.compile(r"hatch\s*(?:distance|spacing)\b", re.IGNORECASE), "hatch_spacing"),
+    (re.compile(r"average\s*power\b|laser\s*power\b", re.IGNORECASE), "average_power"),
+    (re.compile(r"pulse\s*energy\b", re.IGNORECASE), "pulse_energy"),
+    (re.compile(r"spot\s*(?:diameter|size)\b", re.IGNORECASE), "spot_size"),
+    (re.compile(r"pulse\s*(?:width|duration)\b", re.IGNORECASE), "pulse_width"),
+    (re.compile(r"^\s*pitch\b", re.IGNORECASE), "pitch"),
+    (re.compile(r"wavelength\b", re.IGNORECASE), "wavelength"),
+    (re.compile(r"^\s*passes\b", re.IGNORECASE), "passes"),
+)
+
+_UNIT_TOKEN_RE = re.compile(r"^\(?([A-Za-zµμ/]+(?:/[A-Za-zµμ]+)?)\)?$")
+
+
+def _header_columns(header_text: str) -> dict[int, tuple[str, str | None]]:
+    """Map token index -> (canonical parameter, unit | None) from header text.
+
+    Header may span multiple blocks ("Frequency" / "(Hz)" as separate lines);
+    tokens are taken in order, unit tokens immediately following a label are
+    consumed as that column's unit.
+    """
+    tokens = header_text.split()
+    columns: dict[int, tuple[str, str | None]] = {}
+    i = 0
+    while i < len(tokens):
+        token = tokens[i]
+        matched = None
+        for pattern, parameter in _HEADER_LABEL_PATTERNS:
+            if pattern.match(token):
+                matched = parameter
+                break
+        if matched is None:
+            i += 1
+            continue
+        unit = None
+        if i + 1 < len(tokens):
+            m = _UNIT_TOKEN_RE.match(tokens[i + 1])
+            if m:
+                unit = normalize_unit(m.group(1))
+        columns[i] = (matched, unit)
+        i += 1 if unit is None else 2
+    return columns
+
+
+def _parse_header_column_rows(
+    region: TableRegion, header_blocks: list, data_blocks: list
+) -> list[TableRow]:
+    """Data rows split by header token columns (fallback parser)."""
+    header_text = " ".join(b.text for b in header_blocks)
+    columns = _header_columns(header_text)
+    if not columns:
+        return []
+    rows: list[TableRow] = []
+    for block in data_blocks:
+        for line in block.text.splitlines():
+            line = line.strip()
+            if not line:
+                continue
+            tokens = line.split()
+            row = TableRow(
+                index=len(rows), kind=RowKind.DATA, raw_text=line,
+            )
+            for col_idx, (parameter, unit) in columns.items():
+                if col_idx >= len(tokens):
+                    continue
+                raw = tokens[col_idx]
+                if not re.match(r"^[-+]?\d+(?:[.,]\d+)?$", raw):
+                    continue
+                row.cells.append(
+                    TableCell(
+                        value=float(raw.replace(",", ".")),
+                        unit=unit or "",
+                        parameter=parameter,
+                        raw_text=raw,
+                        source_block_id=block.block_id(),
+                        source_row=len(rows),
+                    )
+                )
+            if row.cells:
+                rows.append(row)
+    return rows
+
 
 def _row_kind(first_line: str) -> RowKind:
     if not first_line:
@@ -116,6 +205,31 @@ def classify_table(region: TableRegion, document) -> TableRegion:
     rows: list[TableRow] = []
     for block in region.blocks:
         rows.extend(_parse_rows_from_block(block.text, block.block_id()))
+
+    # A1 fallback: header-column parsing for separated-header tables whose
+    # standard cell parsing produced no rows (e.g. "Frequency" header block +
+    # "(Hz)" block + row-numbered numeric row blocks). Only applied when the
+    # standard path found nothing, so correctly parsed tables are untouched.
+    if not any(r.cells for r in rows):
+        header_blocks = []
+        data_blocks = []
+        seen_data = False
+        for block in region.blocks:
+            from ultrafast_ingestion.tables.detect import _is_table_like_block
+
+            if block.block_type == "caption":
+                continue
+            is_data = _is_table_like_block(block)
+            if is_data:
+                seen_data = True
+            if seen_data:
+                data_blocks.append(block)
+            else:
+                header_blocks.append(block)
+        if data_blocks:
+            header_rows = _parse_header_column_rows(region, header_blocks, data_blocks)
+            if header_rows:
+                rows = header_rows
 
     region.rows = rows
     cell_rows = [r for r in rows if r.cells]

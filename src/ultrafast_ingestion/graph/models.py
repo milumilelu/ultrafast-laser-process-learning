@@ -65,13 +65,20 @@ class CandidateEdge:
 
 @dataclass(slots=True)
 class CandidateGraph:
+    """Identity-agnostic candidate registry.
+
+    Node keys are supplied by the caller (Phase B: ledger candidate ids).
+    Values are ConditionMention carriers; mention_id stays the lineage
+    anchor inside the object.
+    """
+
     mentions: dict[str, ConditionMention] = field(default_factory=dict)
     edges: list[CandidateEdge] = field(default_factory=list)
     roles: dict[str, MentionRole] = field(default_factory=dict)
 
-    def add_mention(self, mention: ConditionMention, role: MentionRole) -> None:
-        self.mentions[mention.mention_id] = mention
-        self.roles[mention.mention_id] = role
+    def add_mention(self, node_id: str, mention: ConditionMention, role: MentionRole) -> None:
+        self.mentions[node_id] = mention
+        self.roles[node_id] = role
 
     def add_edge(self, edge: CandidateEdge) -> None:
         if edge.source_mention_id == edge.target_mention_id:
@@ -86,14 +93,14 @@ class CandidateGraph:
                 return
         self.edges.append(edge)
 
-    def edges_between(self, a: ConditionMention, b: ConditionMention) -> list[CandidateEdge]:
+    def edges_between(self, a: str, b: str) -> list[CandidateEdge]:
         return [
             e
             for e in self.edges
-            if {e.source_mention_id, e.target_mention_id} == {a.mention_id, b.mention_id}
+            if {e.source_mention_id, e.target_mention_id} == {a, b}
         ]
 
-    def has_edge(self, a: ConditionMention, b: ConditionMention, edge_type: EdgeType) -> bool:
+    def has_edge(self, a: str, b: str, edge_type: EdgeType) -> bool:
         return any(e.type == edge_type for e in self.edges_between(a, b))
 
     def edges_of_type(self, edge_type: EdgeType) -> list[CandidateEdge]:

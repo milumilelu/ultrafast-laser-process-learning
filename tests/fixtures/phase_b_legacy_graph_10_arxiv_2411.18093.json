@@ -1,0 +1,534 @@
+{
+ "capture": "post-classify-word-boundary-fix",
+ "document_version_id": "a1bcf8fc709ee8ca",
+ "edges": [
+  {
+   "block_ids": [
+    "10_arxiv_2411.18093.pdf:p8:b4"
+   ],
+   "quote": "1.5mm",
+   "row": null,
+   "rule": "SAME_BLOCK_PARAMETER_GROUP",
+   "source": "97647563a806",
+   "strength": "WEAK",
+   "table_id": "",
+   "target": "ed8c818932bc",
+   "type": "SAME_PARAMETER_GROUP"
+  },
+  {
+   "block_ids": [
+    "10_arxiv_2411.18093.pdf:p8:b4"
+   ],
+   "quote": "1.5mm",
+   "row": null,
+   "rule": "SAME_BLOCK_PARAMETER_GROUP",
+   "source": "97647563a806",
+   "strength": "WEAK",
+   "table_id": "",
+   "target": "d1509ac8daac",
+   "type": "SAME_PARAMETER_GROUP"
+  },
+  {
+   "block_ids": [
+    "10_arxiv_2411.18093.pdf:p8:b4"
+   ],
+   "quote": "10mm",
+   "row": null,
+   "rule": "SAME_BLOCK_PARAMETER_GROUP",
+   "source": "ed8c818932bc",
+   "strength": "WEAK",
+   "table_id": "",
+   "target": "d1509ac8daac",
+   "type": "SAME_PARAMETER_GROUP"
+  },
+  {
+   "block_ids": [
+    "10_arxiv_2411.18093.pdf:p8:b5",
+    "10_arxiv_2411.18093.pdf:p8:b4"
+   ],
+   "quote": "500μm",
+   "row": null,
+   "rule": "SAME_BLOCK_PARAMETER_GROUP",
+   "source": "a5680e169628",
+   "strength": "WEAK",
+   "table_id": "",
+   "target": "97647563a806",
+   "type": "SAME_PARAMETER_GROUP"
+  },
+  {
+   "block_ids": [
+    "10_arxiv_2411.18093.pdf:p8:b5",
+    "10_arxiv_2411.18093.pdf:p8:b4"
+   ],
+   "quote": "500μm",
+   "row": null,
+   "rule": "SAME_BLOCK_PARAMETER_GROUP",
+   "source": "a5680e169628",
+   "strength": "WEAK",
+   "table_id": "",
+   "target": "ed8c818932bc",
+   "type": "SAME_PARAMETER_GROUP"
+  },
+  {
+   "block_ids": [
+    "10_arxiv_2411.18093.pdf:p8:b5",
+    "10_arxiv_2411.18093.pdf:p8:b4"
+   ],
+   "quote": "500μm",
+   "row": null,
+   "rule": "SAME_BLOCK_PARAMETER_GROUP",
+   "source": "a5680e169628",
+   "strength": "WEAK",
+   "table_id": "",
+   "target": "d1509ac8daac",
+   "type": "SAME_PARAMETER_GROUP"
+  },
+  {
+   "block_ids": [
+    "10_arxiv_2411.18093.pdf:p10:b3",
+    "10_arxiv_2411.18093.pdf:p10:b2"
+   ],
+   "quote": "20.4μm",
+   "row": null,
+   "rule": "SAME_BLOCK_PARAMETER_GROUP",
+   "source": "c0239c43f6a7",
+   "strength": "WEAK",
+   "table_id": "",
+   "target": "f2ad716ad2b1",
+   "type": "SAME_PARAMETER_GROUP"
+  },
+  {
+   "block_ids": [
+    "10_arxiv_2411.18093.pdf:p10:b3",
+    "10_arxiv_2411.18093.pdf:p10:b2"
+   ],
+   "quote": "20.4μm",
+   "row": null,
+   "rule": "SAME_BLOCK_PARAMETER_GROUP",
+   "source": "c0239c43f6a7",
+   "strength": "WEAK",
+   "table_id": "",
+   "target": "8186daec097b",
+   "type": "SAME_PARAMETER_GROUP"
+  },
+  {
+   "block_ids": [
+    "10_arxiv_2411.18093.pdf:p10:b3",
+    "10_arxiv_2411.18093.pdf:p10:b2"
+   ],
+   "quote": "40.8μm",
+   "row": null,
+   "rule": "SAME_BLOCK_PARAMETER_GROUP",
+   "source": "f2ad716ad2b1",
+   "strength": "WEAK",
+   "table_id": "",
+   "target": "8186daec097b",
+   "type": "SAME_PARAMETER_GROUP"
+  },
+  {
+   "block_ids": [
+    "10_arxiv_2411.18093.pdf:p10:b9",
+    "10_arxiv_2411.18093.pdf:p10:b8"
+   ],
+   "quote": "100 kHz",
+   "row": null,
+   "rule": "SAME_BLOCK_PARAMETER_GROUP",
+   "source": "b53d2f730198",
+   "strength": "WEAK",
+   "table_id": "",
+   "target": "cffb3ef738d5",
+   "type": "SAME_PARAMETER_GROUP"
+  },
+  {
+   "block_ids": [
+    "10_arxiv_2411.18093.pdf:p11:b16",
+    "10_arxiv_2411.18093.pdf:p11:b15"
+   ],
+   "quote": "100 kHz",
+   "row": null,
+   "rule": "SAME_BLOCK_PARAMETER_GROUP",
+   "source": "c1f1fbeadf87",
+   "strength": "WEAK",
+   "table_id": "",
+   "target": "e28d08a07843",
+   "type": "SAME_PARAMETER_GROUP"
+  },
+  {
+   "block_ids": [
+    "10_arxiv_2411.18093.pdf:p11:b16",
+    "10_arxiv_2411.18093.pdf:p11:b15"
+   ],
+   "quote": "100 kHz",
+   "row": null,
+   "rule": "SAME_BLOCK_PARAMETER_GROUP",
+   "source": "c1f1fbeadf87",
+   "strength": "WEAK",
+   "table_id": "",
+   "target": "cf22b501214e",
+   "type": "SAME_PARAMETER_GROUP"
+  },
+  {
+   "block_ids": [
+    "10_arxiv_2411.18093.pdf:p11:b16",
+    "10_arxiv_2411.18093.pdf:p11:b15"
+   ],
+   "quote": "3W",
+   "row": null,
+   "rule": "SAME_BLOCK_PARAMETER_GROUP",
+   "source": "e28d08a07843",
+   "strength": "WEAK",
+   "table_id": "",
+   "target": "cf22b501214e",
+   "type": "SAME_PARAMETER_GROUP"
+  },
+  {
+   "block_ids": [
+    "10_arxiv_2411.18093.pdf:p11:b17",
+    "10_arxiv_2411.18093.pdf:p11:b16"
+   ],
+   "quote": "200 mm/s",
+   "row": null,
+   "rule": "SAME_BLOCK_PARAMETER_GROUP",
+   "source": "7bb1a82e8c9f",
+   "strength": "WEAK",
+   "table_id": "",
+   "target": "1cc6150ca4f5",
+   "type": "SAME_PARAMETER_GROUP"
+  },
+  {
+   "block_ids": [
+    "10_arxiv_2411.18093.pdf:p11:b17",
+    "10_arxiv_2411.18093.pdf:p11:b16"
+   ],
+   "quote": "200 mm/s",
+   "row": null,
+   "rule": "SAME_BLOCK_PARAMETER_GROUP",
+   "source": "7bb1a82e8c9f",
+   "strength": "WEAK",
+   "table_id": "",
+   "target": "c1f1fbeadf87",
+   "type": "SAME_PARAMETER_GROUP"
+  },
+  {
+   "block_ids": [
+    "10_arxiv_2411.18093.pdf:p11:b17",
+    "10_arxiv_2411.18093.pdf:p11:b16"
+   ],
+   "quote": "200 mm/s",
+   "row": null,
+   "rule": "SAME_BLOCK_PARAMETER_GROUP",
+   "source": "7bb1a82e8c9f",
+   "strength": "WEAK",
+   "table_id": "",
+   "target": "e28d08a07843",
+   "type": "SAME_PARAMETER_GROUP"
+  },
+  {
+   "block_ids": [
+    "10_arxiv_2411.18093.pdf:p11:b17",
+    "10_arxiv_2411.18093.pdf:p11:b16"
+   ],
+   "quote": "200 mm/s",
+   "row": null,
+   "rule": "SAME_BLOCK_PARAMETER_GROUP",
+   "source": "7bb1a82e8c9f",
+   "strength": "WEAK",
+   "table_id": "",
+   "target": "cf22b501214e",
+   "type": "SAME_PARAMETER_GROUP"
+  },
+  {
+   "block_ids": [
+    "10_arxiv_2411.18093.pdf:p11:b17",
+    "10_arxiv_2411.18093.pdf:p11:b16"
+   ],
+   "quote": "200μm",
+   "row": null,
+   "rule": "SAME_BLOCK_PARAMETER_GROUP",
+   "source": "1cc6150ca4f5",
+   "strength": "WEAK",
+   "table_id": "",
+   "target": "c1f1fbeadf87",
+   "type": "SAME_PARAMETER_GROUP"
+  },
+  {
+   "block_ids": [
+    "10_arxiv_2411.18093.pdf:p11:b17",
+    "10_arxiv_2411.18093.pdf:p11:b16"
+   ],
+   "quote": "200μm",
+   "row": null,
+   "rule": "SAME_BLOCK_PARAMETER_GROUP",
+   "source": "1cc6150ca4f5",
+   "strength": "WEAK",
+   "table_id": "",
+   "target": "e28d08a07843",
+   "type": "SAME_PARAMETER_GROUP"
+  },
+  {
+   "block_ids": [
+    "10_arxiv_2411.18093.pdf:p11:b17",
+    "10_arxiv_2411.18093.pdf:p11:b16"
+   ],
+   "quote": "200μm",
+   "row": null,
+   "rule": "SAME_BLOCK_PARAMETER_GROUP",
+   "source": "1cc6150ca4f5",
+   "strength": "WEAK",
+   "table_id": "",
+   "target": "cf22b501214e",
+   "type": "SAME_PARAMETER_GROUP"
+  },
+  {
+   "block_ids": [
+    "10_arxiv_2411.18093.pdf:p13:b2",
+    "10_arxiv_2411.18093.pdf:p13:b1"
+   ],
+   "quote": "0μm",
+   "row": null,
+   "rule": "SAME_BLOCK_PARAMETER_GROUP",
+   "source": "48c544b35216",
+   "strength": "WEAK",
+   "table_id": "",
+   "target": "df0da1514e07",
+   "type": "MEASUREMENT_ONLY"
+  },
+  {
+   "block_ids": [
+    "10_arxiv_2411.18093.pdf:p13:b2",
+    "10_arxiv_2411.18093.pdf:p13:b1"
+   ],
+   "quote": "0μm",
+   "row": null,
+   "rule": "SAME_BLOCK_PARAMETER_GROUP",
+   "source": "48c544b35216",
+   "strength": "WEAK",
+   "table_id": "",
+   "target": "cf007fff5e6e",
+   "type": "MEASUREMENT_ONLY"
+  },
+  {
+   "block_ids": [
+    "10_arxiv_2411.18093.pdf:p13:b2",
+    "10_arxiv_2411.18093.pdf:p13:b1"
+   ],
+   "quote": "25μm",
+   "row": null,
+   "rule": "SAME_BLOCK_PARAMETER_GROUP",
+   "source": "df0da1514e07",
+   "strength": "WEAK",
+   "table_id": "",
+   "target": "cf007fff5e6e",
+   "type": "MEASUREMENT_ONLY"
+  },
+  {
+   "block_ids": [],
+   "quote": "1 W",
+   "row": null,
+   "rule": "PROCESSING_VS_MEASUREMENT_ROLE",
+   "source": "c305f4731074",
+   "strength": "STRONG",
+   "table_id": "",
+   "target": "cf007fff5e6e",
+   "type": "MUTUALLY_EXCLUSIVE"
+  },
+  {
+   "block_ids": [],
+   "quote": "3W",
+   "row": null,
+   "rule": "PROCESSING_VS_MEASUREMENT_ROLE",
+   "source": "e28d08a07843",
+   "strength": "STRONG",
+   "table_id": "",
+   "target": "cf007fff5e6e",
+   "type": "MUTUALLY_EXCLUSIVE"
+  }
+ ],
+ "nodes": [
+  [
+   "5ab1c6b9383b",
+   "UNCLEAR"
+  ],
+  [
+   "c305f4731074",
+   "PROCESSING"
+  ],
+  [
+   "a7edef14d60f",
+   "UNCLEAR"
+  ],
+  [
+   "f8bcf9f9f8fc",
+   "PROCESSING"
+  ],
+  [
+   "f622137162f6",
+   "UNCLEAR"
+  ],
+  [
+   "e773f55d2888",
+   "UNCLEAR"
+  ],
+  [
+   "97647563a806",
+   "PROCESSING"
+  ],
+  [
+   "ed8c818932bc",
+   "PROCESSING"
+  ],
+  [
+   "d1509ac8daac",
+   "PROCESSING"
+  ],
+  [
+   "17ebee51270a",
+   "UNCLEAR"
+  ],
+  [
+   "482221f20122",
+   "UNCLEAR"
+  ],
+  [
+   "a5680e169628",
+   "PROCESSING"
+  ],
+  [
+   "416094939f6b",
+   "UNCLEAR"
+  ],
+  [
+   "0cf296b73cd6",
+   "UNCLEAR"
+  ],
+  [
+   "05f59ba75e40",
+   "PROCESSING"
+  ],
+  [
+   "a6f549e28596",
+   "UNCLEAR"
+  ],
+  [
+   "0f7690a2d27b",
+   "UNCLEAR"
+  ],
+  [
+   "b53d2f730198",
+   "PROCESSING"
+  ],
+  [
+   "c0239c43f6a7",
+   "PROCESSING"
+  ],
+  [
+   "f2ad716ad2b1",
+   "PROCESSING"
+  ],
+  [
+   "ccfdc8342c98",
+   "PROCESSING"
+  ],
+  [
+   "cffb3ef738d5",
+   "PROCESSING"
+  ],
+  [
+   "8186daec097b",
+   "PROCESSING"
+  ],
+  [
+   "c1f1fbeadf87",
+   "PROCESSING"
+  ],
+  [
+   "7bb1a82e8c9f",
+   "PROCESSING"
+  ],
+  [
+   "1cc6150ca4f5",
+   "PROCESSING"
+  ],
+  [
+   "e28d08a07843",
+   "PROCESSING"
+  ],
+  [
+   "cd4704859a9a",
+   "UNCLEAR"
+  ],
+  [
+   "7b0e2a4a6cbc",
+   "UNCLEAR"
+  ],
+  [
+   "cf22b501214e",
+   "PROCESSING"
+  ],
+  [
+   "9c6e3de7b9de",
+   "PROCESSING"
+  ],
+  [
+   "48c544b35216",
+   "MEASUREMENT"
+  ],
+  [
+   "ec3598157bf4",
+   "UNCLEAR"
+  ],
+  [
+   "df0da1514e07",
+   "MEASUREMENT"
+  ],
+  [
+   "efe9cf778922",
+   "UNCLEAR"
+  ],
+  [
+   "cf007fff5e6e",
+   "MEASUREMENT"
+  ],
+  [
+   "d708fe0cc032",
+   "PROCESSING"
+  ],
+  [
+   "927bd7eea767",
+   "UNCLEAR"
+  ],
+  [
+   "6b9ab7e5e22f",
+   "PROCESSING"
+  ],
+  [
+   "a7b9ed76ba90",
+   "UNCLEAR"
+  ],
+  [
+   "37315cc0e7ed",
+   "UNCLEAR"
+  ],
+  [
+   "c83952e575c8",
+   "UNCLEAR"
+  ],
+  [
+   "cba7a4e663cb",
+   "UNCLEAR"
+  ],
+  [
+   "d84bb66f097c",
+   "UNCLEAR"
+  ],
+  [
+   "bf7710070463",
+   "UNCLEAR"
+  ],
+  [
+   "4513147dfff6",
+   "UNCLEAR"
+  ]
+ ],
+ "paper_id": "10_arxiv_2411.18093.pdf"
+}

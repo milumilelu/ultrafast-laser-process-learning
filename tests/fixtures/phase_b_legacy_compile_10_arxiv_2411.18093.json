@@ -1,0 +1,176 @@
+{
+ "capture": "post-classify-word-boundary-fix",
+ "condition_count": 4,
+ "conditions": [
+  {
+   "fields": {
+    "depth": {
+     "anchors": [
+      "23157a829a937525",
+      "6f3c443b4df35d80"
+     ],
+     "status": "CONFLICT_PRESERVED",
+     "unit": "mm",
+     "values": [
+      10.0,
+      1.5,
+      500.0
+     ]
+    }
+   },
+   "mention_ids": [
+    "d1509ac8daac",
+    "ed8c818932bc",
+    "97647563a806",
+    "a5680e169628"
+   ],
+   "role": "PROCESSING",
+   "scope": "EXPERIMENT_GROUP"
+  },
+  {
+   "fields": {
+    "frequency": {
+     "anchors": [
+      "325b442ee51ae5ad"
+     ],
+     "status": "REPORTED_CLEAR",
+     "unit": "kHz",
+     "values": [
+      100.0
+     ]
+    },
+    "length": {
+     "anchors": [
+      "42ce6f8207e9f8e0"
+     ],
+     "status": "REPORTED_CLEAR",
+     "unit": "um",
+     "values": [
+      500.0
+     ]
+    }
+   },
+   "mention_ids": [
+    "cffb3ef738d5",
+    "b53d2f730198"
+   ],
+   "role": "PROCESSING",
+   "scope": "EXPERIMENT_GROUP"
+  },
+  {
+   "fields": {
+    "hatch_spacing": {
+     "anchors": [
+      "891a74e4b8c90ef0"
+     ],
+     "status": "CONFLICT_PRESERVED",
+     "unit": "um",
+     "values": [
+      20.4,
+      61.2,
+      40.8
+     ]
+    }
+   },
+   "mention_ids": [
+    "c0239c43f6a7",
+    "8186daec097b",
+    "f2ad716ad2b1"
+   ],
+   "role": "PROCESSING",
+   "scope": "EXPERIMENT_GROUP"
+  },
+  {
+   "fields": {
+    "average_power": {
+     "anchors": [
+      "c4bd8155b4506d89"
+     ],
+     "status": "REPORTED_CLEAR",
+     "unit": "W",
+     "values": [
+      3.0
+     ]
+    },
+    "frequency": {
+     "anchors": [
+      "c4bd8155b4506d89"
+     ],
+     "status": "REPORTED_CLEAR",
+     "unit": "kHz",
+     "values": [
+      100.0
+     ]
+    },
+    "hatch_spacing": {
+     "anchors": [
+      "41cf71e7c7a22f98",
+      "c4bd8155b4506d89"
+     ],
+     "status": "CONFLICT_PRESERVED",
+     "unit": "um",
+     "values": [
+      200.0,
+      60.0
+     ]
+    },
+    "scan_speed": {
+     "anchors": [
+      "41cf71e7c7a22f98"
+     ],
+     "status": "REPORTED_CLEAR",
+     "unit": "mm/s",
+     "values": [
+      200.0
+     ]
+    }
+   },
+   "mention_ids": [
+    "c1f1fbeadf87",
+    "1cc6150ca4f5",
+    "cf22b501214e",
+    "e28d08a07843",
+    "7bb1a82e8c9f"
+   ],
+   "role": "PROCESSING",
+   "scope": "EXPERIMENT_GROUP"
+  }
+ ],
+ "document_version_id": "a1bcf8fc709ee8ca",
+ "paper_id": "10_arxiv_2411.18093.pdf",
+ "synthetic_condition_count": 0,
+ "unassigned_mentions": [
+  "5ab1c6b9383b",
+  "c305f4731074",
+  "a7edef14d60f",
+  "f8bcf9f9f8fc",
+  "f622137162f6",
+  "e773f55d2888",
+  "17ebee51270a",
+  "482221f20122",
+  "416094939f6b",
+  "0cf296b73cd6",
+  "05f59ba75e40",
+  "a6f549e28596",
+  "0f7690a2d27b",
+  "ccfdc8342c98",
+  "cd4704859a9a",
+  "7b0e2a4a6cbc",
+  "9c6e3de7b9de",
+  "48c544b35216",
+  "ec3598157bf4",
+  "df0da1514e07",
+  "efe9cf778922",
+  "cf007fff5e6e",
+  "d708fe0cc032",
+  "927bd7eea767",
+  "6b9ab7e5e22f",
+  "a7b9ed76ba90",
+  "37315cc0e7ed",
+  "c83952e575c8",
+  "cba7a4e663cb",
+  "d84bb66f097c",
+  "bf7710070463",
+  "4513147dfff6"
+ ]
+}

@@ -24,6 +24,7 @@ from ultrafast_ingestion.linking.models import (
     RelationType,
     Scope,
 )
+from ultrafast_ingestion.mentions.models import MentionValueType
 from ultrafast_ingestion.models.provenance import stable_hash
 
 PROCESSING_ROLE = ConditionRole.PROCESSING
@@ -186,6 +187,12 @@ def compile_conditions(graph: ValidatedRelationGraph) -> CompileResult:
                 status = FieldStatus.CONFLICT_PRESERVED
             if param in abstained_params:
                 status = FieldStatus.LINKAGE_AMBIGUOUS
+            # V2-2: value shape from mention value_type (RANGE > LIST > POINT)
+            shape = "POINT"
+            if any(m.value_type == MentionValueType.RANGE for m in ms):
+                shape = "RANGE"
+            elif any(m.value_type == MentionValueType.LIST for m in ms):
+                shape = "LIST"
             spec.fields[param] = ConditionField(
                 parameter=param,
                 status=status,
@@ -193,6 +200,7 @@ def compile_conditions(graph: ValidatedRelationGraph) -> CompileResult:
                 unit=unit,
                 provenance_anchor_ids=sorted(set(anchors)),
                 evidence_strength=strength,
+                value_shape=shape,
             )
         conditions.append(spec)
 

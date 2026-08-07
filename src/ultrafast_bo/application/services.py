@@ -559,6 +559,8 @@ class _BOCoreEngine:
                     "policy_choice": surrogate_choice,
                 },
             ],
+            search_prior_applied=bool(model.get("search_prior_applied")),
+            prior_spec=model.get("prior_spec"),
         ).to_dict()
 
     def _group_cv_selection(

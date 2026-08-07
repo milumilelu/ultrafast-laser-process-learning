@@ -5,11 +5,14 @@ from __future__ import annotations
 
 import pytest
 
-from ultrafast_ingestion.linking.linker import ResponseParseError, build_linker_prompt, parse_response
+from ultrafast_ingestion.linking.linker import (
+    ResponseParseError,
+    build_linker_prompt,
+    parse_response,
+)
 from ultrafast_ingestion.linking.models import (
     EvidenceStrength,
     LinkDecision,
-    LinkProposal,
     RelationType,
 )
 
@@ -98,8 +101,8 @@ def test_prompt_includes_graph_edges_and_mentions() -> None:
         acceptance_status=AcceptanceStatus.ACCEPTED, anchor=anchor,
     )
     graph = CandidateGraph()
-    graph.add_mention(m1, MentionRole.PROCESSING)
-    graph.add_mention(m2, MentionRole.PROCESSING)
+    graph.add_mention("a", m1, MentionRole.PROCESSING)
+    graph.add_mention("b", m2, MentionRole.PROCESSING)
     graph.add_edge(
         CandidateEdge("a", "b", EdgeType.SAME_PARAMETER_GROUP, "SAME_BLOCK_PARAMETER_GROUP", EdgeStrength.WEAK)
     )
