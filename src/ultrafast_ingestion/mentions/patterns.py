@@ -25,9 +25,14 @@ _LIST_RE = re.compile(
 _SCALAR_RE = re.compile(rf"{_NUM_START}{_NUM}\s*({UNIT_PATTERN.pattern})", re.IGNORECASE)
 
 # dimensionless process parameters (no unit in text)
-_NA_RE = re.compile(r"(?:numerical aperture|na)\s*[=:≈~]?\s*(\d+(?:\.\d+)?)", re.IGNORECASE)
-_M2_RE = re.compile(r"M\s*[²2]\s*[=:≈~]?\s*(\d+(?:\.\d+)?)", re.IGNORECASE)
-_MAGNIFICATION_RE = re.compile(r"(\d+)\s*×\s*(?:magnification)?", re.IGNORECASE)
+_NA_RE = re.compile(
+    r"(?:numerical aperture|na)\s*[=:≈~]?\s*(\d+(?:\.\d+)?)\b(?!\s*x)",
+    re.IGNORECASE,
+)
+_M2_RE = re.compile(
+    r"(?<![a-z])M\s*[²2]\s*[=:≈~]?\s*(\d+(?:\.\d+)?)\b", re.IGNORECASE
+)
+_MAGNIFICATION_RE = re.compile(r"(\d+)\s*[×x](?!\s*(?:ray|axis|y|z))", re.IGNORECASE)
 
 # parameter tables: "Spot diameter (um) 19" / "Fluence range (J/cm2) 2.3-7.0"
 _TABLE_CELL_RE = re.compile(
