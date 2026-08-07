@@ -1,0 +1,153 @@
+app:
+  name: "ultrafast-laser-agent"
+  version: "0.2.0"
+  formal_entry: "ultrafast"
+  api_host: "127.0.0.1"
+  api_port: 8011
+
+agent:
+  runtime_mode: "capability_discovery"
+  tool_timeout_ms: 30000
+  max_retries: 1
+
+llm:
+  provider: "mock"
+  model: "deterministic-mock"
+  api_base: null
+  api_key_env: null
+
+database:
+  url: "sqlite:///data/ultrafast_memory.db"
+
+paths:
+  watch_dirs:
+    - "data/watch_dirs/recipes"
+    - "data/watch_dirs/logs"
+    - "data/watch_dirs/measurements"
+    - "data/watch_dirs/notes"
+  raw_artifacts: "data/raw_artifacts"
+  exports: "data/exports"
+
+ingestion:
+  archive_originals: true
+  skip_duplicate_sha256: true
+
+parsers:
+  recipe_json:
+    enabled: true
+  simple_log:
+    enabled: true
+  measurement_csv:
+    enabled: true
+  operator_note:
+    enabled: true
+  paddleocr:
+    enabled: true
+    parser_version: "3.x-adapter-1.0"
+
+experimental_features:
+  vision_semantic_analysis:
+    implemented: true
+    enabled: false
+    expose_api: false
+    expose_chat_tool: false
+    allow_rag_ingestion: false
+    allow_knowledge_candidate: false
+    allow_process_recommendation: false
+    allow_bo_usage: false
+    allow_cam_usage: false
+
+bo:
+  export_filename: "bo_training_samples.csv"
+  cold_start_max_samples: 9
+  hybrid_max_samples: 29
+  candidate_count: 256
+
+knowledge_bootstrap:
+  auto_web_bootstrap: false
+  require_user_permission: true
+  max_sources_per_chat: 5
+  create_review_tasks: true
+  allow_llm_prior_candidates: true
+  allow_mock_web_search: false
+
+equipment:
+  require_active_profile_for_bo: true
+  warn_if_no_active_profile: true
+  allow_task_level_override: true
+  default_profile_id: null
+
+knowledge_review:
+  fail_closed: true
+  max_items_per_decision: 5
+  max_proactive_decisions_per_task: 1
+
+trial:
+  default_mode: "simple_trial_cut"
+  low_sample_threshold: 10
+
+observability:
+  display_mode: "normal"
+  redact_sensitive_fields: true
+  persist_public_events: true
+
+performance:
+  first_event_target_ms: 500
+  rag_cache_size: 128
+  budgets_ms:
+    route: 800
+    equipment: 300
+    rag: 2500
+    review_gate: 500
+    trial_strategy: 1000
+    bo: 3000
+    llm_first_token: 2500
+    total_soft: 12000
+    total_hard: 30000
+
+demo:
+  enabled: true
+  scenario: "tgv"
+  llm_provider: "mock"
+  llm_model: "deterministic-demo"
+  random_seed: 42
+  trial_result_fixture: "tgv_pass_v1"
+  timeout_ms: 30000
+  fallback: "offline_template"
+  external_network: false
+
+literature:
+  roots:
+    - "data/literature"
+  archive_dir: "data/literature_archive"
+  prefer_structured_metadata: true
+  pdf_backfill: true
+  detect_duplicates: true
+  include_references_section: false
+  create_candidates_from_raw_pdf: false
+
+rag:
+  default_index_name: "literature_default"
+  chunking:
+    target_tokens: 450
+    min_tokens: 120
+    max_tokens: 700
+    overlap_tokens: 80
+  retrieval:
+    lexical_top_k: 20
+    vector_top_k: 20
+    fusion_top_k: 15
+    rerank_top_k: 8
+    max_chunks_per_paper: 3
+  embedding:
+    provider: "sentence_transformers"
+    model: "sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2"
+    dimension: 384
+    device: null
+    batch_size: 8
+    local_files_only: true
+    allow_mock_in_production: false
+  vector_store:
+    provider: "sqlite"
+  lexical_index:
+    provider: "sqlite_fts5"

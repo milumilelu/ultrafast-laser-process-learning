@@ -1,0 +1,85 @@
+skills:
+  - name: task_understanding
+    version: 4.0.0
+    purpose: 指导 Main LLM 从完整原话与会话上下文理解加工任务，并维护开放的任务事实。
+    when_useful: [新加工任务、自然语言补充、事实纠正、附件需求解析、任务目标变化]
+    prompt: >-
+      直接理解用户完整原话。你是材料、工件、几何、工艺意图、约束、缺失项和用户修正的唯一语义裁决者；
+      路由规则、Task Intake、检索结果和 Tool 都只是提示或观察，不能替你写入这些语义事实。
+    process_guidance:
+      - 一次读取当前原话、近期对话、Working Context、文档和可靠 Observation。
+      - 一次提取本轮全部明确事实，并用一个嵌套的 context_updates.task 提交；保留本轮未修改的既有事实。
+      - 当前原话明确补充或纠正旧事实时直接更新，不要求用户使用“修正”“改为”等关键词。
+      - 区分通孔、盲孔及其他开放几何；盲孔深度已知时不得改写为通孔。
+      - 能用明确假设继续就继续；只有缺失信息会实质改变路线或安全性时才提出最少问题。
+      - 普通问候、解释和非加工对话直接自然回复，不为进入流程而强制抽取字段或调用 Tool。
+    tool_hints: [get_equipment_context]
+
+  - name: evidence_research
+    version: 4.0.0
+    purpose: 指导 Main LLM 何时、为何以及如何使用内部证据，并保留来源与适用边界。
+    when_useful: [需要文献依据、材料机理不确定、历史案例比较、参数来源不足、证据缺口]
+    prompt: >-
+      将检索看作可选证据侧车，不是任务理解的前置条件。证据只能支持或限制判断，不能覆盖用户原话和 Main LLM 已确认的任务语义。
+    process_guidance:
+      - 根据当前材料、几何、路线和目标构造窄而明确的检索问题。
+      - 区分直接匹配、可迁移类比和仅供机理参考的证据，并保留来源、审核状态和限制。
+      - 无命中、低质量命中或检索失败时如实说明；继续完成可完成的理解、追问或自然回复。
+      - 只有证据确实支撑时才用于参数或正式结论，不能把 RAG 命中当作设备边界或 BO 合格样本。
+    tool_hints: [retrieve_process_memory, search_knowledge]
+
+  - name: process_planning
+    version: 4.0.0
+    purpose: 指导 Main LLM 将任务事实、设备条件和证据组织成与当前任务相符的加工路线。
+    when_useful: [形成加工方案、选择路线、制定路径策略、设计检测、分析风险]
+    prompt: >-
+      根据当前任务动态规划，不套用固定通孔、切割、纹理、薄膜或抛光模板；Skill 给出思考流程，不决定 Main LLM 可以采取什么行动。
+    process_guidance:
+      - 明确目标、材料与工件、几何、质量目标和约束。
+      - 区分设备固定条件、设备可调能力、本任务工艺设定值、策略参数和派生指标。
+      - 选择首选路线并说明依据、替代路线与切换条件。
+      - 只加入当前任务相关的路径、能量沉积、焦点、运动、排屑或环境策略。
+      - 给出检测项目、成功判据、停止条件、风险、假设和下一轮调整逻辑。
+      - 证据或辅助 Tool 不足时明确不确定性，不让侧车失败阻塞方案性回复。
+    tool_hints: [get_equipment_context, retrieve_process_memory, search_knowledge, recommend_process_parameters, manage_trial, manage_process]
+
+  - name: parameter_recommendation
+    version: 4.0.0
+    purpose: 指导 Main LLM 选择需要推荐的工艺变量，并解释参数来源、不确定性与适用范围。
+    when_useful: [第一轮试切参数、BO 推荐、RAG 参数迁移、冷启动证据判断、参数迭代]
+    prompt: >-
+      根据当前证据选择 BO、审核 RAG 或组合回退顺序；这是流程指导，不是 Skill 权限。实际边界与执行权限由 Tool 合同、设备安全约束和用户授权决定。
+    process_guidance:
+      - 先形成与当前任务匹配的 ProcessPlan，并明确本轮真正要控制的变量及角色。
+      - 设备范围只用于约束，不能把端点或中点称为推荐值。
+      - 为每个参数保留来源、单位、不确定性、验证状态和可用于试切或正式加工的范围。
+      - 显式选择与任务相符的 source_strategy；BO 与审核 RAG 均不足时说明证据缺口，不生成没有来源的数值候选。
+      - 参数侧车失败时返回证据缺口和安全下一步，不撤销任务理解，也不阻止自然对话。
+    tool_hints: [get_equipment_context, recommend_process_parameters]
+
+  - name: experiment_optimization
+    version: 4.0.0
+    purpose: 指导 Main LLM 设计第一轮试切，并根据真实测量结果推进迭代。
+    when_useful: [第一轮试切、试切迭代、参数窗口建立、停止判断、结果驱动调整]
+    prompt: >-
+      把试切看作验证当前工艺假设的实验流程；只基于真实输入和 Tool Observation 推进，不虚构结果，不把预算提示变成前台强制终止。
+    process_guidance:
+      - 明确试切目的、对象、假设、固定条件、变化变量和样本数量。
+      - 组合任务相关策略、参数候选、测量、成功判据、停止条件和风险。
+      - 说明为什么本轮只改变这些变量，以及不同观测对应的下一轮调整方向。
+      - 参数证据不足时只说明试切目标、测量与证据缺口，不生成无来源的参数矩阵。
+    tool_hints: [manage_trial, recommend_process_parameters, record_process_result, get_equipment_context]
+
+  - name: result_learning
+    version: 4.0.0
+    purpose: 指导 Main LLM 将真实加工与测量结果整理为事实 Observation、调整依据和待审核知识候选。
+    when_useful: [提交试切结果、正式加工 checkpoint、质量评价、经验沉淀、下一轮决策]
+    prompt: >-
+      将用户给出的实际设定、路径、测量、缺陷和设备告警与推断严格分开；Skill 只指导分析流程，不决定数据写入、知识晋升或下一动作权限。
+    process_guidance:
+      - 对照当前 TrialPlan 或 ProcessPlan 的成功判据判断通过、失败或数据不完整。
+      - 缺失测量只列为待补数据，不自动判定加工失败。
+      - 根据当前任务相关现象选择保持、局部调整、检索、BO、回退试切、暂停或停止。
+      - 只有满足数据准入规则的记录才可成为 BO 样本；知识候选必须经审核晋升。
+      - 持久化、知识候选、索引或报告失败只产生 warning，不改变当前质量判断和自然回复。
+    tool_hints: [record_process_result, manage_trial, manage_process, recommend_process_parameters, search_knowledge]

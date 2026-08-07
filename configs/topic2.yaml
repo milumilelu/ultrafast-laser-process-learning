@@ -1,0 +1,28 @@
+version: topic2-backend-v1.0-test
+auto_seed_fixture: true
+random_seed: 42
+
+paths:
+  database: data/topic2.db
+  fixture: data/test_fixture/topic2_experiments_v1.csv
+  artifact_dir: model_artifacts
+  report_dir: outputs/topic2_acceptance
+
+modeling:
+  candidate_models:
+    - RSM
+    - GPR
+    - RandomForest
+    - HistGradientBoosting
+  cv_folds: 5
+
+optimization:
+  method: GP_UCB_E2P_SOFT_PRIOR
+  beta: 2.0
+  lambda_0: 0.2
+  alpha: 0.1
+  candidate_count: 1000
+
+acceptance:
+  minimum_material_count: 7
+  model_improvement_threshold: null
