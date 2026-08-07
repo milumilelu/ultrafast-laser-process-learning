@@ -1,0 +1,11 @@
+{
+  "generated_at": "2026-08-05T10:58:29.780064+00:00",
+  "corpus_root": "C:\\Users\\RZF\\Desktop\\博士课题资料\\ultrafast agent\\ultrafast_laser_memory\\超快智能体文献检索",
+  "selected_pdfs": 161,
+  "drafted": 139,
+  "failed": 22,
+  "draft_path": "C:\\Users\\RZF\\Desktop\\博士课题资料\\ultrafast agent\\ultrafast_laser_memory\\benchmarks\\literature_metadata\\work\\drafts\\annotations_round2_draft.jsonl",
+  "worksheet_path": "C:\\Users\\RZF\\Desktop\\博士课题资料\\ultrafast agent\\ultrafast_laser_memory\\benchmarks\\literature_metadata\\work\\annotation_worksheet.md",
+  "texts_dir": "C:\\Users\\RZF\\Desktop\\博士课题资料\\ultrafast agent\\ultrafast_laser_memory\\benchmarks\\literature_metadata\\work\\texts",
+  "existing_gold_papers": 71
+}

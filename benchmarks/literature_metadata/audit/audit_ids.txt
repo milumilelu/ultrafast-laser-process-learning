@@ -1,0 +1,40 @@
+Micro-drilling_of_alkali-silicate_glass_with_ultraviolet_picosecond_la_2022.pdf
+sc04_025_Crafting interior holes on chemically strengthened thin glass based on ultrafast laser ablation and thermo-shock crack propagations.pdf
+Optodynamic_monitoring_of_laser_micro-drilling_of_glass_by_using_a_las_2008.pdf
+Mechanisms_of_damage_formation_in_glass_in_the_process_of_femtosecond__2018.pdf
+sc04_002_Quality and flexural strength of laser-cut glass.D.pdf
+811_Preparation_Process_of_Through_Glass_Via_Based_on_Laser_Induced_De_2025.pdf
+Shadowgraphic_approach_to_through_glass_vias_TGV_metrology_and_inspect_2026.pdf
+epmc_2026_fs_glass_thermal_cycling.pdf
+Liquid-assisted_femtosecond_laser_drilling_of_straight_and_three-dimen_2004.pdf
+29_arxiv_1711.09140.pdf
+31_arxiv_1806.02226.pdf
+21_arxiv_2507.14047.pdf
+27_arxiv_1401.5879.pdf
+A_Review_of_Non-Laser_and_Laser_Machining_for_Through-Glass_via_Fabric_2026.pdf
+A Review of an Investigation of the Ultrafast Laser Processing of Brittle and Hard Materials.pdf
+sc04_030_激光加工显示面板玻璃研究综述_张德康.pdf
+bd05dbfae6a25549_空间X射线反射式聚焦系统的同步辐射表征技术.pdf
+ac37d338473dfe33_task2_10_Wang_2023.pdf
+Femtosecond laser high-quality drilling of film cooling holes in nickel-based single superalloy for turbine blades with a two-step helical drilling method.pdf
+Percussion drilling on nickel-based alloy with thermal barrier coatings using femtosecond laser.pdf
+Fundamental 3D simulation of the femtosecond laser ablation for cooling hole drilling on Ni and Fe based aero-engine components.pdf
+Two-step approach to improving the quality of laser micro-hole drilling on thermal barrier coated nickel base alloys.pdf
+95539c0a7afe44f7_task2_11_Jiang_2020.pdf
+Femtosecond laser drilling of film cooling holes：Quantitative analysis and real-time monitoring.pdf
+epmc_2022_thermal_cycling_am_cfrp.pdf
+Experimental and Numerical Assessment of Flexural Behavior of CFRP-Strengthened Timber Beams.pdf
+A Study on the Bond–Slip Relationship of the CFRP–Steel Interface of CFRP Strengthened Steel.pdf
+Experimental evaluation of CFRP-strengthened shear walls with various CFRP configurations.pdf
+A critical note on the sideband peak count-index technique_ failure for nonlinear damage characterization of impacted CFRP plates.pdf
+sc04_019_石英玻璃的紫外飞秒激光光丝高精度加工技术研究_薛波.pdf
+18_arxiv_2008.13205.pdf
+sc04_018_Temporal-spatial characteristics of filament induced by a femtosecond laser pulse in transparent dielectrics.pdf
+sc04_016_Classical top-down fused silica milling with a femtosecond laser using different laser pulse burst regimes.pdf
+sc04_010_GHz bursts in MHz burst (BiBurst).pdf
+d948e55e1be48a24_X-ray grating interferometer for in situ and at-wavelength wavefront.pdf
+1863d60c31f24e83_task2_04_Li_2025.pdf
+1e1db7c47f124124_X射线二维波前探测器设计与模拟.pdf
+ed5453f4b42d64da_Wavefront sensing at X-ray free-electron lasers.pdf
+15eb913aafa618e0_task2_08_Weiss_2020.pdf
+Femtosecond Laser Writing of Spin Defects in Hexagonal Boron Nitride.pdf

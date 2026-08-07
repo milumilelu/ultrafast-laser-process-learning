@@ -1,0 +1,27 @@
+sc04_003_Efficient milling and cutting of borosilicate glasses through a thin flowing.pdf
+sc04_004_Ultrafast laser composite cutting ultra-thin glass.pdf
+sc04_005_Damage-free cutting of chemically strengthened glass by creation of sub-surface cracks using femtosecond laser pulses.pdf
+Burst_mode_versus_single-pulse_machining_for_Bessel_beam_micro-drillin_2020.pdf
+Crack behavior in ultrafast laser drilling of thermal barrier coated nickel superalloy.pdf
+Dual-directional ultrasonic vibration-assisted femtosecond laser drilling of film cooling holes.pdf
+Effects of recast layer on fatigue performance of laser-drilled holes in nickel-based superalloy.pdf
+Experimental study of nickel-based superalloy IN792 with femtosecond laser drilling method.pdf
+03_arxiv_2605.26251.pdf
+04_arxiv_2502.16530.pdf
+06_arxiv_2406.12886.pdf
+07_arxiv_2401.02340.pdf
+CFRP U-Wraps and Spike Anchors for Enhancing the Flexural Performance of CFRP-Plated RC Beams.pdf
+epmc_2020_epoxy_poss_AO.pdf
+epmc_2021_alcfrp_crash_analysis.pdf
+epmc_2021_cfrp_steel_bond_degradation.pdf
+Bessel_Beam_Femtosecond_Laser_Interaction_with_Fused_Silica_Before_and_2024.pdf
+05_arxiv_1811.01860.pdf
+Additive friction stir deposition of multi-layer aluminum-silicon carbide metal matrix composites.pdf
+sc04_007_High quality full ablation cutting and stealth dicing of silica glass using picosecond laser Bessel beam with burst mode.pdf
+sc04_008_Qin2024_Ultrafast_Laser_Processing_High_Aspect_Ratio.pdf
+sc04_009_微晶玻璃飞秒激光加工研究进展.pdf
+sc04_022_玻璃材料的激光切割分离研究进展.pdf
+ecss_q_st_70_16c_2020_adhesive_bonding.pdf
+Acoustic diagnostics of femtosecond laser filamentation.pdf
+epmc_2022_phps_siox_AO_coating.pdf
+epmc_2023_longterm_adhesive_space.pdf
