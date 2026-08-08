@@ -8,7 +8,6 @@ Archive resolution order:
 
 from __future__ import annotations
 
-import os
 from pathlib import Path
 
 import pytest
@@ -131,27 +130,17 @@ def make_region(
     return TableRegion(table_id=table_id, semantic_type=semantic_type, rows=rows)
 
 
+from demo.t2_slice.resources import PILOT_FILES, resolve_literature_archive
+
+
 def _archive_path() -> Path | None:
-    env = os.environ.get("ULTRAFAST_PILOT_ARCHIVE")
-    if env:
-        return Path(env)
-    sibling = REPO_ROOT.parent / "ultrafast agent" / "ultrafast_laser_memory" / "data" / "literature_archive"
-    if sibling.is_dir():
-        return sibling
-    return None
+    try:
+        return resolve_literature_archive()
+    except RuntimeError:
+        return None
 
 
 ARCHIVE = _archive_path()
-
-PILOT_FILES = {
-    "04_arxiv_2502.16530.pdf": "2dbee78cde23f8f0_04_arxiv_2502.16530.pdf",
-    "10_arxiv_2411.18093.pdf": "c896b8bc0f3aac44_10_arxiv_2411.18093.pdf",
-    "11_arxiv_2404.09906.pdf": "14bd5786dcb52033_11_arxiv_2404.09906.pdf",
-    "13_arxiv_2411.18868.pdf": "2ee9b7fd04167bc5_13_arxiv_2411.18868.pdf",
-    "Flat-top picosecond laser texturing of CFRP.pdf": (
-        "185a6a0667e0b43d_Flat-top picosecond laser texturing of CFRP.pdf"
-    ),
-}
 
 
 def pilot_pdf(paper_id: str) -> Path:

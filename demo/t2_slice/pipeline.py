@@ -191,7 +191,7 @@ def _run_cfa(
     CFA is an audit/assessment output only - it NEVER changes prior weight
     (uncalibrated heuristic != probability).
     """
-    from ultrafast_cfa.cfa import assess_all
+    from ultrafast_cfa.cfa import CFA_VERSION, assess_all
     from ultrafast_interaction.canonical import target_state
     from ultrafast_interaction.target import (
         TargetCoordinateEvaluator,
@@ -223,6 +223,7 @@ def _run_cfa(
                     source=state,
                     target=target,
                     evidence_claim_id=paper_claims[0].claim_id,
+                    version=CFA_VERSION,
                 ).to_dict()
             )
     return {

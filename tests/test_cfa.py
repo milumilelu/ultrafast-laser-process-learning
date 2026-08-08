@@ -114,6 +114,8 @@ def test_reconstructibility_and_reachability() -> None:
 
 
 def test_assess_all_report_shape() -> None:
+    from ultrafast_cfa.cfa import CFA_VERSION
+
     report = assess_all(
         task_scope=TASK_SCOPE,
         evidence_scope={"material_id": "SiC", "laser_type": "fs"},
@@ -122,7 +124,8 @@ def test_assess_all_report_shape() -> None:
         evidence_claim_id="claim_1",
     )
     payload = report.to_dict()
-    assert payload["version"] == "uncalibrated-cfa-v1"
+    # RF-1 traceability: the default report version must equal the released CFA_VERSION
+    assert payload["version"] == CFA_VERSION
     assert payload["calibration_status"] == "NOT_YET_CALIBRATED"
     assert len(payload["facets"]) == 5
     facet_names = {f["facet"] for f in payload["facets"]}

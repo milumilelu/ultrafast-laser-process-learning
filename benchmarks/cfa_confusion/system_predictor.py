@@ -12,7 +12,7 @@ import json
 from pathlib import Path
 from typing import Any
 
-from ultrafast_cfa.cfa import assess_all
+from ultrafast_cfa.cfa import CFA_VERSION, assess_all
 from ultrafast_interaction.canonical import source_state
 from ultrafast_interaction.target import (
     TargetCoordinateEvaluator,
@@ -40,7 +40,7 @@ def predict_paper(
     target_scope: dict[str, Any] | None = None,
     evidence_material: str | None = None,
     evidence_scope: dict[str, Any] | None = None,
-    version: str = "uncalibrated-cfa-v1.1",
+    version: str = CFA_VERSION,
 ) -> dict[str, Any]:
     """System prediction for one paper (all three levels).
 

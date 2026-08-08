@@ -59,9 +59,19 @@
 CFA:            uncalibrated-cfa-v2.0（V2-1 dependency-aware + V2-2 RANGE 语义）
 B1-25:          development/diagnostic set（severe=0）
 旧 13 篇 holdout: v2 diagnostic set（H3 bug 3→0 / H5 bug 5→0）
-新 11 篇 holdout: v2 independent validation（等人工标注）
+新 11 篇 unseen holdout: independent validation completed（2026-08-07）
+                H1/H2 PASS；H3/H5 NOT PASSED（根因登记：
+                facet 聚合语义 / 表格提取 / review-sweep 文档语义）
+                → scientific-validation claim PROHIBITED；demo release unaffected
 Calibration:    未开始（D1-D4 inventory 已完成：outcome 仅 18 点）
 ```
+
+> **RF-6 更新（2026-08-07）**：上表第 4 行此前写"等人工标注"；现人工
+> 三层标注与 v2 独立 H1–H5 判定均已完成（`artifacts/cfa_holdout/
+> V2_INDEPENDENT_VALIDATION.md`）。结论：H1/H2 PASS、H3/H5 未过，全部
+> 根因为 POST_DEMO 项（GAP-11/12/13）。演示版不受影响——本 checklist 与
+> demo 输出从未承诺 calibrated accuracy，只承诺如实呈现五 facet +
+> warnings + NOT_YET_CALIBRATED（v2 独立验证恰好证明该呈现诚实）。
 
 ## 结论
 

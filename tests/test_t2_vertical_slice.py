@@ -101,15 +101,21 @@ def test_process_learning_feature_views() -> None:
     views = result["process_learning"]["feature_views"]
     assert views["RAW"]["status"] == "available"
     assert views["HYBRID"]["status"] == "partial"
-    # power-dependent coordinates blocked and reported (dependency-aware)
+    # power/spot-dependent coordinates blocked and reported (dependency-aware);
+    # HYBRID physics features = {pulse_interval, pulse_spacing, pulse_overlap,
+    # pulses_per_spot}, of which the spot-dependent three must be blocked.
     assert views["HYBRID"]["blocked_coordinates"]
-    assert any("pulse_energy" in b for b in views["HYBRID"]["blocked_coordinates"]) or True
+    assert set(views["HYBRID"]["blocked_coordinates"]) == {
+        "pulse_overlap",
+        "pulse_spacing",
+        "pulses_per_spot",
+    }
 
 
 def test_machine_bounds_from_csv() -> None:
     bounds = machine_bounds_from_csv(CSV_PATH)
     assert set(bounds) >= {"frequency_kHz", "scan_speed_mm_s", "pulse_width_ps"}
-    for key, (low, high) in bounds.items():
+    for low, high in bounds.values():
         assert low <= high
 
 

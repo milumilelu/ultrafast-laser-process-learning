@@ -18,6 +18,11 @@ from ultrafast_interaction.canonical import (
     compare_canonical,
 )
 
+# Single source of truth for the released CFA version (RF-1 traceability).
+# Historical benchmark runs may pass explicit older versions
+# (e.g. run_b1_dev_v11.py keeps "uncalibrated-cfa-v1.1").
+CFA_VERSION = "uncalibrated-cfa-v2.0"
+
 
 class FacetStatus(StrEnum):
     KNOWN = "KNOWN"
@@ -98,7 +103,7 @@ class UncalibratedCFAReport:
     evidence_claim_id: str = ""
     facets: list[Any] = field(default_factory=list)
     warnings: list[str] = field(default_factory=list)
-    version: str = "uncalibrated-cfa-v1"
+    version: str = CFA_VERSION
 
     def to_dict(self) -> dict[str, Any]:
         return {
@@ -250,7 +255,7 @@ def assess_all(
     source: CanonicalInteractionState,
     target: CanonicalInteractionState,
     evidence_claim_id: str = "",
-    version: str = "uncalibrated-cfa-v1",
+    version: str = CFA_VERSION,
 ) -> UncalibratedCFAReport:
     report = UncalibratedCFAReport(evidence_claim_id=evidence_claim_id)
     report.facets = [

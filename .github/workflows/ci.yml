@@ -29,6 +29,9 @@ jobs:
       - name: Lint (ingestion + contracts scope)
         run: python -m ruff check src/ultrafast_ingestion src/ultrafast_e2p/application/prior_artifact.py
 
+      - name: Lint (release scope: demo main chain, RF-8)
+        run: python -m ruff check src/ultrafast_ingestion src/ultrafast_cfa src/ultrafast_interaction src/ultrafast_reconstructibility src/ultrafast_physics src/ultrafast_e2p src/ultrafast_bo demo
+
       - name: Pilot suite (requires archive; skipped when unavailable)
         run: python -m pytest tests -m pilot -q
 
@@ -36,3 +39,8 @@ jobs:
         run: |
           python -m pip install mypy
           python -m mypy src/ultrafast_ingestion --ignore-missing-imports
+
+      - name: Typecheck (release scope: demo main chain, RF-8)
+        run: |
+          python -m pip install mypy
+          python -m mypy --explicit-package-bases src/ultrafast_ingestion src/ultrafast_cfa src/ultrafast_interaction src/ultrafast_reconstructibility demo/t2_slice --ignore-missing-imports

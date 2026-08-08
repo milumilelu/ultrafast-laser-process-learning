@@ -16,18 +16,10 @@ sys.path.insert(0, str(REPO / "src"))
 sys.path.insert(0, str(REPO))
 
 from demo.t2_slice.pipeline import run_vertical_slice
-from tests.conftest import pilot_pdf
+from demo.t2_slice.resources import PILOT_PAPER_IDS, resolve_pilot_pdf
 from ultrafast_ingestion import PyMuPDFDocumentParser
 from ultrafast_ingestion.mentions.extractor import extract_mentions
 from ultrafast_ingestion.tables.models import table_regions
-
-PILOT_PAPERS = [
-    "04_arxiv_2502.16530.pdf",
-    "10_arxiv_2411.18093.pdf",
-    "11_arxiv_2404.09906.pdf",
-    "13_arxiv_2411.18868.pdf",
-    "Flat-top picosecond laser texturing of CFRP.pdf",
-]
 
 TASK_SPEC = {
     "material": "SiC",
@@ -51,8 +43,8 @@ def main() -> None:
     args = parser.parse_args()
 
     documents, mentions_by_paper, regions_by_paper = [], {}, {}
-    for paper in PILOT_PAPERS:
-        doc = PyMuPDFDocumentParser().parse(pilot_pdf(paper))
+    for paper in PILOT_PAPER_IDS:
+        doc = PyMuPDFDocumentParser().parse(resolve_pilot_pdf(paper))
         documents.append(doc)
         mentions_by_paper[doc.paper_id] = extract_mentions(doc)
         regions_by_paper[doc.paper_id] = table_regions(doc)
