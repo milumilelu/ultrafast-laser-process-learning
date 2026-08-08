@@ -1,0 +1,73 @@
+{
+ "release_tag": "topic2-demo-v1.1",
+ "commit_sha": "d634ef7fb2e742829dc661940f3d4d10eb6a1004",
+ "dataset": {
+  "path": "data\\test_fixture\\topic2_experiments_v1.csv",
+  "sha256": "0b74e0dca0ce21050a908e9c8885a7eddf098d511a11ecd0a121c9e38afdd43b"
+ },
+ "literature": [
+  {
+   "paper_id": "04_arxiv_2502.16530.pdf",
+   "archive_filename": "2dbee78cde23f8f0_04_arxiv_2502.16530.pdf",
+   "archive_sha256": "2dbee78cde23f8f0d86ec999a7c847b9c51bc8ea2df953135d7e55c23a83e84a"
+  },
+  {
+   "paper_id": "10_arxiv_2411.18093.pdf",
+   "archive_filename": "c896b8bc0f3aac44_10_arxiv_2411.18093.pdf",
+   "archive_sha256": "c896b8bc0f3aac44cd745778194b96ac2c9c8b1471af5131812960e23ed631cf"
+  },
+  {
+   "paper_id": "11_arxiv_2404.09906.pdf",
+   "archive_filename": "14bd5786dcb52033_11_arxiv_2404.09906.pdf",
+   "archive_sha256": "14bd5786dcb52033f3b0d1fb38158521058b51096d72d832f3de82d37b250f53"
+  },
+  {
+   "paper_id": "13_arxiv_2411.18868.pdf",
+   "archive_filename": "2ee9b7fd04167bc5_13_arxiv_2411.18868.pdf",
+   "archive_sha256": "2ee9b7fd04167bc5acd65eb5017a0b62dd82b30f91ff1bdb4c55892bdf56700f"
+  },
+  {
+   "paper_id": "Flat-top picosecond laser texturing of CFRP.pdf",
+   "archive_filename": "185a6a0667e0b43d_Flat-top picosecond laser texturing of CFRP.pdf",
+   "archive_sha256": "185a6a0667e0b43d9c88996a818fbc6aa2f094810142b557ccb71a09c23e4bb3"
+  }
+ ],
+ "equipment_profile_id": "EQ-DEMO-FS",
+ "equipment_profile": {
+  "spot_radius_um": 5.0,
+  "unverified": true
+ },
+ "random_seed": 42,
+ "versions": {
+  "physics_formula_registry": "v1",
+  "cfa": "uncalibrated-cfa-v2.0",
+  "e2p_prior_spec": "e2p-soft-prior-v1",
+  "bo": "ephemeral_gp_2c3cf0a38070",
+  "acquisition": "1.0",
+  "dependencies": {
+   "numpy": "2.3.5",
+   "pandas": "3.0.5",
+   "scikit_learn": "not_installed",
+   "pydantic": "2.13.4",
+   "sqlalchemy": "2.0.51",
+   "fastapi": "0.141.1"
+  }
+ },
+ "stable_scientific_payload_hash": "33206b044518fa685c4249394e50280c250976a9bdf5afd609f046bdbadd0d94",
+ "payload": {
+  "sample_count": 18,
+  "selected_model": "RSM",
+  "selected_feature_view": "RAW",
+  "prior_count": 47,
+  "governed_prior_hash": "025112440d90c059",
+  "assisted_search_prior_applied": true,
+  "cfa_status": "NOT_YET_CALIBRATED",
+  "cfa_facets": {
+   "Material": "KNOWN",
+   "Task": "KNOWN",
+   "InteractionState": "PARTIAL",
+   "Reconstructibility": "PARTIAL",
+   "Reachability": "PARTIAL"
+  }
+ }
+}

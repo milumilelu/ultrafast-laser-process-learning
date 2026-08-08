@@ -1,0 +1,16 @@
+{
+ "sample_count": 18,
+ "selected_model": "RSM",
+ "selected_feature_view": "RAW",
+ "prior_count": 47,
+ "governed_prior_hash": "025112440d90c059",
+ "assisted_search_prior_applied": true,
+ "cfa_status": "NOT_YET_CALIBRATED",
+ "cfa_facets": {
+  "Material": "KNOWN",
+  "Task": "KNOWN",
+  "InteractionState": "PARTIAL",
+  "Reconstructibility": "PARTIAL",
+  "Reachability": "PARTIAL"
+ }
+}
