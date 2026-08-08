@@ -12,6 +12,7 @@ REPO = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(REPO))
 
 from apps.topic2_backend.application.service import (  # noqa: E402
+    ALL_STAGES,
     DEMO_SCENARIO_01,
     Topic2ApplicationService,
 )
@@ -89,7 +90,9 @@ def test_research_run_events_and_artifacts(app_service) -> None:
     kinds = {item["artifact_type"] for item in artifacts}
     assert "ProcessLearningResult" in kinds
     assert "ModelTrainingResult" in kinds
-    assert "CFAReport" in kinds
+    assert "TargetPhysicsReadiness" in kinds
+    assert "KnowledgeRequirements" in kinds
+    assert "KnowledgeState" in kinds
     stored = app_service.artifact(artifacts[0]["artifact_id"])
     assert "content" in stored
     assert stored["application_run_id"] == run_id
@@ -192,3 +195,93 @@ def test_ndjson_events_after_sequence(app_service) -> None:
     assert len(all_events) > 3
     assert tail[0]["sequence"] > 3
     assert [e["sequence"] for e in tail] == sorted(e["sequence"] for e in tail)
+
+
+def test_knowledge_state_unresolved_without_literature(app_service) -> None:
+    """V0 main chain: no literature -> requirements generated from real
+    diagnostics, all UNSATISFIED, run still completes with Vanilla BO."""
+    summary = app_service.create_application_run(
+        mode="research", task_spec=TASK_SPEC, random_seed=42
+    )
+    result = app_service.get_result(summary["application_run_id"])
+    ks = result["knowledgeState"]
+    assert ks["requirements"], "gap analysis must produce requirements"
+    assert ks["assessment_version"]
+    satisfactions = ks["satisfactions"]
+    assert len(satisfactions) == len(ks["requirements"])
+    for satisfaction in satisfactions:
+        assert satisfaction["assessment_method"] == "DETERMINISTIC_PROVISIONAL"
+        assert satisfaction["status"] in {
+            "SATISFIED",
+            "PARTIALLY_SATISFIED",
+            "SATISFIED_WITH_CONFLICT",
+            "UNSATISFIED",
+        }
+        assert satisfaction["requirement_id"]
+    assert ks["missing_topics"], "no literature => requirements unresolved"
+    # run completes with vanilla BO even with unresolved knowledge
+    assert result["optimization"]["vanilla"]["run_id"]
+    assert result["optimization"]["priorAppliedEvidence"]["assisted_search_prior_applied"] is False
+
+
+def test_gap_requirements_carry_diagnostics_triggers(app_service) -> None:
+    summary = app_service.create_application_run(
+        mode="research", task_spec=TASK_SPEC, random_seed=42
+    )
+    result = app_service.get_result(summary["application_run_id"])
+    requirements = result["knowledgeState"]["requirements"]
+    types = {requirement["type"] for requirement in requirements}
+    assert "parameter_effect" in types
+    assert "reported_optimum" in types
+    for requirement in requirements:
+        assert requirement["trigger_reasons"], "trigger_reasons must reference diagnostics"
+        assert requirement["priority"] in {"high", "medium", "low"}
+
+
+def test_checkpoint_resume_gap_then_knowledge(app_service) -> None:
+    """两段式入口：运行到知识缺口（1-4）→ 检查 Requirement → 续跑知识准备（5-8）。
+    同一 run，已完成阶段不重复执行。"""
+    summary = app_service.create_application_run(
+        mode="research",
+        task_spec=TASK_SPEC,
+        stages=list(Topic2ApplicationService.GAP_STAGES),
+        random_seed=42,
+    )
+    assert summary["status"] == "completed"
+    run = app_service.get_run(summary["application_run_id"])
+    assert set(run["stage_status"]) == set(Topic2ApplicationService.GAP_STAGES)
+    assert run["task_spec"] is not None
+    partial = run["result"]
+    assert partial["knowledgeState"]["requirements"], "gap run must expose requirements"
+    assert partial["optimization"]["vanilla"] is None  # BO 尚未执行
+
+    # 续跑剩余阶段（同一 run_id）
+    resumed = app_service.continue_application_run(
+        summary["application_run_id"],
+        stages=list(Topic2ApplicationService.KNOWLEDGE_STAGES),
+        random_seed=42,
+    )
+    assert resumed["application_run_id"] == summary["application_run_id"]
+    assert resumed["status"] == "completed"
+    full = app_service.get_run(summary["application_run_id"])
+    assert set(full["stage_status"]) == set(ALL_STAGES)
+    assert full["result"]["optimization"]["vanilla"]["run_id"]
+    # 事件序号单调递增（续跑不冲突）
+    events = app_service.events(summary["application_run_id"])
+    sequences = [event["sequence"] for event in events]
+    assert sequences == sorted(sequences)
+    assert len(set(sequences)) == len(sequences)
+
+
+def test_continue_refuses_repeat_stage(app_service) -> None:
+    summary = app_service.create_application_run(
+        mode="research",
+        task_spec=TASK_SPEC,
+        stages=list(Topic2ApplicationService.GAP_STAGES),
+        random_seed=42,
+    )
+    with pytest.raises(ValueError, match="already executed"):
+        app_service.continue_application_run(
+            summary["application_run_id"],
+            stages=["baseline_learning"],
+        )

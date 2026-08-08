@@ -4,6 +4,7 @@
 import { useCallback, useEffect } from 'react'
 
 import { topic2Api } from '../../api/topic2'
+import type { ModelTrainingResult } from '../../api/types'
 import { ErrorBanner, EmptyState } from '../../components/Banners'
 import { DataProfileCard } from '../../components/DataProfileCard'
 import { EvidencePanel } from '../../components/EvidencePanel'
@@ -20,8 +21,11 @@ import { ModelDecisionCard } from './ModelDecisionCard'
 
 export function ModelingWorkspace({
   readonly = false,
+  trainingOverride = null,
 }: {
   readonly?: boolean
+  /** ApplicationRun 的建模结果（processLearning.modelComparison），存在时优先展示 */
+  trainingOverride?: ModelTrainingResult | null
 }) {
   const context = useTaskContextStore((state) => state.context)
   const updateTask = useTaskContextStore((state) => state.update)
@@ -164,10 +168,8 @@ export function ModelingWorkspace({
     return () => setQuickActions([])
   }, [training, setQuickActions])
 
-  const selectedMetrics =
-    training && training.selected_model
-      ? training.validation_metrics[training.selected_model]
-      : null
+  // 应用运行结果优先：完整分析已执行时直接展示正式训练比较
+  const displayedTraining = trainingOverride ?? training
 
   return (
     <div>
@@ -221,13 +223,28 @@ export function ModelingWorkspace({
         )}
       </div>
 
-      {training && (
-        <ModelDecisionCard
-          selectedModel={training.selected_model}
-          metrics={selectedMetrics}
-          cvFolds={selectedMetrics?.cv_folds}
-          cvStrategy={training.cv_strategy}
-        />
+      {displayedTraining && (
+        <>
+          <ModelDecisionCard
+            selectedModel={displayedTraining.selected_model}
+            metrics={
+              displayedTraining.selected_model
+                ? displayedTraining.validation_metrics[displayedTraining.selected_model]
+                : null
+            }
+            cvFolds={
+              displayedTraining.selected_model
+                ? displayedTraining.validation_metrics[displayedTraining.selected_model]?.cv_folds
+                : undefined
+            }
+            cvStrategy={displayedTraining.cv_strategy}
+          />
+          {trainingOverride && (
+            <div className="row" style={{ marginBottom: 8 }}>
+              <span className="badge ok">应用运行正式结果（ApplicationRun）</span>
+            </div>
+          )}
+        </>
       )}
 
       <div className="card">
@@ -279,24 +296,27 @@ export function ModelingWorkspace({
         </div>
       )}
 
-      {training && (
+      {displayedTraining && (
         <div className="card">
           <div className="card-title">
             模型比较
-            <span className="id-chip">{training.run_id}</span>
-            <span className="badge neutral">数据集 {training.dataset_version}</span>
+            <span className="id-chip">{displayedTraining.run_id}</span>
+            <span className="badge neutral">数据集 {displayedTraining.dataset_version}</span>
             {selectionMode === 'manual' && <span className="badge warn">人工覆盖已记录</span>}
           </div>
-          <ModelComparisonTable training={training} onSelect={handleManualSelect} />
+          <ModelComparisonTable
+            training={displayedTraining}
+            onSelect={trainingOverride ? () => undefined : handleManualSelect}
+          />
           {selectionMode === 'system' && selectedModelId && (
             <div style={{ marginTop: 8 }}>
-              <StatusBadge tone="ok">系统推荐模型已应用：{training.selected_model}</StatusBadge>
+              <StatusBadge tone="ok">系统推荐模型已应用：{displayedTraining.selected_model}</StatusBadge>
             </div>
           )}
         </div>
       )}
 
-      {!training && !trainingLoading && !trainingError && (
+      {!displayedTraining && !trainingLoading && !trainingError && (
         <EmptyState message="尚未训练模型。完成后将展示多模型比较表与系统推荐。" />
       )}
     </div>

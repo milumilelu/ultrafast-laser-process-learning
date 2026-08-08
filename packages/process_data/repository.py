@@ -174,6 +174,13 @@ class Topic2Repository:
             }
             if "scope_json" not in model_columns:
                 db.execute("ALTER TABLE models ADD COLUMN scope_json TEXT")
+            run_columns = {
+                row["name"] for row in db.execute("PRAGMA table_info(application_runs)")
+            }
+            if "task_spec_json" not in run_columns:
+                db.execute("ALTER TABLE application_runs ADD COLUMN task_spec_json TEXT")
+            if "stage_results_json" not in run_columns:
+                db.execute("ALTER TABLE application_runs ADD COLUMN stage_results_json TEXT")
             db.execute(
                 "INSERT OR REPLACE INTO metadata(key, value) VALUES('schema_version', ?)",
                 (SCHEMA_VERSION,),
@@ -666,12 +673,15 @@ class Topic2Repository:
             db.execute(
                 """INSERT INTO application_runs
                 (application_run_id, client_request_id, task_context_ref, mode,
-                 workflow_version, status, stage_status_json, result_json)
-                VALUES(?,?,?,?,?,?,?,?)
+                 workflow_version, status, stage_status_json, result_json,
+                 task_spec_json, stage_results_json)
+                VALUES(?,?,?,?,?,?,?,?,?,?)
                 ON CONFLICT(application_run_id) DO UPDATE SET
                     status=excluded.status,
                     stage_status_json=excluded.stage_status_json,
                     result_json=excluded.result_json,
+                    task_spec_json=excluded.task_spec_json,
+                    stage_results_json=excluded.stage_results_json,
                     completed_at=excluded.completed_at""",
                 (
                     payload["application_run_id"],
@@ -682,6 +692,8 @@ class Topic2Repository:
                     payload["status"],
                     json.dumps(payload.get("stage_status") or {}, sort_keys=True),
                     json.dumps(payload.get("result")),
+                    json.dumps(payload.get("task_spec")) if payload.get("task_spec") else None,
+                    json.dumps(payload.get("stage_results") or {}, sort_keys=True),
                 ),
             )
         return payload
@@ -698,6 +710,12 @@ class Topic2Repository:
             item["stage_status"] = json.loads(item.pop("stage_status_json"))
             result = item.pop("result_json")
             item["result"] = json.loads(result) if result else None
+            task_spec = item.pop("task_spec_json")
+            item["task_spec"] = json.loads(task_spec) if task_spec else None
+            stage_results = item.pop("stage_results_json")
+            item["stage_results"] = (
+                json.loads(stage_results) if stage_results else {}
+            )
             return item
 
     def application_run_by_client_request(
@@ -714,6 +732,12 @@ class Topic2Repository:
             item["stage_status"] = json.loads(item.pop("stage_status_json"))
             result = item.pop("result_json")
             item["result"] = json.loads(result) if result else None
+            task_spec = item.pop("task_spec_json")
+            item["task_spec"] = json.loads(task_spec) if task_spec else None
+            stage_results = item.pop("stage_results_json")
+            item["stage_results"] = (
+                json.loads(stage_results) if stage_results else {}
+            )
             return item
 
     def list_application_runs(self, mode: str | None = None) -> list[dict[str, Any]]:
@@ -757,6 +781,15 @@ class Topic2Repository:
                 (application_run_id, after_sequence),
             ).fetchall()
             return [json.loads(row["payload_json"]) for row in rows]
+
+    def last_workflow_event_sequence(self, application_run_id: str) -> int:
+        with self.connection() as db:
+            row = db.execute(
+                "SELECT MAX(sequence) AS seq FROM application_workflow_events "
+                "WHERE application_run_id=?",
+                (application_run_id,),
+            ).fetchone()
+            return int(row["seq"]) if row and row["seq"] is not None else 0
 
     def save_application_artifact(self, payload: dict[str, Any]) -> dict[str, Any]:
         """Store a typed artifact owned by an application run (BE-4)."""

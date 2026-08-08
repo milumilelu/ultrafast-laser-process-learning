@@ -4,9 +4,9 @@
 
 import { useCallback, useEffect, useMemo, useState } from 'react'
 
-import type { Evidence, OptimizationResult } from '../../api/types'
 import { agentApi } from '../../api/agent'
 import { applicationApi } from '../../api/application'
+import type { Evidence, OptimizationComparison as OptimizationComparisonResult, OptimizationResult } from '../../api/types'
 import { topic2Api } from '../../api/topic2'
 import { ErrorBanner, EmptyState } from '../../components/Banners'
 import { OptimizationResultPanel } from '../../components/OptimizationResultPanel'
@@ -40,10 +40,13 @@ function toNumber(value: number | string | null | undefined): number | null {
 export function OptimizationWorkspace({
   readonly = false,
   governedPriorOverride = null,
+  comparisonOverride = null,
 }: {
   readonly?: boolean
   /** 来自 Application Run 的 GovernedPriorArtifact（无则走 honest vanilla fallback） */
   governedPriorOverride?: Record<string, unknown> | null
+  /** ApplicationRun 的优化对照结果（optimization），存在时优先展示 */
+  comparisonOverride?: OptimizationComparisonResult | null
 }) {
   const context = useTaskContextStore((state) => state.context)
   const setActiveRun = usePageContextStore((state) => state.setActiveRun)
@@ -279,7 +282,8 @@ export function OptimizationWorkspace({
     return () => setQuickActions([])
   }, [comparison, optimization, setQuickActions])
 
-  const priorApplied = comparison?.prior_applied_evidence
+  // 应用运行结果优先：完整分析已执行时直接展示正式对照
+  const displayedComparison = comparisonOverride ?? comparison
 
   return (
     <div>
@@ -416,27 +420,32 @@ export function OptimizationWorkspace({
         </div>
       </div>
 
-      {comparison && (
+      {displayedComparison && (
         <>
-          <OptimizationComparison comparison={comparison} />
+          {comparisonOverride && (
+            <div className="row" style={{ marginBottom: 8 }}>
+              <span className="badge ok">应用运行正式结果（ApplicationRun）</span>
+            </div>
+          )}
+          <OptimizationComparison comparison={displayedComparison} />
           <div className="grid grid-2">
-            <PriorInfluencePanel result={comparison.evidence_assisted} />
+            <PriorInfluencePanel result={displayedComparison.evidence_assisted} />
             <EvidenceTracePanel
-              priorAppliedEvidence={priorApplied ?? null}
+              priorAppliedEvidence={displayedComparison.prior_applied_evidence}
               governedPrior={governedPrior}
             />
           </div>
         </>
       )}
 
-      {!comparison && optimization && (
+      {!displayedComparison && optimization && (
         <div className="card">
           <div className="card-title">工艺推荐结果（Vanilla）</div>
           <OptimizationResultPanel result={optimization} />
         </div>
       )}
 
-      {!comparison && !optimization && !comparisonLoading && !optimizationLoading && (
+      {!displayedComparison && !optimization && !comparisonLoading && !optimizationLoading && (
         <EmptyState message="尚未执行优化对照。完成后将并列展示 Vanilla 与 Evidence-assisted 推荐、先验影响与治理追溯。" />
       )}
     </div>

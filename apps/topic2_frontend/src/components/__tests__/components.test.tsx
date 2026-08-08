@@ -3,14 +3,14 @@ import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { MemoryRouter } from 'react-router-dom'
 
-import { TaskContextBar } from '../TaskContextBar'
+import { GlobalContextBar } from '../shell/GlobalContextBar'
 import { AgentProposalCard } from '../AgentProposalCard'
 import { useTaskContextStore } from '../../stores/taskContext'
 import { useScienceStore } from '../../stores/science'
 import { ModelComparisonTable } from '../ModelComparisonTable'
 import type { ModelTrainingResult } from '../../api/types'
 
-describe('TaskContextBar', () => {
+describe('GlobalContextBar', () => {
   beforeEach(() => {
     useTaskContextStore.setState({ context: useTaskContextStore.getState().reset() })
   })
@@ -18,7 +18,7 @@ describe('TaskContextBar', () => {
   it('shows id and version', () => {
     render(
       <MemoryRouter>
-        <TaskContextBar />
+        <GlobalContextBar />
       </MemoryRouter>,
     )
     expect(screen.getByText(/TASK-\d{4}/)).toBeInTheDocument()
@@ -29,10 +29,10 @@ describe('TaskContextBar', () => {
     useTaskContextStore.getState().update({ materialId: 'SiC' })
     render(
       <MemoryRouter>
-        <TaskContextBar />
+        <GlobalContextBar />
       </MemoryRouter>,
     )
-    expect(screen.getByText(/碳化硅/)).toBeInTheDocument()
+    expect(screen.getByText('SiC')).toBeInTheDocument()
   })
 })
 

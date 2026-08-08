@@ -32,6 +32,21 @@ export const applicationApi = {
     })
   },
 
+  /** POST /api/v1/application-runs/{run_id}/continue：同一 ApplicationRun 续跑剩余阶段
+   *  （checkpoint resume，不重复已执行阶段）。 */
+  continueRun(
+    runId: string,
+    payload: { stages?: string[]; random_seed?: number; client_request_id?: string },
+  ): Promise<ApplicationRunSummary> {
+    return request(
+      config.topic2ApiUrl,
+      'POST',
+      `/application-runs/${encodeURIComponent(runId)}/continue`,
+      payload,
+      { timeoutMs: 600_000 },
+    )
+  },
+
   listRuns(mode?: string | null): Promise<{ items: ApplicationRunSummary[] }> {
     const query = mode ? `?mode=${encodeURIComponent(mode)}` : ''
     return request(config.topic2ApiUrl, 'GET', `/application-runs${query}`)

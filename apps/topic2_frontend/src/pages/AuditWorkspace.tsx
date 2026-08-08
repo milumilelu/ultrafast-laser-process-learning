@@ -1,15 +1,62 @@
-/** AuditWorkspace (UI-10): 运行与审计 - Application Run 列表 + Timeline + Artifact
- *  导航 + Replay。所有结果可追溯到 Task / Dataset / Model / Evidence / Prior / BO Run。 */
+/** Scientific Run Inspector（P1 Observability）：/runs 核心开发工具。
+ *
+ *  四个 Tab 全部读取真实持久化数据，前端不硬编码任何执行链：
+ *  - Flow：由 WorkflowEvent 重建的科学执行 DAG（stage → 子操作 → artifact）
+ *  - Events：真实 persisted 事件流（含 trace details）
+ *  - Artifacts：科学状态快照 JSON Inspector
+ *  - State：关键状态快照摘要（TaskState → Requirements → KnowledgeState → Learning → Planning）
+ *
+ *  Developer Mode 开关控制 ID / raw payload / provenance / reason codes 显示。
+ */
 
 import { useCallback, useEffect, useState } from 'react'
 import { useSearchParams } from 'react-router-dom'
 
 import { applicationApi } from '../api/application'
-import type { ApplicationRunSummary, Topic2ApplicationResult } from '../api/types'
+import type { ApplicationRunSummary, WorkflowEvent } from '../api/types'
 import { ErrorBanner, EmptyState } from '../components/Banners'
 import { StatusBadge } from '../components/StatusBadge'
 import { formatTimestamp } from '../lib/format'
-import { RunsPage } from './RunsPage'
+
+interface ArtifactMeta {
+  artifact_id: string
+  artifact_type: string
+  created_at: string
+}
+
+interface ArtifactSnapshot {
+  id: string
+  type: string
+  schema_version: string
+  input_refs: { type: string; id: string }[]
+  content: Record<string, unknown>
+  created_at: string
+}
+
+type InspectorTab = 'flow' | 'events' | 'artifacts' | 'state'
+
+const EVENT_LABELS: Record<string, string> = {
+  STAGE_STARTED: '阶段开始',
+  STAGE_COMPLETED: '阶段完成',
+  TOOL_STARTED: '操作开始',
+  TOOL_COMPLETED: '操作完成',
+  ENTITY_CREATED: '实体创建',
+  ARTIFACT_CREATED: '产物生成',
+  VALIDATION: '校验',
+  WARNING: '警告',
+  ERROR: '错误',
+  RUN_STARTED: '运行开始',
+  RUN_COMPLETED: '运行完成',
+  RUN_FAILED: '运行失败',
+}
+
+const STATE_ARTIFACT_TYPES = [
+  'KnowledgeRequirements',
+  'KnowledgeState',
+  'ProcessLearningResult',
+  'ModelTrainingResult',
+  'GovernedPriorArtifact',
+]
 
 export function AuditWorkspace() {
   const [searchParams, setSearchParams] = useSearchParams()
@@ -17,23 +64,27 @@ export function AuditWorkspace() {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
   const [selected, setSelected] = useState<ApplicationRunSummary | null>(null)
-  const [result, setResult] = useState<Topic2ApplicationResult | null>(null)
-  const [artifacts, setArtifacts] = useState<{ artifact_id: string; artifact_type: string; created_at: string }[]>([])
-  const [replayResult, setReplayResult] = useState<Record<string, unknown> | null>(null)
-  const [selectedArtifact, setSelectedArtifact] = useState<{ artifact_id: string; artifact_type: string; content: Record<string, unknown> } | null>(null)
+  const [events, setEvents] = useState<WorkflowEvent[]>([])
+  const [artifacts, setArtifacts] = useState<ArtifactMeta[]>([])
+  const [snapshots, setSnapshots] = useState<Record<string, ArtifactSnapshot>>({})
+  const [selectedArtifact, setSelectedArtifact] = useState<ArtifactSnapshot | null>(null)
+  const [tab, setTab] = useState<InspectorTab>('flow')
+  const [developerMode, setDeveloperMode] = useState(false)
 
   const openRun = useCallback((runId: string) => {
-    setReplayResult(null)
     setSelectedArtifact(null)
     applicationApi
       .getRun(runId)
-      .then((run) => {
-        setSelected(run)
-        setResult(run.result)
-        return applicationApi.getArtifacts(runId)
-      })
-      .then((items) => setArtifacts(items.items))
+      .then((run) => setSelected(run))
       .catch((err) => setError(err instanceof Error ? err.message : '读取应用运行失败'))
+    applicationApi
+      .getEvents(runId)
+      .then((result) => setEvents(result.items))
+      .catch(() => setEvents([]))
+    applicationApi
+      .getArtifacts(runId)
+      .then((result) => setArtifacts(result.items))
+      .catch(() => setArtifacts([]))
   }, [])
 
   useEffect(() => {
@@ -54,27 +105,46 @@ export function AuditWorkspace() {
     loadRuns()
   }, [loadRuns])
 
-  const replay = useCallback(() => {
-    if (!selected) return
-    setReplayResult(null)
-    applicationApi
-      .replay(selected.application_run_id)
-      .then(setReplayResult)
-      .catch((err) => setError(err instanceof Error ? err.message : 'Replay 失败'))
-  }, [selected])
-
-  const artifactKinds = artifacts.map((item) => item.artifact_type)
-  const audit = result?.audit
+  const inspectArtifact = useCallback(
+    (artifactId: string) => {
+      const cached = snapshots[artifactId]
+      if (cached) {
+        setSelectedArtifact(cached)
+        return
+      }
+      applicationApi
+        .getArtifact(artifactId)
+        .then((payload) => {
+          const snapshot = payload.content as unknown as ArtifactSnapshot
+          setSnapshots((current) => ({ ...current, [artifactId]: snapshot }))
+          setSelectedArtifact(snapshot)
+        })
+        .catch(() => undefined)
+    },
+    [snapshots],
+  )
 
   return (
     <div>
-      <h1>运行与审计</h1>
+      <h1>运行与审计 · Scientific Run Inspector</h1>
       <p className="card-sub">
-        Application Run 完整时间线：Task Context → Dataset → Process Learning → Evidence → CFA →
-        Governed Prior → Vanilla BO → Assisted BO → Recommendation。所有正式结果由后端持久化并可重放。
+        科学运行检查器：Flow / Events / Artifacts / State 全部来自真实持久化数据，
+        可逐级追溯「输入了什么 → 调用了什么 → 产出了什么 → 为什么接受/拒绝」。
       </p>
 
       <ErrorBanner message={error} />
+
+      <div className="row" style={{ marginBottom: 10, alignItems: 'center' }}>
+        <label className="dev-mode-toggle" style={{ display: 'inline-flex', gap: 6, alignItems: 'center' }}>
+          <input
+            type="checkbox"
+            checked={developerMode}
+            onChange={(event) => setDeveloperMode(event.target.checked)}
+          />
+          <b>Developer Mode</b>
+          <span className="muted">（显示 ID / 原始数据 / 来源 / 原因码）</span>
+        </label>
+      </div>
 
       <div className="grid grid-2">
         <div className="card">
@@ -84,14 +154,13 @@ export function AuditWorkspace() {
               <span className="spinner" /> 读取中…
             </div>
           ) : runs.length === 0 ? (
-            <EmptyState message="暂无 Application Run。在工艺智能应用页运行完整分析后自动生成。" />
+            <EmptyState message="暂无 Application Run。运行完整分析后自动生成。" />
           ) : (
             <table className="table">
               <thead>
                 <tr>
                   <th>Run ID</th>
                   <th>模式</th>
-                  <th>Task</th>
                   <th>状态</th>
                   <th>时间</th>
                 </tr>
@@ -108,7 +177,6 @@ export function AuditWorkspace() {
                   >
                     <td className="mono">{run.application_run_id}</td>
                     <td>{run.mode === 'demo' ? '演示' : '研究'}</td>
-                    <td className="mono">{run.task_context_ref}</td>
                     <td>
                       <StatusBadge tone={run.status === 'completed' ? 'ok' : run.status === 'failed' ? 'err' : 'warn'}>
                         {run.status}
@@ -125,117 +193,251 @@ export function AuditWorkspace() {
         {selected && (
           <div className="card">
             <div className="card-title">
-              Run 时间线
-              <span className="id-chip muted">{selected.application_run_id}</span>
-              <button className="btn small" onClick={replay} disabled={selected.mode !== 'demo'}>
-                Replay
-              </button>
+              {selected.application_run_id}
+              <span className="badge neutral">{selected.workflow_version}</span>
+              <span className="badge neutral">{selected.mode}</span>
             </div>
-            {selected.mode !== 'demo' && (
-              <div className="card-sub">Replay 仅对冻结 Demo 场景可用。</div>
-            )}
-            <ul className="detail-list">
-              {[
-                'Task Context',
-                'Dataset',
-                'Process Learning',
-                'Evidence',
-                'CFA',
-                'Governed Prior',
-                'Vanilla BO',
-                'Assisted BO',
-                'Recommendation',
-              ].map((step) => (
-                <li key={step}>
-                  <span className="dl-key">{step}</span>
-                  <span className="dl-value">
-                    {step === 'Recommendation' ? (
-                      <StatusBadge tone={audit ? 'ok' : 'warn'}>
-                        {audit ? '生成' : '—'}
-                      </StatusBadge>
-                    ) : (
-                      <StatusBadge tone="neutral">记录</StatusBadge>
-                    )}
-                  </span>
-                </li>
+            <div className="row" style={{ marginBottom: 6 }}>
+              <StatusBadge tone="neutral">事件 {events.length}</StatusBadge>
+              <StatusBadge tone="neutral">产物 {artifacts.length}</StatusBadge>
+              <StatusBadge tone="neutral">Task {selected.task_context_ref}</StatusBadge>
+            </div>
+            <div className="card-sub">
+              完成时间：{selected.completed_at ? formatTimestamp(selected.completed_at) : '—'}
+            </div>
+            <div className="row">
+              {Object.keys(selected.stage_status ?? {}).map((stage) => (
+                <span className="badge neutral" key={stage}>
+                  {stage}
+                </span>
               ))}
-            </ul>
-            {replayResult && (
-              <div className="warn-banner" style={{ marginTop: 8 }}>
-                Scientific payload identical: {replayResult.scientific_payload_identical ? '✓' : '✗'} · Runtime
-                IDs changed: {replayResult.runtime_ids_changed ? 'expected' : '—'}
-              </div>
-            )}
+            </div>
           </div>
         )}
       </div>
 
-      {selected && result && (
-        <div className="card">
-          <div className="card-title">Artifact 面板</div>
-          <div className="row" style={{ marginBottom: 8 }}>
-            {artifactKinds.map((kind) => (
-              <button
-                key={kind}
-                className="btn small"
-                onClick={() => {
-                  const artifact = artifacts.find((item) => item.artifact_type === kind)
-                  if (artifact) {
-                    applicationApi
-                      .getArtifact(artifact.artifact_id)
-                      .then((payload) =>
-                        setSelectedArtifact({ artifact_id: payload.artifact_id, artifact_type: payload.artifact_type, content: payload.content }),
-                      )
-                      .catch(() => undefined)
-                  }
-                }}
-              >
-                {kind}
+      {selected && (
+        <>
+          <div className="app-tabs" data-testid="inspector-tabs">
+            {(
+              [
+                ['flow', 'Flow 科学数据流'],
+                ['events', 'Events 真实事件'],
+                ['artifacts', 'Artifacts 产物'],
+                ['state', 'State 状态'],
+              ] as [InspectorTab, string][]
+            ).map(([key, label]) => (
+              <button key={key} className={tab === key ? 'active' : ''} onClick={() => setTab(key)}>
+                {label}
               </button>
             ))}
           </div>
-          <ul className="detail-list">
-            <li>
-              <span className="dl-key">evidence_ids</span>
-              <span className="dl-value mono">{audit?.evidenceIds?.join(', ') || '—'}</span>
-            </li>
-            <li>
-              <span className="dl-key">prior_content_hash</span>
-              <span className="dl-value mono">{audit?.priorContentHash ?? '—'}</span>
-            </li>
-            <li>
-              <span className="dl-key">bo_run_ids</span>
-              <span className="dl-value mono">{audit?.boRunIds?.filter(Boolean).join(', ') || '—'}</span>
-            </li>
-            <li>
-              <span className="dl-key">model_version</span>
-              <span className="dl-value mono">{audit?.modelVersion ?? '—'}</span>
-            </li>
-            <li>
-              <span className="dl-key">replayable</span>
-              <span className="dl-value">{audit?.replayable ? '✓（冻结 Demo 场景）' : '—'}</span>
-            </li>
-          </ul>
-          {selectedArtifact && (
-            <div className="card" style={{ marginTop: 8 }}>
-              <div className="card-title">
-                {selectedArtifact.artifact_type}
-                <span className="id-chip muted">{selectedArtifact.artifact_id}</span>
+
+          {tab === 'flow' && <FlowTab events={events} developerMode={developerMode} />}
+          {tab === 'events' && <EventsTab events={events} developerMode={developerMode} />}
+          {tab === 'artifacts' && (
+            <ArtifactsTab
+              artifacts={artifacts}
+              selectedArtifact={selectedArtifact}
+              onInspect={inspectArtifact}
+              developerMode={developerMode}
+            />
+          )}
+          {tab === 'state' && (
+            <StateTab artifacts={artifacts} onInspect={inspectArtifact} developerMode={developerMode} />
+          )}
+        </>
+      )}
+    </div>
+  )
+}
+
+/* ------------------------------------------------------------------ Flow */
+
+function FlowTab({ events, developerMode }: { events: WorkflowEvent[]; developerMode: boolean }) {
+  if (events.length === 0) {
+    return <EmptyState message="无事件数据（该 Run 未记录事件）。" />
+  }
+  // 按 stage 分组：STAGE_STARTED → 子事件 → STAGE_COMPLETED
+  const stages: { stage: string; children: WorkflowEvent[] }[] = []
+  let current: { stage: string; children: WorkflowEvent[] } | null = null
+  for (const event of events) {
+    if (event.type === 'STAGE_STARTED') {
+      current = { stage: event.stage ?? 'application', children: [] }
+      stages.push(current)
+      continue
+    }
+    if (event.type === 'STAGE_COMPLETED') {
+      current = null
+      continue
+    }
+    if (event.type === 'RUN_STARTED' || event.type === 'RUN_COMPLETED' || event.type === 'RUN_FAILED') {
+      continue
+    }
+    if (current) current.children.push(event)
+  }
+
+  return (
+    <div className="flow-tab" data-testid="flow-tab">
+      {stages.map(({ stage, children }) => (
+        <div key={stage} className="flow-stage">
+          <div className="flow-stage-title">
+            <span className="badge info">{stage}</span>
+            <span className="muted">
+              {children.filter((event) => event.type === 'TOOL_STARTED').length} 个操作 ·{' '}
+              {children.filter((event) => event.type === 'ARTIFACT_CREATED').length} 个产物
+            </span>
+          </div>
+          <div className="flow-children">
+            {children.map((event) => (
+              <div key={event.event_id} className="flow-child">
+                <span className={`badge ${toneOf(event.type)}`}>{EVENT_LABELS[event.type] ?? event.type}</span>
+                <span className="flow-summary">{event.summary}</span>
+                {developerMode && (
+                  <div className="flow-details mono muted">
+                    {event.details && Object.keys(event.details).length > 0 && (
+                      <pre className="flow-json">{JSON.stringify(event.details, null, 1)}</pre>
+                    )}
+                    {event.artifactRefs && event.artifactRefs.length > 0 && (
+                      <div>→ {event.artifactRefs.map((ref) => `${ref.type}:${ref.id}`).join(', ')}</div>
+                    )}
+                    {event.entityRefs && event.entityRefs.length > 0 && (
+                      <div>实体 {event.entityRefs.map((ref) => `${ref.type}:${ref.id}`).join(', ')}</div>
+                    )}
+                  </div>
+                )}
               </div>
-              <pre className="artifact-json mono">
-                {JSON.stringify(selectedArtifact.content, null, 2).slice(0, 6000)}
-              </pre>
+            ))}
+          </div>
+        </div>
+      ))}
+    </div>
+  )
+}
+
+function toneOf(type: string): 'ok' | 'warn' | 'err' | 'neutral' | 'info' {
+  if (type === 'TOOL_COMPLETED' || type === 'ARTIFACT_CREATED' || type === 'ENTITY_CREATED') return 'ok'
+  if (type === 'WARNING' || type === 'VALIDATION') return 'warn'
+  if (type === 'ERROR') return 'err'
+  return 'info'
+}
+
+/* ---------------------------------------------------------------- Events */
+
+function EventsTab({ events, developerMode }: { events: WorkflowEvent[]; developerMode: boolean }) {
+  if (events.length === 0) {
+    return <EmptyState message="无事件数据。" />
+  }
+  return (
+    <div className="card" data-testid="events-tab">
+      <div className="card-title">真实执行事件（{events.length}）</div>
+      <table className="table">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>时间</th>
+            <th>类型</th>
+            <th>阶段</th>
+            <th>摘要</th>
+          </tr>
+        </thead>
+        <tbody>
+          {events.map((event) => (
+            <tr key={event.event_id}>
+              <td className="mono">{event.sequence}</td>
+              <td className="mono">{formatTimestamp(event.timestamp).slice(11)}</td>
+              <td>
+                <span className={`badge ${toneOf(event.type)}`}>{EVENT_LABELS[event.type] ?? event.type}</span>
+              </td>
+              <td className="mono">{event.stage ?? '—'}</td>
+              <td>
+                {event.summary}
+                {developerMode && event.details && Object.keys(event.details).length > 0 && (
+                  <details>
+                    <summary className="muted">trace details</summary>
+                    <pre className="artifact-json mono">{JSON.stringify(event.details, null, 2)}</pre>
+                  </details>
+                )}
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  )
+}
+
+/* ------------------------------------------------------------- Artifacts */
+
+function ArtifactsTab({
+  artifacts,
+  selectedArtifact,
+  onInspect,
+  developerMode,
+}: {
+  artifacts: ArtifactMeta[]
+  selectedArtifact: ArtifactSnapshot | null
+  onInspect: (artifactId: string) => void
+  developerMode: boolean
+}) {
+  return (
+    <div className="card" data-testid="artifacts-tab">
+      <div className="card-title">科学产物（Artifacts · {artifacts.length}）</div>
+      <div className="row" style={{ marginBottom: 8 }}>
+        {artifacts.map((artifact) => (
+          <button key={artifact.artifact_id} className="btn small" onClick={() => onInspect(artifact.artifact_id)}>
+            {artifact.artifact_type}
+          </button>
+        ))}
+      </div>
+      {selectedArtifact && (
+        <div>
+          <div className="card-sub">
+            类型 <b>{selectedArtifact.type}</b> · schema {selectedArtifact.schema_version} ·{' '}
+            {developerMode && <span className="mono">{selectedArtifact.id}</span>}
+          </div>
+          {developerMode && selectedArtifact.input_refs.length > 0 && (
+            <div className="muted" style={{ marginBottom: 6 }}>
+              来源（input_refs）：{selectedArtifact.input_refs.map((ref) => `${ref.type}:${ref.id}`).join(', ')}
             </div>
           )}
+          <pre className="artifact-json mono">{JSON.stringify(selectedArtifact.content, null, 2)}</pre>
         </div>
       )}
+    </div>
+  )
+}
 
-      <details style={{ marginTop: 16 }}>
-        <summary className="card-sub" style={{ cursor: 'pointer' }}>
-          科学 Run 记录（Topic2 Backend 持久化）
-        </summary>
-        <RunsPage />
-      </details>
+/* ----------------------------------------------------------------- State */
+
+function StateTab({
+  artifacts,
+  onInspect,
+  developerMode,
+}: {
+  artifacts: ArtifactMeta[]
+  onInspect: (artifactId: string) => void
+  developerMode: boolean
+}) {
+  const stateArtifacts = artifacts.filter((artifact) => STATE_ARTIFACT_TYPES.includes(artifact.artifact_type))
+  if (stateArtifacts.length === 0) {
+    return <EmptyState message="该 Run 暂无状态快照产物。" />
+  }
+  return (
+    <div className="state-tab" data-testid="state-tab">
+      <div className="card-sub">关键状态快照（点击查看原始内容）</div>
+      {stateArtifacts.map((artifact) => (
+        <div key={artifact.artifact_id} className="state-card">
+          <button className="btn small" onClick={() => onInspect(artifact.artifact_id)}>
+            {artifact.artifact_type}
+          </button>
+          {developerMode && <span className="id-chip muted">{artifact.artifact_id}</span>}
+        </div>
+      ))}
+      <div className="card-sub" style={{ marginTop: 12 }}>
+        状态摘要（KnowledgeRequirements / KnowledgeState 等）在 Artifacts Tab 中查看原始 JSON；
+        需求满足 diff（before/after acquisition）将在 Requirement Resolution Loop 落地后展示。
+      </div>
     </div>
   )
 }

@@ -472,6 +472,25 @@ export interface Topic2ApplicationResult {
     targetPhysicsReadiness?: Record<string, unknown> | null
     reports?: Record<string, unknown>[]
   }
+  knowledgeState?: {
+    requirements?: {
+      requirement_id: string
+      type: string
+      question: string
+      required_for?: string
+      priority?: string
+      trigger_reasons?: string[]
+    }[]
+    satisfactions?: {
+      requirement_id: string
+      status: string
+      assessment_method?: string
+      unresolved_reasons?: string[]
+    }[]
+    existing_knowledge?: Record<string, unknown>
+    missing_topics?: string[]
+    assessment_version?: string | null
+  } | null
   optimization: {
     vanilla: BOResult
     evidenceAssisted: BOResult

@@ -5,8 +5,8 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { Link, useNavigate, useSearchParams } from 'react-router-dom'
 
-import { applicationGateway } from '../api/application'
-import type { Topic2ApplicationResult } from '../api/types'
+import { applicationApi, applicationGateway } from '../api/application'
+import type { ModelMetrics, ModelTrainingResult, Topic2ApplicationResult } from '../api/types'
 import { ErrorBanner, EmptyState } from '../components/Banners'
 import { StatusBadge } from '../components/StatusBadge'
 import { IdentificationWorkspace } from '../components/learning/IdentificationWorkspace'
@@ -132,10 +132,26 @@ export function IntelligentProcessApplication() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [workflow.activeRunId])
 
+  const buildTaskSpec = useCallback(() => {
+    const scope = taskContextToScope(context)
+    return {
+      task_context_id: scope.task_context_id,
+      task_context_version: scope.task_context_version,
+      material: scope.material,
+      laser_type: scope.laser_type,
+      equipment_profile_id: scope.equipment_id,
+      geometry_type: scope.geometry_type,
+      objective_metric: scope.target,
+      process_parameters: scope.process_parameters,
+      device_properties: scope.device_properties,
+      random_seed: 42,
+    }
+  }, [context])
+
   const runFullAnalysis = useCallback(() => {
-    let scope
+    let taskSpec
     try {
-      scope = taskContextToScope(context)
+      taskSpec = buildTaskSpec()
     } catch (error) {
       setRunError(error instanceof Error ? error.message : '任务不完整')
       return
@@ -148,18 +164,7 @@ export function IntelligentProcessApplication() {
     applicationGateway
       .runFullApplication({
         mode: softwareMode,
-        task_spec: {
-          task_context_id: scope.task_context_id,
-          task_context_version: scope.task_context_version,
-          material: scope.material,
-          laser_type: scope.laser_type,
-          equipment_profile_id: scope.equipment_id,
-          geometry_type: scope.geometry_type,
-          objective_metric: scope.target,
-          process_parameters: scope.process_parameters,
-          device_properties: scope.device_properties,
-          random_seed: 42,
-        },
+        task_spec: taskSpec,
         random_seed: 42,
         client_request_id: clientRequestId,
       })
@@ -171,7 +176,60 @@ export function IntelligentProcessApplication() {
         setRunning(false)
         setRunError(error instanceof Error ? error.message : '应用运行启动失败')
       })
-  }, [context, softwareMode, workflow, setRunRefs])
+  }, [buildTaskSpec, softwareMode, workflow, setRunRefs])
+
+  /** 两段式入口（checkpoint）：运行到知识缺口（1-4 阶段），检查 Requirement 后由
+   *  「继续准备科学知识」续跑同一 ApplicationRun（5-8 阶段），不重复已执行阶段。 */
+  const runToKnowledgeGap = useCallback(() => {
+    let taskSpec
+    try {
+      taskSpec = buildTaskSpec()
+    } catch (error) {
+      setRunError(error instanceof Error ? error.message : '任务不完整')
+      return
+    }
+    setRunError(null)
+    setApplicationResult(null)
+    setRunning(true)
+    workflow.clear()
+    const clientRequestId = crypto.randomUUID()
+    applicationGateway
+      .runFullApplication({
+        mode: 'research',
+        task_spec: taskSpec,
+        stages: ['prepare_task', 'assess_data', 'baseline_learning', 'analyze_knowledge_gaps'],
+        random_seed: 42,
+        client_request_id: clientRequestId,
+      })
+      .then((summary) => {
+        workflow.start(summary.application_run_id)
+        setRunRefs({ runId: summary.application_run_id, mode: summary.mode })
+      })
+      .catch((error) => {
+        setRunning(false)
+        setRunError(error instanceof Error ? error.message : '运行到知识缺口失败')
+      })
+  }, [buildTaskSpec, workflow, setRunRefs])
+
+  const continueKnowledgePreparation = useCallback(() => {
+    const runId = workflow.activeRunId
+    if (!runId) {
+      setRunError('请先「运行到知识缺口」创建检查点。')
+      return
+    }
+    setRunError(null)
+    setRunning(true)
+    applicationApi
+      .continueRun(runId, {
+        stages: ['prepare_knowledge', 'satisfy_requirements', 'apply_knowledge', 'optimization'],
+        random_seed: 42,
+        client_request_id: crypto.randomUUID(),
+      })
+      .catch((error) => {
+        setRunning(false)
+        setRunError(error instanceof Error ? error.message : '继续准备科学知识失败')
+      })
+  }, [workflow])
 
   const analysisComplete = applicationResult !== null
 
@@ -193,21 +251,41 @@ export function IntelligentProcessApplication() {
         → 下一轮实验最值得做什么（工艺优化）。所有结果可追溯至 Task / Dataset / Model / Evidence / Prior / BO Run。
       </p>
 
-      <div className="row" style={{ marginBottom: 12, alignItems: 'center' }}>
+      <div className="row" style={{ marginBottom: 10, alignItems: 'center' }}>
         <button
           className="btn primary"
           onClick={runFullAnalysis}
           disabled={running}
-          title="一键完整分析：后端按阶段编排（Task Validation → Process Learning → Evidence → CFA → Governed Prior → Vanilla/Assisted BO）"
+          title="一键完整分析：任务 → 数据评估 → 基线学习 → 知识缺口 → 知识准备 → 满足评估 → 知识应用 → BO"
         >
           {running ? (
             <>
-              <span className="spinner" /> 完整分析运行中…
+              <span className="spinner" /> 运行中…
             </>
           ) : (
             '运行完整分析'
           )}
         </button>
+        {softwareMode === 'research' && (
+          <>
+            <button
+              className="btn"
+              onClick={runToKnowledgeGap}
+              disabled={running}
+              title="检查点：先运行到知识缺口（任务/数据/基线/需求），检查 KnowledgeRequirement 后再继续"
+            >
+              运行到知识缺口
+            </button>
+            <button
+              className="btn"
+              onClick={continueKnowledgePreparation}
+              disabled={running || !workflow.activeRunId}
+              title="继续同一 ApplicationRun：知识准备 → 满足评估 → 知识应用 → BO（不重复已执行阶段）"
+            >
+              继续准备科学知识
+            </button>
+          </>
+        )}
         {softwareMode === 'demo' && <StatusBadge tone="warn">展示模式（冻结场景）</StatusBadge>}
         <span className="spacer" />
         {analysisComplete && (
@@ -215,9 +293,19 @@ export function IntelligentProcessApplication() {
             应用结果：{applicationResult.runId}
           </StatusBadge>
         )}
+        {workflow.activeRunId && !analysisComplete && (
+          <StatusBadge tone="warn">检查点：{workflow.activeRunId}</StatusBadge>
+        )}
       </div>
 
       <ErrorBanner message={runError} />
+
+      {softwareMode === 'research' && (
+        <ExecutionStatusTree
+          events={workflow.events}
+          requirements={applicationResult?.knowledgeState?.requirements ?? []}
+        />
+      )}
 
       {statusBar}
 
@@ -239,14 +327,31 @@ export function IntelligentProcessApplication() {
             <SummaryTab result={applicationResult} onNavigate={syncTab} />
           )}
           {selectedTab === 'identification' && (
-            <IdentificationWorkspace readonly={softwareMode === 'demo'} />
+            <IdentificationWorkspace
+              readonly={softwareMode === 'demo'}
+              rankingOverride={applicationResult?.processLearning.controllableRanking ?? null}
+            />
           )}
-          {selectedTab === 'modeling' && <ModelingWorkspace readonly={softwareMode === 'demo'} />}
+          {selectedTab === 'modeling' && (
+            <ModelingWorkspace
+              readonly={softwareMode === 'demo'}
+              trainingOverride={modelingTrainingOverride(applicationResult)}
+            />
+          )}
           {selectedTab === 'optimization' && (
             <OptimizationWorkspace
               readonly={softwareMode === 'demo'}
               governedPriorOverride={
                 (applicationResult?.scientificBasis.governedPrior as Record<string, unknown> | null) ?? null
+              }
+              comparisonOverride={
+                applicationResult
+                  ? {
+                      vanilla: applicationResult.optimization.vanilla as never,
+                      evidence_assisted: applicationResult.optimization.evidenceAssisted as never,
+                      prior_applied_evidence: applicationResult.optimization.priorAppliedEvidence,
+                    }
+                  : null
               }
             />
           )}
@@ -257,6 +362,106 @@ export function IntelligentProcessApplication() {
       </div>
     </div>
   )
+}
+
+/** 执行状态树：从真实 WorkflowEvent 渲染 8 阶段 checkpoint（✓ 完成 / ● 进行中 / ○ 未开始），
+ *  prepare_knowledge 子操作（已有知识检查/文献检索等）与 KnowledgeRequirement 逐条展开。 */
+function ExecutionStatusTree({
+  events,
+  requirements,
+}: {
+  events: import('../api/types').WorkflowEvent[]
+  requirements: { requirement_id: string; question: string }[]
+}) {
+  const stageState = (stage: string): 'done' | 'active' | 'pending' => {
+    const completed = events.some((event) => event.type === 'STAGE_COMPLETED' && event.stage === stage)
+    const started = events.some((event) => event.type === 'STAGE_STARTED' && event.stage === stage)
+    if (completed) return 'done'
+    if (started) return 'active'
+    return 'pending'
+  }
+  const prepareSubs = events.filter(
+    (event) => event.stage === 'prepare_knowledge' && (event.type === 'TOOL_STARTED' || event.type === 'TOOL_COMPLETED'),
+  )
+  const prepareActive = stageState('prepare_knowledge')
+
+  const stageRows: { key: string; label: string }[] = [
+    { key: 'prepare_task', label: '任务准备' },
+    { key: 'assess_data', label: '数据评估' },
+    { key: 'baseline_learning', label: '基线学习' },
+    { key: 'analyze_knowledge_gaps', label: '知识缺口分析' },
+    { key: 'prepare_knowledge', label: '科学知识准备' },
+    { key: 'satisfy_requirements', label: '知识满足度评估' },
+    { key: 'apply_knowledge', label: '知识应用' },
+    { key: 'optimization', label: '工艺优化' },
+  ]
+
+  return (
+    <div className="execution-tree" data-testid="execution-tree">
+      {stageRows.map((row) => {
+        const state = stageState(row.key)
+        return (
+          <div key={row.key} className={`et-row et-${state}`}>
+            <span className="et-mark">{state === 'done' ? '✓' : state === 'active' ? '●' : '○'}</span>
+            <span className="et-label">{row.label}</span>
+            {row.key === 'analyze_knowledge_gaps' && state === 'done' && requirements.length > 0 && (
+              <span className="muted">发现 {requirements.length} 个 Knowledge Requirements</span>
+            )}
+            {row.key === 'prepare_knowledge' && prepareSubs.length > 0 && (
+              <div className="et-children">
+                {prepareSubs.map((event) => (
+                  <div key={event.event_id} className="et-child">
+                    <span className="et-mark">{event.type === 'TOOL_COMPLETED' ? '✓' : '●'}</span>
+                    {event.summary}
+                  </div>
+                ))}
+                {prepareActive === 'active' && (
+                  <div className="et-child muted">Evidence forming...</div>
+                )}
+              </div>
+            )}
+            {row.key === 'analyze_knowledge_gaps' && state === 'done' && requirements.length > 0 && (
+              <div className="et-children">
+                {requirements.map((requirement) => (
+                  <div key={requirement.requirement_id} className="et-child">
+                    <span className="et-mark">├</span>
+                    {requirement.requirement_id} {requirement.question}
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        )
+      })}
+    </div>
+  )
+}
+
+/** 从 ApplicationRun 结果构造建模 Tab 可消费的 training 视图（模型比较 + 选中模型）。 */
+function modelingTrainingOverride(
+  result: Topic2ApplicationResult | null,
+): ModelTrainingResult | null {
+  if (!result?.processLearning?.modelComparison) return null
+  const comparison = result.processLearning.modelComparison
+  if (typeof comparison !== 'object' || Array.isArray(comparison)) return null
+  const metrics = comparison as Record<string, ModelMetrics>
+  const selected = result.processLearning.selectedModel ?? Object.keys(metrics)[0] ?? null
+  if (!selected || !metrics[selected]) return null
+  return {
+    run_id: result.processLearning.trainingRunId ?? `app-run:${result.runId}`,
+    model_id: null,
+    model_version: '',
+    dataset_version: '',
+    selected_model: selected,
+    validation_metrics: metrics,
+    comparison: {
+      baseline: { model: selected, ...metrics[selected] },
+      optimized: { model: selected, ...metrics[selected] },
+      comparison_basis: 'Group-CV (application run)',
+      improved: false,
+    },
+    cv_strategy: 'GroupKFold(parameter_combination_id)',
+  }
 }
 
 function SummaryTab({
@@ -443,6 +648,12 @@ function SummaryTab({
           <StatusBadge tone="neutral">
             Prediction {formatNumber((assisted?.prediction as { mean?: number })?.mean)} ±{' '}
             {formatNumber((assisted?.prediction as { std?: number })?.std)}
+            {typeof (assisted?.prediction as { mean?: number })?.mean === 'number' &&
+              (assisted?.prediction as { mean?: number }).mean! < 0 && (
+                <span className="muted" style={{ fontSize: 11 }}>
+                  （高斯过程外推预测，可能低于物理下限）
+                </span>
+              )}
           </StatusBadge>
         </div>
         <button className="btn small" onClick={() => onNavigate('optimization')}>

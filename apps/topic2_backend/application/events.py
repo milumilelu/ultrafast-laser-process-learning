@@ -48,14 +48,19 @@ FORMAL_EVENT_TYPES = frozenset(
 
 
 class WorkflowEventBus:
-    """Sequence-ordered, persisted workflow event bus for one application run."""
+    """Sequence-ordered, persisted workflow event bus for one application run.
+
+    Sequences are monotonic across run continuation (checkpoint resume):
+    the bus starts from the last persisted sequence so resumed stages never
+    collide with the UNIQUE(application_run_id, sequence) constraint.
+    """
 
     def __init__(self, run_id: str, repository: Any, task_context_ref: str):
         self.run_id = run_id
         self.repository = repository
         self.task_context_ref = task_context_ref
         self._pending: list[dict[str, Any]] = []
-        self._sequence = 0
+        self._sequence = self.repository.last_workflow_event_sequence(run_id)
 
     def emit(
         self,

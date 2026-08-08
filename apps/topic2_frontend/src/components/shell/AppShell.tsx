@@ -55,6 +55,9 @@ export function AppShell() {
       <header className="app-header">
         <span className="brand">超快激光加工工艺智能规划系统</span>
         {config.acceptanceMode && <StatusBadge tone="info">验收模式</StatusBadge>}
+        <StatusBadge tone="neutral">
+          Project: {context.taskContextId}:v{context.version}
+        </StatusBadge>
         <span className="spacer" />
         <ModeSwitcher />
         <StatusBadge tone="neutral">

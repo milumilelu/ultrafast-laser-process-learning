@@ -44,6 +44,16 @@ class ApplicationRunRequest(BaseModel):
     client_request_id: str | None = Field(default=None, min_length=1)
 
 
+class ApplicationContinueRequest(BaseModel):
+    """Checkpoint resume contract：续跑同一 ApplicationRun 的剩余阶段。"""
+
+    model_config = ConfigDict(extra="forbid")
+
+    stages: list[str] | None = None
+    random_seed: int | None = None
+    client_request_id: str | None = Field(default=None, min_length=1)
+
+
 class OptimizationCompareRequest(BaseModel):
     """Vanilla / Evidence-assisted comparison contract (BE-5)."""
 
@@ -350,6 +360,19 @@ def create_app(settings: Settings | None = None) -> FastAPI:
     def replay_application_run(run_id: str):
         try:
             return application_service.replay(run_id)
+        except ValueError as exc:
+            raise HTTPException(status_code=422, detail=str(exc)) from exc
+
+    @app.post("/api/v1/application-runs/{run_id}/continue")
+    def continue_application_run(run_id: str, payload: ApplicationContinueRequest):
+        """Checkpoint resume：同一 ApplicationRun 续跑剩余阶段（不重复已执行阶段）。"""
+        try:
+            return application_service.continue_application_run(
+                run_id,
+                stages=payload.stages,
+                random_seed=payload.random_seed,
+                client_request_id=payload.client_request_id,
+            )
         except ValueError as exc:
             raise HTTPException(status_code=422, detail=str(exc)) from exc
 

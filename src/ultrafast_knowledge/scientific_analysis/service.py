@@ -191,18 +191,6 @@ class ScientificKnowledgeService:
         report["critic"] = critic_result
         emit("criticizing", {"current": len(selected), "total": len(selected)})
         return {**reduced.model_dump(mode="json"), "pipeline_report": report}
-        reduced = self.synthesizer.synthesize(analyses, pack.task_scope, pack.corpus_pack_id)
-        report["reduce"] = {
-            "candidates": len(reduced.candidates),
-            "known": len(reduced.known),
-            "unknown": len(reduced.unknown),
-            "conflicts": len(reduced.conflicts),
-        }
-
-        # SELECTIVE CRITIC：只审核高风险候选，按需取证（文档第七、八节）
-        critic_result = self.critic.criticize(reduced, pack)
-        report["critic"] = critic_result
-        return {**reduced.model_dump(mode="json"), "pipeline_report": report}
 
     # ------------------------------------------------------------- helpers
     def _targeted_retrieval(

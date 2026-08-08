@@ -186,37 +186,3 @@ def _canonical(key: str, value: str) -> str:
     # 本地规范化（不依赖 ontology 包，e2p 保持 leaf）：只判定"明确不等"；
     # 别名级等价（CFRP == 碳纤维复合板）由下游 applicability 层完成。
     return re.sub(r"[\s\-_/]+", " ", value.strip().lower())
-
-
-def compile_from_evidence(
-    task: dict[str, Any], claims: list[Any]
-) -> tuple[EvidenceBundle, GovernedPriorArtifact]:
-    """EvidenceClaim[] → EvidenceBundle → GovernedPriorArtifact（完整治理链）。"""
-    from ultrafast_e2p.application.evidence_compiler import compile_evidence
-
-    bundle = compile_evidence(task, claims)
-    prior_spec = compile_from_bundle(bundle)
-    approval_ids = [
-        str(claim.claim_id) for claim in bundle.claims
-        if getattr(claim, "approval_status", None) == "approved"
-    ]
-    evidence_ids = [
-        str(claim.claim_id) for claim in bundle.claims if getattr(claim, "claim_id", None)
-    ]
-    scope = {
-        key: task.get(key)
-        for key in ("material", "laser_type", "process_type", "geometry_type", "target")
-        if task.get(key)
-    }
-    content_hash = compute_prior_content_hash(
-        prior_spec, approval_ids, scope, PRIOR_SPEC_VERSION
-    )
-    artifact = GovernedPriorArtifact(
-        prior_spec=prior_spec,
-        approval_ids=tuple(dict.fromkeys(approval_ids)),
-        evidence_ids=tuple(dict.fromkeys(evidence_ids)),
-        compiler_version=PRIOR_SPEC_VERSION,
-        scope=scope,
-        content_hash=content_hash,
-    )
-    return bundle, artifact

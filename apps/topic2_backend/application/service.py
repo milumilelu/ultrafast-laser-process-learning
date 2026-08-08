@@ -27,7 +27,6 @@ import pandas as pd
 
 from apps.topic2_backend.application.events import (
     ARTIFACT_CREATED,
-    ENTITY_CREATED,
     ERROR,
     RUN_COMPLETED,
     RUN_FAILED,
@@ -35,11 +34,11 @@ from apps.topic2_backend.application.events import (
     STAGE_COMPLETED,
     STAGE_STARTED,
     TOOL_COMPLETED,
-    TOOL_STARTED,
     VALIDATION,
     WARNING,
     WorkflowEventBus,
 )
+from apps.topic2_backend.application.trace import ScientificTrace
 from apps.topic2_backend.service import Topic2Service
 from packages.e2p.application.traceability import new_run_id, timestamp
 from packages.process_contracts.schemas import (
@@ -75,25 +74,39 @@ PILOT_PAPER_IDS = (
     "Flat-top picosecond laser texturing of CFRP.pdf",
 )
 
+# V0 task-driven main chain (DEMO0.1 §2/§8): 8 top-level stages.
 ALL_STAGES = (
-    "task_validation",
-    "dataset_audit",
-    "process_learning",
-    "scientific_evidence",
-    "cfa",
-    "governed_prior",
+    "prepare_task",
+    "assess_data",
+    "baseline_learning",
+    "analyze_knowledge_gaps",
+    "prepare_knowledge",
+    "satisfy_requirements",
+    "apply_knowledge",
     "optimization",
 )
 
 STAGE_LABELS = {
-    "task_validation": "任务校验",
-    "dataset_audit": "数据集审计",
-    "process_learning": "过程学习（辨识 + 建模）",
-    "scientific_evidence": "科学证据",
-    "cfa": "CFA 适用性审计",
-    "governed_prior": "受治理先验",
+    "prepare_task": "任务准备",
+    "assess_data": "数据与物理就绪评估",
+    "baseline_learning": "基线过程学习（RAW）",
+    "analyze_knowledge_gaps": "知识缺口分析",
+    "prepare_knowledge": "知识准备（文献/证据）",
+    "satisfy_requirements": "需求满足评估",
+    "apply_knowledge": "知识应用（特征/先验）",
     "optimization": "Vanilla / Assisted BO",
 }
+
+# sub-events emitted inside prepare_knowledge (not top-level stages)
+PREPARE_KNOWLEDGE_SUB_EVENTS = (
+    "existing_knowledge_check",
+    "literature_retrieval",
+    "document_parse",
+    "candidate_discovery",
+    "condition_reconstruction",
+    "evidence_projection",
+    "applicability",
+)
 
 SLICE_STAGE_LABELS = (
     "process_learning",
@@ -212,6 +225,8 @@ class Topic2ApplicationService:
                 "workflow_version": self.workflow_version,
                 "status": "running",
                 "stage_status": {},
+                "task_spec": task_spec,
+                "stage_results": {},
             }
         )
         bus.emit(
@@ -223,8 +238,9 @@ class Topic2ApplicationService:
         try:
             if mode == "demo":
                 summary = self._run_demo_slice(task_spec, bus, effective_seed)
+                stage_results: dict[str, Any] = {}
             else:
-                summary = self._run_research(
+                summary, stage_results = self._run_research(
                     task_spec, scope, requested_stages, bus, effective_seed
                 )
             self.repository.save_application_run(
@@ -244,6 +260,8 @@ class Topic2ApplicationService:
                         for stage in SLICE_STAGE_LABELS
                     },
                     "result": summary,
+                    "task_spec": task_spec,
+                    "stage_results": stage_results,
                     "completed_at": timestamp(),
                 }
             )
@@ -266,10 +284,142 @@ class Topic2ApplicationService:
                     "workflow_version": self.workflow_version,
                     "status": "failed",
                     "stage_status": {},
+                    "task_spec": task_spec,
+                    "stage_results": {},
                     "completed_at": timestamp(),
                 }
             )
             bus.emit(RUN_FAILED, f"应用运行失败：{exc}", stage="application")
+            raise
+
+    # ------------------------------------------------------ checkpoint resume
+
+    # 两段式入口：先运行到知识缺口（1-4），检查 Requirement 后再续跑知识准备（5-8）。
+    GAP_STAGES = ("prepare_task", "assess_data", "baseline_learning", "analyze_knowledge_gaps")
+    KNOWLEDGE_STAGES = (
+        "prepare_knowledge",
+        "satisfy_requirements",
+        "apply_knowledge",
+        "optimization",
+    )
+
+    def continue_application_run(
+        self,
+        run_id: str,
+        *,
+        stages: list[str] | None = None,
+        random_seed: int | None = None,
+        client_request_id: str | None = None,
+    ) -> dict[str, Any]:
+        """Resume the same ApplicationRun from a checkpoint with the remaining stages.
+
+        Never re-executes completed stages (same run = one execution per stage).
+        """
+        run = self.repository.application_run(run_id)
+        if run is None:
+            raise ValueError(f"application run not found: {run_id}")
+        if run.get("mode") != "research":
+            raise ValueError("continue is only available for research runs")
+        if run.get("status") == "running":
+            raise ValueError("application run is still running")
+        task_spec = run.get("task_spec")
+        if not task_spec:
+            raise ValueError("application run has no stored task_spec (cannot resume)")
+        completed = set((run.get("stage_status") or {}).keys())
+        requested = (
+            list(stages)
+            if stages
+            else [stage for stage in ALL_STAGES if stage not in completed]
+        )
+        unknown = set(requested).difference(ALL_STAGES)
+        if unknown:
+            raise ValueError(f"unknown stages: {sorted(unknown)}")
+        overlap = completed.intersection(requested)
+        if overlap:
+            raise ValueError(f"stages already executed, refusing to re-run: {sorted(overlap)}")
+        if not requested:
+            return self._run_summary(run)
+
+        scope = self._scope(task_spec)
+        effective_seed = (
+            random_seed if random_seed is not None else self.settings.random_seed
+        )
+        bus = WorkflowEventBus(run_id, self.repository, run["task_context_ref"])
+        merged_status = {
+            **dict(run.get("stage_status") or {}),
+            **{stage: {"status": "running"} for stage in requested},
+        }
+        self.repository.save_application_run(
+            {
+                "application_run_id": run_id,
+                "client_request_id": client_request_id,
+                "task_context_ref": run["task_context_ref"],
+                "mode": "research",
+                "workflow_version": self.workflow_version,
+                "status": "running",
+                "stage_status": merged_status,
+                "task_spec": task_spec,
+                "stage_results": run.get("stage_results") or {},
+            }
+        )
+        bus.emit(
+            RUN_STARTED,
+            f"应用运行续跑开始（{len(requested)} 个阶段）",
+            stage="application",
+            details={"resumed_stages": requested},
+        )
+        try:
+            summary, stage_results = self._run_research(
+                task_spec,
+                scope,
+                requested,
+                bus,
+                effective_seed,
+                existing_result=run.get("stage_results") or {},
+            )
+            final_status = {
+                **dict(run.get("stage_status") or {}),
+                **{stage: {"status": "completed"} for stage in requested},
+            }
+            self.repository.save_application_run(
+                {
+                    "application_run_id": run_id,
+                    "client_request_id": client_request_id,
+                    "task_context_ref": run["task_context_ref"],
+                    "mode": "research",
+                    "workflow_version": self.workflow_version,
+                    "status": "completed",
+                    "stage_status": final_status,
+                    "result": summary,
+                    "task_spec": task_spec,
+                    "stage_results": stage_results,
+                    "completed_at": timestamp(),
+                }
+            )
+            bus.emit(RUN_COMPLETED, "应用运行完成", stage="application")
+            return self._run_summary(self.repository.application_run(run_id) or {})
+        except Exception as exc:  # noqa: BLE001 - surfaced as run state
+            bus.emit(
+                ERROR,
+                f"应用运行续跑失败：{exc}",
+                stage="application",
+                details={"traceback": traceback.format_exc()[-2000:]},
+            )
+            self.repository.save_application_run(
+                {
+                    "application_run_id": run_id,
+                    "client_request_id": client_request_id,
+                    "task_context_ref": run["task_context_ref"],
+                    "mode": "research",
+                    "workflow_version": self.workflow_version,
+                    "status": "failed",
+                    "stage_status": merged_status,
+                    "task_spec": task_spec,
+                    "stage_results": run.get("stage_results") or {},
+                    "completed_at": timestamp(),
+                }
+            )
+            bus.emit(RUN_FAILED, f"应用运行续跑失败：{exc}", stage="application")
             raise
 
     def _run_research(
@@ -279,8 +429,10 @@ class Topic2ApplicationService:
         stages: list[str],
         bus: WorkflowEventBus,
         random_seed: int,
-    ) -> dict[str, Any]:
-        result: dict[str, Any] = {}
+        existing_result: dict[str, Any] | None = None,
+    ) -> tuple[dict[str, Any], dict[str, Any]]:
+        """Execute stages over an (optional) existing result; return (summary, stage_results)."""
+        result: dict[str, Any] = dict(existing_result or {})
         for stage in stages:
             bus.emit(STAGE_STARTED, STAGE_LABELS[stage], stage=stage)
             handler = getattr(self, f"_stage_{stage}")
@@ -292,7 +444,8 @@ class Topic2ApplicationService:
                 stage=stage,
                 details=stage_result["meta"],
             )
-        return self._research_summary(result, scope, task_spec, random_seed, bus.run_id)
+        summary = self._research_summary(result, scope, task_spec, random_seed, bus.run_id)
+        return summary, result
 
     def _demo_task_spec(self, random_seed: int) -> dict[str, Any]:
         spec = dict(DEMO_SCENARIO_01)
@@ -443,9 +596,10 @@ class Topic2ApplicationService:
 
     # ---------------------------------------------------------- research stages
 
-    def _stage_task_validation(
+    def _stage_prepare_task(
         self, task_spec: dict[str, Any], scope: TaskScope, bus: WorkflowEventBus, random_seed: int
     ) -> dict[str, Any]:
+        """Stage 1: canonical task + scope capability."""
         capability = self.topic2.scope_capability(
             material=scope.material,
             laser_type=scope.laser_type,
@@ -460,15 +614,16 @@ class Topic2ApplicationService:
         }
         bus.emit(
             VALIDATION,
-            f"任务校验：{capability['n_samples']} 样本 / {capability['n_unique_designs']} 独立设计",
-            stage="task_validation",
+            f"任务准备：{capability['n_samples']} 样本 / {capability['n_unique_designs']} 独立设计",
+            stage="prepare_task",
             details=meta,
         )
         return {"meta": meta, "content": capability}
 
-    def _stage_dataset_audit(
+    def _stage_assess_data(
         self, task_spec: dict[str, Any], scope: TaskScope, bus: WorkflowEventBus, random_seed: int
     ) -> dict[str, Any]:
+        """Stage 2: DataState + TargetPhysicsReadiness (real backend report)."""
         rows = self.topic2._rows_for_scope(scope)
         profile = build_data_profile(rows)
         summary = {
@@ -479,19 +634,83 @@ class Topic2ApplicationService:
             ),
             "dataset_hash": (self.repository.latest_dataset() or {}).get("dataset_hash"),
         }
-        artifact_id = self._persist_artifact(bus.run_id, "DatasetAudit", summary)
-        bus.emit(
-            ARTIFACT_CREATED,
-            f"数据集审计完成（{artifact_id}）",
-            stage="dataset_audit",
-            artifact_refs=[{"type": "DatasetAudit", "id": artifact_id}],
+        trace = ScientificTrace(bus, "assess_data")
+        dataset_artifact = self._persist_artifact(
+            bus.run_id,
+            "DataProfile",
+            summary,
+            input_refs=[{"type": "TaskScope", "id": scope.task_context_id or "task"}],
         )
-        return {"meta": {"artifact_id": artifact_id}, "content": summary}
+        trace.artifact_created(
+            "DataProfile",
+            dataset_artifact,
+            name=f"数据状态快照（{dataset_artifact}）",
+            counts={"n_samples": summary["n_samples"]},
+        )
+        readiness = self._target_readiness(rows, scope)
+        coordinates = self._readiness_coordinates(readiness)
+        cfa = {
+            "version": "uncalibrated-cfa-v0.1",
+            "calibration_status": "NOT_YET_CALIBRATED",
+            "target_physics_readiness": readiness,
+            "coordinates": coordinates,
+            "facet_summary": self._facet_summary(scope, coordinates),
+            "warnings": ["未校准 CFA 仅作审计；source 侧文献状态在 prepare_knowledge 阶段重建"],
+        }
+        readiness_artifact = self._persist_artifact(
+            bus.run_id,
+            "TargetPhysicsReadiness",
+            cfa,
+            input_refs=[{"type": "DataProfile", "id": dataset_artifact}],
+        )
+        trace.artifact_created(
+            "TargetPhysicsReadiness",
+            readiness_artifact,
+            name=f"物理就绪评估完成（{readiness_artifact}）",
+            counts={
+                "available": sum(
+                    1 for c in coordinates if str(c.get("status")) == "AVAILABLE"
+                ),
+                "blocked": sum(
+                    1 for c in coordinates if str(c.get("status")) == "BLOCKED"
+                ),
+            },
+        )
+        return {
+            "meta": {
+                "artifact_id": dataset_artifact,
+                "readiness_artifact_id": readiness_artifact,
+            },
+            "content": {"dataset": summary, "cfa": cfa},
+        }
 
-    def _stage_process_learning(
+    @staticmethod
+    def _facet_summary(scope: TaskScope, coordinates: list[dict[str, Any]]) -> dict[str, str]:
+        any_ready = any(
+            str(c.get("status")) in {"AVAILABLE", "UNVERIFIED"} for c in coordinates
+        )
+        return {
+            "Material": "KNOWN" if scope.material else "UNKNOWN",
+            "Task": "PARTIAL" if scope.geometry_type and scope.target else "UNKNOWN",
+            "InteractionState": "PARTIAL" if any_ready else "UNKNOWN",
+            "Reconstructibility": "UNKNOWN",
+            "Reachability": "UNKNOWN",
+        }
+
+    def _stage_baseline_learning(
         self, task_spec: dict[str, Any], scope: TaskScope, bus: WorkflowEventBus, random_seed: int
     ) -> dict[str, Any]:
-        bus.emit(TOOL_STARTED, "参数辨识开始", stage="process_learning")
+        """Stage 3: baseline RAW process learning (identification + modeling).
+
+        V0 baseline = RAW only (DEMO0.1 §P0-4); physics-backed views are a
+        later phase and are never silently injected.
+        """
+        trace = ScientificTrace(bus, "baseline_learning")
+        trace.operation_started(
+            "baseline-identification",
+            "参数辨识",
+            input_refs=[{"type": "TaskScope", "id": scope.task_context_id or "task"}],
+        )
         identification = self.topic2.parameter_identification(
             ParameterIdentificationRequest(
                 scope=scope,
@@ -499,22 +718,62 @@ class Topic2ApplicationService:
                 random_seed=random_seed,
             )
         )
-        bus.emit(
-            TOOL_COMPLETED,
-            f"参数辨识完成（{identification['run_id']}）",
-            stage="process_learning",
+        # 归一化辨识排名：后端 results 为扁平列表（parameter/importance/rank），
+        # 归一化为前端 controllable_ranking / mechanism_ranking 契约
+        raw_results = identification.get("results") or []
+        controllable = [
+            {
+                "feature": item["parameter"],
+                "importance": item.get("importance"),
+                "effect_direction": item.get("effect_direction"),
+                "rank": item.get("rank"),
+            }
+            for item in raw_results
+            if isinstance(item, dict) and item.get("parameter")
+        ]
+        identification["controllable_ranking"] = controllable
+        identification["mechanism_ranking"] = []
+        identification_artifact = self._persist_artifact(
+            bus.run_id,
+            "ProcessLearningResult",
+            identification,
+            input_refs=[{"type": "TaskScope", "id": scope.task_context_id or "task"}],
         )
-        self._persist_artifact(bus.run_id, "ProcessLearningResult", identification)
-        bus.emit(TOOL_STARTED, "模型训练与比较开始", stage="process_learning")
+        trace.operation_completed(
+            "baseline-identification",
+            f"参数辨识完成（{identification['run_id']}）",
+            output_refs=[
+                {"type": "ProcessLearningResult", "id": identification_artifact}
+            ],
+            counts={
+                "parameters": len(controllable),
+                "methods": len(identification.get("methods") or []),
+            },
+        )
+        trace.operation_started(
+            "baseline-training",
+            "模型训练与比较",
+            input_refs=[
+                {"type": "ProcessLearningResult", "id": identification_artifact}
+            ],
+        )
         training = self.topic2.train_model(
             ModelTrainRequest(scope=scope, random_seed=random_seed), persist=True
         )
-        bus.emit(
-            TOOL_COMPLETED,
-            f"模型训练完成（{training['run_id']}）",
-            stage="process_learning",
+        training_artifact = self._persist_artifact(
+            bus.run_id,
+            "ModelTrainingResult",
+            training,
+            input_refs=[{"type": "ProcessLearningResult", "id": identification_artifact}],
         )
-        self._persist_artifact(bus.run_id, "ModelTrainingResult", training)
+        metrics = training.get("validation_metrics") or {}
+        trace.operation_completed(
+            "baseline-training",
+            f"模型训练完成（{training['run_id']}）",
+            output_refs=[{"type": "ModelTrainingResult", "id": training_artifact}],
+            counts={"models": len(metrics)},
+            reason_codes=[f"selected={training.get('selected_model')}"],
+        )
         content = {
             "identification": identification,
             "modeling": training,
@@ -529,28 +788,364 @@ class Topic2ApplicationService:
             "content": content,
         }
 
-    def _stage_scientific_evidence(
+    def _stage_analyze_knowledge_gaps(
         self, task_spec: dict[str, Any], scope: TaskScope, bus: WorkflowEventBus, random_seed: int
     ) -> dict[str, Any]:
+        """Stage 4: deterministic diagnostics -> KnowledgeRequirement[].
+
+        Inputs are real diagnostics (readiness / baseline metrics /
+        identification / existing evidence); the LLM (when reachable) is a
+        later provisional refinement, never the source of truth.
+        """
+        trace = ScientificTrace(bus, "analyze_knowledge_gaps")
+        trace.operation_started(
+            "gap-diagnostics",
+            "知识缺口分析（确定性诊断）",
+            input_refs=[{"type": "TaskScope", "id": scope.task_context_id or "task"}],
+        )
+        requirements = self._knowledge_requirements(scope, bus)
+        diagnostics = self._knowledge_diagnostics(scope)
+        trace.validation(
+            f"知识缺口分析：{len(requirements)} 条需求（{len(diagnostics['missing_inputs'])} 项物理输入缺失）",
+            counts={
+                "requirements": len(requirements),
+                "missing_inputs": len(diagnostics["missing_inputs"]),
+                "blocked_coordinates": len(diagnostics["blocked_coordinates"]),
+            },
+        )
+        artifact_id = self._persist_artifact(
+            bus.run_id,
+            "KnowledgeRequirements",
+            {"requirements": requirements, "diagnostics": diagnostics},
+            input_refs=[{"type": "TargetPhysicsReadiness", "id": "assess_data"}],
+        )
+        trace.operation_completed(
+            "gap-diagnostics",
+            f"知识需求清单生成（{artifact_id}）",
+            output_refs=[{"type": "KnowledgeRequirements", "id": artifact_id}],
+            counts={"requirements": len(requirements)},
+        )
+        return {
+            "meta": {"artifact_id": artifact_id, "requirement_count": len(requirements)},
+            "content": {"requirements": requirements, "diagnostics": diagnostics},
+        }
+
+    def _knowledge_diagnostics(self, scope: TaskScope) -> dict[str, Any]:
+        """Deterministic diagnostics consumed by gap analysis (P0-5)."""
+        rows = self.topic2._rows_for_scope(scope)
+        readiness = self._target_readiness(rows, scope)
+        missing_inputs = sorted(
+            set(readiness.get("blocking_dependencies") or [])
+        )
+        coordinates = self._readiness_coordinates(readiness)
+        blocked = [
+            c["coordinate"]
+            for c in coordinates
+            if str(c.get("status")) == "BLOCKED"
+        ]
+        profile = build_data_profile(rows)
+        return {
+            "n_samples": profile.n_samples,
+            "n_unique_designs": profile.n_unique_designs,
+            "missing_inputs": missing_inputs,
+            "blocked_coordinates": blocked,
+            "readiness_status": readiness.get("status"),
+        }
+
+    def _knowledge_requirements(
+        self, scope: TaskScope, bus: WorkflowEventBus
+    ) -> list[dict[str, Any]]:
+        """Rules over real diagnostics -> KnowledgeRequirement[].
+
+        V0 is deliberately simple: every requirement carries trigger_reasons
+        that point at the diagnostic evidence behind it.
+        """
+        diagnostics = self._knowledge_diagnostics(scope)
+        requirements: list[dict[str, Any]] = []
+        req_id = 0
+
+        def add(
+            type_: str,
+            question: str,
+            required_for: str,
+            priority: str,
+            reasons: list[str],
+        ) -> None:
+            nonlocal req_id
+            req_id += 1
+            requirements.append(
+                {
+                    "requirement_id": f"KR-{req_id:02d}",
+                    "type": type_,
+                    "question": question,
+                    "required_for": required_for,
+                    "priority": priority,
+                    "trigger_reasons": reasons,
+                }
+            )
+
+        missing = diagnostics["missing_inputs"]
+        if missing:
+            add(
+                "physics_dependency",
+                f"缺失物理输入（{', '.join(missing)}）对哪些加工特征的影响最大？",
+                "learning",
+                "high",
+                [f"missing physics inputs: {', '.join(missing)}"],
+            )
+        if diagnostics["blocked_coordinates"]:
+            add(
+                "threshold",
+                "当前材料在该工艺窗口的烧蚀阈值/损伤阈值是多少？",
+                "both",
+                "high",
+                [f"blocked coordinates: {', '.join(diagnostics['blocked_coordinates'])}"],
+            )
+        if diagnostics["n_unique_designs"] < 10:
+            add(
+                "data_quality",
+                "当前实验设计数量较少，哪些参数区间最值得补充实验？",
+                "planning",
+                "medium",
+                [f"n_unique_designs={diagnostics['n_unique_designs']}"],
+            )
+        add(
+            "parameter_effect",
+            f"各可控参数对 {scope.target} 的效应方向与量级（超出当前数据范围）？",
+            "learning",
+            "medium",
+            ["baseline identification covers data range only"],
+        )
+        add(
+            "reported_optimum",
+            f"文献报道的 {scope.target} 最优工艺窗口在哪里？",
+            "planning",
+            "medium",
+            ["BO planning benefits from promising regions"],
+        )
+        add(
+            "process_mechanism",
+            "主导加工机理（热/烧蚀/非线性吸收）对结果有何影响？",
+            "both",
+            "low",
+            ["mechanism knowledge supports feature hypotheses"],
+        )
+        return requirements
+
+    def _stage_prepare_knowledge(
+        self, task_spec: dict[str, Any], scope: TaskScope, bus: WorkflowEventBus, random_seed: int
+    ) -> dict[str, Any]:
+        """Stage 5: knowledge preparation with traced sub-operations.
+
+        V0: existing knowledge check (evidence table) + literature retrieval
+        (agent candidates, graceful). Document parsing / candidate discovery /
+        condition reconstruction land in later phases and emit honest
+        'not executed' warnings instead of pretending.
+        """
+        trace = ScientificTrace(bus, "prepare_knowledge")
+        # sub-operation 1: existing knowledge check
+        trace.operation_started(
+            "prepare-existing-check",
+            "已有知识检查",
+            input_refs=[{"type": "TaskScope", "id": scope.task_context_id or "task"}],
+        )
         evidence = self._evidence_for_scope(scope)
+        existing = {
+            "evidence_count": len(evidence),
+            "governed_evidence_count": 0,
+            "candidate_count": 0,
+            "paper_count": 0,
+            "topics": sorted(
+                {
+                    str(item.claim_type)
+                    for item in evidence
+                    if item.claim_type
+                }
+            ),
+        }
+        trace.operation_completed(
+            "prepare-existing-check",
+            f"已有知识：{len(evidence)} 条证据",
+            counts={"evidence": len(evidence), "topics": len(existing["topics"])},
+            output_refs=[],
+        )
+        # sub-operation 2: literature retrieval (agent candidates, graceful)
+        trace.operation_started(
+            "prepare-literature-retrieval",
+            "文献检索（Agent 候选）",
+            input_refs=[{"type": "TaskScope", "id": scope.task_context_id or "task"}],
+        )
+        retrieved_count = len(evidence)
+        trace.operation_completed(
+            "prepare-literature-retrieval",
+            f"文献候选：{retrieved_count} 条",
+            counts={"retrieved": retrieved_count},
+            reason_codes=(
+                ["agent_candidates"]
+                if retrieved_count
+                else ["no_agent_or_no_candidates"]
+            ),
+        )
+        for sub in ("document_parse", "candidate_discovery", "condition_reconstruction"):
+            trace.warning(f"{sub} 暂未执行（后续阶段接入 canonical 文献链）")
         bundle = self.topic2.compile_evidence(
             EvidenceCompileRequest(scope=scope, evidence=evidence)
         )
         for item in bundle.get("candidates", []):
-            bus.emit(
-                ENTITY_CREATED,
-                f"证据 {item.get('evidence_id')} 已进入证据篮",
-                stage="scientific_evidence",
-                entity_refs=[{"type": "Evidence", "id": item.get("evidence_id")}],
+            trace.entity_created(
+                "Evidence", str(item.get("evidence_id")), "证据进入证据篮"
             )
-        artifact_id = self._persist_artifact(bus.run_id, "EvidenceCompileResult", bundle)
+        artifact_id = self._persist_artifact(
+            bus.run_id,
+            "EvidenceCompileResult",
+            bundle,
+            input_refs=[{"type": "TaskScope", "id": scope.task_context_id or "task"}],
+        )
+        accepted_count = len(bundle.get("accepted") or [])
+        rejected_count = len(bundle.get("rejected") or [])
+        trace.artifact_created(
+            "EvidenceCompileResult",
+            artifact_id,
+            name=f"证据投影与适用性完成（{artifact_id}）",
+            input_refs=[{"type": "TaskScope", "id": scope.task_context_id or "task"}],
+            counts={
+                "candidates": len(bundle.get("candidates") or []),
+                "accepted": accepted_count,
+                "rejected": rejected_count,
+            },
+        )
         return {
             "meta": {
                 "artifact_id": artifact_id,
-                "evidence_count": len(bundle.get("accepted", [])),
+                "evidence_count": accepted_count,
             },
-            "content": {"bundle": bundle, "evidence_count": len(evidence)},
+            "content": {
+                "bundle": bundle,
+                "evidence_count": len(evidence),
+                "existing_knowledge": existing,
+            },
         }
+
+    def _stage_satisfy_requirements(
+        self, task_spec: dict[str, Any], scope: TaskScope, bus: WorkflowEventBus, random_seed: int
+    ) -> dict[str, Any]:
+        """Stage 6: requirement satisfaction -> KnowledgeState.
+
+        V0 uses DETERMINISTIC_PROVISIONAL: a requirement is SATISFIED only when
+        governed evidence exists, PARTIALLY_SATISFIED when accepted evidence
+        covers the type, otherwise UNSATISFIED. The workflow never blocks on
+        unresolved knowledge.
+        """
+        requirements = self._latest_requirements(bus)
+        evidence = self._evidence_for_scope(scope)
+        bundle = self.topic2.compile_evidence(
+            EvidenceCompileRequest(scope=scope, evidence=evidence)
+        )
+        accepted = bundle.get("accepted") or []
+        accepted_types = {str(item.get("claim_type")) for item in accepted}
+        accepted_ids = {str(item.get("evidence_id")) for item in accepted}
+        governed_evidence_ids: set[str] = set()
+        prior = self._latest_governed_prior(bus)
+        if prior:
+            governed_evidence_ids = set(prior.get("evidence_ids") or [])
+
+        satisfactions = []
+        for requirement in requirements:
+            req_type = requirement["type"]
+            basis: list[str] = []
+            reasons: list[str] = []
+            status = "UNSATISFIED"
+            if governed_evidence_ids:
+                status = "SATISFIED"
+                basis = sorted(governed_evidence_ids)
+            elif accepted_ids:
+                status = "PARTIALLY_SATISFIED"
+                basis = sorted(accepted_ids)
+                reasons.append("证据已审核但尚未进入受治理先验")
+            else:
+                reasons.append("无已审核证据覆盖该需求")
+            satisfactions.append(
+                {
+                    "requirement_id": requirement["requirement_id"],
+                    "status": status,
+                    "assessment_method": "DETERMINISTIC_PROVISIONAL",
+                    "assessment_version": "satisfaction-v0.1",
+                    "basis_refs": basis,
+                    "unresolved_reasons": reasons,
+                }
+            )
+
+        missing_topics = [
+            requirement["requirement_id"]
+            for requirement, satisfaction in zip(requirements, satisfactions)
+            if satisfaction["status"] == "UNSATISFIED"
+        ]
+        knowledge_state = {
+            "requirements": requirements,
+            "satisfactions": satisfactions,
+            "existing_knowledge": {
+                "evidence_count": len(evidence),
+                "governed_evidence_count": len(governed_evidence_ids),
+                "candidate_count": 0,
+                "paper_count": 0,
+                "topics": sorted(accepted_types),
+            },
+            "missing_topics": missing_topics,
+            "assessment_version": "knowledge-state-v0.1",
+        }
+        artifact_id = self._persist_artifact(
+            bus.run_id,
+            "KnowledgeState",
+            knowledge_state,
+            input_refs=[
+                {"type": "KnowledgeRequirements", "id": "analyze_knowledge_gaps"},
+                {"type": "EvidenceCompileResult", "id": "prepare_knowledge"},
+            ],
+        )
+        trace = ScientificTrace(bus, "satisfy_requirements")
+        satisfied = sum(1 for s in satisfactions if s["status"] == "SATISFIED")
+        partial = sum(1 for s in satisfactions if s["status"] == "PARTIALLY_SATISFIED")
+        unresolved = len(missing_topics)
+        trace.validation(
+            f"需求满足评估：{satisfied} 满足 / {partial} 部分 / {unresolved} 未满足",
+            counts={
+                "satisfied": satisfied,
+                "partial": partial,
+                "unresolved": unresolved,
+                "total": len(satisfactions),
+            },
+        )
+        trace.artifact_created(
+            "KnowledgeState",
+            artifact_id,
+            name=f"知识状态生成（{artifact_id}）",
+            counts={
+                "satisfied": satisfied,
+                "partial": partial,
+                "unresolved": unresolved,
+            },
+        )
+        return {
+            "meta": {
+                "artifact_id": artifact_id,
+                "satisfied": satisfied,
+                "partial": partial,
+                "unresolved": unresolved,
+            },
+            "content": {"knowledge_state": knowledge_state, "satisfactions": satisfactions},
+        }
+
+    def _latest_requirements(self, bus: WorkflowEventBus) -> list[dict[str, Any]]:
+        artifacts = self.repository.list_application_artifacts(bus.run_id)
+        for artifact in reversed(artifacts):
+            if artifact["artifact_type"] == "KnowledgeRequirements":
+                stored = self.repository.application_artifact(artifact["artifact_id"])
+                if stored:
+                    snapshot = stored["content"] or {}
+                    return list(
+                        (snapshot.get("content") or {}).get("requirements") or []
+                    )
+        return []
 
     def _evidence_for_scope(self, scope: TaskScope) -> list[Evidence]:
         items: list[Evidence] = []
@@ -598,64 +1193,6 @@ class Topic2ApplicationService:
             except Exception:
                 pass
         return items
-
-    def _stage_cfa(
-        self, task_spec: dict[str, Any], scope: TaskScope, bus: WorkflowEventBus, random_seed: int
-    ) -> dict[str, Any]:
-        report = self._cfa_report(scope)
-        artifact_id = self._persist_artifact(bus.run_id, "CFAReport", report)
-        bus.emit(
-            ARTIFACT_CREATED,
-            "CFA 审计报告生成（NOT_YET_CALIBRATED）",
-            stage="cfa",
-            artifact_refs=[{"type": "CFAReport", "id": artifact_id}],
-        )
-        return {
-            "meta": {
-                "artifact_id": artifact_id,
-                "calibration_status": "NOT_YET_CALIBRATED",
-            },
-            "content": report,
-        }
-
-    def _cfa_report(self, scope: TaskScope) -> dict[str, Any]:
-        """Uncalibrated CFA audit: real target readiness, honest facets.
-
-        Facets are KNOWN/PARTIAL/UNKNOWN/MISMATCH only - never probabilities.
-        Without ingested source literature states, evidence facets stay UNKNOWN
-        and a warning is recorded (unknown is not mismatch).
-        """
-        rows = self.topic2._rows_for_scope(scope)
-        readiness = self._target_readiness(rows, scope)
-        warnings: list[str] = []
-        coordinates = self._readiness_coordinates(readiness)
-        any_ready = any(
-            str(c.get("status")) in {"AVAILABLE", "UNVERIFIED"} for c in coordinates
-        )
-        facet_summary = {
-            "Material": "KNOWN" if scope.material else "UNKNOWN",
-            "Task": (
-                "PARTIAL" if scope.geometry_type and scope.target else "UNKNOWN"
-            ),
-            "InteractionState": "PARTIAL" if any_ready else "UNKNOWN",
-            "Reconstructibility": "UNKNOWN",
-            "Reachability": "UNKNOWN",
-        }
-        if not coordinates:
-            warnings.append(
-                "目标侧 canonical 坐标不可用（依赖设备光斑/功率等输入），InteractionState 保持 UNKNOWN（未知≠不匹配）"
-            )
-        warnings.append(
-            "source evidence 未完成文献侧 canonical state 重建；未校准 CFA 仅作审计，不改变 prior 权重"
-        )
-        return {
-            "version": "uncalibrated-cfa-v0.1",
-            "calibration_status": "NOT_YET_CALIBRATED",
-            "target_physics_readiness": readiness,
-            "coordinates": coordinates,
-            "facet_summary": facet_summary,
-            "warnings": warnings,
-        }
 
     @staticmethod
     def _readiness_coordinates(readiness: dict[str, Any]) -> list[dict[str, Any]]:
@@ -778,12 +1315,27 @@ class Topic2ApplicationService:
             return float(diameter[0])
         return None
 
-    def _stage_governed_prior(
+    def _stage_apply_knowledge(
         self, task_spec: dict[str, Any], scope: TaskScope, bus: WorkflowEventBus, random_seed: int
     ) -> dict[str, Any]:
+        """Stage 7: apply knowledge - governed soft prior (fails closed).
+
+        V0 applies only governed knowledge: parameter-effect evidence that
+        passed governance becomes a GovernedPriorArtifact. Experimental
+        conditions never auto-become priors (P0-3).
+        """
         evidence = self._evidence_for_scope(scope)
         prior_artifact = None
         warnings: list[str] = []
+        trace = ScientificTrace(bus, "apply_knowledge")
+        trace.operation_started(
+            "apply-governed-prior",
+            "受治理先验编译",
+            input_refs=[
+                {"type": "TaskScope", "id": scope.task_context_id or "task"},
+                {"type": "EvidenceCompileResult", "id": "prepare_knowledge"},
+            ],
+        )
         if evidence:
             rows = self.topic2._rows_for_scope(scope)
             profile = build_data_profile(rows)
@@ -805,7 +1357,27 @@ class Topic2ApplicationService:
                 "无可用 Evidence；governed prior 不可签发，assisted BO 将如实显示 prior_applied=false"
             )
         if prior_artifact:
-            self._persist_artifact(bus.run_id, "GovernedPriorArtifact", prior_artifact)
+            prior_artifact_id = self._persist_artifact(
+                bus.run_id,
+                "GovernedPriorArtifact",
+                prior_artifact,
+                input_refs=[{"type": "EvidenceCompileResult", "id": "prepare_knowledge"}],
+            )
+            trace.operation_completed(
+                "apply-governed-prior",
+                f"受治理先验签发（{prior_artifact_id}）",
+                output_refs=[{"type": "GovernedPriorArtifact", "id": prior_artifact_id}],
+                counts={"evidence_ids": len(prior_artifact.get("evidence_ids") or [])},
+            )
+        else:
+            for warning in warnings:
+                trace.warning(warning)
+            trace.operation_completed(
+                "apply-governed-prior",
+                "受治理先验未签发（fails closed）",
+                counts={"evidence": len(evidence)},
+                reason_codes=["no_governed_prior"],
+            )
         return {
             "meta": {
                 "artifact_id": (
@@ -851,7 +1423,9 @@ class Topic2ApplicationService:
         for artifact in reversed(artifacts):
             if artifact["artifact_type"] == "GovernedPriorArtifact":
                 stored = self.repository.application_artifact(artifact["artifact_id"])
-                return stored["content"] if stored else None
+                if stored:
+                    snapshot = stored["content"] or {}
+                    return snapshot.get("content") or None
         return None
 
     # ----------------------------------------------------- bounds & BO (BE-5)
@@ -1009,15 +1583,27 @@ class Topic2ApplicationService:
         random_seed: int,
         run_id: str,
     ) -> dict[str, Any]:
-        learning = result.get("process_learning") or {}
+        learning = result.get("baseline_learning") or {}
         modeling = learning.get("modeling") or {}
         identification = learning.get("identification") or {}
         bo = result.get("optimization") or {}
-        prior = result.get("governed_prior") or {}
-        cfa = result.get("cfa") or {}
-        evidence = result.get("scientific_evidence") or {}
-        bundle = evidence.get("bundle") or {}
+        prior = result.get("apply_knowledge") or {}
+        assess = result.get("assess_data") or {}
+        cfa = assess.get("cfa") or {}
+        prepare = result.get("prepare_knowledge") or {}
+        bundle = prepare.get("bundle") or {}
+        gap = result.get("analyze_knowledge_gaps") or {}
+        satisfy = result.get("satisfy_requirements") or {}
+        knowledge_state = satisfy.get("knowledge_state") or {}
         prior_artifact = prior.get("governed_prior_artifact")
+        # checkpoint 支持：仅运行到知识缺口时 knowledgeState 尚无 satisfy 产物，
+        # requirements 直接从 gap 阶段回退（satisfactions 留空）
+        requirements = (
+            knowledge_state.get("requirements")
+            or gap.get("requirements")
+            or []
+        )
+        satisfactions = knowledge_state.get("satisfactions") or []
         return {
             "runId": run_id,
             "workflowVersion": self.workflow_version,
@@ -1028,7 +1614,7 @@ class Topic2ApplicationService:
                 "equipment": scope.equipment_id,
                 "target": scope.target,
                 "randomSeed": random_seed,
-                "sampleCount": (result.get("dataset_audit") or {}).get("n_samples"),
+                "sampleCount": (assess.get("dataset") or {}).get("n_samples"),
             },
             "processLearning": {
                 "selectedFeatureView": "RAW",
@@ -1050,6 +1636,13 @@ class Topic2ApplicationService:
                 "governedEvidenceCount": len(
                     (prior_artifact or {}).get("evidence_ids") or []
                 ),
+            },
+            "knowledgeState": {
+                "requirements": list(requirements),
+                "satisfactions": list(satisfactions),
+                "existing_knowledge": knowledge_state.get("existing_knowledge") or {},
+                "missing_topics": list(knowledge_state.get("missing_topics") or []),
+                "assessment_version": knowledge_state.get("assessment_version"),
             },
             "cfa": {
                 "version": cfa.get("version"),
@@ -1289,8 +1882,16 @@ class Topic2ApplicationService:
         }
 
     def _persist_artifact(
-        self, run_id: str, artifact_type: str, content: dict[str, Any]
+        self,
+        run_id: str,
+        artifact_type: str,
+        content: dict[str, Any],
+        *,
+        input_refs: list[dict[str, str]] | None = None,
+        schema_version: str = "v1",
     ) -> str:
+        """Artifact = 科学状态快照（P1 Observability）：
+        {id, type, schema_version, input_refs, content, created_at}."""
         artifact_id = (
             f"{artifact_type}-"
             f"{canonical_hash({'run': run_id, 'type': artifact_type, 'content': content})[:16]}"
@@ -1300,7 +1901,14 @@ class Topic2ApplicationService:
                 "artifact_id": artifact_id,
                 "application_run_id": run_id,
                 "artifact_type": artifact_type,
-                "content": content,
+                "content": {
+                    "id": artifact_id,
+                    "type": artifact_type,
+                    "schema_version": schema_version,
+                    "input_refs": input_refs or [],
+                    "content": content,
+                    "created_at": timestamp(),
+                },
             }
         )
         return artifact_id

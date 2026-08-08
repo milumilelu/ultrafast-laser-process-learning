@@ -17,7 +17,6 @@ import { usePageContextStore } from '../../stores/pageContext'
 import { useTaskContextStore } from '../../stores/taskContext'
 import { AgentProposalCard } from '../AgentProposalCard'
 import { LlmConfigModal } from '../LlmConfigModal'
-import { ScientificAnalysisProgress } from '../ScientificAnalysisProgress'
 import { StatusBadge } from '../StatusBadge'
 
 const DEGRADED_REPLY_MARKERS = [
@@ -282,8 +281,6 @@ export function ChatTab() {
           </span>
         </div>
       )}
-
-      <ScientificAnalysisProgress />
 
       <div className="agent-messages">
         {messages.length === 0 && (

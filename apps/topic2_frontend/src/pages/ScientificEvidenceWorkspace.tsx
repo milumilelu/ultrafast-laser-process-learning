@@ -2,11 +2,9 @@
  *  论文 | Evidence 生命周期 | 适用性 / CFA。CFA 只做审计（UNCALIBRATED），
  *  Unknown 从不渲染为 Mismatch，界面永不出现概率字段。 */
 
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 
-import { agentApi } from '../api/agent'
 import { applicationApi } from '../api/application'
-import { topic2Api } from '../api/topic2'
 import type { Evidence, Topic2ApplicationResult } from '../api/types'
 import { ErrorBanner } from '../components/Banners'
 import { StatusBadge } from '../components/StatusBadge'
@@ -19,16 +17,13 @@ import {
 } from '../components/evidence/CFAMatrix'
 import { EvidenceLifecycle } from '../components/evidence/EvidenceLifecycle'
 import { PaperNavigator, summarizePapers } from '../components/evidence/PaperNavigator'
-import { taskContextToScope } from '../lib/scope'
 import { useApplicationStore } from '../stores/application'
 import { useScienceStore } from '../stores/science'
-import { useTaskContextStore } from '../stores/taskContext'
 
 export function ScientificEvidenceWorkspace() {
   const {
     ragEvidence,
     ragEvidenceMeta,
-    ragEvidenceLoading,
     ragEvidenceError,
     evidence,
     setRagEvidence,
@@ -43,43 +38,77 @@ export function ScientificEvidenceWorkspace() {
   const [cfaMeta, setCfaMeta] = useState<{ calibrationStatus: string; warnings: string[] } | null>(null)
   const [governedPriorEvidenceIds, setGovernedPriorEvidenceIds] = useState<string[]>([])
 
-  /** 检索 + 编译当前 scope 的文献证据与适用性（复用正式 API）。 */
-  const loadEvidence = useCallback(() => {
-    let scope
-    try {
-      scope = taskContextToScope(useTaskContextStore.getState().context)
-    } catch (error) {
-      setRagEvidence([], null, error instanceof Error ? error.message : '任务不完整')
-      return
+  /** 只读 ApplicationRun 的 EvidenceCompileResult artifact（prepare_knowledge 产物）。
+   *  页面不再直接调用 /e2p/evidence-candidates——科学链以 ApplicationRun 为唯一执行源。 */
+  useEffect(() => {
+    let cancelled = false
+    if (!activeApplicationRunId) {
+      setRagEvidence([], null)
+      setEvidence(null)
+      return () => {
+        cancelled = true
+      }
     }
     setRagEvidence([], null, null, true)
-    agentApi
-      .evidenceCandidates({
-        task_scope: {
-          material: scope.material,
-          laser_type: scope.laser_type,
-          geometry_type: scope.geometry_type,
-          equipment_id: scope.equipment_id,
-          target: scope.target,
-        },
-        top_k: 50,
+    applicationApi
+      .getArtifacts(activeApplicationRunId)
+      .then((items) => {
+        if (cancelled) return
+        const artifact = items.items.find(
+          (item) => item.artifact_type === 'EvidenceCompileResult',
+        )
+        if (!artifact) {
+          setRagEvidence([], null)
+          setEvidence(null)
+          return
+        }
+        return applicationApi.getArtifact(artifact.artifact_id)
       })
-      .then((result) => {
-        const items = result.evidence as unknown as Evidence[]
-        setRagEvidence(items, {
-          retrievedHits: result.retrieved_hits,
-          reviewedHits: result.reviewed_hits,
-          evidenceStatus: result.evidence_status,
+      .then((payload) => {
+        if (cancelled) return
+        if (!payload) return
+        // artifact 为科学状态快照：{id, type, schema_version, input_refs, content, created_at}
+        const snapshot = payload.content as {
+          content?: {
+            candidates?: Evidence[]
+            accepted?: Evidence[]
+            rejected?: { evidence_id: string; reason: string }[]
+            applicability_results?: {
+              evidence_id: string
+              material_match: boolean | null
+              laser_type_match: boolean | null
+              geometry_match: boolean | null
+              equipment_match: boolean | null
+              target_match: boolean | null
+              transfer_level: 'strong' | 'medium' | 'weak' | 'none'
+            }[]
+            version?: string
+          }
+        }
+        const content = snapshot.content ?? {}
+        setRagEvidence(content.candidates ?? [], {
+          retrievedHits: (content.candidates ?? []).length,
+          reviewedHits: (content.accepted ?? []).length,
+          evidenceStatus: 'application_run',
         })
-        return topic2Api.compileEvidence(scope, items).catch(() => null)
+        setEvidence({
+          version: content.version ?? 'application-run',
+          candidates: content.candidates ?? [],
+          accepted: content.accepted ?? [],
+          rejected: content.rejected ?? [],
+          applicability_results: content.applicability_results ?? [],
+        })
       })
-      .then((compiled) => {
-        if (compiled) setEvidence(compiled)
+      .catch(() => {
+        if (!cancelled) {
+          setRagEvidence([], null)
+          setEvidence(null)
+        }
       })
-      .catch((error) =>
-        setRagEvidence([], null, error instanceof Error ? error.message : '证据检索失败'),
-      )
-  }, [setRagEvidence, setEvidence])
+    return () => {
+      cancelled = true
+    }
+  }, [activeApplicationRunId, setRagEvidence, setEvidence])
 
   const papers = useMemo(
     () => summarizePapers(ragEvidence, new Set(evidence?.accepted.map((item) => item.evidence_id) ?? [])),
@@ -137,19 +166,13 @@ export function ScientificEvidenceWorkspace() {
       </p>
 
       <div className="row" style={{ marginBottom: 12 }}>
-        <button className="btn primary" onClick={loadEvidence} disabled={ragEvidenceLoading}>
-          {ragEvidenceLoading ? (
-            <>
-              <span className="spinner" /> 检索中…
-            </>
-          ) : (
-            '检索当前任务证据'
-          )}
-        </button>
         {ragEvidenceMeta && (
           <StatusBadge tone={ragEvidence.length > 0 ? 'ok' : 'warn'}>
-            候选 {ragEvidence.length} 条（检索 {ragEvidenceMeta.retrievedHits} / 来源可用 {ragEvidenceMeta.reviewedHits}）
+            证据候选 {ragEvidence.length} 条（已审核 {ragEvidenceMeta.reviewedHits}）
           </StatusBadge>
+        )}
+        {!activeApplicationRunId && (
+          <StatusBadge tone="neutral">运行完整分析后展示 ApplicationRun 的证据产物</StatusBadge>
         )}
       </div>
 
@@ -181,13 +204,15 @@ export function ScientificEvidenceWorkspace() {
                 governedPriorEvidenceIds={governedPriorEvidenceIds}
               />
             ) : (
-              <div className="empty-state">无证据。请先检索当前任务证据。</div>
+              <div className="empty-state">
+                无证据。请先在工艺智能应用页运行完整分析（科学证据由 ApplicationRun 主链生成）。
+              </div>
             )}
           </div>
           <div className="card">
             <div className="card-title">证据列表（{paperEvidence.length}）</div>
             {paperEvidence.length === 0 ? (
-              <div className="empty-state">无证据。</div>
+              <div className="empty-state">无证据。运行完整分析后自动生成（ApplicationRun 产物）。</div>
             ) : (
               <table className="table">
                 <thead>

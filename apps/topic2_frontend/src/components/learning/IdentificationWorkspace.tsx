@@ -64,8 +64,11 @@ function physicsReadinessFromBuild(
 
 export function IdentificationWorkspace({
   readonly = false,
+  rankingOverride = null,
 }: {
   readonly?: boolean
+  /** ApplicationRun 的辨识结果（processLearning.controllableRanking），存在时优先展示 */
+  rankingOverride?: ParameterImportance[] | null
 }) {
   const context = useTaskContextStore((state) => state.context)
   const setQuickActions = usePageContextStore((state) => state.setQuickActions)
@@ -77,6 +80,11 @@ export function IdentificationWorkspace({
   const [v2Loading, setV2Loading] = useState(false)
   const [v2Error, setV2Error] = useState<string | null>(null)
   const [profileSpot, setProfileSpot] = useState<{ spot_diameter_um: number | null; spot_definition: string | null } | null>(null)
+
+  // 应用运行结果优先：完整分析已执行时直接展示正式辨识排名
+  const displayedRanking =
+    (rankingOverride && rankingOverride.length > 0 ? rankingOverride : null) ??
+    (v2Result?.controllable_ranking?.length ? v2Result.controllable_ranking : null)
 
   // 设备档案：只读取光学属性（光斑）。热扩散系数/烧蚀阈值是材料参数，从 Task Context 读取。
   useEffect(() => {
@@ -273,6 +281,48 @@ export function IdentificationWorkspace({
 
       <ErrorBanner message={v2Error} />
 
+      {rankingOverride && rankingOverride.length > 0 && (
+        <div className="card">
+          <div className="card-title">
+            应用运行辨识结果（ApplicationRun）
+            <span className="badge ok">正式结果</span>
+          </div>
+          <div className="grid grid-2">
+            <ParameterImportanceChart
+              items={rankingOverride}
+              title="可控参数重要性（Controllable）"
+            />
+          </div>
+          <div className="card" style={{ marginTop: 8 }}>
+            <div className="card-title">可控参数排名明细</div>
+            <table className="table">
+              <thead>
+                <tr>
+                  <th>排名</th>
+                  <th>参数</th>
+                  <th>importance</th>
+                  <th>方向</th>
+                </tr>
+              </thead>
+              <tbody>
+                {rankingOverride.map((item) => (
+                  <tr key={item.feature}>
+                    <td>{item.rank}</td>
+                    <td>{parameterLabel(item.feature)}</td>
+                    <td className="mono">{formatNumber(item.importance, 4)}</td>
+                    <td>
+                      <span className={effectClass(item.effect_direction)}>
+                        {effectLabel(item.effect_direction)}
+                      </span>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      )}
+
       {v2Result && (
         <div className="card">
           <div className="card-title">
@@ -341,7 +391,7 @@ export function IdentificationWorkspace({
         <PhysicsReadinessMatrix coordinates={physicsReadiness} />
       </div>
 
-      {!v2Result && !v2Loading && !v2Error && (
+      {!displayedRanking && !v2Loading && !v2Error && (
         <EmptyState message="尚未运行参数辨识。完成后将在此展示可控参数与机理特征双排名。" />
       )}
 
