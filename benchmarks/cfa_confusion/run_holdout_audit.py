@@ -1,4 +1,4 @@
-"""Holdout audit: 13-paper CFA v1.1 predictions vs completed three-level gold.
+"""Holdout audit: CFA predictions vs completed three-level gold (v1.1 / v2).
 
 H1-H5 gates (docs/validation/CFA_V1_1_EVALUATION_CANDIDATE_FREEZE.md §2):
   H1  severe = 0 (asymmetric-risk first metric)
@@ -7,10 +7,17 @@ H1-H5 gates (docs/validation/CFA_V1_1_EVALUATION_CANDIDATE_FREEZE.md §2):
       InteractionState evidence
   H4  Material/Task explicit mismatch recognized when metadata available
   H5  Reconstructibility keeps high consistency with human gold
+
+Usage:
+  v1.1 (former holdout / v2 diagnostic): python run_holdout_audit.py
+  v2 independent holdout:                python run_holdout_audit.py
+      --gold artifacts/cfa_holdout/gold_holdout_v2_level1_2_3_completed.jsonl
+      --output benchmarks/cfa_confusion/results/holdout_v2_audit.json
 """
 
 from __future__ import annotations
 
+import argparse
 import json
 import sys
 from pathlib import Path
@@ -111,9 +118,13 @@ def _gate_verdicts(gold: list[dict], predictions: list[dict]) -> dict:
 
 
 def main() -> None:
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--gold", type=Path, default=GOLD)
+    parser.add_argument("--output", type=Path, default=OUTPUT)
+    args = parser.parse_args()
     gold = [
         json.loads(line)
-        for line in GOLD.read_text(encoding="utf-8").splitlines()
+        for line in args.gold.read_text(encoding="utf-8").splitlines()
         if line.strip()
     ]
     metadata, _ = load_evidence_metadata(METADATA_GOLD, [p.name for p in ARCHIVE.glob("*.pdf")])
@@ -144,8 +155,8 @@ def main() -> None:
         "pass": report["severity_summary"]["severe"] == 0,
     }
 
-    OUTPUT.parent.mkdir(parents=True, exist_ok=True)
-    OUTPUT.write_text(
+    args.output.parent.mkdir(parents=True, exist_ok=True)
+    args.output.write_text(
         json.dumps(
             {"gold_papers": len(gold), "predictions": predictions, "audit": report, "gates": gates},
             ensure_ascii=False,
