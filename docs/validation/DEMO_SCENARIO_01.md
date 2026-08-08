@@ -64,6 +64,10 @@ BO:  BORecommendationService（governed_prior 唯一合法 prior 路径）
 
 ```text
 python scripts/demo_t2_vertical_slice.py --output outputs/t2_slice_run.json
+python scripts/demo_report.py                      # 生成 outputs/topic2_demo_report.html
 ```
 
 重复运行必须逐字节一致（R16：fixed seed/config 可重放）。
+HTML 报告为自包含单文件（零依赖，离线浏览器直开），内含 10 步故事线、
+facet 表、evidence/prior/BO 对照与全链路回溯；生成时自动执行展示纪律
+检查（Uncalibrated / NOT_YET_CALIBRATED / 无概率词 / B1-25 仅 diagnostic）。

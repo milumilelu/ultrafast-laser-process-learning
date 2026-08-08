@@ -30,6 +30,7 @@
 | R14 | assisted BO 报告 prior_applied=true | `prior_applied_evidence.assisted_search_prior_applied=True`，prior_guidance=`e2p_soft_prior_v1`，acquisition score 0.999（prior 真实修改 acquisition） | **PASS** |
 | R15 | vanilla BO 报告 prior_applied=false | `vanilla_search_prior_applied=False`，acquisition prior_guidance=null，score 0.732 | **PASS** |
 | R16 | fixed seed/config 可重放 | 同命令重跑两次：仅 `bo_run_id`（运行标识）不同，全部科学载荷逐字节一致（推荐参数/acquisition/哈希/facets） | **PASS** |
+| R17 | 单文件 HTML 演示报告（展示包） | `scripts/demo_report.py`：10 步故事线全渲染；纪律检查（Uncalibrated / NOT_YET_CALIBRATED / 无 probability-confidence 词 / B1-25 仅 diagnostic）PASS；生成确定性（`tests/test_demo_report.py`）；输出 `outputs/topic2_demo_report.html`（17 KB 自包含，离线浏览器直开） | **PASS** |
 
 ## 展示纪律（随 release 固化）
 
@@ -64,4 +65,12 @@ Calibration:    未开始（D1-D4 inventory 已完成：outcome 仅 18 点）
 
 ## 结论
 
-**R1–R16 全部 PASS → 允许 tag `topic2-demo-v1`。**
+**R1–R17 全部 PASS → 展示包就绪（tag `topic2-demo-v1.1`）。**
+
+## 展示三步
+
+```text
+python scripts/demo_t2_vertical_slice.py          # ① 实跑冻结 Scenario 01（确定性）
+python scripts/demo_report.py                     # ② 生成单文件 HTML 报告（纪律自动检查）
+# ③ 浏览器打开 outputs/topic2_demo_report.html
+```
