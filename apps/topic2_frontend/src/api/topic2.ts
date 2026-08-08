@@ -5,6 +5,7 @@ import { buildUrl, request } from './client'
 import type {
   DataProfile,
   DatabaseStatistics,
+  E2PPrepareResult,
   EquipmentItem,
   Evidence,
   EvidenceCompileResult,
@@ -102,6 +103,18 @@ export const topic2Api = {
     evidence: Evidence[],
   ): Promise<EvidenceCompileResult> {
     return request(config.topic2ApiUrl, 'POST', '/e2p/evidence/compile', { scope, evidence })
+  },
+
+  /** E2P 唯一入口：EvidenceBundle + Applicability + ModelPolicy + PriorSpec →
+   *  GovernedPriorArtifact（服务器签发，review 实时校验，fails closed）。 */
+  prepareE2P(requestBody: {
+    scope: TaskScope
+    data_profile: DataProfile
+    evidence: Evidence[]
+  }): Promise<E2PPrepareResult> {
+    return request(config.topic2ApiUrl, 'POST', '/e2p/prepare', requestBody, {
+      timeoutMs: 120_000,
+    })
   },
 
   modelPolicy(requestBody: ModelPolicyRequest): Promise<ModelPolicyResult> {

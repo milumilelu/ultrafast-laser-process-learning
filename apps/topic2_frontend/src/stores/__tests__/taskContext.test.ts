@@ -77,9 +77,54 @@ describe('task context store', () => {
     expect(migrated.processType).toBe('rectangular_groove')
     expect(migrated.objective).toBe('quality_first')
     expect(migrated.processParams).toEqual({})
-    // 旧 equipmentId 是 Topic2 设备 ID → 迁移为数据集设备；设备档案置空待用户选择
+    // �� equipmentId �� Topic2 �豸 ID �� Ǩ��Ϊ���ݼ��豸���豸�����ÿմ��û�ѡ��
     expect(migrated.datasetEquipmentId).toBe('EQ-TEST-FS')
     expect(migrated.equipmentId).toBeNull()
   })
+
+  it('migrates legacy deviceProperties material params into materialProperties', () => {
+    const legacy = {
+      taskContextId: 'TASK-0100',
+      version: 2,
+      materialId: 'SiC',
+      laserType: 'fs',
+      datasetEquipmentId: 'EQ-TEST-FS',
+      processType: 'rectangular_groove',
+      objective: 'efficiency_first',
+      targetMetrics: [],
+      deviceProperties: {
+        spotRadiusUm: '2.5',
+        spotDefinition: '1/e2',
+        thermalDiffusivityM2S: '0.000001',
+        ablationThresholdJcm2: '0.82',
+      },
+      createdAt: '2026-01-01T00:00:00.000Z',
+      updatedAt: '2026-01-01T00:00:00.000Z',
+    } as unknown as TaskContextState
+
+    const migrated = migrateLegacyContext(legacy)
+    // 设备属性只保留光斑
+    expect(migrated.deviceProperties).toEqual({
+      spotRadiusUm: '2.5',
+      spotDefinition: '1/e2',
+    })
+    // 热扩散系数/烧蚀阈值迁移为材料参数
+    expect(migrated.materialProperties).toEqual({
+      thermalDiffusivityM2S: '0.000001',
+      ablationThresholdJcm2: '0.82',
+    })
+  })
+
+  it('material properties update bumps the task version', () => {
+    const store = useTaskContextStore.getState()
+    const before = store.context.version
+    store.update({ materialProperties: { thermalDiffusivityM2S: '0.000001', ablationThresholdJcm2: '0.82' } })
+    expect(useTaskContextStore.getState().context.version).toBe(before + 1)
+    expect(useTaskContextStore.getState().context.materialProperties).toEqual({
+      thermalDiffusivityM2S: '0.000001',
+      ablationThresholdJcm2: '0.82',
+    })
+  })
 })
+
 

@@ -19,8 +19,6 @@ interface FormState {
   actual_max_power_W: string
   spot_diameter_um: string
   spot_definition: string
-  thermal_diffusivity_m2_s: string
-  ablation_threshold_J_cm2: string
   scan_speed_min_mm_s: string
   scan_speed_max_mm_s: string
   set_active: boolean
@@ -40,8 +38,6 @@ const INITIAL: FormState = {
   actual_max_power_W: '',
   spot_diameter_um: '',
   spot_definition: '',
-  thermal_diffusivity_m2_s: '',
-  ablation_threshold_J_cm2: '',
   scan_speed_min_mm_s: '',
   scan_speed_max_mm_s: '',
   set_active: true,
@@ -92,12 +88,8 @@ export function NewEquipmentModal({
       optical_setup.spot_definition = form.spot_definition.trim()
     }
 
-    // 物理特征构建输入（材料/光学属性，随设备档案管理）
+    // 热扩散系数 / 烧蚀阈值是材料参数，不随设备档案管理（在任务定义的材料中设置）
     const process_capability: Record<string, number> = {}
-    const diffusivity = toNumber(form.thermal_diffusivity_m2_s)
-    const threshold = toNumber(form.ablation_threshold_J_cm2)
-    if (diffusivity !== null) process_capability.thermal_diffusivity_m2_s = diffusivity
-    if (threshold !== null) process_capability.ablation_threshold_J_cm2 = threshold
 
     const motion_system: Record<string, number> = {}
     const speedMin = toNumber(form.scan_speed_min_mm_s)
@@ -132,9 +124,10 @@ export function NewEquipmentModal({
     <div className="modal-overlay" data-testid="new-equipment-modal">
       <div className="modal">
         <h2>新建设备</h2>
-        <p className="card-sub">
+        <div className="card-sub">
           设备档案由 Agent 服务管理（波长、脉宽、功率、频率、光斑直径、扫描速度等），创建后可在任务中选用。
-        </p>
+          热扩散系数 / 烧蚀阈值是材料参数，请在任务定义的材料中设置（可选）。
+        </div>
         <ErrorBanner message={error} />
         <div className="grid grid-2">
           <div className="field">
@@ -169,45 +162,45 @@ export function NewEquipmentModal({
               <option value="fwhm">FWHM</option>
             </select>
           </div>
-          <div className="field">
-            <label>热扩散系数 thermal_diffusivity_m2_s</label>
-            <input type="number" step="1e-7" value={form.thermal_diffusivity_m2_s} onChange={(e) => set('thermal_diffusivity_m2_s', e.target.value)} placeholder="如 0.000001" />
+          <div className="field-pair">
+            <div className="field">
+              <label>最小脉宽 pulse_width_min_fs</label>
+              <input type="number" value={form.pulse_width_min_fs} onChange={(e) => set('pulse_width_min_fs', e.target.value)} />
+            </div>
+            <div className="field">
+              <label>最大脉宽 pulse_width_max_fs</label>
+              <input type="number" value={form.pulse_width_max_fs} onChange={(e) => set('pulse_width_max_fs', e.target.value)} />
+            </div>
           </div>
-          <div className="field">
-            <label>烧蚀阈值 ablation_threshold_J/cm2</label>
-            <input type="number" step="0.01" value={form.ablation_threshold_J_cm2} onChange={(e) => set('ablation_threshold_J_cm2', e.target.value)} placeholder="如 0.82" />
+          <div className="field-pair">
+            <div className="field">
+              <label>最小频率 frequency_min_kHz</label>
+              <input type="number" value={form.frequency_min_kHz} onChange={(e) => set('frequency_min_kHz', e.target.value)} />
+            </div>
+            <div className="field">
+              <label>最大频率 frequency_max_kHz</label>
+              <input type="number" value={form.frequency_max_kHz} onChange={(e) => set('frequency_max_kHz', e.target.value)} />
+            </div>
           </div>
-          <div className="field">
-            <label>最小脉宽 pulse_width_min_fs</label>
-            <input type="number" value={form.pulse_width_min_fs} onChange={(e) => set('pulse_width_min_fs', e.target.value)} />
+          <div className="field-pair">
+            <div className="field">
+              <label>额定最大功率 rated_max_power_W</label>
+              <input type="number" value={form.rated_max_power_W} onChange={(e) => set('rated_max_power_W', e.target.value)} />
+            </div>
+            <div className="field">
+              <label>实际最大功率 actual_max_power_W</label>
+              <input type="number" value={form.actual_max_power_W} onChange={(e) => set('actual_max_power_W', e.target.value)} />
+            </div>
           </div>
-          <div className="field">
-            <label>最大脉宽 pulse_width_max_fs</label>
-            <input type="number" value={form.pulse_width_max_fs} onChange={(e) => set('pulse_width_max_fs', e.target.value)} />
-          </div>
-          <div className="field">
-            <label>最小频率 frequency_min_kHz</label>
-            <input type="number" value={form.frequency_min_kHz} onChange={(e) => set('frequency_min_kHz', e.target.value)} />
-          </div>
-          <div className="field">
-            <label>最大频率 frequency_max_kHz</label>
-            <input type="number" value={form.frequency_max_kHz} onChange={(e) => set('frequency_max_kHz', e.target.value)} />
-          </div>
-          <div className="field">
-            <label>额定最大功率 rated_max_power_W</label>
-            <input type="number" value={form.rated_max_power_W} onChange={(e) => set('rated_max_power_W', e.target.value)} />
-          </div>
-          <div className="field">
-            <label>实际最大功率 actual_max_power_W</label>
-            <input type="number" value={form.actual_max_power_W} onChange={(e) => set('actual_max_power_W', e.target.value)} />
-          </div>
-          <div className="field">
-            <label>最小扫描速度 scan_speed_min_mm_s</label>
-            <input type="number" value={form.scan_speed_min_mm_s} onChange={(e) => set('scan_speed_min_mm_s', e.target.value)} />
-          </div>
-          <div className="field">
-            <label>最大扫描速度 scan_speed_max_mm_s</label>
-            <input type="number" value={form.scan_speed_max_mm_s} onChange={(e) => set('scan_speed_max_mm_s', e.target.value)} />
+          <div className="field-pair">
+            <div className="field">
+              <label>最小扫描速度 scan_speed_min_mm_s</label>
+              <input type="number" value={form.scan_speed_min_mm_s} onChange={(e) => set('scan_speed_min_mm_s', e.target.value)} />
+            </div>
+            <div className="field">
+              <label>最大扫描速度 scan_speed_max_mm_s</label>
+              <input type="number" value={form.scan_speed_max_mm_s} onChange={(e) => set('scan_speed_max_mm_s', e.target.value)} />
+            </div>
           </div>
         </div>
         <label style={{ display: 'inline-flex', gap: 6, alignItems: 'center', marginBottom: 12 }}>

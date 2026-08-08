@@ -10,8 +10,12 @@ export type PageName =
   | 'identification'
   | 'modeling'
   | 'optimization'
+  | 'application'
+  | 'evidence'
   | 'database'
   | 'runs'
+  | 'demo'
+  | 'resources'
 
 export interface PageQuickAction {
   label: string

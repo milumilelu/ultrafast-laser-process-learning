@@ -38,7 +38,7 @@ export const PROCESS_TASK_LABELS: Record<ProcessTaskType, string> = {
 export const PROCESS_TASK_OPTIONS: { value: ProcessTaskType; label: string; description: string }[] = [
   { value: 'rectangular_groove', label: '矩形槽', description: '加工矩形沟槽，可设置槽宽、槽深等参数' },
   { value: 'circular_hole', label: '圆孔', description: '加工圆孔，可设置孔径、孔深等参数' },
-  { value: 'single_line', label: '单线', description: '单线刻划，可设置线宽、切深等参数' },
+  { value: 'single_line', label: '单线', description: '单线刻划，只需填写单线长度' },
   { value: 'custom', label: '自定义', description: '其他任务形态，通过 Agent 对话描述具体任务' },
 ]
 
@@ -67,6 +67,7 @@ export const PROCESS_PARAM_LABELS: Record<string, string> = {
   hole_depth_um: '孔深 (μm)',
   line_width_um: '线宽 (μm)',
   cut_depth_um: '切深 (μm)',
+  line_length_um: '单线长度 (μm)',
   custom_description: '任务描述',
 }
 

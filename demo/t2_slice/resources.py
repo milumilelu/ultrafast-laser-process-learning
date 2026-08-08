@@ -29,7 +29,13 @@ PILOT_PAPER_IDS: tuple[str, ...] = tuple(PILOT_FILES)
 
 
 def resolve_literature_archive() -> Path:
-    """Return the literature archive directory or raise RuntimeError."""
+    """Return the literature archive directory or raise RuntimeError.
+
+    Resolution order:
+      1. ULTRAFAST_PILOT_ARCHIVE env (explicit)
+      2. bundled archive inside this repository (data/literature_archive)
+      3. sibling "ultrafast agent/ultrafast_laser_memory/data/literature_archive"
+    """
     env = os.environ.get("ULTRAFAST_PILOT_ARCHIVE")
     if env:
         archive = Path(env)
@@ -38,12 +44,15 @@ def resolve_literature_archive() -> Path:
         raise RuntimeError(
             f"ULTRAFAST_PILOT_ARCHIVE is set but not a directory: {env}"
         )
+    bundled = REPO_ROOT / "data" / "literature_archive"
+    if bundled.is_dir():
+        return bundled
     sibling = REPO_ROOT.parent / "ultrafast agent" / "ultrafast_laser_memory" / "data" / "literature_archive"
     if sibling.is_dir():
         return sibling
     raise RuntimeError(
         "literature archive not found; set ULTRAFAST_PILOT_ARCHIVE=<dir> "
-        "or place 'ultrafast agent' as a sibling of the repository"
+        "or place the archive at data/literature_archive in this repository"
     )
 
 

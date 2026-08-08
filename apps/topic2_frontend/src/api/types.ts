@@ -345,3 +345,176 @@ export interface MachineBoundsResponse {
   machine_bounds: Record<string, [number, number]>
   missing_equipment_fields: string[]
 }
+
+/* ---------------------- Application Run / WorkflowEvent ---------------------- */
+
+export type WorkflowEventType =
+  | 'RUN_STARTED'
+  | 'RUN_COMPLETED'
+  | 'RUN_FAILED'
+  | 'STAGE_STARTED'
+  | 'STAGE_PROGRESS'
+  | 'STAGE_COMPLETED'
+  | 'TOOL_STARTED'
+  | 'TOOL_COMPLETED'
+  | 'ENTITY_CREATED'
+  | 'ARTIFACT_CREATED'
+  | 'VALIDATION'
+  | 'WARNING'
+  | 'ERROR'
+
+export interface WorkflowEvent {
+  eventId?: string
+  event_id: string
+  runId?: string
+  run_id: string
+  sequence: number
+  timestamp: string
+  type: WorkflowEventType
+  stage?: string | null
+  summary: string
+  progress?: { current?: number; total?: number } | null
+  entityRefs?: { type: string; id: string }[]
+  artifactRefs?: { type: string; id: string }[]
+  details?: Record<string, unknown>
+}
+
+export type FacetName =
+  | 'Material'
+  | 'Task'
+  | 'InteractionState'
+  | 'Reconstructibility'
+  | 'Reachability'
+
+export type FacetStatus = 'KNOWN' | 'PARTIAL' | 'UNKNOWN' | 'MISMATCH'
+
+export interface ParameterImportance {
+  feature: string
+  importance: number
+  effect_direction: string
+  rank: number
+}
+
+export interface PhysicsCoordinateStatus {
+  coordinate: string
+  status: string
+  dependencies: string[]
+  reason: string | null
+  source?: string | null
+  target?: string | null
+  comparison?: string | null
+}
+
+export interface BOResult {
+  run_id: string
+  bo_run_id?: string
+  model_id: string | null
+  model_source: string
+  optimization_method: string
+  recommended_parameters: Record<string, number>
+  vanilla_recommended_parameters?: Record<string, number>
+  recommendation_changed_by_evidence?: boolean
+  search_prior_applied?: boolean
+  prediction: { mean: number; std: number } | Record<string, unknown>
+  acquisition: Record<string, unknown>
+  machine_bounds: Record<string, { lower: number; upper: number }>
+  prior_spec?: { prior_spec_version?: string; range_preferences: unknown[] }
+  governed_prior?: Record<string, unknown> | null
+  [key: string]: unknown
+}
+
+export interface PriorAppliedEvidence {
+  vanilla_search_prior_applied: boolean
+  assisted_search_prior_applied: boolean
+  assisted_prior_guidance: string | null
+  governed_prior_hash: string | null
+  assisted_prior_evidence_ids: string[]
+}
+
+export interface Topic2ApplicationResult {
+  runId: string
+  workflowVersion: string
+  targetTask: {
+    material: string
+    laserType: string
+    geometry: string
+    equipment: string
+    target: string
+    randomSeed?: number
+    sampleCount?: number | null
+  }
+  processLearning: {
+    selectedFeatureView: string
+    selectedModel: string | null
+    controllableRanking?: ParameterImportance[]
+    mechanismRanking?: ParameterImportance[]
+    modelComparison: Record<string, ModelMetrics> | string[] | Record<string, unknown>
+    physicsReadiness?: PhysicsCoordinateStatus[]
+    cvFolds?: number
+    featureViews?: Record<string, unknown>
+    identificationRunId?: string | null
+    trainingRunId?: string | null
+    [key: string]: unknown
+  }
+  scientificBasis: {
+    paperCount?: number
+    candidateCount?: number
+    evidenceCount?: number
+    governedEvidenceCount?: number
+    priorCount?: number
+    governedPrior?: Record<string, unknown> | null
+  }
+  cfa: {
+    version: string | null
+    calibrationStatus: 'NOT_YET_CALIBRATED' | string
+    facetSummary: Record<string, string>
+    warnings: string[]
+    targetPhysicsReadiness?: Record<string, unknown> | null
+    reports?: Record<string, unknown>[]
+  }
+  optimization: {
+    vanilla: BOResult
+    evidenceAssisted: BOResult
+    priorAppliedEvidence: PriorAppliedEvidence
+  }
+  audit: {
+    evidenceIds: string[]
+    priorContentHash: string | null
+    boRunIds: (string | null)[]
+    modelVersion?: string | null
+    replayable: boolean
+    ledgerVersionIds?: string[]
+  }
+}
+
+export interface ApplicationRunSummary {
+  application_run_id: string
+  status: 'running' | 'completed' | 'failed'
+  task_context_ref: string
+  mode: 'demo' | 'research'
+  workflow_version: string
+  stage_status: Record<string, { status: string }>
+  created_at: string
+  completed_at: string | null
+}
+
+export interface OptimizationComparison {
+  vanilla: BOResult
+  evidence_assisted: BOResult
+  prior_applied_evidence: PriorAppliedEvidence
+}
+
+export interface E2PPrepareResult {
+  e2p_run_id: string
+  dataset_version: string
+  evidence: {
+    candidates: string[]
+    accepted: string[]
+    rejected: string[]
+  }
+  applicability: ApplicabilityResult[]
+  model_policy: ModelPolicyResult
+  prior_spec: { prior_spec_version: string; range_preferences: RangePreference[] }
+  governed_prior_artifact: GovernedPriorArtifactPayload | null
+  conflict_state: { status: string }
+}

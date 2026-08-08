@@ -13,12 +13,17 @@ export interface TargetMetric {
   target: 'depth_um' | 'roughness_um'
 }
 
-/** 设备光学/材料属性（物理特征构建输入，在工艺任务页设置，辨识页自动读取） */
+/** 设备光学属性（物理特征构建输入，随设备档案管理；在任务页展示读取） */
 export interface DeviceProperties {
   /** 光斑半径（1/e²），与 spotDefinition 必须成对 */
   spotRadiusUm: string
   /** 光斑定义：如 "1/e2"、"full_width_half_maximum" */
   spotDefinition: string
+}
+
+/** 材料参数（可选，非必选）：随材料定义设置，与设备档案无关。
+ *  用于物理特征构建（热扩散系数 → 热积累相关特征；烧蚀阈值 → 归一化通量等）。 */
+export interface MaterialProperties {
   /** 热扩散系数 m²/s */
   thermalDiffusivityM2S: string
   /** 烧蚀阈值 J/cm² */
@@ -42,8 +47,10 @@ export interface TaskContextState {
   /** 加工目标：质量优先 / 效率优先（决定后端优化目标） */
   objective: ObjectiveMode | null
   targetMetrics: TargetMetric[]
-  /** 设备光学/材料属性（物理特征构建输入） */
+  /** 设备光学属性（物理特征构建输入，随设备档案管理） */
   deviceProperties: DeviceProperties
+  /** 材料参数（可选，非必选）：热扩散系数 / 烧蚀阈值 */
+  materialProperties: MaterialProperties
   datasetId: string | null
   selectedModelId: string | null
   createdAt: string
@@ -61,6 +68,7 @@ export interface TaskContextPatch {
   objective?: ObjectiveMode | null
   targetMetrics?: TargetMetric[]
   deviceProperties?: DeviceProperties
+  materialProperties?: MaterialProperties
   datasetId?: string | null
   selectedModelId?: string | null
 }
@@ -97,6 +105,8 @@ function createInitialContext(): TaskContextState {
     deviceProperties: {
       spotRadiusUm: '',
       spotDefinition: '',
+    },
+    materialProperties: {
       thermalDiffusivityM2S: '',
       ablationThresholdJcm2: '',
     },
@@ -109,16 +119,20 @@ function createInitialContext(): TaskContextState {
   return initial
 }
 
-/** 兼容旧版本持久化数据：geometryType → processType，targetMetrics → objective */
+/** 兼容旧版本持久化数据：geometryType → processType，targetMetrics → objective；
+ *  旧 deviceProperties 中的热扩散系数/烧蚀阈值迁移为材料参数 materialProperties。 */
 export function migrateLegacyContext(state: TaskContextState): TaskContextState {
+  const legacyDevice = (state as unknown as { deviceProperties?: Record<string, unknown> }).deviceProperties ?? {}
   const migrated = {
     ...state,
     processParams: state.processParams ?? {},
-    deviceProperties: state.deviceProperties ?? {
-      spotRadiusUm: '',
-      spotDefinition: '',
-      thermalDiffusivityM2S: '',
-      ablationThresholdJcm2: '',
+    deviceProperties: {
+      spotRadiusUm: state.deviceProperties?.spotRadiusUm ?? String(legacyDevice.spotRadiusUm ?? ''),
+      spotDefinition: state.deviceProperties?.spotDefinition ?? String(legacyDevice.spotDefinition ?? ''),
+    },
+    materialProperties: state.materialProperties ?? {
+      thermalDiffusivityM2S: String(legacyDevice.thermalDiffusivityM2S ?? ''),
+      ablationThresholdJcm2: String(legacyDevice.ablationThresholdJcm2 ?? ''),
     },
   }
   let changed = false

@@ -138,6 +138,35 @@ class Topic2Repository:
                     UNIQUE(workflow_id, version),
                     FOREIGN KEY(workflow_id) REFERENCES process_workflows(workflow_id)
                 );
+                CREATE TABLE IF NOT EXISTS application_runs (
+                    application_run_id TEXT PRIMARY KEY,
+                    client_request_id TEXT UNIQUE,
+                    task_context_ref TEXT NOT NULL,
+                    mode TEXT NOT NULL,
+                    workflow_version TEXT NOT NULL,
+                    status TEXT NOT NULL,
+                    stage_status_json TEXT NOT NULL,
+                    result_json TEXT,
+                    created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                    completed_at TEXT
+                );
+                CREATE TABLE IF NOT EXISTS application_workflow_events (
+                    event_id TEXT PRIMARY KEY,
+                    application_run_id TEXT NOT NULL,
+                    sequence INTEGER NOT NULL,
+                    payload_json TEXT NOT NULL,
+                    created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                    UNIQUE(application_run_id, sequence),
+                    FOREIGN KEY(application_run_id) REFERENCES application_runs(application_run_id)
+                );
+                CREATE TABLE IF NOT EXISTS application_artifacts (
+                    artifact_id TEXT PRIMARY KEY,
+                    application_run_id TEXT NOT NULL,
+                    artifact_type TEXT NOT NULL,
+                    payload_json TEXT NOT NULL,
+                    created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                    FOREIGN KEY(application_run_id) REFERENCES application_runs(application_run_id)
+                );
                 """
             )
             model_columns = {
@@ -629,6 +658,149 @@ class Topic2Repository:
                     (workflow_id,),
                 )
             ]
+
+    def save_application_run(self, payload: dict[str, Any]) -> dict[str, Any]:
+        """Create or update an application run (BE-2). Idempotent on application_run_id."""
+        encoded = json.dumps(payload, ensure_ascii=False, sort_keys=True)
+        with self.connection() as db:
+            db.execute(
+                """INSERT INTO application_runs
+                (application_run_id, client_request_id, task_context_ref, mode,
+                 workflow_version, status, stage_status_json, result_json)
+                VALUES(?,?,?,?,?,?,?,?)
+                ON CONFLICT(application_run_id) DO UPDATE SET
+                    status=excluded.status,
+                    stage_status_json=excluded.stage_status_json,
+                    result_json=excluded.result_json,
+                    completed_at=excluded.completed_at""",
+                (
+                    payload["application_run_id"],
+                    payload.get("client_request_id"),
+                    payload["task_context_ref"],
+                    payload["mode"],
+                    payload["workflow_version"],
+                    payload["status"],
+                    json.dumps(payload.get("stage_status") or {}, sort_keys=True),
+                    json.dumps(payload.get("result")),
+                ),
+            )
+        return payload
+
+    def application_run(self, application_run_id: str) -> dict[str, Any] | None:
+        with self.connection() as db:
+            row = db.execute(
+                "SELECT * FROM application_runs WHERE application_run_id=?",
+                (application_run_id,),
+            ).fetchone()
+            if not row:
+                return None
+            item = dict(row)
+            item["stage_status"] = json.loads(item.pop("stage_status_json"))
+            result = item.pop("result_json")
+            item["result"] = json.loads(result) if result else None
+            return item
+
+    def application_run_by_client_request(
+        self, client_request_id: str
+    ) -> dict[str, Any] | None:
+        with self.connection() as db:
+            row = db.execute(
+                "SELECT * FROM application_runs WHERE client_request_id=?",
+                (client_request_id,),
+            ).fetchone()
+            if not row:
+                return None
+            item = dict(row)
+            item["stage_status"] = json.loads(item.pop("stage_status_json"))
+            result = item.pop("result_json")
+            item["result"] = json.loads(result) if result else None
+            return item
+
+    def list_application_runs(self, mode: str | None = None) -> list[dict[str, Any]]:
+        query = (
+            "SELECT application_run_id, task_context_ref, mode, workflow_version, "
+            "status, created_at, completed_at FROM application_runs"
+        )
+        values: list[str] = []
+        if mode is not None:
+            query += " WHERE mode=?"
+            values.append(mode)
+        query += " ORDER BY created_at DESC, application_run_id DESC"
+        with self.connection() as db:
+            return [dict(row) for row in db.execute(query, values)]
+
+    def save_workflow_event(self, payload: dict[str, Any]) -> dict[str, Any]:
+        """Persist one formal application workflow event (BE-3)."""
+        with self.connection() as db:
+            db.execute(
+                """INSERT INTO application_workflow_events
+                (event_id, application_run_id, sequence, payload_json)
+                VALUES(?,?,?,?)
+                ON CONFLICT(event_id) DO NOTHING""",
+                (
+                    payload["event_id"],
+                    payload["run_id"],
+                    payload["sequence"],
+                    json.dumps(payload, ensure_ascii=False, sort_keys=True),
+                ),
+            )
+        return payload
+
+    def workflow_events(
+        self, application_run_id: str, after_sequence: int = 0
+    ) -> list[dict[str, Any]]:
+        with self.connection() as db:
+            rows = db.execute(
+                """SELECT payload_json FROM application_workflow_events
+                WHERE application_run_id=? AND sequence>?
+                ORDER BY sequence""",
+                (application_run_id, after_sequence),
+            ).fetchall()
+            return [json.loads(row["payload_json"]) for row in rows]
+
+    def save_application_artifact(self, payload: dict[str, Any]) -> dict[str, Any]:
+        """Store a typed artifact owned by an application run (BE-4)."""
+        with self.connection() as db:
+            db.execute(
+                """INSERT INTO application_artifacts
+                (artifact_id, application_run_id, artifact_type, payload_json)
+                VALUES(?,?,?,?)
+                ON CONFLICT(artifact_id) DO UPDATE SET
+                    application_run_id=excluded.application_run_id,
+                    artifact_type=excluded.artifact_type,
+                    payload_json=excluded.payload_json""",
+                (
+                    payload["artifact_id"],
+                    payload["application_run_id"],
+                    payload["artifact_type"],
+                    json.dumps(payload["content"], ensure_ascii=False, sort_keys=True),
+                ),
+            )
+        return payload
+
+    def application_artifact(self, artifact_id: str) -> dict[str, Any] | None:
+        with self.connection() as db:
+            row = db.execute(
+                "SELECT * FROM application_artifacts WHERE artifact_id=?",
+                (artifact_id,),
+            ).fetchone()
+            if not row:
+                return None
+            item = dict(row)
+            item["content"] = json.loads(item.pop("payload_json"))
+            return item
+
+    def list_application_artifacts(
+        self, application_run_id: str
+    ) -> list[dict[str, Any]]:
+        with self.connection() as db:
+            rows = db.execute(
+                """SELECT artifact_id, artifact_type, created_at
+                FROM application_artifacts WHERE application_run_id=?
+                ORDER BY created_at, artifact_id""",
+                (application_run_id,),
+            ).fetchall()
+            return [dict(row) for row in rows]
 
     def statistics(self) -> dict[str, Any]:
         with self.connection() as db:

@@ -39,6 +39,9 @@ export function taskContextToScope(context: TaskContextState): TaskScope {
     process_parameters: { ...context.processParams },
     device_properties: {
       ...context.deviceProperties,
+      // 材料参数（可选）：热扩散系数 / 烧蚀阈值，随任务上下文传递（物理特征构建输入）
+      thermal_diffusivity_m2_s: context.materialProperties?.thermalDiffusivityM2S,
+      ablation_threshold_J_cm2: context.materialProperties?.ablationThresholdJcm2,
       equipment_profile_id: context.equipmentId,
     },
   }

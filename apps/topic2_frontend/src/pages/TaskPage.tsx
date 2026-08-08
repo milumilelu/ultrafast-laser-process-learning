@@ -9,6 +9,7 @@ import { topic2Api } from '../api/topic2'
 import { ErrorBanner } from '../components/Banners'
 import { EquipmentManager } from '../components/EquipmentManager'
 import type { ScopeCapability } from '../components/EquipmentManager'
+import { ScientificAnalysisPanel } from '../components/ScientificAnalysisPanel'
 import { StatusBadge } from '../components/StatusBadge'
 import {
   OBJECTIVE_LABELS,
@@ -24,7 +25,7 @@ import type { ObjectiveMode, ProcessTaskType } from '../stores/taskContext'
 const PROCESS_TASK_PARAM_FIELDS: Record<ProcessTaskType, string[]> = {
   rectangular_groove: ['groove_width_um', 'groove_depth_um'],
   circular_hole: ['hole_diameter_um', 'hole_depth_um'],
-  single_line: ['line_width_um', 'cut_depth_um'],
+  single_line: ['line_length_um'],
   custom: ['custom_description'],
 }
 
@@ -37,8 +38,14 @@ export function TaskPage() {
   const [capabilityLoading, setCapabilityLoading] = useState(false)
   const [profileOptical, setProfileOptical] = useState<Record<string, unknown> | null>(null)
   const { scientificPack, setScientificPack, setAnalysisJob } = useScienceStore()
+  const analysisJobRunning = useScienceStore(
+    (state) =>
+      state.analysisJob !== null &&
+      state.analysisJob.status !== 'completed' &&
+      state.analysisJob.status !== 'failed',
+  )
 
-  // 设备档案的光学/材料属性（新建设备时配置）：读取展示，供辨识页自动使用
+  // 设备档案的光学属性（新建设备时配置）：读取展示，供辨识页自动使用
   useEffect(() => {
     if (!context.equipmentId) {
       setProfileOptical(null)
@@ -50,12 +57,9 @@ export function TaskPage() {
       .then((profile) => {
         if (cancelled) return
         const optical = (profile.optical_setup ?? {}) as Record<string, unknown>
-        const capability_ = (profile.process_capability ?? {}) as Record<string, unknown>
         setProfileOptical({
           spot_diameter_um: optical.spot_diameter_um ?? null,
           spot_definition: optical.spot_definition ?? null,
-          thermal_diffusivity_m2_s: capability_.thermal_diffusivity_m2_s ?? null,
-          ablation_threshold_J_cm2: capability_.ablation_threshold_J_cm2 ?? null,
         })
       })
       .catch(() => {
@@ -233,6 +237,43 @@ export function TaskPage() {
             </div>
           </div>
         </div>
+
+        <div className="grid grid-2" style={{ marginTop: 12 }}>
+          <div className="field">
+            <label>热扩散系数 thermal_diffusivity_m2_s（材料参数，可选）</label>
+            <input
+              type="number"
+              step="1e-7"
+              value={String(context.materialProperties?.thermalDiffusivityM2S ?? '')}
+              placeholder="如 0.000001（不填则物理特征如实显示不可用）"
+              onChange={(event) =>
+                update({
+                  materialProperties: {
+                    ...context.materialProperties,
+                    thermalDiffusivityM2S: event.target.value,
+                  },
+                })
+              }
+            />
+          </div>
+          <div className="field">
+            <label>烧蚀阈值 ablation_threshold_J_cm2（材料参数，可选）</label>
+            <input
+              type="number"
+              step="0.01"
+              value={String(context.materialProperties?.ablationThresholdJcm2 ?? '')}
+              placeholder="如 0.82（不填则物理特征如实显示不可用）"
+              onChange={(event) =>
+                update({
+                  materialProperties: {
+                    ...context.materialProperties,
+                    ablationThresholdJcm2: event.target.value,
+                  },
+                })
+              }
+            />
+          </div>
+        </div>
       </div>
 
       <div className="card">
@@ -261,22 +302,26 @@ export function TaskPage() {
 
         {context.equipmentId && profileOptical && (
           <div className="card-sub" style={{ marginBottom: 0, marginTop: 12 }}>
-            设备档案光学/材料属性（新建设备时配置，供物理特征构建）：
+            设备档案光学属性（新建设备时配置，供物理特征构建）：
             <span className="badge neutral" style={{ marginLeft: 8 }}>
               光斑 {String(profileOptical.spot_diameter_um ?? '—')} um（{String(profileOptical.spot_definition ?? '未定义')}）
             </span>
-            <span className="badge neutral">
-              热扩散系数 {String(profileOptical.thermal_diffusivity_m2_s ?? '—')} m²/s
-            </span>
-            <span className="badge neutral">
-              烧蚀阈值 {String(profileOptical.ablation_threshold_J_cm2 ?? '—')} J/cm²
-            </span>          </div>
+          </div>
         )}
         {context.equipmentId && !profileOptical && (
           <div className="card-sub" style={{ marginBottom: 0, marginTop: 12 }}>
-            设备档案未配置光学/材料属性——物理特征将不可用。请在「设备管理」中编辑该设备档案（光斑直径/定义、热扩散系数、烧蚀阈值）。
+            设备档案未配置光学属性——涉及光斑的物理特征将不可用。请在「设备管理」中编辑该设备档案（光斑直径/定义）。
           </div>
         )}
+        <div className="card-sub" style={{ marginBottom: 0, marginTop: 6 }}>
+          材料参数（可选，随材料定义设置）：
+          <span className="badge neutral" style={{ marginLeft: 8 }}>
+            热扩散系数 {context.materialProperties?.thermalDiffusivityM2S || '未设置'} m²/s
+          </span>
+          <span className="badge neutral">
+            烧蚀阈值 {context.materialProperties?.ablationThresholdJcm2 || '未设置'} J/cm²
+          </span>
+        </div>
       </div>
 
       <div className="card">
@@ -369,15 +414,25 @@ export function TaskPage() {
         <button className="btn primary" onClick={save}>
           保存任务（升级为 v{context.version + 1}）
         </button>
-        <button
-          className="btn"
-          onClick={runScientificAnalysis}
-          disabled={!context.materialId || !context.laserType}
-          title="任务级工艺任务分析（RAG→LLM→E2P）：结果由参数辨识/工艺建模/工艺优化共享，进度在右侧 Agent 面板实时显示"
-        >
-          工艺任务分析（RAG→LLM→E2P）
-        </button>
         <StatusBadge tone="neutral">修改必须由人工确认后生效</StatusBadge>
+      </div>
+
+      <div className="card">
+        <div className="card-title">工艺任务分析（独立栏）</div>
+        <div className="row" style={{ marginBottom: 10 }}>
+          <button
+            className="btn primary"
+            onClick={runScientificAnalysis}
+            disabled={!context.materialId || !context.laserType || analysisJobRunning}
+            title="任务级工艺任务分析（RAG→LLM→E2P）：结果由参数辨识/工艺建模/工艺优化共享"
+          >
+            运行工艺任务分析
+          </button>
+          <StatusBadge tone="neutral">
+            执行流程：任务校验 → RAG 检索 → LLM 精读 → 确定性验证 → 覆盖检查 → 全局综合 → 关键批判 → 完成
+          </StatusBadge>
+        </div>
+        <ScientificAnalysisPanel />
       </div>
 
       {scientificPack && (
@@ -411,6 +466,14 @@ export function TaskPage() {
           <li>
             <span className="dl-key">material_id</span>
             <span className="dl-value mono">{context.materialId ?? '—'}</span>
+          </li>
+          <li>
+            <span className="dl-key">material_properties（材料参数，可选）</span>
+            <span className="dl-value mono">
+              {context.materialProperties
+                ? `thermal_diffusivity_m2_s=${context.materialProperties.thermalDiffusivityM2S || '—'}, ablation_threshold_J_cm2=${context.materialProperties.ablationThresholdJcm2 || '—'}`
+                : '—'}
+            </span>
           </li>
           <li>
             <span className="dl-key">laser_type</span>

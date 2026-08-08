@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import json
 import os
 from pathlib import Path
 from typing import Any
@@ -10,9 +11,11 @@ from urllib.parse import quote
 import httpx
 from fastapi import FastAPI, HTTPException, Request
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import PlainTextResponse, Response
+from fastapi.responses import FileResponse, PlainTextResponse, Response
 from fastapi.staticfiles import StaticFiles
+from pydantic import BaseModel, ConfigDict, Field
 
+from apps.topic2_backend.application.service import Topic2ApplicationService
 from apps.topic2_backend.service import Topic2Service
 from apps.topic2_backend.settings import Settings
 from packages.process_contracts.schemas import (
@@ -26,6 +29,31 @@ from packages.process_contracts.schemas import (
 )
 
 FRONTEND_DIST = Path(__file__).resolve().parents[3] / "apps" / "topic2_frontend" / "dist"
+
+
+class ApplicationRunRequest(BaseModel):
+    """Application Run creation contract (BE-1, idempotent via client_request_id)."""
+
+    model_config = ConfigDict(extra="forbid")
+
+    mode: str = "research"
+    task_spec: dict[str, Any] | None = None
+    stages: list[str] | None = None
+    optimization_modes: list[str] | None = None
+    random_seed: int | None = None
+    client_request_id: str | None = Field(default=None, min_length=1)
+
+
+class OptimizationCompareRequest(BaseModel):
+    """Vanilla / Evidence-assisted comparison contract (BE-5)."""
+
+    model_config = ConfigDict(extra="allow")
+
+    scope: dict[str, Any]
+    machine_bounds: dict[str, dict[str, float]]
+    governed_prior_artifact: dict[str, Any] | None = None
+    model_id: str | None = None
+    random_seed: int | None = None
 
 # Optional same-origin proxy to the Ultrafast Laser Agent. The Agent remains an
 # enhancement layer: when it is down or the proxy is disabled, only the Agent
@@ -67,6 +95,12 @@ def create_app(settings: Settings | None = None) -> FastAPI:
     )
     service = Topic2Service(settings, approval_verifier=_agent_review_is_approved)
     app.state.topic2_service = service
+    application_service = Topic2ApplicationService(
+        service,
+        approval_verifier=_agent_review_is_approved,
+        agent_proxy_target=AGENT_PROXY_TARGET,
+    )
+    app.state.application_service = application_service
 
     app.add_middleware(
         CORSMiddleware,
@@ -253,6 +287,92 @@ def create_app(settings: Settings | None = None) -> FastAPI:
             raise _not_found("run", run_id)
         return result
 
+    # ------------------------- Application Run API (BE-1..BE-5) -------------------------
+
+    @app.post("/api/v1/application-runs")
+    def create_application_run(payload: ApplicationRunRequest):
+        try:
+            return application_service.create_application_run(
+                mode=payload.mode,
+                task_spec=payload.task_spec,
+                stages=payload.stages,
+                optimization_modes=payload.optimization_modes,
+                random_seed=payload.random_seed,
+                client_request_id=payload.client_request_id,
+            )
+        except ValueError as exc:
+            raise HTTPException(status_code=422, detail=str(exc)) from exc
+
+    @app.get("/api/v1/application-runs")
+    def list_application_runs(mode: str | None = None):
+        return {"items": application_service.list_runs(mode=mode)}
+
+    @app.get("/api/v1/application-runs/{run_id}")
+    def get_application_run(run_id: str):
+        try:
+            return application_service.get_run(run_id)
+        except ValueError as exc:
+            raise _not_found("application run", run_id) from exc
+
+    @app.get("/api/v1/application-runs/{run_id}/result")
+    def application_run_result(run_id: str):
+        try:
+            return application_service.get_result(run_id)
+        except ValueError as exc:
+            raise _not_found("application run result", run_id) from exc
+
+    @app.get("/api/v1/application-runs/{run_id}/events")
+    def application_run_events(
+        run_id: str, request: Request, after_sequence: int = 0
+    ):
+        try:
+            events = application_service.events(run_id, after_sequence=after_sequence)
+        except ValueError as exc:
+            raise _not_found("application run", run_id) from exc
+        if request.headers.get("accept", "").lower().startswith("application/x-ndjson"):
+            lines = "\n".join(
+                json.dumps(event, ensure_ascii=False) for event in events
+            )
+            return Response(
+                content=lines,
+                media_type="application/x-ndjson",
+            )
+        return {"items": events}
+
+    @app.get("/api/v1/application-runs/{run_id}/artifacts")
+    def application_run_artifacts(run_id: str):
+        try:
+            return {"items": application_service.artifacts(run_id)}
+        except ValueError as exc:
+            raise _not_found("application run", run_id) from exc
+
+    @app.post("/api/v1/application-runs/{run_id}/replay")
+    def replay_application_run(run_id: str):
+        try:
+            return application_service.replay(run_id)
+        except ValueError as exc:
+            raise HTTPException(status_code=422, detail=str(exc)) from exc
+
+    @app.get("/api/v1/artifacts/{artifact_id}")
+    def artifact(artifact_id: str):
+        try:
+            return application_service.artifact(artifact_id)
+        except ValueError as exc:
+            raise _not_found("artifact", artifact_id) from exc
+
+    @app.post("/api/v1/optimization/compare")
+    def compare_optimization(payload: OptimizationCompareRequest):
+        try:
+            return application_service.compare_optimization(
+                scope=payload.scope,
+                machine_bounds=payload.machine_bounds,
+                governed_prior_artifact=payload.governed_prior_artifact,
+                model_id=payload.model_id,
+                random_seed=payload.random_seed,
+            )
+        except (ValueError, KeyError) as exc:
+            raise HTTPException(status_code=422, detail=str(exc)) from exc
+
     @app.api_route(
         "/agent-api/{path:path}",
         methods=["GET", "POST", "PUT", "PATCH", "DELETE"],
@@ -286,6 +406,19 @@ def create_app(settings: Settings | None = None) -> FastAPI:
         )
 
     if FRONTEND_DIST.is_dir() and (FRONTEND_DIST / "index.html").exists():
-        app.mount("/", StaticFiles(directory=FRONTEND_DIST, html=True), name="frontend")
+
+        @app.get("/{full_path:path}", include_in_schema=False)
+        def spa_static(full_path: str):
+            """Serve built frontend with SPA fallback (registered last; API routes win)."""
+            if full_path.startswith("api/") or full_path.startswith("agent-api/"):
+                raise HTTPException(status_code=404, detail="not found")
+            candidate = (FRONTEND_DIST / full_path).resolve()
+            try:
+                candidate.relative_to(FRONTEND_DIST.resolve())
+            except ValueError:
+                raise HTTPException(status_code=404, detail="not found") from None
+            if full_path and candidate.is_file():
+                return FileResponse(candidate)
+            return FileResponse(FRONTEND_DIST / "index.html")
 
     return app
