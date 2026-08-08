@@ -6,7 +6,7 @@ import { Outlet, useLocation } from 'react-router-dom'
 
 import { agentApi } from '../../api/agent'
 import { topic2Api } from '../../api/topic2'
-import { config } from '../../config'
+import { APP_BUILD_TIME, APP_VERSION, config } from '../../config'
 import { useAgentStore } from '../../stores/agent'
 import { useModeStore } from '../../stores/mode'
 import { usePageContextStore } from '../../stores/pageContext'
@@ -17,8 +17,6 @@ import { TaskContextSync } from '../TaskContextSync'
 import { GlobalContextBar } from './GlobalContextBar'
 import { ModeSwitcher } from './ModeSwitcher'
 import { WorkflowNav } from './WorkflowNav'
-
-const RELEASE_VERSION = 'topic2-frontend-v2.0'
 
 export function AppShell() {
   const [topic2Ok, setTopic2Ok] = useState<boolean | null>(null)
@@ -59,7 +57,12 @@ export function AppShell() {
         {config.acceptanceMode && <StatusBadge tone="info">验收模式</StatusBadge>}
         <span className="spacer" />
         <ModeSwitcher />
-        <StatusBadge tone="neutral">{RELEASE_VERSION}</StatusBadge>
+        <StatusBadge tone="neutral">
+          {APP_VERSION}
+          <span className="muted" style={{ marginLeft: 4 }} title={`构建时间 ${APP_BUILD_TIME}`}>
+            {APP_BUILD_TIME.slice(5, 16).replace('T', ' ')}
+          </span>
+        </StatusBadge>
         <StatusBadge tone={topic2Ok === false ? 'err' : 'ok'}>
           Topic2 {topic2Ok === false ? '离线' : '在线'}
         </StatusBadge>

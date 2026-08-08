@@ -99,3 +99,25 @@ describe('scientific pipeline api adapter', () => {
     vi.unstubAllGlobals()
   })
 })
+
+describe('agent GET requests never carry a body (regression: poll kept failing)', () => {
+  beforeEach(() => {
+    vi.stubGlobal('fetch', vi.fn(async () => new Response(JSON.stringify({ items: [] }), { status: 200 })))
+  })
+  afterEach(() => vi.unstubAllGlobals())
+
+  it('getAnalysisJob issues a GET without body', async () => {
+    await agentApi.getAnalysisJob('sa-123').catch(() => undefined)
+    const [url, init] = vi.mocked(fetch).mock.calls[0] as [string, RequestInit]
+    expect(String(init?.method ?? 'GET').toUpperCase()).toBe('GET')
+    expect(init?.body).toBeUndefined()
+    expect(String(url)).toContain('/api/v1/scientific-analysis/jobs/sa-123')
+  })
+
+  it('listAnalysisRuns issues a GET without body', async () => {
+    await agentApi.listAnalysisRuns()
+    const [, init] = vi.mocked(fetch).mock.calls[0] as [string, RequestInit]
+    expect(String(init?.method ?? 'GET').toUpperCase()).toBe('GET')
+    expect(init?.body).toBeUndefined()
+  })
+})

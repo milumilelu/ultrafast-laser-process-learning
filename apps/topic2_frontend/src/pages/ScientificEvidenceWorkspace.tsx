@@ -41,6 +41,7 @@ export function ScientificEvidenceWorkspace() {
   const [inspectedCell, setInspectedCell] = useState<{ rowId: string; facet: string; details: Record<string, unknown> | null } | null>(null)
   const [cfaRows, setCfaRows] = useState<CFARow[]>([])
   const [cfaMeta, setCfaMeta] = useState<{ calibrationStatus: string; warnings: string[] } | null>(null)
+  const [governedPriorEvidenceIds, setGovernedPriorEvidenceIds] = useState<string[]>([])
 
   /** 检索 + 编译当前 scope 的文献证据与适用性（复用正式 API）。 */
   const loadEvidence = useCallback(() => {
@@ -117,6 +118,9 @@ export function ScientificEvidenceWorkspace() {
       .then((result) => {
         if (cancelled) return
         buildCfaRows(result, setCfaRows, setCfaMeta)
+        setGovernedPriorEvidenceIds(
+          result.scientificBasis.governedPrior?.evidence_ids as string[] | undefined ?? [],
+        )
       })
       .catch(() => undefined)
     return () => {
@@ -129,7 +133,7 @@ export function ScientificEvidenceWorkspace() {
       <h1>科学知识</h1>
       <p className="card-sub">
         系统使用了哪些文献？抽取了哪些科学信息？哪些能进入 E2P？为什么？
-        证据链路：PDF → ScientificDocument → ScientificCandidate → ExperimentalCondition → EvidenceIR → GovernedPriorArtifact。
+        证据链路：EvidenceIR 通过 provenance 引用 SourceCondition → Applicability → GovernedPriorArtifact（引用式，非严格单线链）。
       </p>
 
       <div className="row" style={{ marginBottom: 12 }}>
@@ -167,7 +171,15 @@ export function ScientificEvidenceWorkspace() {
           <div className="card">
             <div className="card-title">Evidence 生命周期</div>
             {selectedEvidence ? (
-              <EvidenceLifecycle evidence={selectedEvidence} />
+              <EvidenceLifecycle
+                evidence={selectedEvidence}
+                applicabilityLevel={
+                  evidence?.applicability_results.find(
+                    (item) => item.evidence_id === selectedEvidence.evidence_id,
+                  )?.transfer_level ?? null
+                }
+                governedPriorEvidenceIds={governedPriorEvidenceIds}
+              />
             ) : (
               <div className="empty-state">无证据。请先检索当前任务证据。</div>
             )}

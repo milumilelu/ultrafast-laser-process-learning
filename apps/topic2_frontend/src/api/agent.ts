@@ -168,7 +168,7 @@ export const agentApi = {
     result: Record<string, unknown> | null
     error: string | null
   }> {
-    return request(config.agentApiUrl, 'GET', `/api/v1/scientific-analysis/jobs/${jobId}`, {
+    return request(config.agentApiUrl, 'GET', `/api/v1/scientific-analysis/jobs/${jobId}`, undefined, {
       timeoutMs: 30_000,
     })
   },
@@ -186,7 +186,7 @@ export const agentApi = {
       created_at: string
     }[]
   }> {
-    return request(config.agentApiUrl, 'GET', '/api/v1/scientific-analysis/runs', {
+    return request(config.agentApiUrl, 'GET', '/api/v1/scientific-analysis/runs', undefined, {
       timeoutMs: 30_000,
     })
   },

@@ -417,8 +417,9 @@ def create_app(settings: Settings | None = None) -> FastAPI:
                 candidate.relative_to(FRONTEND_DIST.resolve())
             except ValueError:
                 raise HTTPException(status_code=404, detail="not found") from None
+            headers = {"Cache-Control": "no-cache"}
             if full_path and candidate.is_file():
-                return FileResponse(candidate)
-            return FileResponse(FRONTEND_DIST / "index.html")
+                return FileResponse(candidate, headers=headers)
+            return FileResponse(FRONTEND_DIST / "index.html", headers=headers)
 
     return app

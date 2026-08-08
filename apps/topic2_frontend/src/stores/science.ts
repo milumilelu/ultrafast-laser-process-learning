@@ -60,6 +60,12 @@ interface ScienceStore {
     progress: Record<string, unknown>
     detail: { stage: string; [key: string]: unknown }[]
     error: string | null
+    /** 最后一次成功轮询的时间（判断进度是否滞后） */
+    lastUpdatedAt: string | null
+    /** 当前连续轮询失败次数（>0 表示进度更新中断） */
+    pollAttempts: number
+    /** 最近一次轮询失败的原始原因（网络/HTTP 状态等） */
+    lastPollError: string | null
   } | null
   analysisJobPolling: boolean
   experiments: ExperimentRow[]
@@ -94,6 +100,9 @@ interface ScienceStore {
       progress: Record<string, unknown>
       detail: { stage: string; [key: string]: unknown }[]
       error: string | null
+      lastUpdatedAt?: string | null
+      pollAttempts?: number
+      lastPollError?: string | null
     } | null,
     polling?: boolean,
   ) => void
@@ -154,8 +163,21 @@ export const useScienceStore = create<ScienceStore>()((set) => ({
     set({ ragEvidence, ragEvidenceMeta, ragEvidenceError, ragEvidenceLoading }),
   setScientificPack: (scientificPack, scientificError = null, scientificLoading = false) =>
     set({ scientificPack, scientificError, scientificLoading }),
-  setAnalysisJob: (analysisJob, analysisJobPolling = false) =>
-    set({ analysisJob, analysisJobPolling }),
+  setAnalysisJob: (analysisJob, analysisJobPolling = false) => {
+    if (analysisJob === null) {
+      return set({ analysisJob: null, analysisJobPolling: false })
+    }
+    const current = useScienceStore.getState().analysisJob
+    return set({
+      analysisJob: {
+        ...analysisJob,
+        lastUpdatedAt: analysisJob.lastUpdatedAt ?? current?.lastUpdatedAt ?? null,
+        pollAttempts: analysisJob.pollAttempts ?? current?.pollAttempts ?? 0,
+        lastPollError: analysisJob.lastPollError ?? current?.lastPollError ?? null,
+      },
+      analysisJobPolling,
+    })
+  },
   setExperiments: (experiments, experimentsError = null, experimentsLoading = false) => {
     const profile = computeDataProfile(experiments)
     return set({ experiments, experimentsError, experimentsLoading, dataProfile: profile })

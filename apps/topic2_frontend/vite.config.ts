@@ -3,6 +3,10 @@ import { defineConfig } from 'vite'
 
 export default defineConfig({
   plugins: [react()],
+  define: {
+    __BUILD_TIME__: JSON.stringify(new Date().toISOString()),
+    __FRONTEND_VERSION__: JSON.stringify('topic2-frontend-v2.0.5'),
+  },
   build: {
     rollupOptions: {
       output: {

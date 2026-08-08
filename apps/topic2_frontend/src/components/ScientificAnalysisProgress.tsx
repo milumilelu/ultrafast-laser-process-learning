@@ -1,11 +1,10 @@
-/** 科学分析实时进度面板（Agent 右侧界面）。
- *  轮询异步 Job（RAG 检索 → 精读 i/N → 验证 → 覆盖 → 综合 → 批判 → 完成），
- *  实时展示阶段与进展细节。 */
+/** 科学分析实时进度面板（Agent 抽屉内只读展示）。
+ *  轮询由全局单例（stores/analysisPolling）负责，本组件只订阅 store，
+ *  避免与任务页分析面板的轮询互相打断。 */
 
 import { useEffect } from 'react'
 
-import { agentApi } from '../api/agent'
-import { candidatesToEvidence } from '../lib/candidatesToEvidence'
+import { ensureAnalysisPolling } from '../stores/analysisPolling'
 import { useScienceStore } from '../stores/science'
 
 const STAGE_LABELS: Record<string, string> = {
@@ -23,83 +22,11 @@ const STAGE_LABELS: Record<string, string> = {
 export function ScientificAnalysisProgress() {
   const analysisJob = useScienceStore((state) => state.analysisJob)
   const analysisJobPolling = useScienceStore((state) => state.analysisJobPolling)
-  const setAnalysisJob = useScienceStore((state) => state.setAnalysisJob)
-  const setScientificPack = useScienceStore((state) => state.setScientificPack)
-  const setRagEvidence = useScienceStore((state) => state.setRagEvidence)
 
   useEffect(() => {
     if (!analysisJob || !analysisJobPolling) return
-    let cancelled = false
-    let failures = 0
-    const poll = async () => {
-      try {
-        const job = await agentApi.getAnalysisJob(analysisJob.jobId)
-        if (cancelled) return
-        failures = 0
-        const finished = job.status === 'completed' || job.status === 'failed'
-        setAnalysisJob(
-          {
-            jobId: job.analysis_run_id,
-            status: job.status,
-            stage: job.stage,
-            progress: job.progress,
-            detail: job.detail,
-            error: job.error,
-          },
-          !finished,
-        )
-        if (job.status === 'completed' && job.result) {
-          // 完成后结果写入共享科学包（辨识/建模/优化页共享）
-          const knowledge = job.result as Record<string, unknown>
-          setScientificPack({
-            corpus: null,
-            knowledge,
-            validation: null,
-            degraded: false,
-            llmModel: String(knowledge.llm_model ?? 'unknown'),
-          })
-          // 数值候选 → 证据篮（建模页编译/模型策略直接消费）
-          const taskScope = (job.result.task_scope ?? {}) as Record<string, unknown>
-          const converted = candidatesToEvidence(knowledge, {
-            material: (taskScope.material as string | null) ?? null,
-            laser_type: (taskScope.laser_type as string | null) ?? null,
-            geometry_type: (taskScope.geometry_type as string | null) ?? null,
-            equipment_id: (taskScope.equipment_id as string | null) ?? null,
-            target: (taskScope.target as string | null) ?? null,
-          })
-          if (converted.length > 0) {
-            setRagEvidence(converted, {
-              retrievedHits: converted.length,
-              reviewedHits: converted.length,
-              evidenceStatus: 'scientific_analysis',
-            })
-          }
-        }
-        if (!finished && !cancelled) {
-          window.setTimeout(poll, 2000)
-        }
-      } catch {
-        // 轮询失败不停止：重试（3 次后提示并暂停 10s 自动恢复轮询，
-        // 服务恢复后进度自动续上，避免界面永久卡在错误态）
-        if (cancelled) return
-        failures += 1
-        if (failures >= 3) {
-          setAnalysisJob(
-            { ...analysisJob, error: '分析任务状态查询失败（服务可能已重启）——正在自动重试……' },
-            false,
-          )
-          failures = 0
-          window.setTimeout(poll, 10_000)
-          return
-        }
-        window.setTimeout(poll, 2000)
-      }
-    }
-    void poll()
-    return () => {
-      cancelled = true
-    }
-  }, [analysisJob, analysisJobPolling, setAnalysisJob, setScientificPack, setRagEvidence])
+    ensureAnalysisPolling(analysisJob.jobId)
+  }, [analysisJob?.jobId, analysisJobPolling])
 
   if (!analysisJob) return null
 

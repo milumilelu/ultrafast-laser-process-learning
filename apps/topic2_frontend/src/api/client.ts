@@ -38,6 +38,15 @@ export async function request<T>(
   body?: unknown,
   options: RequestOptions = {},
 ): Promise<T> {
+  // 防护：GET/HEAD 请求携带 body 是浏览器非法请求（参数错位常见根源），
+  // 立即抛出明确错误而不是让 fetch 静默失败。
+  const upperMethod = method.toUpperCase()
+  if ((upperMethod === 'GET' || upperMethod === 'HEAD') && body !== undefined) {
+    throw new ApiError(
+      0,
+      `request() 非法调用：${upperMethod} ${path} 携带了 body（请把 options 作为第 5 个参数传入）`,
+    )
+  }
   const controller = new AbortController()
   const timer = setTimeout(
     () => controller.abort(),

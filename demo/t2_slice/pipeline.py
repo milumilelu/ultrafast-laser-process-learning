@@ -68,7 +68,13 @@ def _feature_views(csv_path: Path) -> dict[str, Any]:
 
 
 def _run_process_learning(csv_path: Path, random_seed: int = 42) -> dict[str, Any]:
-    """DEMO-1：Dataset → ProcessLearningResult（RAW/HYBRID × Group-CV）。"""
+    """DEMO-1：Dataset → ProcessLearningResult（RAW/HYBRID × Group-CV）。
+
+    HYBRID is a real training matrix: RAW columns + verified computable
+    physics features (blocked coordinates excluded). Until every physics
+    coordinate is computable, HYBRID stays partial and RAW remains the
+    honest baseline.
+    """
     from ultrafast_e2p.application.model_selection import (
         comparison_report,
         select_model,
@@ -79,9 +85,12 @@ def _run_process_learning(csv_path: Path, random_seed: int = 42) -> dict[str, An
     groups = df.loc[y.index, GROUP_COLUMN]
     x = df.loc[y.index, CSV_PARAM_COLUMNS]
     views = _feature_views(csv_path)
+    x_hybrid = _hybrid_frame(df, views)
     results: dict[str, Any] = {}
-    for view_name, x_frame in (("RAW", x), ("HYBRID", _hybrid_frame(df))):
+    for view_name, x_frame in (("RAW", x), ("HYBRID", x_hybrid)):
         clean = x_frame.dropna()
+        if len(clean) < 2:
+            continue
         result = select_model(
             clean,
             y.loc[clean.index],
@@ -97,14 +106,22 @@ def _run_process_learning(csv_path: Path, random_seed: int = 42) -> dict[str, An
             "cv_folds": result.cv_folds,
             "comparison": comparison_report(result),
         }
+    if "RAW" not in results:
+        raise ValueError("RAW process learning could not be computed")
     winner_view = max(results, key=lambda v: _cv_score(results[v]))
+    hybrid_available = sorted(
+        set(views.get("hybrid_physics") or {}).difference(
+            set(views.get("blocked_coordinates") or [])
+        )
+    )
     return {
         "feature_views": {
             "RAW": {"status": "available"},
             "HYBRID": {
                 "status": "partial",
-                "available_physics": list(views["hybrid_physics"]),
+                "available_physics": hybrid_available,
                 "blocked_coordinates": views["blocked_coordinates"],
+                "note": "blocked 坐标（依赖设备属性）尚未纳入训练矩阵，下一步优先开发",
             },
         },
         "model_comparison": results,
@@ -117,15 +134,33 @@ def _run_process_learning(csv_path: Path, random_seed: int = 42) -> dict[str, An
     }
 
 
-def _hybrid_frame(df: pd.DataFrame) -> pd.DataFrame:
-    return df[CSV_PARAM_COLUMNS].copy()
+def _hybrid_frame(df: pd.DataFrame, views: dict | None = None) -> pd.DataFrame:
+    """True HYBRID training matrix: RAW five columns + physics features that are
+    computable and verified by the physics builder.
+
+    Blocked coordinates (missing device properties) are excluded - they are
+    never silently added.  Values are aligned to the CSV row order used by
+    ``_feature_views``; pandas index alignment handles dropna afterwards.
+    """
+    if views is None:
+        raise ValueError("_hybrid_frame requires the feature views report")
+    frame = df[CSV_PARAM_COLUMNS].copy()
+    physics = views.get("hybrid_physics") or {}
+    blocked = set(views.get("blocked_coordinates") or [])
+    for feature, values in physics.items():
+        if feature in blocked:
+            continue
+        frame[feature] = values
+    return frame
 
 
 def _cv_score(view_result: dict) -> float:
     metrics = view_result.get("metrics_by_model") or {}
     selected = view_result.get("selected_model")
-    if selected in metrics and metrics[selected].get("cv_rmse") is not None:
-        return -float(metrics[selected]["cv_rmse"])
+    if selected in metrics:
+        rmse = metrics[selected].get("RMSE", metrics[selected].get("cv_rmse"))
+        if rmse is not None:
+            return -float(rmse)
     return -1e9
 
 
