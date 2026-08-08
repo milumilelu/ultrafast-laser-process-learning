@@ -17,6 +17,7 @@ interface WorkflowStore {
   lastSequence: number
   error: string | null
   start: (runId: string) => void
+  resume: () => void
   append: (incoming: WorkflowEvent[]) => void
   stageChanged: (stage: string | null) => void
   complete: () => void
@@ -40,6 +41,7 @@ export const useWorkflowStore = create<WorkflowStore>()((set, get) => ({
       lastSequence: 0,
       error: null,
     }),
+  resume: () => set({ status: 'running', error: null }),
   append: (incoming) => {
     if (incoming.length === 0) return
     const merged = workflowReducer(get().events, incoming)

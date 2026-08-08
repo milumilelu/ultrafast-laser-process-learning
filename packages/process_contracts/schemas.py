@@ -77,6 +77,12 @@ class EvidenceClaimType(StrEnum):
     HISTORICAL_DATASET = "historical_dataset"
     HISTORICAL_MODEL = "historical_model"
     FUNCTIONAL_SHAPE = "functional_shape"
+    THRESHOLD = "threshold"
+    MATERIAL_PROPERTY = "material_property"
+    MECHANISM_MODEL = "mechanism_model"
+    FORMULA = "formula"
+    PATH_STRATEGY = "path_strategy"
+    EXTERNAL_VALIDATION_CASE = "external_validation_case"
 
 
 class EvidenceScope(StrictModel):

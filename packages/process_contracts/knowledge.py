@@ -13,7 +13,7 @@ Phase 0 semantics:
 
 from __future__ import annotations
 
-from typing import Literal
+from typing import Any, Literal
 
 from pydantic import BaseModel, ConfigDict, Field
 
@@ -28,9 +28,19 @@ KnowledgeRequirementType = Literal[
     "physics_dependency",
     "process_mechanism",
     "data_quality",
+    "MATERIAL_PROPERTY",
+    "PARAMETER_PRIOR",
+    "MECHANISM_MODEL",
+    "PHYSICS_DEPENDENCY",
+    "INTERACTION_MECHANISM",
+    "PARAMETER_EFFECT",
+    "MODEL_VALIDATION",
+    "EXTERNAL_VALIDATION_CASE",
+    "PATH_STRATEGY",
+    "OTHER",
 ]
 
-RequirementTarget = Literal["learning", "planning", "both"]
+RequirementTarget = str
 
 
 class KnowledgeRequirement(BaseModel):
@@ -45,11 +55,23 @@ class KnowledgeRequirement(BaseModel):
 
     requirement_id: str = Field(min_length=1)
     type: KnowledgeRequirementType
-    question: str = Field(min_length=1)
+    question: str | None = Field(default=None, min_length=1)
+    scientific_question: str | None = Field(default=None, min_length=1)
     required_for: RequirementTarget = "both"
     priority: Literal["high", "medium", "low"] = "medium"
     trigger_reasons: list[str] = Field(default_factory=list)
     required_evidence_roles: list[str] = Field(default_factory=list)
+    satisfaction_criteria: list[str] = Field(default_factory=list)
+    status: Literal["KNOWN", "PARTIAL", "UNKNOWN", "MISMATCH"] = "UNKNOWN"
+    provenance: list[dict[str, Any]] = Field(default_factory=list)
+
+    def model_post_init(self, __context: Any) -> None:
+        if not self.question and not self.scientific_question:
+            raise ValueError("question or scientific_question is required")
+        if not self.question:
+            object.__setattr__(self, "question", self.scientific_question)
+        if not self.scientific_question:
+            object.__setattr__(self, "scientific_question", self.question)
 
 
 SatisfactionStatus = Literal[

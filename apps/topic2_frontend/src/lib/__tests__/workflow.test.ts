@@ -117,4 +117,26 @@ describe('workflowStore', () => {
     expect(useWorkflowStore.getState().status).toBe('failed')
     expect(useWorkflowStore.getState().error).toBe('boom')
   })
+
+  it('resume keeps the same run and its persisted event cursor', () => {
+    useWorkflowStore.getState().start('app-resume')
+    useWorkflowStore.getState().append([
+      {
+        event_id: 'resume-1',
+        run_id: 'app-resume',
+        sequence: 7,
+        timestamp: '2026-08-08T00:00:00Z',
+        type: 'STAGE_COMPLETED',
+        stage: 'assess_capability',
+        summary: 'capability complete',
+      },
+    ])
+    useWorkflowStore.getState().complete()
+    useWorkflowStore.getState().resume()
+    const state = useWorkflowStore.getState()
+    expect(state.activeRunId).toBe('app-resume')
+    expect(state.status).toBe('running')
+    expect(state.lastSequence).toBe(7)
+    expect(state.events).toHaveLength(1)
+  })
 })

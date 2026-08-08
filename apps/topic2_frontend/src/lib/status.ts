@@ -18,10 +18,10 @@ export type ScientificStatus =
 
 export type StatusTone = 'ok' | 'warn' | 'neutral' | 'err' | 'info'
 
-const POSITIVE = new Set(['AVAILABLE', 'VERIFIED', 'KNOWN', 'READY'])
-const WARNING_SET = new Set(['PARTIAL', 'UNVERIFIED', 'PENDING'])
+const POSITIVE = new Set(['AVAILABLE', 'VERIFIED', 'KNOWN', 'READY', 'IDENTIFIABLE', 'CALIBRATED', 'RECOMMENDED'])
+const WARNING_SET = new Set(['PARTIAL', 'UNVERIFIED', 'PENDING', 'WEAKLY_IDENTIFIABLE'])
 const ERROR_SET = new Set(['MISMATCH', 'ERROR', 'CONTRADICTED', 'FAILED'])
-const NEUTRAL_SET = new Set(['UNKNOWN', 'NOT_REPORTED', 'BLOCKED', 'NOT_YET_CALIBRATED'])
+const NEUTRAL_SET = new Set(['UNKNOWN', 'MISSING', 'NOT_REPORTED', 'BLOCKED', 'NOT_YET_CALIBRATED', 'NOT_IDENTIFIABLE'])
 
 /** Map a scientific status to a UI tone. UNKNOWN / BLOCKED are gray (neutral),
  *  never red - only explicit mismatches are red. */
@@ -46,6 +46,7 @@ export const SCIENTIFIC_LABELS: Record<string, string> = {
   UNVERIFIED: '待确认',
   PENDING: '待处理',
   UNKNOWN: '未知',
+  MISSING: '缺失',
   NOT_REPORTED: '未报告',
   BLOCKED: '不可判断',
   NOT_YET_CALIBRATED: '未校准',
@@ -57,6 +58,11 @@ export const SCIENTIFIC_LABELS: Record<string, string> = {
   DEPENDENCY_MISSING: '依赖缺失',
   UNREACHABLE: '不可达',
   REACHABLE: '可达',
+  IDENTIFIABLE: '可辨识',
+  WEAKLY_IDENTIFIABLE: '弱可辨识',
+  NOT_IDENTIFIABLE: '当前数据不可辨识',
+  CALIBRATED: '已校准',
+  RECOMMENDED: '推荐',
 }
 
 export function scientificLabel(status: string | null | undefined): string {

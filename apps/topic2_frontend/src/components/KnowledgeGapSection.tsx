@@ -1,5 +1,5 @@
 /** KnowledgeGapSection：展示 ApplicationRun 主链输出的知识需求与满足评估
- *  （analyze_knowledge_gaps / satisfy_requirements）。数据只读自应用运行结果，
+ *  （analyze_knowledge_requirements / satisfy_requirements）。数据只读自应用运行结果，
  *  不单独启动任何科学分析任务。 */
 
 import { useEffect, useState } from 'react'

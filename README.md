@@ -2,6 +2,33 @@
 
 主计划 V2 的正式仓库（Brownfield 迁移内核）。
 
+## Current development milestone：Physics-to-Planning V1
+
+后端主链与前端工作台已升级为：
+
+```text
+Task → Capability → KnowledgeRequirementSet → EvidenceIR → typed E2P Prior
+→ Calibration / Identifiability → LocalRemovalModel → Stateful F0-F2 Simulation
+→ Simulator-driven ToolpathPlan
+```
+
+独立验收：
+
+```powershell
+.venv\Scripts\python.exe scripts\run_topic2_acceptance.py
+.venv\Scripts\python.exe -m pytest tests\test_physics_to_planning_v1.py -q
+cd apps\topic2_frontend
+npm test -- --run
+npm run typecheck
+npm run build
+```
+
+完整 B0–B9 / F1–F6 验收与科学披露见
+`docs/validation/PHYSICS_TO_PLANNING_V1_FINAL_ACCEPTANCE.md`；后端独立验收见
+`docs/validation/PHYSICS_TO_PLANNING_V1_BACKEND_ACCEPTANCE.md`。Topic 2 Demo
+仍保留为可回放的历史冻结场景；旧 BO 比较仅作为 `plan_process` 内的兼容诊断，
+`ToolpathPlan` 是新主链最终规划产物。
+
 - 文档与决策：`docs/`（契约冻结见 `docs/contracts/CONTRACT_V2_FREEZE.md`）
 - 包边界由 `lint-imports`（import-linter）强制
 

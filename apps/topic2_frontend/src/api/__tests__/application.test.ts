@@ -2,7 +2,7 @@
 
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 
-import { applicationApi, applicationGateway } from '../application'
+import { applicationApi, applicationGateway, continueRunInPlace } from '../application'
 import { useApplicationStore } from '../../stores/application'
 
 describe('applicationApi request paths', () => {
@@ -14,6 +14,7 @@ describe('applicationApi request paths', () => {
   })
 
   afterEach(() => {
+    vi.restoreAllMocks()
     vi.unstubAllGlobals()
   })
 
@@ -46,6 +47,49 @@ describe('applicationApi request paths', () => {
     const urls = vi.mocked(fetch).mock.calls.map((call) => String(call[0]))
     expect(urls.some((url) => url.includes('/application-runs'))).toBe(true)
     expect(urls.some((url) => url.includes('/application-runs/app-1/result'))).toBe(true)
+  })
+
+  it('resumes canonical stages in place and reads events after the last sequence', async () => {
+    const summary = {
+      application_run_id: 'app-1',
+      status: 'completed' as const,
+      task_context_ref: 'TASK-1:v1',
+      mode: 'research' as const,
+      workflow_version: 'physics-to-planning-application-v1',
+      stage_status: {},
+      created_at: '2026-08-08T00:00:00Z',
+      completed_at: '2026-08-08T00:01:00Z',
+    }
+    const continueSpy = vi.spyOn(applicationApi, 'continueRun').mockResolvedValue(summary)
+    const eventsSpy = vi.spyOn(applicationApi, 'getEvents').mockResolvedValue({ items: [] })
+    vi.spyOn(applicationApi, 'getRun').mockResolvedValue({ ...summary, result: null })
+    const createSpy = vi.spyOn(applicationApi, 'createRun')
+
+    const resumed = await continueRunInPlace('app-1', ['calibrate_physics'], 17)
+
+    expect(resumed.run.application_run_id).toBe('app-1')
+    expect(continueSpy).toHaveBeenCalledWith(
+      'app-1',
+      expect.objectContaining({ stages: ['calibrate_physics'] }),
+    )
+    expect(eventsSpy).toHaveBeenCalledWith('app-1', 17)
+    expect(createSpy).not.toHaveBeenCalled()
+  })
+
+  it('rejects a backend resume that returns a second run id', async () => {
+    vi.spyOn(applicationApi, 'continueRun').mockResolvedValue({
+      application_run_id: 'app-2',
+      status: 'completed',
+      task_context_ref: 'TASK-1:v1',
+      mode: 'research',
+      workflow_version: 'physics-to-planning-application-v1',
+      stage_status: {},
+      created_at: '2026-08-08T00:00:00Z',
+      completed_at: '2026-08-08T00:01:00Z',
+    })
+    await expect(continueRunInPlace('app-1', ['plan_process'], 20)).rejects.toThrow(
+      '不同的 ApplicationRun ID',
+    )
   })
 })
 

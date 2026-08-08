@@ -1526,3 +1526,82 @@ h2 {
   padding: 20px 12px;
   font-size: 13px;
 }
+
+/* Physics-to-Planning V1 artifact views */
+.knowledge-chain {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+}
+
+.requirement-card {
+  margin-top: 10px;
+  padding: 10px 12px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: color-mix(in srgb, var(--surface) 94%, var(--primary) 6%);
+}
+
+.surface-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.surface-card {
+  min-width: 0;
+}
+
+.surface-field {
+  display: grid;
+  gap: 1px;
+  width: 100%;
+  aspect-ratio: 1;
+  margin: 8px 0;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  background: var(--border);
+}
+
+.surface-cell {
+  display: block;
+  min-width: 0;
+  min-height: 0;
+}
+
+.metric-strip {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 10px;
+  margin: 8px 0 12px;
+}
+
+.metric-strip > div {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  padding: 9px;
+  border-radius: 7px;
+  background: var(--bg);
+}
+
+.metric-strip span {
+  color: var(--text-muted);
+  font-size: 12px;
+}
+
+.developer-artifact summary {
+  cursor: pointer;
+}
+
+.planning-hero {
+  border-left: 4px solid var(--primary);
+}
+
+@media (max-width: 1000px) {
+  .surface-grid,
+  .metric-strip {
+    grid-template-columns: 1fr;
+  }
+}

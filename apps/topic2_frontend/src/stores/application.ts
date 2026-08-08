@@ -4,7 +4,16 @@
 
 import { create } from 'zustand'
 
-export type ApplicationTab = 'summary' | 'identification' | 'modeling' | 'optimization'
+export type ApplicationTab =
+  | 'summary'
+  | 'capability'
+  | 'knowledge'
+  | 'calibration'
+  | 'simulation'
+  | 'planning'
+  | 'identification'
+  | 'modeling'
+  | 'optimization'
 
 interface ApplicationStore {
   activeApplicationRunId: string | null

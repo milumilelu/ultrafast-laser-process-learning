@@ -8,6 +8,8 @@
 import { config } from '../config'
 import { request } from './client'
 import type {
+  ApplicationArtifactMeta,
+  ApplicationArtifactSnapshot,
   ApplicationRunSummary,
   OptimizationComparison,
   Topic2ApplicationResult,
@@ -68,15 +70,15 @@ export const applicationApi = {
     )
   },
 
-  getArtifacts(runId: string): Promise<{ items: { artifact_id: string; artifact_type: string; created_at: string }[] }> {
+  getArtifacts(runId: string): Promise<{ items: ApplicationArtifactMeta[] }> {
     return request(config.topic2ApiUrl, 'GET', `/application-runs/${encodeURIComponent(runId)}/artifacts`)
   },
 
-  getArtifact(artifactId: string): Promise<{
+  getArtifact<T = Record<string, unknown>>(artifactId: string): Promise<{
     artifact_id: string
     application_run_id: string
     artifact_type: string
-    content: Record<string, unknown>
+    content: ApplicationArtifactSnapshot<T>
   }> {
     return request(config.topic2ApiUrl, 'GET', `/artifacts/${encodeURIComponent(artifactId)}`)
   },
@@ -171,6 +173,31 @@ export const applicationApi = {
   },
 }
 
+/** Resume one persisted ApplicationRun and read only the newly appended events.
+ * Fails closed if the backend ever returns a different run identifier. */
+export async function continueRunInPlace(
+  runId: string,
+  stages: string[],
+  afterSequence: number,
+): Promise<{
+  run: ApplicationRunSummary & { result: Topic2ApplicationResult | null }
+  events: WorkflowEvent[]
+}> {
+  const summary = await applicationApi.continueRun(runId, {
+    stages,
+    random_seed: 42,
+    client_request_id: crypto.randomUUID(),
+  })
+  if (summary.application_run_id !== runId) {
+    throw new Error('后端 resume 返回了不同的 ApplicationRun ID')
+  }
+  const [eventPage, run] = await Promise.all([
+    applicationApi.getEvents(runId, afterSequence),
+    applicationApi.getRun(runId),
+  ])
+  return { run, events: eventPage.items }
+}
+
 /** Phase-1 gateway: page components depend only on this surface.
  *  Internals may migrate from topic2Api/agentApi to applicationApi later. */
 export interface ApplicationGateway {
@@ -196,7 +223,7 @@ export interface ApplicationGateway {
     artifact_id: string
     application_run_id: string
     artifact_type: string
-    content: Record<string, unknown>
+    content: ApplicationArtifactSnapshot
   }>
 }
 

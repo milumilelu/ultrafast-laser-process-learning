@@ -51,11 +51,18 @@ const EVENT_LABELS: Record<string, string> = {
 }
 
 const STATE_ARTIFACT_TYPES = [
-  'KnowledgeRequirements',
+  'TaskState',
+  'ScientificCapabilityReport',
+  'KnowledgeRequirementSet',
+  'EvidenceIRSet',
+  'PriorObjectSet',
+  'CalibrationResult',
+  'PhysicalModelState',
+  'LocalRemovalModel',
+  'MorphologySimulationResult',
+  'ToolpathPlan',
   'KnowledgeState',
   'ProcessLearningResult',
-  'ModelTrainingResult',
-  'GovernedPriorArtifact',
 ]
 
 export function AuditWorkspace() {
@@ -254,7 +261,7 @@ export function AuditWorkspace() {
 
 /* ------------------------------------------------------------------ Flow */
 
-function FlowTab({ events, developerMode }: { events: WorkflowEvent[]; developerMode: boolean }) {
+export function FlowTab({ events, developerMode }: { events: WorkflowEvent[]; developerMode: boolean }) {
   if (events.length === 0) {
     return <EmptyState message="无事件数据（该 Run 未记录事件）。" />
   }
@@ -401,7 +408,23 @@ function ArtifactsTab({
               来源（input_refs）：{selectedArtifact.input_refs.map((ref) => `${ref.type}:${ref.id}`).join(', ')}
             </div>
           )}
-          <pre className="artifact-json mono">{JSON.stringify(selectedArtifact.content, null, 2)}</pre>
+          {developerMode ? (
+            <>
+              {'provenance' in selectedArtifact.content && (
+                <pre className="artifact-json mono">
+                  provenance: {JSON.stringify(selectedArtifact.content.provenance, null, 2)}
+                </pre>
+              )}
+              {'reason_codes' in selectedArtifact.content && (
+                <div className="muted">
+                  reason codes: {JSON.stringify(selectedArtifact.content.reason_codes)}
+                </div>
+              )}
+              <pre className="artifact-json mono">{JSON.stringify(selectedArtifact.content, null, 2)}</pre>
+            </>
+          ) : (
+            <div className="empty-state">开启 Developer Mode 查看 raw payload、provenance 与 reason codes。</div>
+          )}
         </div>
       )}
     </div>
@@ -435,8 +458,7 @@ function StateTab({
         </div>
       ))}
       <div className="card-sub" style={{ marginTop: 12 }}>
-        状态摘要（KnowledgeRequirements / KnowledgeState 等）在 Artifacts Tab 中查看原始 JSON；
-        需求满足 diff（before/after acquisition）将在 Requirement Resolution Loop 落地后展示。
+        所有节点均来自当前 Run 的真实 artifact metadata；点击后读取对应 schema、input refs 与原始 payload。
       </div>
     </div>
   )

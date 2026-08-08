@@ -431,6 +431,238 @@ export interface PriorAppliedEvidence {
   assisted_prior_evidence_ids: string[]
 }
 
+export interface ArtifactRef {
+  type: string
+  id: string
+}
+
+export interface ProvenanceRecord {
+  source_type: string
+  source_ref: string
+  role: string
+}
+
+export interface ApplicationArtifactMeta {
+  artifact_id: string
+  artifact_type: string
+  created_at: string
+}
+
+export interface ApplicationArtifactSnapshot<T = Record<string, unknown>> {
+  id: string
+  type: string
+  schema_version: string
+  input_refs: ArtifactRef[]
+  content: T
+  created_at: string
+}
+
+export interface CapabilityInput {
+  name: string
+  value: number | string | null
+  unit: string
+  status: string
+  source_refs: ArtifactRef[]
+}
+
+export interface ParameterIdentifiability {
+  parameter: string
+  status: 'IDENTIFIABLE' | 'WEAKLY_IDENTIFIABLE' | 'NOT_IDENTIFIABLE'
+  reason_codes: string[]
+  required_observations: string[]
+}
+
+export interface ScientificCapabilityArtifact {
+  capability_id: string
+  task_ref: ArtifactRef
+  input_refs: ArtifactRef[]
+  interaction_topology: string
+  simulation_supported: boolean
+  supported_fidelity: string[]
+  available: CapabilityInput[]
+  missing: CapabilityInput[]
+  identifiability: ParameterIdentifiability[]
+  recommended_requirements: KnowledgeRequirementArtifact[]
+  status: string
+  reason_codes: string[]
+  provenance: ProvenanceRecord[]
+}
+
+export interface KnowledgeRequirementArtifact {
+  requirement_id: string
+  type: string
+  question?: string | null
+  scientific_question?: string | null
+  required_for: string
+  priority: string
+  trigger_reasons: string[]
+  required_evidence_roles: string[]
+  satisfaction_criteria: string[]
+  status: string
+  provenance: ArtifactRef[]
+}
+
+export interface KnowledgeRequirementSetArtifact {
+  requirements: KnowledgeRequirementArtifact[]
+  diagnostics: Record<string, unknown>
+}
+
+export interface RetrievalQueryPlanArtifact {
+  schema_version: string
+  plans: {
+    query_plan_id: string
+    requirement_id: string
+    requirement_type: string
+    scientific_question: string
+    hard_facets: Record<string, string[]>
+    soft_facets: Record<string, string[]>
+    query_terms: string[]
+    geometry_is_hard_filter: boolean
+    reason_codes: string[]
+  }[]
+  geometry_policy: 'SOFT_RANKING_HINT_ONLY' | string
+}
+
+export interface EvidenceIRSetArtifact {
+  schema_version: string
+  items: Record<string, unknown>[]
+  query_plan_ref: string
+}
+
+export interface PriorObjectArtifact {
+  prior_id: string
+  prior_type: 'ParameterPrior' | 'MechanismModelPrior' | 'PlanningPreferencePrior'
+  parameter?: string
+  lower?: number
+  upper?: number
+  unit?: string
+  parameter_semantics?: string
+  model_family?: string
+  path_families?: string[]
+  preference?: string
+  hard_constraint?: boolean
+  evidence_refs: ArtifactRef[]
+  applicability_refs: ArtifactRef[]
+  provenance: ArtifactRef[]
+  uncertainty: string
+  status: string
+  conflict_status: string
+}
+
+export interface PriorObjectSetArtifact {
+  prior_set_id: string
+  input_refs: ArtifactRef[]
+  priors: PriorObjectArtifact[]
+  conflicts: Record<string, unknown>[]
+  warnings: string[]
+  provenance: ArtifactRef[]
+}
+
+export interface ParameterEstimateArtifact {
+  parameter: string
+  estimate: number | null
+  lower: number | null
+  upper: number | null
+  unit: string
+  identifiability: 'IDENTIFIABLE' | 'WEAKLY_IDENTIFIABLE' | 'NOT_IDENTIFIABLE'
+  parameter_semantics: 'PHYSICAL' | 'EFFECTIVE' | 'PROVISIONAL'
+  prior_refs: ArtifactRef[]
+  data_refs: ArtifactRef[]
+  assumptions: string[]
+}
+
+export interface CalibrationResultArtifact {
+  calibration_id: string
+  input_refs: ArtifactRef[]
+  parameters: ParameterEstimateArtifact[]
+  fit_metrics: {
+    rmse: number
+    mae: number
+    r2: number | null
+    target_unit: string
+    n_observations: number
+  }
+  status: string
+  validation_data_refs: ArtifactRef[]
+  assumptions: string[]
+  provenance: ProvenanceRecord[]
+}
+
+export interface LocalRemovalModelArtifact {
+  model_id: string
+  input_refs: ArtifactRef[]
+  mode: 'EMPIRICAL' | 'RECONSTRUCTED' | 'HYBRID'
+  threshold_J_cm2: number
+  incubation_S: number
+  delta_um: number
+  alpha_defocus_per_um: number
+  thermal_memory_eff: number
+  parameter_semantics: Record<string, string>
+  status: string
+  assumptions: string[]
+  provenance: ProvenanceRecord[]
+}
+
+export interface MorphologyMetricsArtifact {
+  mean_depth_um: number
+  max_depth_um: number
+  removed_volume_um3: number
+  morphology_rmse_um: number | null
+  machining_time_s: number
+}
+
+export interface MorphologySimulationArtifact {
+  simulation_id: string
+  input_refs: ArtifactRef[]
+  local_removal_model_ref: ArtifactRef
+  fidelity: string
+  state: {
+    height_field_um: number[][]
+    effective_pulse_count: number[][]
+    accumulated_fluence_J_cm2: number[][]
+    thermal_memory_proxy: number[][]
+    grid_spacing_um: number
+    validity_flags: string[]
+  }
+  target_depth_field_um: number[][] | null
+  predicted_depth_field_um: number[][]
+  difference_field_um: number[][] | null
+  metrics: MorphologyMetricsArtifact
+  pulse_count: number
+  deterministic_seed: number
+  status: string
+  warnings: string[]
+  provenance: ProvenanceRecord[]
+}
+
+export interface ToolpathPlanArtifact {
+  plan_id: string
+  input_refs: ArtifactRef[]
+  path_family: string
+  path_parameters: Record<string, number | string>
+  laser_parameters: Record<string, number | string>
+  predicted_metrics: MorphologyMetricsArtifact
+  machine_constraints: { name: string; lower: number | null; upper: number | null; unit: string }[]
+  simulation_ref: ArtifactRef
+  planning_prior_refs: ArtifactRef[]
+  status: string
+  objective_value: number
+  candidate_summary: Record<string, unknown>[]
+  provenance: ProvenanceRecord[]
+}
+
+export interface PhysicsToPlanningArtifacts {
+  ScientificCapabilityReport?: ApplicationArtifactSnapshot<ScientificCapabilityArtifact>
+  KnowledgeRequirementSet?: ApplicationArtifactSnapshot<KnowledgeRequirementSetArtifact>
+  LiteratureRetrievalQueryPlan?: ApplicationArtifactSnapshot<RetrievalQueryPlanArtifact>
+  EvidenceIRSet?: ApplicationArtifactSnapshot<EvidenceIRSetArtifact>
+  PriorObjectSet?: ApplicationArtifactSnapshot<PriorObjectSetArtifact>
+  CalibrationResult?: ApplicationArtifactSnapshot<CalibrationResultArtifact>
+  LocalRemovalModel?: ApplicationArtifactSnapshot<LocalRemovalModelArtifact>
+  MorphologySimulationResult?: ApplicationArtifactSnapshot<MorphologySimulationArtifact>
+  ToolpathPlan?: ApplicationArtifactSnapshot<ToolpathPlanArtifact>
+}
+
 export interface Topic2ApplicationResult {
   runId: string
   workflowVersion: string
@@ -496,6 +728,19 @@ export interface Topic2ApplicationResult {
     evidenceAssisted: BOResult
     priorAppliedEvidence: PriorAppliedEvidence
   }
+  physicsToPlanning?: {
+    capability?: ScientificCapabilityArtifact | null
+    priorObjectSet?: PriorObjectSetArtifact | null
+    canonicalPhysicsState?: Record<string, unknown> | null
+    identifiabilityReport?: Record<string, unknown> | null
+    calibrationResult?: CalibrationResultArtifact | null
+    physicalModelState?: Record<string, unknown> | null
+    localRemovalModel?: LocalRemovalModelArtifact | null
+    morphologySimulation?: MorphologySimulationArtifact | null
+    toolpathPlan?: ToolpathPlanArtifact | null
+    processCorrection?: Record<string, unknown> | null
+    observationResult?: Record<string, unknown> | null
+  }
   audit: {
     evidenceIds: string[]
     priorContentHash: string | null
@@ -503,6 +748,7 @@ export interface Topic2ApplicationResult {
     modelVersion?: string | null
     replayable: boolean
     ledgerVersionIds?: string[]
+    artifactLineage?: Record<string, string | null>
   }
 }
 

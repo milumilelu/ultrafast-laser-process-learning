@@ -1,7 +1,7 @@
 [importlinter]
 include_external_packages = true
 root_packages =
-    process_contracts
+    packages
     ultrafast_bo
     ultrafast_cfa
     ultrafast_domain
@@ -18,7 +18,7 @@ type = forbidden
 source_modules =
     ultrafast_cfa
 forbidden_modules =
-    process_contracts
+    packages.process_contracts
     ultrafast_bo
     ultrafast_domain
 
@@ -28,7 +28,7 @@ type = forbidden
 source_modules =
     ultrafast_interaction
 forbidden_modules =
-    process_contracts
+    packages.process_contracts
     ultrafast_bo
     ultrafast_domain
 
@@ -38,7 +38,7 @@ type = forbidden
 source_modules =
     ultrafast_reconstructibility
 forbidden_modules =
-    process_contracts
+    packages.process_contracts
     ultrafast_bo
     ultrafast_domain
 
@@ -48,7 +48,7 @@ type = forbidden
 source_modules =
     ultrafast_ingestion
 forbidden_modules =
-    process_contracts
+    packages.process_contracts
     ultrafast_bo
     ultrafast_domain
     ultrafast_e2p
@@ -61,7 +61,7 @@ type = forbidden
 source_modules =
     ultrafast_physics
 forbidden_modules =
-    process_contracts
+    packages.process_contracts
     ultrafast_bo
     ultrafast_domain
     ultrafast_e2p
@@ -72,7 +72,7 @@ type = forbidden
 source_modules =
     ultrafast_domain
 forbidden_modules =
-    process_contracts
+    packages.process_contracts
     ultrafast_bo
     ultrafast_e2p
     ultrafast_physics
@@ -84,7 +84,7 @@ type = forbidden
 source_modules =
     ultrafast_e2p
 forbidden_modules =
-    process_contracts
+    packages.process_contracts
     ultrafast_bo
     ultrafast_domain
     ultrafast_physics
@@ -96,7 +96,7 @@ type = forbidden
 source_modules =
     ultrafast_shared
 forbidden_modules =
-    process_contracts
+    packages.process_contracts
     ultrafast_bo
     ultrafast_domain
     ultrafast_e2p
@@ -106,7 +106,7 @@ forbidden_modules =
 name = process_contracts must not depend on project packages
 type = forbidden
 source_modules =
-    process_contracts
+    packages.process_contracts
 forbidden_modules =
     ultrafast_bo
     ultrafast_domain
@@ -120,6 +120,23 @@ type = forbidden
 source_modules =
     ultrafast_bo
 forbidden_modules =
-    process_contracts
+    packages.process_contracts
     ultrafast_domain
     ultrafast_physics
+
+[importlinter:contract:e2p-not-on-scientific-computation]
+name = Typed E2P must not depend on scientific computation
+type = forbidden
+source_modules =
+    packages.e2p
+forbidden_modules =
+    packages.scientific_computation
+
+[importlinter:contract:scientific-computation-not-on-e2p]
+name = Scientific computation must not depend on E2P
+type = forbidden
+source_modules =
+    packages.scientific_computation
+forbidden_modules =
+    packages.e2p
+    ultrafast_e2p
