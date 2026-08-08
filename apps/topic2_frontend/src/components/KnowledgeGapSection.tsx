@@ -37,6 +37,7 @@ interface KnowledgeStateShape {
     required_for?: string
     priority?: string
     trigger_reasons?: string[]
+    required_evidence_roles?: string[]
   }[]
   satisfactions?: {
     requirement_id: string
@@ -45,6 +46,13 @@ interface KnowledgeStateShape {
     unresolved_reasons?: string[]
   }[]
   missing_topics?: string[]
+}
+
+const ROLE_LABELS: Record<string, string> = {
+  parameter_direction: '参数方向',
+  range_preference: '范围偏好',
+  functional_shape: '函数关系',
+  historical_dataset: '历史数据',
 }
 
 export function KnowledgeGapSection() {
@@ -97,8 +105,9 @@ export function KnowledgeGapSection() {
             <th>需求</th>
             <th>类型</th>
             <th>问题</th>
-            <th>触发依据</th>
-            <th>满足状态</th>
+                <th>触发依据</th>
+                <th>需求证据形态</th>
+                <th>满足状态</th>
           </tr>
         </thead>
         <tbody>
@@ -112,6 +121,13 @@ export function KnowledgeGapSection() {
                 <td>{requirement.question}</td>
                 <td className="muted">
                   {(requirement.trigger_reasons ?? []).join('；') || '—'}
+                </td>
+                <td className="muted">
+                  {(requirement.required_evidence_roles ?? []).length > 0
+                    ? (requirement.required_evidence_roles ?? [])
+                        .map((role) => ROLE_LABELS[role] ?? role)
+                        .join('、')
+                    : '文献不可满足'}
                 </td>
                 <td>
                   <StatusBadge tone={label.tone}>{label.label}</StatusBadge>

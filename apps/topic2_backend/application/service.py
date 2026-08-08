@@ -817,7 +817,13 @@ class Topic2ApplicationService:
             bus.run_id,
             "KnowledgeRequirements",
             {"requirements": requirements, "diagnostics": diagnostics},
-            input_refs=[{"type": "TargetPhysicsReadiness", "id": "assess_data"}],
+            input_refs=[
+                {"type": "DataProfile", "id": self._latest_artifact_id(bus, "DataProfile")},
+                {
+                    "type": "TargetPhysicsReadiness",
+                    "id": self._latest_artifact_id(bus, "TargetPhysicsReadiness"),
+                },
+            ],
         )
         trace.operation_completed(
             "gap-diagnostics",
@@ -852,13 +858,29 @@ class Topic2ApplicationService:
             "readiness_status": readiness.get("status"),
         }
 
+    # requirement type -> acceptable Evidence claim_type roles (V0 coverage map).
+    # 一条证据只满足与其 claim_type 匹配的需求（requirement-specific coverage）。
+    REQUIREMENT_EVIDENCE_ROLES: dict[str, tuple[str, ...]] = {
+        "threshold": ("range_preference",),
+        "parameter_effect": ("parameter_direction", "range_preference"),
+        "reported_optimum": ("range_preference",),
+        "material_property": ("range_preference",),
+        "physics_dependency": ("range_preference",),
+        "process_mechanism": ("functional_shape",),
+        "formula": ("functional_shape",),
+        "experimental_condition": ("historical_dataset", "range_preference"),
+        "parameter_range": ("range_preference",),
+        "data_quality": (),  # 文献无法满足：由实验数据决定，恒 UNSATISFIED
+    }
+
     def _knowledge_requirements(
         self, scope: TaskScope, bus: WorkflowEventBus
     ) -> list[dict[str, Any]]:
         """Rules over real diagnostics -> KnowledgeRequirement[].
 
         V0 is deliberately simple: every requirement carries trigger_reasons
-        that point at the diagnostic evidence behind it.
+        that point at the diagnostic evidence behind it, plus
+        required_evidence_roles for requirement-specific satisfaction.
         """
         diagnostics = self._knowledge_diagnostics(scope)
         requirements: list[dict[str, Any]] = []
@@ -881,6 +903,9 @@ class Topic2ApplicationService:
                     "required_for": required_for,
                     "priority": priority,
                     "trigger_reasons": reasons,
+                    "required_evidence_roles": list(
+                        self.REQUIREMENT_EVIDENCE_ROLES.get(type_, ())
+                    ),
                 }
             )
 
@@ -1029,12 +1054,14 @@ class Topic2ApplicationService:
     def _stage_satisfy_requirements(
         self, task_spec: dict[str, Any], scope: TaskScope, bus: WorkflowEventBus, random_seed: int
     ) -> dict[str, Any]:
-        """Stage 6: requirement satisfaction -> KnowledgeState.
+        """Stage 6: requirement-specific satisfaction -> KnowledgeState.
 
-        V0 uses DETERMINISTIC_PROVISIONAL: a requirement is SATISFIED only when
-        governed evidence exists, PARTIALLY_SATISFIED when accepted evidence
-        covers the type, otherwise UNSATISFIED. The workflow never blocks on
-        unresolved knowledge.
+        V0 uses DETERMINISTIC_PROVISIONAL with requirement-specific coverage:
+        an evidence only satisfies requirements whose required_evidence_roles
+        contain its claim_type. A single parameter_effect evidence therefore
+        never satisfies a threshold requirement. SATISFIED requires governed
+        evidence, PARTIALLY_SATISFIED requires accepted evidence, data_quality
+        can never be satisfied by literature. The workflow never blocks.
         """
         requirements = self._latest_requirements(bus)
         evidence = self._evidence_for_scope(scope)
@@ -1042,34 +1069,61 @@ class Topic2ApplicationService:
             EvidenceCompileRequest(scope=scope, evidence=evidence)
         )
         accepted = bundle.get("accepted") or []
+        accepted_by_claim_type: dict[str, set[str]] = {}
+        for item in accepted:
+            claim_type = str(item.get("claim_type") or "")
+            accepted_by_claim_type.setdefault(claim_type, set()).add(
+                str(item.get("evidence_id"))
+            )
         accepted_types = {str(item.get("claim_type")) for item in accepted}
-        accepted_ids = {str(item.get("evidence_id")) for item in accepted}
         governed_evidence_ids: set[str] = set()
         prior = self._latest_governed_prior(bus)
+        governed_by_claim_type: dict[str, set[str]] = {}
         if prior:
-            governed_evidence_ids = set(prior.get("evidence_ids") or [])
+            for evidence_id in prior.get("evidence_ids") or []:
+                governed_evidence_ids.add(str(evidence_id))
+        if governed_evidence_ids:
+            # governed 证据同样按 claim_type 归类（来自同批 evidence）
+            for item in accepted:
+                if str(item.get("evidence_id")) in governed_evidence_ids:
+                    claim_type = str(item.get("claim_type") or "")
+                    governed_by_claim_type.setdefault(claim_type, set()).add(
+                        str(item.get("evidence_id"))
+                    )
 
         satisfactions = []
         for requirement in requirements:
-            req_type = requirement["type"]
+            roles = requirement.get("required_evidence_roles") or []
             basis: list[str] = []
             reasons: list[str] = []
-            status = "UNSATISFIED"
-            if governed_evidence_ids:
-                status = "SATISFIED"
-                basis = sorted(governed_evidence_ids)
-            elif accepted_ids:
-                status = "PARTIALLY_SATISFIED"
-                basis = sorted(accepted_ids)
-                reasons.append("证据已审核但尚未进入受治理先验")
+            if not roles:
+                # 文献不可满足的需求（如 data_quality）：如实 UNSATISFIED
+                reasons.append("该需求由实验数据决定，文献无法满足")
+                status = "UNSATISFIED"
             else:
-                reasons.append("无已审核证据覆盖该需求")
+                covered_governed: set[str] = set()
+                covered_accepted: set[str] = set()
+                for role in roles:
+                    covered_governed.update(governed_by_claim_type.get(role, set()))
+                    covered_accepted.update(accepted_by_claim_type.get(role, set()))
+                if covered_governed:
+                    status = "SATISFIED"
+                    basis = sorted(covered_governed)
+                elif covered_accepted:
+                    status = "PARTIALLY_SATISFIED"
+                    basis = sorted(covered_accepted)
+                    reasons.append("存在匹配证据但尚未进入受治理先验")
+                else:
+                    status = "UNSATISFIED"
+                    reasons.append(
+                        f"无匹配证据（需要 claim_type ∈ {roles}，现有 accepted claim_types ∈ {sorted(accepted_types) or '∅'}）"
+                    )
             satisfactions.append(
                 {
                     "requirement_id": requirement["requirement_id"],
                     "status": status,
                     "assessment_method": "DETERMINISTIC_PROVISIONAL",
-                    "assessment_version": "satisfaction-v0.1",
+                    "assessment_version": "satisfaction-v0.2",
                     "basis_refs": basis,
                     "unresolved_reasons": reasons,
                 }
@@ -1098,8 +1152,14 @@ class Topic2ApplicationService:
             "KnowledgeState",
             knowledge_state,
             input_refs=[
-                {"type": "KnowledgeRequirements", "id": "analyze_knowledge_gaps"},
-                {"type": "EvidenceCompileResult", "id": "prepare_knowledge"},
+                {
+                    "type": "KnowledgeRequirements",
+                    "id": self._latest_artifact_id(bus, "KnowledgeRequirements"),
+                },
+                {
+                    "type": "EvidenceCompileResult",
+                    "id": self._latest_artifact_id(bus, "EvidenceCompileResult"),
+                },
             ],
         )
         trace = ScientificTrace(bus, "satisfy_requirements")
@@ -1146,6 +1206,20 @@ class Topic2ApplicationService:
                         (snapshot.get("content") or {}).get("requirements") or []
                     )
         return []
+
+    def _latest_artifact_id(
+        self, bus: WorkflowEventBus, artifact_type: str
+    ) -> str:
+        """Real artifact ID of the most recent artifact of a type (provenance).
+
+        Stage names are never used as provenance IDs - the DAG must reference
+        actual artifact UUIDs so every input is traceable.
+        """
+        artifacts = self.repository.list_application_artifacts(bus.run_id)
+        for artifact in reversed(artifacts):
+            if artifact["artifact_type"] == artifact_type:
+                return artifact["artifact_id"]
+        return f"{artifact_type}-unavailable"
 
     def _evidence_for_scope(self, scope: TaskScope) -> list[Evidence]:
         items: list[Evidence] = []
@@ -1327,13 +1401,16 @@ class Topic2ApplicationService:
         evidence = self._evidence_for_scope(scope)
         prior_artifact = None
         warnings: list[str] = []
+        evidence_artifact_id = self._latest_artifact_id(bus, "EvidenceCompileResult")
+        knowledge_state_id = self._latest_artifact_id(bus, "KnowledgeState")
         trace = ScientificTrace(bus, "apply_knowledge")
         trace.operation_started(
             "apply-governed-prior",
             "受治理先验编译",
             input_refs=[
                 {"type": "TaskScope", "id": scope.task_context_id or "task"},
-                {"type": "EvidenceCompileResult", "id": "prepare_knowledge"},
+                {"type": "EvidenceCompileResult", "id": evidence_artifact_id},
+                {"type": "KnowledgeState", "id": knowledge_state_id},
             ],
         )
         if evidence:
@@ -1361,7 +1438,10 @@ class Topic2ApplicationService:
                 bus.run_id,
                 "GovernedPriorArtifact",
                 prior_artifact,
-                input_refs=[{"type": "EvidenceCompileResult", "id": "prepare_knowledge"}],
+                input_refs=[
+                    {"type": "EvidenceCompileResult", "id": evidence_artifact_id},
+                    {"type": "KnowledgeState", "id": knowledge_state_id},
+                ],
             )
             trace.operation_completed(
                 "apply-governed-prior",

@@ -9,6 +9,7 @@ import { applicationApi } from '../../api/application'
 import type { Evidence, OptimizationComparison as OptimizationComparisonResult, OptimizationResult } from '../../api/types'
 import { topic2Api } from '../../api/topic2'
 import { ErrorBanner, EmptyState } from '../../components/Banners'
+import { friendlyApiError } from '../../lib/errors'
 import { OptimizationResultPanel } from '../../components/OptimizationResultPanel'
 import { StatusBadge } from '../../components/StatusBadge'
 import { objectiveLabel, processTaskLabel, parameterLabel } from '../../lib/canonical'
@@ -130,9 +131,7 @@ export function OptimizationWorkspace({
       })
       .catch((error) => {
         if (cancelled) return
-        setMachineBoundsError(
-          error instanceof Error ? `设备机器边界读取失败：${error.message}` : '设备机器边界读取失败',
-        )
+        setMachineBoundsError(`设备机器边界读取失败：${friendlyApiError(error)}`)
         if (rows.length > 0) {
           const dataBounds = defaultBoundsFromRows(rows)
           setBounds(dataBounds)
@@ -161,7 +160,7 @@ export function OptimizationWorkspace({
     try {
       scope = taskContextToScope(context)
     } catch (error) {
-      setComparisonError(error instanceof Error ? error.message : '任务不完整')
+      setComparisonError(friendlyApiError(error))
       return
     }
     if (!boundsInitialized || !bounds) {
@@ -193,7 +192,7 @@ export function OptimizationWorkspace({
         setActiveRun(result.vanilla.run_id)
       })
       .catch((error) =>
-        setComparisonError(error instanceof Error ? error.message : '优化对照失败'),
+        setComparisonError(friendlyApiError(error)),
       )
       .finally(() => setComparisonLoading(false))
   }, [context, modelPolicy, boundsInitialized, bounds, gates, governedPrior, setOptimization, setActiveRun])
@@ -240,7 +239,7 @@ export function OptimizationWorkspace({
     try {
       scope = taskContextToScope(context)
     } catch (error) {
-      setE2pError(error instanceof Error ? error.message : '任务不完整')
+      setE2pError(friendlyApiError(error))
       return
     }
     if (!dataProfile) {
@@ -259,13 +258,7 @@ export function OptimizationWorkspace({
             : 'E2P Prepare 未签发 GovernedPriorArtifact（无已批准证据）；assisted 将与 Vanilla 相同。',
         )
       })
-      .catch((error) =>
-        setE2pError(
-          error instanceof Error
-            ? `Governed Prior 签发失败（fails closed）：${error.message}`
-            : 'Governed Prior 签发失败',
-        ),
-      )
+      .catch((error) => setE2pError(friendlyApiError(error)))
       .finally(() => setE2pLoading(false))
   }, [context, dataProfile, ragEvidence])
 
@@ -451,3 +444,4 @@ export function OptimizationWorkspace({
     </div>
   )
 }
+

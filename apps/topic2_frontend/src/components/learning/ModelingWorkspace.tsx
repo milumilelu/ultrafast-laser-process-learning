@@ -6,6 +6,7 @@ import { useCallback, useEffect } from 'react'
 import { topic2Api } from '../../api/topic2'
 import type { ModelTrainingResult } from '../../api/types'
 import { ErrorBanner, EmptyState } from '../../components/Banners'
+import { friendlyApiError } from '../../lib/errors'
 import { DataProfileCard } from '../../components/DataProfileCard'
 import { EvidencePanel } from '../../components/EvidencePanel'
 import { ModelComparisonTable } from '../../components/ModelComparisonTable'
@@ -72,7 +73,7 @@ export function ModelingWorkspace({
       .compileEvidence(scope, ragEvidence)
       .then((result) => setEvidence(result))
       .catch((error) =>
-        setEvidence(null, error instanceof Error ? error.message : 'Evidence 编译失败'),
+        setEvidence(null, friendlyApiError(error)),
       )
   }, [context, ragEvidence, setEvidence])
 
@@ -96,7 +97,7 @@ export function ModelingWorkspace({
         setActiveRun(result.run_id)
       })
       .catch((error) =>
-        setModelPolicy(null, error instanceof Error ? error.message : 'Model Policy 计算失败'),
+        setModelPolicy(null, friendlyApiError(error)),
       )
   }, [context, dataProfile, ragEvidence, setModelPolicy, setActiveRun])
 
@@ -125,7 +126,7 @@ export function ModelingWorkspace({
         }
       })
       .catch((error) =>
-        setTraining(null, error instanceof Error ? error.message : '模型训练失败'),
+        setTraining(null, friendlyApiError(error)),
       )
   }, [context, modelPolicy, setTraining, setActiveRun, setActiveModel, setSelection, updateTask])
 
@@ -322,3 +323,4 @@ export function ModelingWorkspace({
     </div>
   )
 }
+

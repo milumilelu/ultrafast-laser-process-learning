@@ -34,7 +34,12 @@ RequirementTarget = Literal["learning", "planning", "both"]
 
 
 class KnowledgeRequirement(BaseModel):
-    """一条知识需求：当前任务值得知道什么、为什么（P0-5）。"""
+    """一条知识需求：当前任务值得知道什么、为什么（P0-5）。
+
+    required_evidence_roles 声明该需求能被哪种 evidence claim_type 满足
+    （requirement-specific coverage：一条 parameter_effect 证据不能
+    满足 threshold 需求）。
+    """
 
     model_config = ConfigDict(extra="forbid")
 
@@ -44,6 +49,7 @@ class KnowledgeRequirement(BaseModel):
     required_for: RequirementTarget = "both"
     priority: Literal["high", "medium", "low"] = "medium"
     trigger_reasons: list[str] = Field(default_factory=list)
+    required_evidence_roles: list[str] = Field(default_factory=list)
 
 
 SatisfactionStatus = Literal[

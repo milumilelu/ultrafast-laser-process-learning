@@ -199,9 +199,17 @@ class Topic2Service:
             geometry_type=scope.geometry_type,
         )
         target = scope.target
-        return [
+        result = [
             row for row in rows if row.get("valid_flag") and row.get(target) is not None
         ]
+        if not result:
+            raise ValueError(
+                f"no comparable experiments found for the requested scope: "
+                f"material={scope.material}, laser_type={scope.laser_type}, "
+                f"equipment_id={scope.equipment_id}, geometry_type={scope.geometry_type}, "
+                f"target={scope.target}（total_rows={len(rows)}）"
+            )
+        return result
 
     def scope_capability(
         self,

@@ -3,6 +3,7 @@ events, artifacts, vanilla/assisted comparison and demo replay contract."""
 
 from __future__ import annotations
 
+import json
 import sys
 from pathlib import Path
 
@@ -285,3 +286,47 @@ def test_continue_refuses_repeat_stage(app_service) -> None:
             summary["application_run_id"],
             stages=["baseline_learning"],
         )
+
+
+def test_requirement_specific_coverage(app_service) -> None:
+    """一条 range_preference evidence 只能满足 range 类需求，不能误满足
+    process_mechanism（functional_shape）需求；data_quality 恒不被文献满足。"""
+    from packages.process_contracts.schemas import Evidence, EvidenceClaimType, EvidenceProvenance, EvidenceScope
+
+    evidence = Evidence(
+        evidence_id="E-COV-001",
+        source_type="literature",
+        claim_type=EvidenceClaimType.RANGE_PREFERENCE,
+        parameter="frequency_kHz",
+        target="depth_um",
+        claim={"lower": 50.0, "upper": 200.0, "strength": "medium"},
+        scope=EvidenceScope(material="SiC", laser_type="fs"),
+        provenance=EvidenceProvenance(source_id="paper-x", review_id="review-1"),
+        review_status="approved",
+        version="1",
+    )
+    with app_service.repository.connection() as db:
+        db.execute(
+            "INSERT OR REPLACE INTO evidence(evidence_id,evidence_version,payload_json,review_status) VALUES(?,?,?,?)",
+            (evidence.evidence_id, "1", json.dumps(evidence.model_dump(mode="json"), ensure_ascii=False), "approved"),
+        )
+
+    summary = app_service.create_application_run(
+        mode="research", task_spec=TASK_SPEC, random_seed=42
+    )
+    result = app_service.get_result(summary["application_run_id"])
+    satisfactions = {
+        s["requirement_id"]: s for s in result["knowledgeState"]["satisfactions"]
+    }
+    by_type = {}
+    for req in result["knowledgeState"]["requirements"]:
+        by_type[req["requirement_id"]] = req["type"]
+    # range 类需求（parameter_effect / reported_optimum）应被部分满足
+    for req_id, req_type in by_type.items():
+        if req_type in ("parameter_effect", "reported_optimum"):
+            assert satisfactions[req_id]["status"] in ("SATISFIED", "PARTIALLY_SATISFIED"), req_id
+            assert "E-COV-001" in satisfactions[req_id]["basis_refs"], req_id
+        if req_type in ("process_mechanism", "formula"):
+            assert satisfactions[req_id]["status"] == "UNSATISFIED", req_id
+        if req_type == "data_quality":
+            assert satisfactions[req_id]["status"] == "UNSATISFIED", req_id

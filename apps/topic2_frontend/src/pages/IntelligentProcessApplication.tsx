@@ -6,7 +6,9 @@ import { useCallback, useEffect, useRef, useState } from 'react'
 import { Link, useNavigate, useSearchParams } from 'react-router-dom'
 
 import { applicationApi, applicationGateway } from '../api/application'
+import { topic2Api } from '../api/topic2'
 import type { ModelMetrics, ModelTrainingResult, Topic2ApplicationResult } from '../api/types'
+import { friendlyApiError } from '../lib/errors'
 import { ErrorBanner, EmptyState } from '../components/Banners'
 import { StatusBadge } from '../components/StatusBadge'
 import { IdentificationWorkspace } from '../components/learning/IdentificationWorkspace'
@@ -148,6 +150,32 @@ export function IntelligentProcessApplication() {
     }
   }, [context])
 
+  /** 运行前预检：当前组合是否有实验数据（无数据不发请求，直接友好提示）。 */
+  const preflightScope = useCallback(async (): Promise<boolean> => {
+    try {
+      const capability = await topic2Api.scopeCapability({
+        material: context.materialId,
+        laser_type: context.laserType,
+        equipment_id: context.datasetEquipmentId,
+        geometry_type: context.processType ?? null,
+      })
+      if (capability.n_samples === 0) {
+        setRunError(
+          `当前组合（${context.materialId ?? '?'} / ${context.laserType ?? '?'} / ${context.datasetEquipmentId ?? '?'} / ${context.processType ?? '?'}）在数据库中没有实验数据。请到「任务与数据」页更换组合后再运行。`,
+        )
+        return false
+      }
+      if (!capability.meets_identification) {
+        setRunError('当前组合数据量不足以执行参数辨识（需 ≥4 样本 / ≥2 独立设计）。请补充数据或更换组合。')
+        return false
+      }
+      return true
+    } catch (error) {
+      setRunError(friendlyApiError(error))
+      return false
+    }
+  }, [context.materialId, context.laserType, context.datasetEquipmentId, context.processType, setRunError])
+
   const runFullAnalysis = useCallback(() => {
     let taskSpec
     try {
@@ -156,27 +184,30 @@ export function IntelligentProcessApplication() {
       setRunError(error instanceof Error ? error.message : '任务不完整')
       return
     }
-    setRunError(null)
-    setApplicationResult(null)
-    setRunning(true)
-    workflow.clear()
-    const clientRequestId = crypto.randomUUID()
-    applicationGateway
-      .runFullApplication({
-        mode: softwareMode,
-        task_spec: taskSpec,
-        random_seed: 42,
-        client_request_id: clientRequestId,
-      })
-      .then((summary) => {
-        workflow.start(summary.application_run_id)
-        setRunRefs({ runId: summary.application_run_id, mode: summary.mode })
-      })
-      .catch((error) => {
-        setRunning(false)
-        setRunError(error instanceof Error ? error.message : '应用运行启动失败')
-      })
-  }, [buildTaskSpec, softwareMode, workflow, setRunRefs])
+    void preflightScope().then((ok) => {
+      if (!ok) return
+      setRunError(null)
+      setApplicationResult(null)
+      setRunning(true)
+      workflow.clear()
+      const clientRequestId = crypto.randomUUID()
+      applicationGateway
+        .runFullApplication({
+          mode: softwareMode,
+          task_spec: taskSpec,
+          random_seed: 42,
+          client_request_id: clientRequestId,
+        })
+        .then((summary) => {
+          workflow.start(summary.application_run_id)
+          setRunRefs({ runId: summary.application_run_id, mode: summary.mode })
+        })
+        .catch((error) => {
+          setRunning(false)
+          setRunError(friendlyApiError(error))
+        })
+    })
+  }, [buildTaskSpec, preflightScope, softwareMode, workflow, setRunRefs])
 
   /** 两段式入口（checkpoint）：运行到知识缺口（1-4 阶段），检查 Requirement 后由
    *  「继续准备科学知识」续跑同一 ApplicationRun（5-8 阶段），不重复已执行阶段。 */
@@ -188,28 +219,31 @@ export function IntelligentProcessApplication() {
       setRunError(error instanceof Error ? error.message : '任务不完整')
       return
     }
-    setRunError(null)
-    setApplicationResult(null)
-    setRunning(true)
-    workflow.clear()
-    const clientRequestId = crypto.randomUUID()
-    applicationGateway
-      .runFullApplication({
-        mode: 'research',
-        task_spec: taskSpec,
-        stages: ['prepare_task', 'assess_data', 'baseline_learning', 'analyze_knowledge_gaps'],
-        random_seed: 42,
-        client_request_id: clientRequestId,
-      })
-      .then((summary) => {
-        workflow.start(summary.application_run_id)
-        setRunRefs({ runId: summary.application_run_id, mode: summary.mode })
-      })
-      .catch((error) => {
-        setRunning(false)
-        setRunError(error instanceof Error ? error.message : '运行到知识缺口失败')
-      })
-  }, [buildTaskSpec, workflow, setRunRefs])
+    void preflightScope().then((ok) => {
+      if (!ok) return
+      setRunError(null)
+      setApplicationResult(null)
+      setRunning(true)
+      workflow.clear()
+      const clientRequestId = crypto.randomUUID()
+      applicationGateway
+        .runFullApplication({
+          mode: 'research',
+          task_spec: taskSpec,
+          stages: ['prepare_task', 'assess_data', 'baseline_learning', 'analyze_knowledge_gaps'],
+          random_seed: 42,
+          client_request_id: clientRequestId,
+        })
+        .then((summary) => {
+          workflow.start(summary.application_run_id)
+          setRunRefs({ runId: summary.application_run_id, mode: summary.mode })
+        })
+        .catch((error) => {
+          setRunning(false)
+          setRunError(friendlyApiError(error))
+        })
+    })
+  }, [buildTaskSpec, preflightScope, workflow, setRunRefs])
 
   const continueKnowledgePreparation = useCallback(() => {
     const runId = workflow.activeRunId
@@ -227,7 +261,7 @@ export function IntelligentProcessApplication() {
       })
       .catch((error) => {
         setRunning(false)
-        setRunError(error instanceof Error ? error.message : '继续准备科学知识失败')
+        setRunError(friendlyApiError(error))
       })
   }, [workflow])
 
@@ -504,7 +538,11 @@ function SummaryTab({
             <li>
               <span className="dl-key">数据</span>
               <span className="dl-value">
-                {dataProfile ? `${dataProfile.n_samples} 样本 / ${dataProfile.n_unique_designs} 独立设计` : '—'}
+                {dataProfile
+                  ? dataProfile.n_samples > 0
+                    ? `${dataProfile.n_samples} 样本 / ${dataProfile.n_unique_designs} 独立设计`
+                    : '当前组合无实验数据（请到任务与数据页更换组合）'
+                  : '—'}
               </span>
             </li>
             <li>
