@@ -1,12 +1,21 @@
 from __future__ import annotations
 
-from typing import Any
+from typing import Any, Literal
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, ConfigDict, Field
+
+EquipmentFieldVerification = Literal[
+    "MEASURED",
+    "MANUFACTURER_SPEC",
+    "ESTIMATED",
+    "UNVERIFIED",
+]
 
 
 class EquipmentProfileCreate(BaseModel):
-    profile_name: str
+    model_config = ConfigDict(extra="forbid")
+
+    profile_name: str = Field(min_length=1)
     machine_id: str | None = None
     manufacturer: str | None = None
     model: str | None = None
@@ -19,10 +28,15 @@ class EquipmentProfileCreate(BaseModel):
     optical_setup: dict[str, Any] = Field(default_factory=dict)
     motion_system: dict[str, Any] = Field(default_factory=dict)
     process_capability: dict[str, Any] = Field(default_factory=dict)
+    field_verification: dict[str, EquipmentFieldVerification] = Field(
+        default_factory=dict
+    )
     set_active: bool = False
 
 
 class EquipmentProfileUpdate(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
     profile_name: str | None = None
     machine_id: str | None = None
     manufacturer: str | None = None
@@ -37,6 +51,7 @@ class EquipmentProfileUpdate(BaseModel):
     optical_setup: dict[str, Any] | None = None
     motion_system: dict[str, Any] | None = None
     process_capability: dict[str, Any] | None = None
+    field_verification: dict[str, EquipmentFieldVerification] | None = None
 
 
 class MachineBounds(BaseModel):
@@ -48,4 +63,3 @@ class MachineBounds(BaseModel):
 class MachineBoundsOverride(BaseModel):
     machine_bounds_override: dict[str, list[float | int]] = Field(default_factory=dict)
     override_reason: str
-

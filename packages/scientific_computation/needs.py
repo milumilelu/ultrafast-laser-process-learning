@@ -3,9 +3,11 @@
 Separates four fundamentally different gap kinds that used to be collapsed
 into one "knowledge requirement" list:
 
-- RESOURCE_INPUT          : equipment record fields (actual_power_W,
-                            beam_radius_um, wavelength_nm) - resolved by the
-                            Equipment Manager, never by literature.
+- RESOURCE_INPUT          : task execution setpoints (actual_power_W) or
+                            equipment record fields (beam_radius_um,
+                            wavelength_nm). They are resolved by the task
+                            definition or Equipment Manager, never by
+                            literature.
 - SCIENTIFIC_KNOWLEDGE    : knowledge gaps (F_th prior, incubation model,
                             path strategy) - resolved by literature + LLM
                             reading.
@@ -38,7 +40,9 @@ from packages.scientific_computation.contracts import (
 
 SCIENTIFIC_NEED_SCHEMA_VERSION = "scientific-need-set-v1"
 
-RESOURCE_INPUT_PARAMETERS = ("actual_power_W", "beam_radius_um", "wavelength_nm")
+TASK_SETPOINT_PARAMETERS = ("actual_power_W",)
+EQUIPMENT_INPUT_PARAMETERS = ("beam_radius_um", "wavelength_nm")
+RESOURCE_INPUT_PARAMETERS = TASK_SETPOINT_PARAMETERS + EQUIPMENT_INPUT_PARAMETERS
 RESOURCE_REQUIREMENT_TYPES = ("PHYSICS_DEPENDENCY", "physics_dependency")
 OBSERVATION_REQUIREMENT_TYPES = ("data_quality",)
 
@@ -51,6 +55,7 @@ class ScientificNeedType(StrEnum):
 
 
 class NeedResolutionTarget(StrEnum):
+    TASK_DEFINITION = "TASK_DEFINITION"
     EQUIPMENT_MANAGER = "EQUIPMENT_MANAGER"
     LITERATURE_RETRIEVAL = "LITERATURE_RETRIEVAL"
     EXPERIMENT_OBSERVATION = "EXPERIMENT_OBSERVATION"
@@ -168,7 +173,7 @@ def compile_scientific_needs(
     needs: list[ScientificNeed] = []
     resolved_resource_targets: set[str] = set()
 
-    # 1. RESOURCE_INPUT from machine-origin gaps (never literature)
+    # 1. RESOURCE_INPUT from task-setpoint or machine-origin gaps (never literature)
     snapshot = dict(machine_snapshot or {})
     snapshot_missing = [str(name) for name in snapshot.get("missing_required") or []]
     capability_missing = {
@@ -181,17 +186,40 @@ def compile_scientific_needs(
     resource_names.update(snapshot_missing)
     for name in sorted(resource_names):
         resolved_resource_targets.add(name)
+        is_task_setpoint = name in TASK_SETPOINT_PARAMETERS
         needs.append(
             ScientificNeed(
                 need_id=_need_id({"type": "RESOURCE_INPUT", "target": name}),
                 need_type=ScientificNeedType.RESOURCE_INPUT,
                 target=name,
-                question=f"目标设备的 {name} 是多少？",
-                required_for="MachineProfileSnapshot",
+                question=(
+                    "本次任务在材料表面处的入射平均功率设定值是多少？"
+                    if is_task_setpoint
+                    else f"目标设备的 {name} 是多少？"
+                ),
+                required_for=(
+                    "ExecutionContext" if is_task_setpoint else "MachineProfileSnapshot"
+                ),
                 priority="high",
-                trigger_reasons=[f"{name} missing in machine profile"],
-                resolution_target=NeedResolutionTarget.EQUIPMENT_MANAGER,
-                satisfaction_criteria=["verified equipment profile field"],
+                trigger_reasons=[
+                    (
+                        "task workpiece-surface incident power setpoint missing"
+                        if is_task_setpoint
+                        else f"{name} missing in machine profile"
+                    )
+                ],
+                resolution_target=(
+                    NeedResolutionTarget.TASK_DEFINITION
+                    if is_task_setpoint
+                    else NeedResolutionTarget.EQUIPMENT_MANAGER
+                ),
+                satisfaction_criteria=[
+                    (
+                        "task setpoint verified against measured workpiece-surface equipment bounds"
+                        if is_task_setpoint
+                        else "verified equipment profile field"
+                    )
+                ],
                 provenance=refs,
             )
         )

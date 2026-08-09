@@ -12,7 +12,6 @@ import httpx
 from fastapi import FastAPI, HTTPException, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse, PlainTextResponse, Response
-from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel, ConfigDict, Field
 
 from apps.topic2_backend.application.service import Topic2ApplicationService
@@ -128,19 +127,124 @@ def create_app(settings: Settings | None = None) -> FastAPI:
         return {
             "status": "ok",
             "version": app.version,
-            "agent_required": False,
-            "llm_required": False,
-            "internet_required": False,
+            "agent_required": True,
+            "llm_required": True,
+            "internet_required": True,
+            "requirements_by_execution_mode": {
+                "RESEARCH": {
+                    "agent_equipment_repository": "required",
+                    "real_llm_on_cache_miss": "required",
+                    "network": "required_when_remote_resources_are_used",
+                },
+                "DEMO_FIXTURE": {
+                    "agent_equipment_repository": "not_used",
+                    "real_llm_on_cache_miss": "forbidden_fail_closed",
+                    "network": "not_required",
+                },
+                "SANDBOX": {
+                    "agent_equipment_repository": "optional",
+                    "real_llm_on_cache_miss": "not_required",
+                    "network": "not_required",
+                },
+            },
             "database_path": str(service.settings.database_path),
         }
 
     @app.get("/api/v1/materials")
     def materials():
-        return {"items": service.repository.materials()}
+        return {"items": service.repository.materials(real_only=True)}
 
     @app.get("/api/v1/equipment")
     def equipment():
-        return {"items": service.repository.equipment()}
+        """Administrative provenance view; task scope is resolved by the backend."""
+        return {"items": service.repository.equipment(real_only=True)}
+
+    @app.get("/api/v1/datasets")
+    def datasets():
+        return {"items": service.repository.datasets(real_only=True)}
+
+    @app.get("/api/v1/equipment-profiles")
+    def equipment_profiles():
+        """Synthetic/demo profiles are not part of the user-facing resource API."""
+        return {"items": []}
+
+    @app.get("/api/v1/calibration-observation-sets")
+    def calibration_observation_sets():
+        path = service.settings.calibration_fixture_path
+        if path is None or not Path(path).exists():
+            return {"items": []}
+        try:
+            payload = json.loads(Path(path).read_text(encoding="utf-8"))
+        except (OSError, json.JSONDecodeError):
+            return {"items": []}
+        if str(payload.get("origin") or "").upper() in {
+            "SYNTHETIC_TEST_FIXTURE",
+            "DEMO_FIXTURE",
+        }:
+            return {"items": []}
+        return {
+            "items": [
+                {
+                    "observation_set_id": payload.get("observation_set_id"),
+                    "schema_version": payload.get("schema_version"),
+                    "material": payload.get("material"),
+                    "equipment_profile_id": payload.get("equipment_profile_id"),
+                    "origin": payload.get("origin"),
+                    "count": len(payload.get("observations") or []),
+                }
+            ]
+            if payload.get("observation_set_id")
+            else []
+        }
+
+    @app.get("/api/v1/literature")
+    def literature():
+        try:
+            from ultrafast_memory.db.session import get_connection
+
+            with get_connection() as connection:
+                rows = connection.execute(
+                    """
+                    SELECT p.paper_id,p.canonical_title,p.authors,p.year,p.material,
+                           p.process_type,p.laser_type,p.source,p.url,
+                           c.metadata_json
+                    FROM literature_paper p
+                    LEFT JOIN literature_chunk c ON c.chunk_id=(
+                      SELECT c2.chunk_id FROM literature_chunk c2
+                      WHERE c2.paper_id=p.paper_id AND c2.active=1
+                      ORDER BY c2.chunk_index LIMIT 1
+                    )
+                    ORDER BY p.paper_id
+                    """
+                ).fetchall()
+        except Exception:  # noqa: BLE001 - optional catalog degrades to empty
+            return {"items": []}
+        items = []
+        for row in rows:
+            item = dict(row)
+            try:
+                metadata = json.loads(item.pop("metadata_json") or "{}")
+            except json.JSONDecodeError:
+                metadata = {}
+            source = str(item.get("source") or "").lower()
+            fixture_label = str(metadata.get("fixture_label") or "").upper()
+            if "fixture" in source or fixture_label in {
+                "CURATED_LITERATURE_FIXTURE",
+                "SYNTHETIC_TEST_FIXTURE",
+            }:
+                continue
+            items.append(
+                {
+                    **item,
+                    "fixture_label": metadata.get("fixture_label"),
+                    "pdf_ref": metadata.get("pdf_ref") or item.get("url"),
+                    "pdf_sha256": metadata.get("pdf_sha256"),
+                    "scientific_document_ref": metadata.get(
+                        "scientific_document_ref"
+                    ),
+                }
+            )
+        return {"items": items}
 
     @app.get("/api/v1/scope-capability")
     def scope_capability(
@@ -167,6 +271,7 @@ def create_app(settings: Settings | None = None) -> FastAPI:
     ):
         return {
             "items": service.repository.list_experiments(
+                real_only=True,
                 material=material,
                 laser_type=laser_type,
                 equipment_id=equipment_id,
@@ -284,7 +389,10 @@ def create_app(settings: Settings | None = None) -> FastAPI:
         result = service.repository.workflow(workflow_id)
         if result is None:
             raise _not_found("process workflow", workflow_id)
-        return {**result, "events": service.repository.workflow_events(workflow_id)}
+        return {
+            **result,
+            "events": service.repository.process_workflow_events(workflow_id),
+        }
 
     @app.get("/api/v1/runs")
     def runs(run_type: str | None = None):
@@ -301,6 +409,19 @@ def create_app(settings: Settings | None = None) -> FastAPI:
 
     @app.post("/api/v1/application-runs")
     def create_application_run(payload: ApplicationRunRequest):
+        if payload.mode != "research":
+            raise HTTPException(
+                status_code=422,
+                detail="用户入口仅允许 RESEARCH；Demo/Sandbox 不得进入产品界面",
+            )
+        execution_mode = str(
+            (payload.task_spec or {}).get("execution_mode") or "RESEARCH"
+        ).upper()
+        if execution_mode != "RESEARCH":
+            raise HTTPException(
+                status_code=422,
+                detail="用户入口不接受 Demo/Sandbox 科学输入",
+            )
         try:
             return application_service.create_application_run(
                 mode=payload.mode,
@@ -315,17 +436,27 @@ def create_app(settings: Settings | None = None) -> FastAPI:
 
     @app.get("/api/v1/application-runs")
     def list_application_runs(mode: str | None = None):
-        return {"items": application_service.list_runs(mode=mode)}
+        return {"items": application_service.list_runs(mode="research")}
+
+    def require_public_research_run(run_id: str) -> dict[str, Any]:
+        try:
+            run = application_service.get_run(run_id)
+        except ValueError as exc:
+            raise _not_found("application run", run_id) from exc
+        execution_mode = str(
+            (run.get("task_spec") or {}).get("execution_mode") or "RESEARCH"
+        ).upper()
+        if run.get("mode") != "research" or execution_mode != "RESEARCH":
+            raise _not_found("application run", run_id)
+        return run
 
     @app.get("/api/v1/application-runs/{run_id}")
     def get_application_run(run_id: str):
-        try:
-            return application_service.get_run(run_id)
-        except ValueError as exc:
-            raise _not_found("application run", run_id) from exc
+        return require_public_research_run(run_id)
 
     @app.get("/api/v1/application-runs/{run_id}/result")
     def application_run_result(run_id: str):
+        require_public_research_run(run_id)
         try:
             return application_service.get_result(run_id)
         except ValueError as exc:
@@ -335,6 +466,7 @@ def create_app(settings: Settings | None = None) -> FastAPI:
     def application_run_events(
         run_id: str, request: Request, after_sequence: int = 0
     ):
+        require_public_research_run(run_id)
         try:
             events = application_service.events(run_id, after_sequence=after_sequence)
         except ValueError as exc:
@@ -351,6 +483,7 @@ def create_app(settings: Settings | None = None) -> FastAPI:
 
     @app.get("/api/v1/application-runs/{run_id}/artifacts")
     def application_run_artifacts(run_id: str):
+        require_public_research_run(run_id)
         try:
             return {"items": application_service.artifacts(run_id)}
         except ValueError as exc:
@@ -358,14 +491,16 @@ def create_app(settings: Settings | None = None) -> FastAPI:
 
     @app.post("/api/v1/application-runs/{run_id}/replay")
     def replay_application_run(run_id: str):
-        try:
-            return application_service.replay(run_id)
-        except ValueError as exc:
-            raise HTTPException(status_code=422, detail=str(exc)) from exc
+        del run_id
+        raise HTTPException(
+            status_code=404,
+            detail="用户入口不提供 Demo replay",
+        )
 
     @app.post("/api/v1/application-runs/{run_id}/continue")
     def continue_application_run(run_id: str, payload: ApplicationContinueRequest):
         """Checkpoint resume：同一 ApplicationRun 续跑剩余阶段（不重复已执行阶段）。"""
+        require_public_research_run(run_id)
         try:
             return application_service.continue_application_run(
                 run_id,
@@ -379,9 +514,11 @@ def create_app(settings: Settings | None = None) -> FastAPI:
     @app.get("/api/v1/artifacts/{artifact_id}")
     def artifact(artifact_id: str):
         try:
-            return application_service.artifact(artifact_id)
+            item = application_service.artifact(artifact_id)
         except ValueError as exc:
             raise _not_found("artifact", artifact_id) from exc
+        require_public_research_run(str(item.get("application_run_id") or ""))
+        return item
 
     @app.post("/api/v1/optimization/compare")
     def compare_optimization(payload: OptimizationCompareRequest):
@@ -433,7 +570,7 @@ def create_app(settings: Settings | None = None) -> FastAPI:
         @app.get("/{full_path:path}", include_in_schema=False)
         def spa_static(full_path: str):
             """Serve built frontend with SPA fallback (registered last; API routes win)."""
-            if full_path.startswith("api/") or full_path.startswith("agent-api/"):
+            if full_path.startswith(("api/", "agent-api/")):
                 raise HTTPException(status_code=404, detail="not found")
             candidate = (FRONTEND_DIST / full_path).resolve()
             try:

@@ -69,7 +69,7 @@ class Topic2Service:
         if self.settings.auto_seed_fixture and not self.repository.list_experiments():
             self.repository.import_fixture(self.settings.fixture_path)
         self._export_json("database_statistics.json", self.repository.statistics())
-        latest = self.repository.latest_dataset()
+        latest = self.repository.latest_dataset(real_only=True)
         if latest:
             self._export_json(
                 "dataset_summary.json", {**latest, **self.repository.statistics()}
@@ -189,10 +189,14 @@ class Topic2Service:
                 "latest_event": event,
             }
         )
-        return {**stored, "events": self.repository.workflow_events(workflow_id)}
+        return {
+            **stored,
+            "events": self.repository.process_workflow_events(workflow_id),
+        }
 
     def _rows_for_scope(self, scope: TaskScope) -> list[dict[str, Any]]:
         rows = self.repository.list_experiments(
+            real_only=True,
             material=scope.material,
             laser_type=scope.laser_type,
             equipment_id=scope.equipment_id,
@@ -220,6 +224,7 @@ class Topic2Service:
     ) -> dict[str, Any]:
         """当前组合的样本能力（按目标统计），并列出可选设备/几何供 UI 约束。"""
         rows = self.repository.list_experiments(
+            real_only=True,
             material=material,
             laser_type=laser_type,
             equipment_id=equipment_id,
@@ -237,20 +242,31 @@ class Topic2Service:
             }
 
         available_equipment = sorted(
-            {row["equipment_id"] for row in self.repository.list_experiments(laser_type=laser_type)}
+            {
+                row["equipment_id"]
+                for row in self.repository.list_experiments(
+                    real_only=True, laser_type=laser_type
+                )
+            }
         )
         available_geometries = sorted(
             {
                 row["geometry_type"]
                 for row in self.repository.list_experiments(
-                    material=material, laser_type=laser_type, equipment_id=equipment_id
+                    real_only=True,
+                    material=material,
+                    laser_type=laser_type,
+                    equipment_id=equipment_id,
                 )
             }
         )
         equipment_samples: dict[str, int] = {}
         for name in available_equipment:
             rows_for = self.repository.list_experiments(
-                material=material, laser_type=laser_type, equipment_id=name
+                real_only=True,
+                material=material,
+                laser_type=laser_type,
+                equipment_id=name,
             )
             equipment_samples[name] = len(
                 [row for row in rows_for if row.get("valid_flag")]
@@ -290,7 +306,7 @@ class Topic2Service:
         configuration: dict[str, Any],
     ) -> dict[str, Any]:
         profile = build_data_profile(rows)
-        dataset = self.repository.latest_dataset() or {
+        dataset = self.repository.latest_dataset(real_only=True) or {
             "dataset_version": "unknown",
             "dataset_hash": "unknown",
         }
@@ -627,7 +643,7 @@ class Topic2Service:
         # 先在内存中完成完整结果（含 RSM 基线比较），全部成功后才落盘，
         # 避免失败路径残留模型文件与数据库记录。
         comparison = comparison_report(selection)
-        dataset = self.repository.latest_dataset() or {"dataset_version": "unknown"}
+        dataset = self.repository.latest_dataset(real_only=True) or {"dataset_version": "unknown"}
         model_version = (
             f"{MODEL_CODE_VERSION}-{canonical_hash(selection.metrics_by_model)[:10]}"
         )
@@ -711,7 +727,7 @@ class Topic2Service:
         if not records:
             raise ValueError(f"model not found: {request.model_id}")
         metadata = records[0]
-        dataset = self.repository.latest_dataset()
+        dataset = self.repository.latest_dataset(real_only=True)
         if dataset is None or metadata["dataset_version"] != dataset["dataset_version"]:
             raise ValueError("model dataset version is not current")
         if metadata["material"] != request.scope.material:
@@ -805,7 +821,7 @@ class Topic2Service:
             model=optimization_model,
         )
         run_id = new_run_id("bo")
-        recommendation_id = f"recommendation-{canonical_hash({'scope': request.scope.model_dump(mode='json'), 'dataset': self.repository.latest_dataset(), 'optimization': optimization})[:16]}"
+        recommendation_id = f"recommendation-{canonical_hash({'scope': request.scope.model_dump(mode='json'), 'dataset': self.repository.latest_dataset(real_only=True), 'optimization': optimization})[:16]}"
         configuration = {
             **request.model_dump(mode="json"),
             "effective_beta": beta,
@@ -873,7 +889,7 @@ class Topic2Service:
         return payload
 
     def export_experiments_csv(self, **filters: Any) -> str:
-        rows = self.repository.list_experiments(**filters)
+        rows = self.repository.list_experiments(real_only=True, **filters)
         if not rows:
             return ""
         buffer = StringIO()

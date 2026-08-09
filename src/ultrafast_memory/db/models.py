@@ -360,6 +360,7 @@ class EquipmentProfile(Base):
     calibration_date: Mapped[str | None] = mapped_column(Text)
     valid_until: Mapped[str | None] = mapped_column(Text)
     notes: Mapped[str | None] = mapped_column(Text)
+    field_verification_json: Mapped[str | None] = mapped_column(Text)
 
 
 class LaserSourceConfig(Base):
@@ -375,6 +376,8 @@ class LaserSourceConfig(Base):
     average_power_max_W: Mapped[float | None] = mapped_column(Float)
     rated_max_power_W: Mapped[float | None] = mapped_column(Float)
     actual_max_power_W: Mapped[float | None] = mapped_column(Float)
+    workpiece_incident_power_min_W: Mapped[float | None] = mapped_column(Float)
+    workpiece_incident_power_max_W: Mapped[float | None] = mapped_column(Float)
     frequency_min_kHz: Mapped[float | None] = mapped_column(Float)
     frequency_max_kHz: Mapped[float | None] = mapped_column(Float)
     pulse_energy_max_uJ: Mapped[float | None] = mapped_column(Float)

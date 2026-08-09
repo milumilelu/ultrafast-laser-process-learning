@@ -246,12 +246,12 @@ class ScientificCapabilityAnalyzer:
         if "actual_power_W" in missing_names:
             add_requirement(
                 "PHYSICS_DEPENDENCY",
-                "目标设备的实际到样品平均功率或脉冲能量是多少？",
+                "本次任务在材料表面处的入射平均功率设定值是多少？",
                 "PhysicsCanonicalization.peak_fluence",
                 "high",
-                ["actual_power_W missing"],
-                ["experimental_condition"],
-                ["verified machine measurement or equipment record"],
+                ["task workpiece-surface incident power setpoint missing"],
+                ["task_process_setpoint"],
+                ["verified against measured workpiece-surface equipment bounds"],
             )
         if "beam_radius_um" in missing_names:
             add_requirement(

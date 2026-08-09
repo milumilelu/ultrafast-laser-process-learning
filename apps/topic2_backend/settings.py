@@ -38,7 +38,7 @@ class Settings:
     equipment_profiles_path: Path | None = None
     calibration_fixture_path: Path | None = None
     prior_fixture_path: Path | None = None
-    auto_seed_fixture: bool = True
+    auto_seed_fixture: bool = False
     random_seed: int = 42
     equipment_profiles: dict[str, dict[str, Any]] = field(default_factory=dict)
     cv_folds: int = 5
@@ -129,7 +129,7 @@ class Settings:
             calibration_fixture_path=calibration_fixture_path,
             prior_fixture_path=prior_fixture_path,
             auto_seed_fixture=os.getenv(
-                "TOPIC2_AUTO_SEED_FIXTURE", str(config.get("auto_seed_fixture", True))
+                "TOPIC2_AUTO_SEED_FIXTURE", str(config.get("auto_seed_fixture", False))
             ).lower()
             == "true",
             random_seed=int(

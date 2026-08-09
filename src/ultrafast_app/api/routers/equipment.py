@@ -33,7 +33,7 @@ def equipment_profiles() -> list[dict]:
     from ultrafast_memory.equipment.service import list_equipment_profiles
 
     init_database()
-    return list_equipment_profiles()
+    return list_equipment_profiles(user_facing=True)
 
 
 @router.get("/profiles/{equipment_profile_id}")
@@ -44,6 +44,36 @@ def equipment_profile_detail(equipment_profile_id: str) -> dict:
     init_database()
     try:
         return get_equipment_profile(equipment_profile_id)
+    except ValueError as exc:
+        raise HTTPException(status_code=404, detail=str(exc)) from exc
+
+
+@router.get("/profiles/{equipment_profile_id}/revisions")
+def equipment_profile_revisions(equipment_profile_id: str) -> dict:
+    from ultrafast_memory.db.init_db import init_database
+    from ultrafast_memory.equipment.service import (
+        list_equipment_profile_revisions,
+    )
+
+    init_database()
+    try:
+        return {"items": list_equipment_profile_revisions(equipment_profile_id)}
+    except ValueError as exc:
+        raise HTTPException(status_code=404, detail=str(exc)) from exc
+
+
+@router.get(
+    "/profiles/{equipment_profile_id}/revisions/{revision_id}"
+)
+def equipment_profile_revision_detail(
+    equipment_profile_id: str, revision_id: str
+) -> dict:
+    from ultrafast_memory.db.init_db import init_database
+    from ultrafast_memory.equipment.service import get_equipment_profile_revision
+
+    init_database()
+    try:
+        return get_equipment_profile_revision(equipment_profile_id, revision_id)
     except ValueError as exc:
         raise HTTPException(status_code=404, detail=str(exc)) from exc
 
@@ -100,18 +130,23 @@ def equipment_profile_machine_bounds(equipment_profile_id: str) -> dict:
 @router.get("/schema")
 def equipment_schema() -> dict:
     return {
-        "schema_version": 2,
+        "schema_version": 3,
         "required_setup_fields": [
             "wavelength_nm",
-            "pulse_width_min_fs",
-            "pulse_width_max_fs",
-            "rated_max_power_W",
-            "actual_max_power_W",
+            "pulse_width_fixed_fs_or_min_max",
+            "workpiece_incident_power_min_W",
+            "workpiece_incident_power_max_W",
             "frequency_min_kHz",
             "frequency_max_kHz",
             "scan_speed_min_mm_s",
             "scan_speed_max_mm_s",
             "spot_diameter_um",
         ],
-        "range_input_format": "min,max",
+        "verification_statuses": [
+            "MEASURED",
+            "MANUFACTURER_SPEC",
+            "ESTIMATED",
+            "UNVERIFIED",
+        ],
+        "verification_is_required_per_physical_field": True,
     }

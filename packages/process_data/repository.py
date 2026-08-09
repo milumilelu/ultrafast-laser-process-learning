@@ -306,7 +306,9 @@ class Topic2Repository:
                 )
         return self.import_experiments(records, requested_version="topic2-fixture-v1")
 
-    def list_experiments(self, **filters: Any) -> list[dict[str, Any]]:
+    def list_experiments(
+        self, *, real_only: bool = False, **filters: Any
+    ) -> list[dict[str, Any]]:
         allowed = {
             "material",
             "laser_type",
@@ -316,6 +318,8 @@ class Topic2Repository:
             "experiment_batch_id",
         }
         clauses, values = [], []
+        if real_only:
+            clauses.extend(("is_synthetic=0", "data_origin<>'synthetic_test_fixture'"))
         for key, value in filters.items():
             if value is not None and key in allowed:
                 clauses.append(f"{key}=?")
@@ -388,26 +392,141 @@ class Topic2Repository:
             )
             return {**merged, "dataset_version": version, "dataset_hash": digest}
 
-    def materials(self) -> list[dict[str, Any]]:
+    def materials(self, *, real_only: bool = False) -> list[dict[str, Any]]:
         with self.connection() as db:
+            if real_only:
+                return [
+                    dict(row)
+                    for row in db.execute(
+                        """
+                        SELECT material,0 AS is_synthetic,data_origin
+                        FROM experiments
+                        WHERE is_synthetic=0 AND data_origin<>'synthetic_test_fixture'
+                        GROUP BY material,data_origin
+                        ORDER BY material
+                        """
+                    )
+                ]
             return [
                 dict(row)
                 for row in db.execute("SELECT * FROM materials ORDER BY material")
             ]
 
-    def equipment(self) -> list[dict[str, Any]]:
+    def equipment(self, *, real_only: bool = False) -> list[dict[str, Any]]:
         with self.connection() as db:
+            if real_only:
+                return [
+                    dict(row)
+                    for row in db.execute(
+                        """
+                        SELECT e.equipment_id,e.laser_id,e.machine_id,COUNT(*) AS samples
+                        FROM equipment e
+                        JOIN experiments x ON x.equipment_id=e.equipment_id
+                        WHERE x.is_synthetic=0
+                          AND x.data_origin<>'synthetic_test_fixture'
+                        GROUP BY e.equipment_id,e.laser_id,e.machine_id
+                        ORDER BY e.equipment_id
+                        """
+                    )
+                ]
             return [
                 dict(row)
                 for row in db.execute("SELECT * FROM equipment ORDER BY equipment_id")
             ]
 
-    def latest_dataset(self) -> dict[str, Any] | None:
+    def _current_real_dataset(self) -> dict[str, Any] | None:
+        rows = self.list_experiments(real_only=True)
+        if not rows:
+            return None
+        version, digest = dataset_identity(rows, None)
+        return {
+            "dataset_version": version,
+            "dataset_hash": digest,
+            "n_samples": len(rows),
+            "created_at": None,
+            "data_origin": "real_machining_data",
+            "is_synthetic": 0,
+        }
+
+    def latest_dataset(self, *, real_only: bool = False) -> dict[str, Any] | None:
+        if real_only:
+            return self._current_real_dataset()
         with self.connection() as db:
             row = db.execute(
                 "SELECT * FROM datasets ORDER BY created_at DESC, rowid DESC LIMIT 1"
             ).fetchone()
             return dict(row) if row else None
+
+    def datasets(self, *, real_only: bool = False) -> list[dict[str, Any]]:
+        """Return immutable dataset snapshots available to ApplicationRun."""
+        if real_only:
+            current = self._current_real_dataset()
+            return [current] if current is not None else []
+        with self.connection() as db:
+            return [
+                dict(row)
+                for row in db.execute(
+                    "SELECT * FROM datasets ORDER BY created_at DESC, rowid DESC"
+                )
+            ]
+
+    def dataset(
+        self, dataset_version: str, *, real_only: bool = False
+    ) -> dict[str, Any] | None:
+        if real_only:
+            current = self._current_real_dataset()
+            return (
+                current
+                if current is not None
+                and current["dataset_version"] == dataset_version
+                else None
+            )
+        with self.connection() as db:
+            row = db.execute(
+                "SELECT * FROM datasets WHERE dataset_version=?",
+                (dataset_version,),
+            ).fetchone()
+            return dict(row) if row else None
+
+    def resolve_real_equipment_scope(
+        self,
+        *,
+        material: str,
+        laser_type: str,
+        geometry_type: str,
+        target: str,
+    ) -> str:
+        """Resolve the historical equipment scope from real observations.
+
+        The equipment identifier is provenance carried by imported experiments,
+        not a user-selectable task parameter. Ambiguous source data fails closed.
+        """
+        rows = self.list_experiments(
+            real_only=True,
+            material=material,
+            laser_type=laser_type,
+            geometry_type=geometry_type,
+            target=target,
+        )
+        target_column = target if target in {"depth_um", "roughness_um"} else None
+        equipment_ids = sorted(
+            {
+                str(row["equipment_id"])
+                for row in rows
+                if row.get("valid_flag")
+                and (target_column is None or row.get(target_column) is not None)
+            }
+        )
+        if not equipment_ids:
+            raise ValueError(
+                "真实数据中没有与任务材料、激光体制、几何和目标匹配的历史记录"
+            )
+        if len(equipment_ids) != 1:
+            raise ValueError(
+                "真实数据对应多个历史设备来源，后端无法唯一确定证据范围: "
+                + ", ".join(equipment_ids)
+            )
+        return equipment_ids[0]
 
     def save_model(self, payload: dict[str, Any]) -> None:
         with self.connection() as db:
@@ -655,7 +774,7 @@ class Topic2Repository:
             )
         return stored
 
-    def workflow_events(self, workflow_id: str) -> list[dict[str, Any]]:
+    def process_workflow_events(self, workflow_id: str) -> list[dict[str, Any]]:
         with self.connection() as db:
             return [
                 json.loads(row["payload_json"])
@@ -668,7 +787,6 @@ class Topic2Repository:
 
     def save_application_run(self, payload: dict[str, Any]) -> dict[str, Any]:
         """Create or update an application run (BE-2). Idempotent on application_run_id."""
-        encoded = json.dumps(payload, ensure_ascii=False, sort_keys=True)
         with self.connection() as db:
             db.execute(
                 """INSERT INTO application_runs
@@ -743,7 +861,7 @@ class Topic2Repository:
     def list_application_runs(self, mode: str | None = None) -> list[dict[str, Any]]:
         query = (
             "SELECT application_run_id, task_context_ref, mode, workflow_version, "
-            "status, created_at, completed_at FROM application_runs"
+            "status, created_at, completed_at, task_spec_json FROM application_runs"
         )
         values: list[str] = []
         if mode is not None:
@@ -751,7 +869,20 @@ class Topic2Repository:
             values.append(mode)
         query += " ORDER BY created_at DESC, application_run_id DESC"
         with self.connection() as db:
-            return [dict(row) for row in db.execute(query, values)]
+            items: list[dict[str, Any]] = []
+            for row in db.execute(query, values):
+                item = dict(row)
+                raw_task_spec = item.pop("task_spec_json", None)
+                try:
+                    task_spec = json.loads(raw_task_spec) if raw_task_spec else {}
+                except (TypeError, json.JSONDecodeError):
+                    task_spec = {}
+                item["execution_mode"] = str(
+                    task_spec.get("execution_mode")
+                    or ("DEMO_FIXTURE" if item.get("mode") == "demo" else "RESEARCH")
+                )
+                items.append(item)
+            return items
 
     def save_workflow_event(self, payload: dict[str, Any]) -> dict[str, Any]:
         """Persist one formal application workflow event (BE-3)."""
@@ -770,7 +901,7 @@ class Topic2Repository:
             )
         return payload
 
-    def workflow_events(
+    def application_workflow_events(
         self, application_run_id: str, after_sequence: int = 0
     ) -> list[dict[str, Any]]:
         with self.connection() as db:
@@ -781,6 +912,19 @@ class Topic2Repository:
                 (application_run_id, after_sequence),
             ).fetchall()
             return [json.loads(row["payload_json"]) for row in rows]
+
+    def workflow_events(
+        self, identifier: str, after_sequence: int | None = None
+    ) -> list[dict[str, Any]]:
+        """Backward-compatible dispatcher for the two workflow event stores.
+
+        Process-workflow callers historically pass one argument; ApplicationRun
+        callers pass an explicit sequence cursor.  The concrete methods above
+        keep the two schemas from accidentally shadowing each other.
+        """
+        if after_sequence is None:
+            return self.process_workflow_events(identifier)
+        return self.application_workflow_events(identifier, after_sequence)
 
     def last_workflow_event_sequence(self, application_run_id: str) -> int:
         with self.connection() as db:

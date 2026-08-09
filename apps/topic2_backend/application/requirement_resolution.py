@@ -22,6 +22,8 @@ the shared memory DB (same tables, same cache).
 
 from __future__ import annotations
 
+import hashlib
+import json
 from collections.abc import Callable
 from dataclasses import dataclass, field
 from typing import Any
@@ -203,6 +205,9 @@ def candidate_to_evidence_ir(
     candidate: dict[str, Any],
     task_scope: dict[str, Any],
     corpus_pack_id: str,
+    *,
+    requirement_ids: list[str] | None = None,
+    query_plan_refs: list[str] | None = None,
 ) -> dict[str, Any] | None:
     """Map one validated scientific candidate to an EvidenceIR item."""
     ctype = str(candidate.get("type") or "")
@@ -269,6 +274,11 @@ def candidate_to_evidence_ir(
         },
         "review_status": VALIDATED_REVIEW_STATUS,
         "applicability_status": "UNKNOWN",
+        "requirement_ids": list(requirement_ids or []),
+        "query_plan_refs": [
+            {"type": "RequirementRetrievalPlan", "id": item}
+            for item in (query_plan_refs or [])
+        ],
         "provenance": provenance,
         "source_refs": source_refs,
     }
@@ -304,7 +314,7 @@ def assess_evidence_applicability(
     }
     report = assess_applicability(task, claim)
     transfer = str(report.transfer_class).upper()
-    return {
+    report_payload = {
         "evidence_id": claim_id,
         "material_match": report.material_match,
         "laser_type_match": report.laser_type_match,
@@ -313,6 +323,11 @@ def assess_evidence_applicability(
         "equipment_match": report.equipment_match,
         "target_metric_match": report.target_metric_match,
         "transfer_level": transfer,
+    }
+    raw = json.dumps(report_payload, sort_keys=True, ensure_ascii=False).encode("utf-8")
+    return {
+        "applicability_report_id": f"applicability-{hashlib.sha256(raw).hexdigest()[:16]}",
+        **report_payload,
     }
 
 
@@ -376,6 +391,10 @@ def resolve_requirement_chain(
         plan_retrieval(requirement, task_scope).model_dump(mode="json")
         for requirement in requirements
     ]
+    plans_by_requirement = {
+        str(plan["requirement_id"]): str(plan["query_plan_id"])
+        for plan in query_plans
+    }
     adapter = ScientificSourceAdapter(
         llm_client=llm_client,
         model=model,
@@ -410,8 +429,25 @@ def resolve_requirement_chain(
     for candidate in knowledge_pack.get("candidates") or []:
         if str(candidate.get("candidate_id")) in rejected:
             continue
+        candidate_type = str(candidate.get("type") or "")
+        candidate_claim_type = CLAIM_TYPE_MAP.get(candidate_type)
+        matching_requirement_ids = [
+            str(requirement.get("requirement_id"))
+            for requirement in requirements
+            if candidate_claim_type
+            and candidate_claim_type
+            in {str(role) for role in requirement.get("required_evidence_roles") or []}
+        ]
         item = candidate_to_evidence_ir(
-            candidate, task_scope, corpus_pack.get("corpus_pack_id") or ""
+            candidate,
+            task_scope,
+            corpus_pack.get("corpus_pack_id") or "",
+            requirement_ids=matching_requirement_ids,
+            query_plan_refs=[
+                plans_by_requirement[requirement_id]
+                for requirement_id in matching_requirement_ids
+                if requirement_id in plans_by_requirement
+            ],
         )
         if item is None:
             continue
@@ -419,6 +455,7 @@ def resolve_requirement_chain(
             item, task_scope, claim_id=str(item["evidence_id"])
         )
         item["applicability_status"] = str(report.get("transfer_level") or "UNKNOWN")
+        item["applicability_ref"] = report["applicability_report_id"]
         applicability.append(report)
         evidence_ir.append(item)
     mapping_report = (knowledge_pack.get("pipeline_report") or {}).get("mapping") or {}

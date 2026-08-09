@@ -20,14 +20,30 @@ from pydantic import BaseModel, Field
 
 EQUIPMENT_SCHEMA_VERSION = "machine-profile-snapshot-v1"
 
-FieldStatus = Literal["VERIFIED", "DERIVED", "MISSING"]
-SourceQuality = Literal["RESEARCH_AGENT", "DEMO_FIXTURE", "TASK_OVERRIDE"]
+FieldStatus = Literal["VERIFIED", "DERIVED", "UNVERIFIED", "MISSING"]
+FieldVerification = Literal[
+    "REPOSITORY_VERIFIED",
+    "MEASURED",
+    "MANUFACTURER_SPEC",
+    "ESTIMATED",
+    "DEMO_FIXTURE_DECLARED",
+    "DERIVED_FROM_VERIFIED_INPUT",
+    "UNVERIFIED",
+    "MISSING",
+]
+SourceQuality = Literal[
+    "RESEARCH_AGENT",
+    "DEMO_FIXTURE",
+    "TASK_OVERRIDE",
+    "UNRESOLVED",
+]
 ResourceStatus = Literal["READY", "PARTIAL", "BLOCKED"]
 
 # canonical physics fields with their units (order defines canonical key set)
 CANONICAL_EQUIPMENT_FIELDS: tuple[tuple[str, str | None], ...] = (
     ("wavelength_nm", "nm"),
-    ("actual_power_W", "W"),
+    ("workpiece_incident_power_min_W", "W"),
+    ("workpiece_incident_power_max_W", "W"),
     ("beam_radius_um", "um"),
     ("pulse_width_min_fs", "fs"),
     ("pulse_width_max_fs", "fs"),
@@ -38,7 +54,12 @@ CANONICAL_EQUIPMENT_FIELDS: tuple[tuple[str, str | None], ...] = (
 )
 
 # fields the physics chain cannot compute without (Gate A)
-REQUIRED_PHYSICS_FIELDS = ("wavelength_nm", "actual_power_W", "beam_radius_um")
+REQUIRED_PHYSICS_FIELDS = (
+    "wavelength_nm",
+    "workpiece_incident_power_min_W",
+    "workpiece_incident_power_max_W",
+    "beam_radius_um",
+)
 
 
 def _now_iso() -> str:
@@ -50,6 +71,7 @@ class EquipmentFieldState(BaseModel):
     value: float | None = None
     unit: str | None = None
     status: FieldStatus = "MISSING"
+    verification_status: FieldVerification = "MISSING"
     provenance: list[str] = Field(default_factory=list)
 
 
@@ -96,7 +118,7 @@ def build_blocked_snapshot(
     }
     return MachineProfileSnapshot(
         equipment_profile_id=equipment_profile_id,
-        source_quality="TASK_OVERRIDE",
+        source_quality="UNRESOLVED",
         fields=fields,
         resource_status="BLOCKED",
         missing_required=list(REQUIRED_PHYSICS_FIELDS),
@@ -114,7 +136,7 @@ def _finish_snapshot(
         name
         for name in REQUIRED_PHYSICS_FIELDS
         if snapshot.fields.get(name) is None
-        or snapshot.fields[name].status == "MISSING"
+        or snapshot.fields[name].status in {"MISSING", "UNVERIFIED"}
         or snapshot.fields[name].value is None
     ]
     present = {
@@ -164,24 +186,71 @@ def snapshot_from_profile(
         unit: str | None,
         *,
         derived: bool = False,
+        verification_key: str | None = None,
         note: list[str] | None = None,
     ) -> EquipmentFieldState:
+        verification_map = profile.get("field_verification") or {}
+        verification_value = verification_map.get(verification_key or parameter, False)
+        raw_verification = (
+            str(verification_value.get("status") or "").upper()
+            if isinstance(verification_value, dict)
+            else "VERIFIED"
+            if verification_value is True
+            else str(verification_value or "").upper()
+        )
+        explicitly_verified = (
+            raw_verification
+            in {"VERIFIED", "MEASURED", "MANUFACTURER_SPEC", "APPROVED"}
+        )
+        if source_quality == "DEMO_FIXTURE":
+            status: FieldStatus = "DERIVED" if derived else (
+                "VERIFIED" if value is not None else "MISSING"
+            )
+            verification_status: FieldVerification = (
+                "DERIVED_FROM_VERIFIED_INPUT"
+                if derived and value is not None
+                else "DEMO_FIXTURE_DECLARED"
+                if value is not None
+                else "MISSING"
+            )
+        elif derived and value is not None and explicitly_verified:
+            status = "DERIVED"
+            verification_status = "DERIVED_FROM_VERIFIED_INPUT"
+        elif value is not None and explicitly_verified:
+            status = "VERIFIED"
+            verification_status = (
+                raw_verification
+                if raw_verification in {"MEASURED", "MANUFACTURER_SPEC"}
+                else "REPOSITORY_VERIFIED"
+            )
+        elif value is not None:
+            status = "UNVERIFIED"
+            verification_status = (
+                "ESTIMATED" if raw_verification == "ESTIMATED" else "UNVERIFIED"
+            )
+        else:
+            status = "MISSING"
+            verification_status = "MISSING"
         return EquipmentFieldState(
             parameter=parameter,
             value=value,
             unit=unit,
-            status="DERIVED" if derived else ("VERIFIED" if value is not None else "MISSING"),
+            status=status,
+            verification_status=verification_status,
             provenance=[*(provenance if value is not None else []), *(note or [])],
         )
 
     spot_diameter = optical.get("spot_diameter_um")
-    beam_radius = float(spot_diameter) / 2.0 if spot_diameter is not None else None
-    actual_power = laser.get("actual_power_W")
+    explicit_beam_radius = optical.get("beam_radius_um")
+    beam_radius = (
+        float(explicit_beam_radius)
+        if explicit_beam_radius is not None
+        else float(spot_diameter) / 2.0
+        if spot_diameter is not None
+        else None
+    )
+    beam_is_derived = explicit_beam_radius is None and spot_diameter is not None
     warnings: list[str] = []
-    if actual_power is None and laser.get("average_power_max_W") is not None:
-        warnings.append(
-            "actual_power_W 未显式提供：average_power_max_W 是上限，不能充当实际功率"
-        )
 
     pulse_min = laser.get("pulse_width_min_fs")
     pulse_max = laser.get("pulse_width_max_fs")
@@ -194,19 +263,45 @@ def snapshot_from_profile(
             _as_float(laser.get("wavelength_nm")),
             "nm",
         ),
-        "actual_power_W": field_state("actual_power_W", _as_float(actual_power), "W"),
+        "workpiece_incident_power_min_W": field_state(
+            "workpiece_incident_power_min_W",
+            _as_float(laser.get("workpiece_incident_power_min_W")),
+            "W",
+        ),
+        "workpiece_incident_power_max_W": field_state(
+            "workpiece_incident_power_max_W",
+            _as_float(laser.get("workpiece_incident_power_max_W")),
+            "W",
+        ),
         "beam_radius_um": field_state(
             "beam_radius_um",
             beam_radius,
             "um",
-            derived=True,
-            note=["derived from spot_diameter_um/2"],
+            derived=beam_is_derived,
+            verification_key=("spot_diameter_um" if beam_is_derived else "beam_radius_um"),
+            note=(["derived from spot_diameter_um/2"] if beam_is_derived else []),
         ),
         "pulse_width_min_fs": field_state(
-            "pulse_width_min_fs", _as_float(pulse_min), "fs"
+            "pulse_width_min_fs",
+            _as_float(pulse_min),
+            "fs",
+            derived=laser.get("pulse_width_min_fs") is None and pulse_min is not None,
+            verification_key=(
+                "pulse_width_fixed_fs"
+                if laser.get("pulse_width_min_fs") is None
+                else "pulse_width_min_fs"
+            ),
         ),
         "pulse_width_max_fs": field_state(
-            "pulse_width_max_fs", _as_float(pulse_max), "fs"
+            "pulse_width_max_fs",
+            _as_float(pulse_max),
+            "fs",
+            derived=laser.get("pulse_width_max_fs") is None and pulse_max is not None,
+            verification_key=(
+                "pulse_width_fixed_fs"
+                if laser.get("pulse_width_max_fs") is None
+                else "pulse_width_max_fs"
+            ),
         ),
         "frequency_min_kHz": field_state(
             "frequency_min_kHz", _as_float(laser.get("frequency_min_kHz")), "kHz"
@@ -248,6 +343,13 @@ def snapshot_from_profile(
             "lower": fields["pulse_width_min_fs"].value / 1000.0,
             "upper": fields["pulse_width_max_fs"].value / 1000.0,
         }
+    if fields["workpiece_incident_power_min_W"].value is not None and fields[
+        "workpiece_incident_power_max_W"
+    ].value is not None:
+        bounds["laser_power_W"] = {
+            "lower": fields["workpiece_incident_power_min_W"].value,
+            "upper": fields["workpiece_incident_power_max_W"].value,
+        }
     if spot_diameter is not None:
         bounds["spot_diameter_um"] = {
             "lower": float(spot_diameter),
@@ -287,6 +389,11 @@ def snapshot_from_task_override(
             value=value,
             unit=unit,
             status="VERIFIED" if value is not None and explicit_verified else "MISSING",
+            verification_status=(
+                "REPOSITORY_VERIFIED"
+                if value is not None and explicit_verified
+                else "MISSING"
+            ),
             provenance=["task_override:sandbox"],
         )
 
@@ -297,8 +404,15 @@ def snapshot_from_task_override(
         "wavelength_nm": field_state(
             "wavelength_nm", _as_float(machine_profile.get("wavelength_nm")), "nm"
         ),
-        "actual_power_W": field_state(
-            "actual_power_W", _as_float(machine_profile.get("actual_power_W")), "W"
+        "workpiece_incident_power_min_W": field_state(
+            "workpiece_incident_power_min_W",
+            _as_float(machine_profile.get("workpiece_incident_power_min_W")),
+            "W",
+        ),
+        "workpiece_incident_power_max_W": field_state(
+            "workpiece_incident_power_max_W",
+            _as_float(machine_profile.get("workpiece_incident_power_max_W")),
+            "W",
         ),
         "beam_radius_um": field_state(
             "beam_radius_um", _as_float(spot_radius), "um"

@@ -368,7 +368,8 @@ CREATE TABLE IF NOT EXISTS equipment_profile (
     updated_at TEXT,
     calibration_date TEXT,
     valid_until TEXT,
-    notes TEXT
+    notes TEXT,
+    field_verification_json TEXT
 );
 CREATE TABLE IF NOT EXISTS laser_source_config (
     config_id TEXT PRIMARY KEY,
@@ -382,6 +383,8 @@ CREATE TABLE IF NOT EXISTS laser_source_config (
     average_power_max_W REAL,
     rated_max_power_W REAL,
     actual_max_power_W REAL,
+    workpiece_incident_power_min_W REAL,
+    workpiece_incident_power_max_W REAL,
     frequency_min_kHz REAL,
     frequency_max_kHz REAL,
     pulse_energy_max_uJ REAL,
@@ -651,9 +654,14 @@ CHAT_SESSION_STATE_COLUMNS = {
 }
 
 TABLE_COLUMNS = {
+    "equipment_profile": {
+        "field_verification_json": "TEXT",
+    },
     "laser_source_config": {
         "rated_max_power_W": "REAL",
         "actual_max_power_W": "REAL",
+        "workpiece_incident_power_min_W": "REAL",
+        "workpiece_incident_power_max_W": "REAL",
     },
     "knowledge_candidate": {
         "paper_id": "TEXT",

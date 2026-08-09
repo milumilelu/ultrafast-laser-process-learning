@@ -3,7 +3,10 @@ from __future__ import annotations
 from typing import Any
 
 from ultrafast_memory.core.config import load_config
-from ultrafast_memory.equipment.service import get_active_equipment_profile, get_equipment_profile
+from ultrafast_memory.equipment.service import (
+    get_active_equipment_profile,
+    get_equipment_profile,
+)
 from ultrafast_memory.equipment.validation import validate_override_within_bounds
 
 
@@ -117,10 +120,12 @@ def _bounds_from_profile(profile: dict[str, Any]) -> dict[str, list[float | int]
         _add_fixed(bounds, "pulse_width_fs", laser.get("pulse_width_fixed_fs"))
     else:
         _add_range(bounds, "pulse_width_fs", laser.get("pulse_width_min_fs"), laser.get("pulse_width_max_fs"))
-    if laser.get("actual_max_power_W") is not None:
-        _add_range(bounds, "laser_power_W", 0, laser.get("actual_max_power_W"))
-    else:
-        _add_range(bounds, "laser_power_W", laser.get("average_power_min_W"), laser.get("average_power_max_W"))
+    _add_range(
+        bounds,
+        "laser_power_W",
+        laser.get("workpiece_incident_power_min_W"),
+        laser.get("workpiece_incident_power_max_W"),
+    )
     _add_range(bounds, "frequency_kHz", laser.get("frequency_min_kHz"), laser.get("frequency_max_kHz"))
     _add_fixed(bounds, "spot_diameter_um", optical.get("spot_diameter_um"))
     _add_range(bounds, "focus_offset_um", optical.get("focus_offset_min_um"), optical.get("focus_offset_max_um"))
@@ -143,10 +148,12 @@ def _semantic_parameters(profile: dict[str, Any]) -> tuple[dict[str, Any], dict[
         _semantic_fixed(fixed, "pulse_width_fs", laser.get("pulse_width_fixed_fs"))
     else:
         _semantic_range(tunable, "pulse_width_fs", laser.get("pulse_width_min_fs"), laser.get("pulse_width_max_fs"))
-    if laser.get("actual_max_power_W") is not None:
-        _semantic_range(tunable, "laser_power_W", 0, laser.get("actual_max_power_W"))
-    else:
-        _semantic_range(tunable, "laser_power_W", laser.get("average_power_min_W"), laser.get("average_power_max_W"))
+    _semantic_range(
+        tunable,
+        "laser_power_W",
+        laser.get("workpiece_incident_power_min_W"),
+        laser.get("workpiece_incident_power_max_W"),
+    )
     _semantic_range(tunable, "frequency_kHz", laser.get("frequency_min_kHz"), laser.get("frequency_max_kHz"))
     _semantic_fixed(fixed, "spot_diameter_um", optical.get("spot_diameter_um"))
     _semantic_range(tunable, "focus_offset_um", optical.get("focus_offset_min_um"), optical.get("focus_offset_max_um"))

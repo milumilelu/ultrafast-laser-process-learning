@@ -46,7 +46,12 @@ def build_background_worker():
 async def lifespan(_: FastAPI) -> AsyncIterator[None]:
     from ultrafast_agent.jobs import BackgroundWorkerRunner
     from ultrafast_memory.core.llm_config import restore_api_key_from_store
+    from ultrafast_memory.db.init_db import init_database
 
+    # Initialize synchronously before the background worker starts polling the
+    # same SQLite database.  Otherwise the worker and the first API request can
+    # race while both try to switch journal_mode to WAL.
+    init_database()
     # 启动时恢复 DPAPI 加密保存的 API Key 到进程环境变量（无需重启后重新配置）
     restore_api_key_from_store()
     runner = BackgroundWorkerRunner(build_background_worker())

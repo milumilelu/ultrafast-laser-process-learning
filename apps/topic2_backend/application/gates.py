@@ -4,7 +4,8 @@ Gate A - Resource Ready   : canonical MachineProfileSnapshot resolved.
 Gate B - Knowledge Ready  : active-mechanism required parameters have a
                             prior, a measurement, or fittable observations.
 Gate C - Physical Model   : CalibrationResult produced real estimates.
-Gate D - Planning Ready   : machine bounds + LocalRemovalModel available.
+Gate D - Planning Ready   : machine bounds + LocalRemovalModel + persisted
+                            MorphologySimulationResult available.
 
 Research mode fails closed (BLOCKED).  DEMO_FIXTURE is allowed to be PARTIAL
 with explicit tracking.  SANDBOX bypasses gates (computational defaults
@@ -31,6 +32,7 @@ STAGE_PHASES: dict[str, str] = {
     "satisfy_requirements": "KNOWLEDGE",
     "calibrate_physics": "CALIBRATION",
     "establish_process_model": "MODEL",
+    "simulate_morphology": "SIMULATION",
     "plan_process": "PLANNING",
     "evaluate_observation": "OBSERVATION",
 }
@@ -71,6 +73,7 @@ class StageBlockedError(Exception):
         next_actions: list[dict[str, Any]],
         phase: str,
         run_control_state: dict[str, Any] | None = None,
+        stage_results: dict[str, Any] | None = None,
     ):
         super().__init__(f"Gate {gate} BLOCKED: {'; '.join(reasons)}")
         self.gate = gate
@@ -78,6 +81,7 @@ class StageBlockedError(Exception):
         self.next_actions = next_actions
         self.phase = phase
         self.run_control_state = run_control_state
+        self.stage_results = stage_results or {}
 
 
 @dataclass
@@ -100,6 +104,7 @@ def resource_gate(
     machine_snapshot: dict[str, Any] | None,
     data_state: dict[str, Any] | None,
     target_geometry: dict[str, Any] | None,
+    execution_context: dict[str, Any] | None = None,
     *,
     execution_mode: str,
 ) -> GateResult:
@@ -137,6 +142,24 @@ def resource_gate(
                     "source_quality": machine_snapshot.get("source_quality"),
                 }
             )
+
+    context_status = str((execution_context or {}).get("status") or "BLOCKED")
+    if context_status != "READY":
+        context_reasons = [
+            str(reason) for reason in (execution_context or {}).get("reasons") or []
+        ]
+        reasons.append(
+            "本次任务的材料表面入射平均功率不可执行"
+            + (f": {'; '.join(context_reasons)}" if context_reasons else "")
+        )
+        actions.append(
+            {
+                "type": "SPECIFY_PROCESS_SETPOINT",
+                "parameter": "laser_power_W",
+                "location": "WORKPIECE_SURFACE_INCIDENT",
+                "bounds": (execution_context or {}).get("bounds"),
+            }
+        )
 
     data_status = str((data_state or {}).get("status") or "INVALID")
     if data_status != "READY":
@@ -178,6 +201,7 @@ def knowledge_gate(
     observation_capabilities: set[str],
     mechanism_required: list[dict[str, Any]],
     machine_fields: set[str] | None = None,
+    knowledge_state: dict[str, Any] | None = None,
     execution_mode: str,
 ) -> GateResult:
     """Gate B (阶段二 T5): active-mechanism model structure AND parameters.
@@ -204,6 +228,23 @@ def knowledge_gate(
     partial: list[str] = []
     structure_blocked: list[str] = []
     parameter_blocked: list[str] = []
+    state_blocked: list[str] = []
+
+    if knowledge_state:
+        satisfaction_by_id = {
+            str(item.get("requirement_id")): str(item.get("status") or "UNSATISFIED")
+            for item in knowledge_state.get("satisfactions") or []
+            if isinstance(item, dict)
+        }
+        for requirement in knowledge_state.get("requirements") or []:
+            if not isinstance(requirement, dict) or requirement.get("priority") != "high":
+                continue
+            requirement_id = str(requirement.get("requirement_id") or "")
+            satisfaction = satisfaction_by_id.get(requirement_id, "UNSATISFIED")
+            if satisfaction != "SATISFIED":
+                state_blocked.append(
+                    f"{requirement_id}: KnowledgeState={satisfaction}"
+                )
 
     # model structure: every structure-requiring active mechanism needs a
     # MechanismModelPrior (the mechanism registry decides which models
@@ -236,6 +277,7 @@ def knowledge_gate(
         if not covered:
             parameter_blocked.append(name)
     blocked = [
+        *state_blocked,
         *(
             f"{model}: 模型结构未解决（需要 MechanismModelPrior）"
             for model in structure_blocked
@@ -247,6 +289,15 @@ def knowledge_gate(
     ]
     if blocked:
         actions: list[dict[str, Any]] = []
+        if state_blocked:
+            actions.append(
+                {
+                    "type": "RESOLVE_KNOWLEDGE_REQUIREMENTS",
+                    "requirement_ids": [
+                        item.split(":", 1)[0] for item in state_blocked
+                    ],
+                }
+            )
         if structure_blocked:
             actions.append(
                 {
@@ -352,10 +403,12 @@ def physical_model_gate(
 def planning_gate(
     *,
     model_available: bool,
+    simulation_available: bool,
     machine_bounds: dict[str, Any],
+    candidate_plan: dict[str, Any] | None,
     execution_mode: str,
 ) -> GateResult:
-    """Gate D: LocalRemovalModel + machine bounds before path planning."""
+    """Gate D: simulation + constraint-compliant candidate before plan issuance."""
     if execution_mode == "SANDBOX":
         return GateResult("D", "READY", ["SANDBOX: gates bypassed (provisional)"])
     reasons: list[str] = []
@@ -365,9 +418,57 @@ def planning_gate(
         actions.append(
             {"type": "RESUME_RUN", "target_phase": "MODEL", "resume_stage": "establish_process_model"}
         )
+    if not simulation_available:
+        reasons.append("MorphologySimulationResult 未生成")
+        actions.append(
+            {
+                "type": "RESUME_RUN",
+                "target_phase": "SIMULATION",
+                "resume_stage": "simulate_morphology",
+            }
+        )
     if not machine_bounds:
         reasons.append("机器边界（MachineBounds）不可用")
         actions.append({"type": "COMPLETE_EQUIPMENT_PROFILE", "missing": ["motion/laser ranges"]})
+    if not candidate_plan:
+        reasons.append("ToolpathCandidateSet 不可用")
+        actions.append(
+            {
+                "type": "RESUME_RUN",
+                "target_phase": "SIMULATION",
+                "resume_stage": "simulate_morphology",
+            }
+        )
+    elif machine_bounds:
+        laser = candidate_plan.get("laser_parameters") or {}
+        path = candidate_plan.get("path_parameters") or {}
+        selected = {
+            "pulse_width_ps": laser.get("pulse_width_ps"),
+            "frequency_kHz": laser.get("frequency_kHz"),
+            "scan_speed_mm_s": laser.get("scan_speed_mm_s"),
+            "hatch_spacing_um": path.get("hatch_um"),
+            "passes": path.get("passes"),
+        }
+        violations: list[str] = []
+        for name, value in selected.items():
+            bound = machine_bounds.get(name)
+            if not isinstance(bound, dict):
+                continue
+            if value is None:
+                violations.append(f"{name}: candidate value missing")
+                continue
+            lower = bound.get("lower")
+            upper = bound.get("upper")
+            numeric = float(value)
+            if (lower is not None and numeric < float(lower)) or (
+                upper is not None and numeric > float(upper)
+            ):
+                violations.append(
+                    f"{name}={numeric} outside [{lower}, {upper}]"
+                )
+        if violations:
+            reasons.extend(violations)
+            actions.append({"type": "REGENERATE_TOOLPATH_CANDIDATES"})
     if reasons:
         return GateResult("D", "BLOCKED", reasons, actions)
     return GateResult("D", "READY")
@@ -386,16 +487,18 @@ def run_control_state(
     `phases` gives every phase a backend-computed status - the frontend
     performs zero gate-to-phase interpretation (阶段三 T1).
     """
-    gate_dicts = {result.name: result.to_dict() for result in gates}
+    # A resumed run may evaluate the same gate again.  The newest result is
+    # authoritative; stale BLOCKED results must not poison the current state.
     gate_by_name = {result.name: result for result in gates}
+    gate_dicts = {name: result.to_dict() for name, result in gate_by_name.items()}
     blocking = [
         reason
-        for result in gates
+        for result in gate_by_name.values()
         for reason in result.reasons
         if result.status == "BLOCKED"
     ]
     next_actions: list[dict[str, Any]] = []
-    for result in gates:
+    for result in gate_by_name.values():
         for action in result.next_actions:
             if action not in next_actions:
                 next_actions.append(action)
@@ -411,14 +514,16 @@ def run_control_state(
         phase_stages = [
             stage for stage, owner in STAGE_PHASES.items() if owner == phase
         ]
-        stage_done = all(stage in completed for stage in phase_stages)
+        stage_done = bool(phase_stages) and all(
+            stage in completed for stage in phase_stages
+        )
         gate = gate_by_name.get(PHASE_GATE[phase])
-        if stage_done:
-            phase_status_value = "COMPLETED"
-            reasons: list[str] = []
-        elif gate is not None and gate.status == "BLOCKED":
+        if gate is not None and gate.status == "BLOCKED":
             phase_status_value = "BLOCKED"
             reasons = list(gate.reasons)
+        elif stage_done:
+            phase_status_value = "COMPLETED"
+            reasons = []
         elif gate is not None and gate.status == "PARTIAL":
             phase_status_value = "PARTIAL"
             reasons = list(gate.reasons)
@@ -432,6 +537,19 @@ def run_control_state(
             "status": phase_status_value,
             "blocking_reasons": reasons,
         }
+
+    if not next_actions and phase_status not in {"COMPLETED", "BLOCKED"}:
+        remaining = [
+            stage for stage in STAGE_PHASES if stage not in completed
+        ]
+        if remaining:
+            next_actions.append(
+                {
+                    "type": "CONTINUE_RUN",
+                    "resume_stage": remaining[0],
+                    "target_phase": STAGE_PHASES[remaining[0]],
+                }
+            )
 
     return {
         "schema_version": RUN_CONTROL_SCHEMA_VERSION,

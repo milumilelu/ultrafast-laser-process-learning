@@ -62,6 +62,36 @@ class ToolpathPlanner:
             item if isinstance(item, ConstraintValue) else ConstraintValue.model_validate(item)
             for item in machine_constraints
         ]
+        constraint_by_name = {item.name: item for item in constraints}
+        for constraint in constraints:
+            if (
+                constraint.lower is not None
+                and constraint.upper is not None
+                and constraint.lower > constraint.upper
+            ):
+                raise ValueError(
+                    f"invalid machine constraint for {constraint.name}: "
+                    f"{constraint.lower} > {constraint.upper}"
+                )
+
+        def within_constraint(name: str, value: float) -> bool:
+            constraint = constraint_by_name.get(name)
+            if constraint is None:
+                return True
+            tolerance = 1e-12 * max(1.0, abs(value))
+            return not (
+                constraint.lower is not None and value < constraint.lower - tolerance
+            ) and not (
+                constraint.upper is not None and value > constraint.upper + tolerance
+            )
+
+        def require_within_constraint(name: str, value: float) -> None:
+            if not within_constraint(name, value):
+                constraint = constraint_by_name[name]
+                raise ValueError(
+                    f"{name}={value} is outside machine constraint "
+                    f"[{constraint.lower}, {constraint.upper}]"
+                )
         priors = [
             item
             if isinstance(item, PlanningPreferencePrior)
@@ -92,15 +122,44 @@ class ToolpathPlanner:
         )
         if frequency_kHz <= 0 or scan_speed_mm_s <= 0 or peak_fluence <= 0:
             raise ValueError("frequency, scan speed, and peak fluence must be positive")
+        require_within_constraint("frequency_kHz", frequency_kHz)
+        require_within_constraint("scan_speed_mm_s", scan_speed_mm_s)
+        if laser_parameters.get("pulse_width_ps") is not None:
+            require_within_constraint(
+                "pulse_width_ps", float(laser_parameters["pulse_width_ps"])
+            )
         pulse_spacing_um = max(scan_speed_mm_s / frequency_kHz, geometry.grid_spacing_um)
+        hatch_values = {
+            max(geometry.grid_spacing_um, removal_model.kernel.radius_um * 0.75),
+            max(geometry.grid_spacing_um, removal_model.kernel.radius_um),
+            max(geometry.grid_spacing_um, removal_model.kernel.radius_um * 1.5),
+        }
+        hatch_constraint = constraint_by_name.get("hatch_spacing_um")
+        if hatch_constraint:
+            hatch_values.update(
+                value
+                for value in (hatch_constraint.lower, hatch_constraint.upper)
+                if value is not None and value > 0
+            )
         hatch_candidates = sorted(
-            {
-                max(geometry.grid_spacing_um, removal_model.kernel.radius_um * 0.75),
-                max(geometry.grid_spacing_um, removal_model.kernel.radius_um),
-                max(geometry.grid_spacing_um, removal_model.kernel.radius_um * 1.5),
-            }
+            value
+            for value in hatch_values
+            if within_constraint("hatch_spacing_um", value)
         )
-        pass_candidates = (1, 2)
+        pass_values = {1, 2}
+        pass_constraint = constraint_by_name.get("passes")
+        if pass_constraint:
+            if pass_constraint.lower is not None:
+                pass_values.add(math.ceil(pass_constraint.lower))
+            if pass_constraint.upper is not None:
+                pass_values.add(math.floor(pass_constraint.upper))
+        pass_candidates = tuple(
+            value
+            for value in sorted(pass_values)
+            if value > 0 and within_constraint("passes", float(value))
+        )
+        if not hatch_candidates or not pass_candidates:
+            raise ValueError("no toolpath candidates satisfy machine constraints")
         candidates: list[tuple[float, ToolpathPlan, MorphologySimulationResult]] = []
         prior_refs = [
             ArtifactRef(type="PlanningPreferencePrior", id=item.prior_id) for item in priors

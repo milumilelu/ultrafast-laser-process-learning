@@ -16,9 +16,11 @@ silent computational defaults.
 from __future__ import annotations
 
 from typing import Any
+from urllib.parse import quote
 
 from packages.process_contracts.equipment import (
     MachineProfileSnapshot,
+    SourceQuality,
     build_blocked_snapshot,
     snapshot_from_profile,
     snapshot_from_task_override,
@@ -41,6 +43,7 @@ def effective_execution_mode(run_mode: str, task_spec: dict[str, Any]) -> str:
 def resolve_machine_snapshot(
     *,
     equipment_profile_id: str,
+    equipment_revision_id: str | None = None,
     run_mode: str,
     task_spec: dict[str, Any],
     agent_proxy_target: str | None,
@@ -48,11 +51,12 @@ def resolve_machine_snapshot(
 ) -> MachineProfileSnapshot:
     """Resolve the canonical MachineProfileSnapshot for a run.
 
-    Resolution order:
-    1. SANDBOX + task_spec.machine_profile  -> TASK_OVERRIDE (provisional)
-    2. fixture store                        -> DEMO_FIXTURE
-    3. agent archive over HTTP              -> RESEARCH_AGENT
-    4. otherwise                            -> BLOCKED snapshot
+    Resolution is mode-exclusive.  A RESEARCH run can never consume a demo
+    fixture merely because the identifiers happen to match.
+
+    - SANDBOX      : task override, then an explicitly selected fixture.
+    - DEMO_FIXTURE : fixture store only.
+    - RESEARCH     : versioned agent archive only.
     """
     mode = effective_execution_mode(run_mode, task_spec)
     if mode == "SANDBOX" and task_spec.get("machine_profile"):
@@ -61,33 +65,73 @@ def resolve_machine_snapshot(
             equipment_profile_id=equipment_profile_id,
         )
 
-    fixture = (fixture_profiles or {}).get(equipment_profile_id)
-    if fixture is not None:
-        return snapshot_from_profile(
-            fixture, source_quality="DEMO_FIXTURE"
+    if mode in {"DEMO_FIXTURE", "SANDBOX"}:
+        fixture = (fixture_profiles or {}).get(equipment_profile_id)
+        if fixture is not None:
+            return _snapshot_with_revision_check(
+                fixture,
+                source_quality="DEMO_FIXTURE",
+                requested_revision_id=equipment_revision_id,
+            )
+        return build_blocked_snapshot(
+            equipment_profile_id,
+            "DEMO_FIXTURE 设备档案不可解析（fixture store 中不存在）",
         )
 
-    if agent_proxy_target:
-        profile = _fetch_agent_profile(agent_proxy_target, equipment_profile_id)
+    if mode == "RESEARCH" and agent_proxy_target:
+        profile = _fetch_agent_profile(
+            agent_proxy_target,
+            equipment_profile_id,
+            equipment_revision_id,
+        )
         if profile is not None:
-            return snapshot_from_profile(
-                profile, source_quality="RESEARCH_AGENT"
+            return _snapshot_with_revision_check(
+                profile,
+                source_quality="RESEARCH_AGENT",
+                requested_revision_id=equipment_revision_id,
             )
 
     return build_blocked_snapshot(
         equipment_profile_id,
-        "equipment profile 不可解析（无 fixture，且 agent 档案不可达）",
+        "RESEARCH 设备档案不可解析（agent 档案不可达或 profile 不存在；禁止回退到 fixture）",
     )
 
 
+def _snapshot_with_revision_check(
+    profile: dict[str, Any],
+    *,
+    source_quality: SourceQuality,
+    requested_revision_id: str | None,
+) -> MachineProfileSnapshot:
+    actual_revision = str(profile.get("revision_id") or "") or None
+    if requested_revision_id and actual_revision != requested_revision_id:
+        return build_blocked_snapshot(
+            str(profile.get("equipment_profile_id") or "unknown"),
+            (
+                "equipment revision mismatch: "
+                f"requested={requested_revision_id}, resolved={actual_revision or 'missing'}"
+            ),
+        )
+    return snapshot_from_profile(profile, source_quality=source_quality)
+
+
 def _fetch_agent_profile(
-    agent_proxy_target: str, equipment_profile_id: str
+    agent_proxy_target: str,
+    equipment_profile_id: str,
+    equipment_revision_id: str | None = None,
 ) -> dict[str, Any] | None:
     import httpx
 
     try:
+        profile_path = (
+            f"equipment/profiles/{quote(equipment_profile_id, safe='')}"
+        )
+        if equipment_revision_id:
+            profile_path += (
+                f"/revisions/{quote(equipment_revision_id, safe='')}"
+            )
         response = httpx.get(
-            f"{agent_proxy_target.rstrip('/')}/equipment/profiles/{equipment_profile_id}",
+            f"{agent_proxy_target.rstrip('/')}/{profile_path}",
             timeout=5.0,
         )
         response.raise_for_status()

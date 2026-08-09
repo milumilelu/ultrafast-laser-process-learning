@@ -1,18 +1,8 @@
-"""Topic2 Application Orchestrator (BE-1).
+"""Evidence-governed Physics-to-Planning ApplicationRun orchestrator.
 
-Wraps the frozen scientific stages (identification / modeling / evidence /
-CFA / governed prior / vanilla+assisted BO) into one formal application run
-with persistence (BE-2), workflow events (BE-3) and artifact queries (BE-4).
-
-Demo mode binds DEMO_SCENARIO_01 (SiC / fs / rectangular_groove / depth_um /
-EQ-DEMO-FS / seed 42) and runs the frozen vertical slice over the fixed
-5-paper pilot set when the literature archive is available; otherwise it falls
-back to the offline synthetic-ledger path, never faking results.
-
-Research mode consumes the Topic2 repository: evidence from the evidence
-table + agent RAG candidates (via proxy, graceful), governed prior only when
-live approval verification passes (fails closed), BO via the frozen
-recommend path with vanilla and evidence-assisted comparison (BE-5).
+DEMO_FIXTURE, RESEARCH and SANDBOX share the same ordered stage graph and
+artifact contracts.  Modes only change resource resolution and fail-closed
+policy; there is no parallel demo pipeline.
 """
 
 from __future__ import annotations
@@ -31,7 +21,6 @@ from apps.topic2_backend.application.equipment import (
     resolve_machine_snapshot,
 )
 from apps.topic2_backend.application.events import (
-    ARTIFACT_CREATED,
     ERROR,
     RUN_BLOCKED,
     RUN_COMPLETED,
@@ -68,6 +57,7 @@ from packages.e2p.domain.prior_objects import (
     PlanningPreferencePrior,
     PriorObjectSet,
 )
+from packages.process_contracts.knowledge import KnowledgeState
 from packages.process_contracts.schemas import (
     CORE_PARAMETER_NAMES,
     E2PPrepareRequest,
@@ -90,6 +80,7 @@ from packages.scientific_computation.contracts import (
     LocalRemovalModel,
     ObservationMeasurement,
     ObservationResult,
+    ParameterObservation,
     PathFamily,
     PhysicalModelState,
     ProcessCorrectionInterface,
@@ -100,6 +91,7 @@ from packages.scientific_computation.contracts import (
     ScientificStatus,
     SimulationFidelity,
     TargetGeometry,
+    ToolpathPlan,
 )
 from packages.scientific_computation.identification import ParameterIdentificationEngine
 from packages.scientific_computation.local_removal import LocalRemovalModelFactory
@@ -118,21 +110,27 @@ DEMO_SCENARIO_01 = {
     "process_type": "fs_laser_processing",
     "geometry_type": "rectangular_groove",
     "objective_metric": "depth_um",
-    "equipment_profile_id": "EQ-DEMO-FS",
+    "dataset_ref": "topic2-fixture-v1",
+    "dataset_equipment_scope_id": "DEMO-FS-LASER-01",
+    "equipment_profile_id": "DEMO-FS-LASER-01",
+    "execution_equipment_ref": {
+        "equipment_profile_id": "DEMO-FS-LASER-01",
+        "revision_id": "rev-1",
+    },
+    "calibration_observation_set_ref": "golden-sic-calibration-v1",
+    "prior_set_ref": "golden-sic-priors-v1",
+    "execution_mode": "DEMO_FIXTURE",
+    "target_geometry": {
+        "width_um": 30.0,
+        "height_um": 24.0,
+        "target_depth_um": 20.0,
+        "grid_spacing_um": 2.0,
+    },
     "random_seed": 42,
     "knowledge_gate_decision": {"status": "allowed"},
 }
 
-PILOT_PAPER_IDS = (
-    "04_arxiv_2502.16530.pdf",
-    "10_arxiv_2411.18093.pdf",
-    "11_arxiv_2404.09906.pdf",
-    "13_arxiv_2411.18868.pdf",
-    "Flat-top picosecond laser texturing of CFRP.pdf",
-)
-
-# Physics-to-Planning V1 canonical ApplicationRun.  Legacy BO remains a
-# compatibility output inside plan_process, not a parallel workflow.
+# Physics-to-Planning V1 canonical ApplicationRun.
 ALL_STAGES = (
     "prepare_task",
     "assess_capability",
@@ -143,6 +141,7 @@ ALL_STAGES = (
     "satisfy_requirements",
     "calibrate_physics",
     "establish_process_model",
+    "simulate_morphology",
     "plan_process",
 )
 OPTIONAL_STAGES = ("evaluate_observation",)
@@ -157,7 +156,8 @@ STAGE_LABELS = {
     "satisfy_requirements": "需求满足评估",
     "calibrate_physics": "E2P Prior 与物理参数标定",
     "establish_process_model": "局部去除模型与物理状态",
-    "plan_process": "形貌仿真驱动的路径规划",
+    "simulate_morphology": "候选路径形貌仿真",
+    "plan_process": "仿真结果驱动的路径规划",
     "evaluate_observation": "实验观察与闭环更新意图",
 }
 
@@ -172,16 +172,6 @@ PREPARE_KNOWLEDGE_SUB_EVENTS = (
     "applicability",
 )
 
-SLICE_STAGE_LABELS = (
-    "process_learning",
-    "literature_evidence",
-    "evidence_ir",
-    "e2p_prior",
-    "cfa",
-    "bo",
-)
-
-
 class Topic2ApplicationService:
     def __init__(
         self,
@@ -189,7 +179,6 @@ class Topic2ApplicationService:
         *,
         approval_verifier: Callable[[str], bool] | None = None,
         agent_proxy_target: str | None = None,
-        fixture_csv: str | None = None,
         workflow_version: str = WORKFLOW_VERSION,
         resolution_llm_client: Any | None = None,
         resolution_model: str = "scientific-reading-v1",
@@ -200,7 +189,6 @@ class Topic2ApplicationService:
         self.approval_verifier = approval_verifier
         self.agent_proxy_target = agent_proxy_target
         self.workflow_version = workflow_version
-        self.fixture_csv = fixture_csv
         self.resolution_llm_client = resolution_llm_client
         self.resolution_model = resolution_model
 
@@ -213,9 +201,6 @@ class Topic2ApplicationService:
             return TaskScope.model_validate(payload)
         material = payload.get("material")
         laser_type = payload.get("laser_type")
-        equipment_id = payload.get("equipment_profile_id") or payload.get(
-            "execution_equipment_ref"
-        )
         geometry_type = payload.get("geometry_type")
         target = payload.get("objective_metric")
         missing = [
@@ -223,7 +208,6 @@ class Topic2ApplicationService:
             for key, value in (
                 ("material", material),
                 ("laser_type", laser_type),
-                ("equipment_profile_id", equipment_id),
                 ("geometry_type", geometry_type),
                 ("objective_metric", target),
             )
@@ -235,6 +219,12 @@ class Topic2ApplicationService:
             raise ValueError(f"unsupported laser_type: {laser_type}")
         if target not in ("depth_um", "roughness_um"):
             raise ValueError(f"unsupported objective_metric: {target}")
+        equipment_id = self.repository.resolve_real_equipment_scope(
+            material=str(material),
+            laser_type=str(laser_type),
+            geometry_type=str(geometry_type),
+            target=str(target),
+        )
         return TaskScope(
             task_context_id=payload.get("task_context_id"),
             task_context_version=payload.get("task_context_version"),
@@ -246,6 +236,36 @@ class Topic2ApplicationService:
             process_parameters=dict(payload.get("process_parameters") or {}),
             device_properties=dict(payload.get("device_properties") or {}),
         )
+
+    @staticmethod
+    def _execution_equipment_ref(
+        task_spec: dict[str, Any], scope: TaskScope
+    ) -> tuple[str, str | None]:
+        """Return the immutable execution-profile identity selected by Task."""
+        raw = task_spec.get("execution_equipment_ref")
+        if isinstance(raw, dict):
+            profile_id = str(raw.get("equipment_profile_id") or "").strip()
+            revision_id = str(raw.get("revision_id") or "").strip() or None
+            return profile_id, revision_id
+        if isinstance(raw, str) and raw.strip():
+            return raw.strip(), str(task_spec.get("equipment_revision_id") or "").strip() or None
+        if effective_execution_mode("research", task_spec) == "SANDBOX":
+            return str(task_spec.get("equipment_profile_id") or scope.equipment_id), None
+        return "UNRESOLVED-EQUIPMENT", None
+
+    @staticmethod
+    def _validate_task_inputs(mode: str, task_spec: dict[str, Any]) -> None:
+        execution_mode = effective_execution_mode(mode, task_spec)
+        injected = [
+            key
+            for key in ("machine_profile", "evidence_ir", "calibration_observations")
+            if task_spec.get(key) is not None
+        ]
+        if execution_mode != "SANDBOX" and injected:
+            raise ValueError(
+                "direct scientific input injection is SANDBOX-only: "
+                + ", ".join(injected)
+            )
 
     # ------------------------------------------------------------- creation
 
@@ -281,6 +301,7 @@ class Topic2ApplicationService:
             effective_seed = (
                 random_seed if random_seed is not None else self.settings.random_seed
             )
+        self._validate_task_inputs(mode, task_spec)
         if stages is None and task_spec.get("observation"):
             requested_stages.append("evaluate_observation")
 
@@ -308,13 +329,11 @@ class Topic2ApplicationService:
             details={"mode": mode, "task_context_ref": task_ref},
         )
         try:
+            summary, stage_results = self._run_research(
+                task_spec, scope, requested_stages, bus, effective_seed
+            )
             if mode == "demo":
-                summary = self._run_demo_slice(task_spec, bus, effective_seed)
-                stage_results: dict[str, Any] = {}
-            else:
-                summary, stage_results = self._run_research(
-                    task_spec, scope, requested_stages, bus, effective_seed
-                )
+                summary.setdefault("audit", {})["replayable"] = True
             self.repository.save_application_run(
                 {
                     "application_run_id": run_id,
@@ -325,11 +344,6 @@ class Topic2ApplicationService:
                     "status": "completed",
                     "stage_status": {
                         stage: {"status": "completed"} for stage in requested_stages
-                    }
-                    if mode == "research"
-                    else {
-                        stage: {"status": "completed"}
-                        for stage in SLICE_STAGE_LABELS
                     },
                     "result": summary,
                     "task_spec": task_spec,
@@ -352,6 +366,14 @@ class Topic2ApplicationService:
                     "next_actions": exc.next_actions,
                 },
             )
+            partial_summary = self._research_summary(
+                exc.stage_results,
+                scope,
+                task_spec,
+                effective_seed,
+                run_id,
+            )
+            partial_summary["runControlState"] = exc.run_control_state
             self.repository.save_application_run(
                 {
                     "application_run_id": run_id,
@@ -365,12 +387,11 @@ class Topic2ApplicationService:
                         for stage in requested_stages
                         if stage
                         in ((exc.run_control_state or {}).get("completed_stages") or [])
-                    }
-                    if mode == "research"
-                    else {},
-                    "result": {
-                        "runControlState": exc.run_control_state
-                        or {
+                    },
+                    "result": partial_summary
+                    if exc.run_control_state
+                    else {
+                        "runControlState": {
                             "schema_version": "run-control-state-v1",
                             "execution_mode": effective_execution_mode(
                                 mode, task_spec
@@ -380,10 +401,10 @@ class Topic2ApplicationService:
                             "blocking_reasons": exc.reasons,
                             "next_actions": exc.next_actions,
                             "completed_stages": [],
-                        }
+                        },
                     },
                     "task_spec": task_spec,
-                    "stage_results": {},
+                    "stage_results": exc.stage_results,
                     "completed_at": timestamp(),
                 }
             )
@@ -427,6 +448,7 @@ class Topic2ApplicationService:
         "satisfy_requirements",
         "calibrate_physics",
         "establish_process_model",
+        "simulate_morphology",
         "plan_process",
     )
 
@@ -546,6 +568,18 @@ class Topic2ApplicationService:
                 },
             )
             completed = set((exc.run_control_state or {}).get("completed_stages") or [])
+            partial_stage_results = {
+                **dict(run.get("stage_results") or {}),
+                **dict(exc.stage_results or {}),
+            }
+            partial_summary = self._research_summary(
+                partial_stage_results,
+                scope,
+                task_spec,
+                effective_seed,
+                run_id,
+            )
+            partial_summary["runControlState"] = exc.run_control_state
             self.repository.save_application_run(
                 {
                     "application_run_id": run_id,
@@ -564,19 +598,20 @@ class Topic2ApplicationService:
                             for stage in completed
                         },
                     },
-                    "result": {
-                        "runControlState": exc.run_control_state
-                        or {
+                    "result": partial_summary
+                    if exc.run_control_state
+                    else {
+                        "runControlState": {
                             "schema_version": "run-control-state-v1",
                             "current_phase": exc.phase,
                             "phase_status": "BLOCKED",
                             "blocking_reasons": exc.reasons,
                             "next_actions": exc.next_actions,
                             "completed_stages": [],
-                        }
+                        },
                     },
                     "task_spec": task_spec,
-                    "stage_results": run.get("stage_results") or {},
+                    "stage_results": partial_stage_results,
                     "completed_at": timestamp(),
                 }
             )
@@ -621,7 +656,13 @@ class Topic2ApplicationService:
         """
         result: dict[str, Any] = dict(existing_result or {})
         execution_mode = effective_execution_mode("research", task_spec)
-        completed: list[str] = []
+        stored_run = self.repository.application_run(bus.run_id) or {}
+        stored_status = stored_run.get("stage_status") or {}
+        completed: list[str] = [
+            stage
+            for stage in (*ALL_STAGES, *OPTIONAL_STAGES)
+            if (stored_status.get(stage) or {}).get("status") == "completed"
+        ]
         gate_results: list[GateResult] = self._previous_gate_results(bus)
         for stage in stages:
             gates = self._gates_before_stage(
@@ -649,6 +690,7 @@ class Topic2ApplicationService:
                         next_actions=gate.next_actions,
                         phase=STAGE_PHASES.get(stage, "UNKNOWN"),
                         run_control_state=control,
+                        stage_results=result,
                     )
             bus.emit(STAGE_STARTED, STAGE_LABELS[stage], stage=stage)
             handler = getattr(self, f"_stage_{stage}")
@@ -703,12 +745,17 @@ class Topic2ApplicationService:
         """Canonical gates that guard `stage` (fail closed)."""
         try:
             if stage == "assess_capability":
-                data_state = self._data_state(scope)
+                data_state = self._data_state(
+                    scope,
+                    task_spec,
+                    execution_mode=execution_mode,
+                )
                 return [
                     resource_gate(
                         self._machine_snapshot(bus),
                         data_state,
                         self._target_geometry_from_task(task_spec, scope, bus),
+                        self._execution_context(bus),
                         execution_mode=execution_mode,
                     )
                 ]
@@ -742,37 +789,97 @@ class Topic2ApplicationService:
                             scope, task_spec, bus
                         ),
                         machine_fields=set(self._machine_fields(bus)),
+                        knowledge_state=self._latest_artifact_content(
+                            bus, "KnowledgeState"
+                        ),
                         execution_mode=execution_mode,
                     )
                 ]
-            if stage == "plan_process":
+            if stage == "simulate_morphology":
                 model_payload = self._latest_artifact_content(bus, "LocalRemovalModel")
-                bounds = (
-                    self._machine_snapshot(bus) or {}
-                ).get("machine_bounds") or {}
                 gate_c = physical_model_gate(
                     self._latest_artifact_content(bus, "CalibrationResult"),
                     model_payload,
                     execution_mode=execution_mode,
                 )
+                return [gate_c]
+            if stage == "plan_process":
+                model_payload = self._latest_artifact_content(bus, "LocalRemovalModel")
+                rows = self.topic2._rows_for_scope(scope)
+                bounds = self._machine_bounds(
+                    scope,
+                    rows,
+                    snapshot_bounds=(
+                        (self._machine_snapshot(bus) or {}).get("machine_bounds")
+                    ),
+                )
                 gate_d = planning_gate(
                     model_available=bool(model_payload),
+                    simulation_available=bool(
+                        self._latest_artifact_content(bus, "MorphologySimulationResult")
+                    ),
                     machine_bounds=bounds,
+                    candidate_plan=self._latest_artifact_content(
+                        bus, "ToolpathCandidateSet"
+                    ),
                     execution_mode=execution_mode,
                 )
-                return [gate_c, gate_d]
+                return [gate_d]
         except Exception as exc:  # noqa: BLE001 - gate evaluation must fail closed
             return [GateResult(stage, "BLOCKED", [f"gate evaluation failed: {exc}"])]
         return []
 
-    def _data_state(self, scope: TaskScope) -> dict[str, Any]:
+    def _data_state(
+        self,
+        scope: TaskScope,
+        task_spec: dict[str, Any] | None = None,
+        *,
+        execution_mode: str = "RESEARCH",
+    ) -> dict[str, Any]:
         """Typed DataState for Gate A (阶段二 T1)."""
+        task_spec = task_spec or {}
+        dataset_ref = str(task_spec.get("dataset_ref") or "").strip()
+        if not dataset_ref and execution_mode != "SANDBOX":
+            return {
+                "status": "INVALID",
+                "reason": "Task 缺少 dataset_ref",
+                "dataset_ref": None,
+                "n_samples": 0,
+                "n_unique_designs": 0,
+            }
+        dataset = (
+            self.repository.dataset(dataset_ref, real_only=True)
+            if dataset_ref
+            else self.repository.latest_dataset(real_only=True)
+        )
+        if dataset is None:
+            return {
+                "status": "INVALID",
+                "reason": f"dataset_ref 不存在: {dataset_ref or 'missing'}",
+                "dataset_ref": dataset_ref or None,
+                "n_samples": 0,
+                "n_unique_designs": 0,
+            }
+        latest = self.repository.latest_dataset(real_only=True)
+        if (
+            execution_mode != "SANDBOX"
+            and latest is not None
+            and dataset["dataset_version"] != latest["dataset_version"]
+        ):
+            return {
+                "status": "INVALID",
+                "reason": "当前仓库不能物化所选历史 dataset snapshot",
+                "dataset_ref": dataset_ref,
+                "n_samples": 0,
+                "n_unique_designs": 0,
+            }
         try:
             rows = self.topic2._rows_for_scope(scope)
         except Exception as exc:  # noqa: BLE001 - no comparable rows
             return {
                 "status": "INVALID",
                 "reason": str(exc),
+                "dataset_ref": dataset.get("dataset_version"),
                 "n_samples": 0,
                 "n_unique_designs": 0,
             }
@@ -781,12 +888,15 @@ class Topic2ApplicationService:
             return {
                 "status": "INVALID",
                 "reason": "scope 内无有效样本",
+                "dataset_ref": dataset.get("dataset_version"),
                 "n_samples": profile.n_samples,
                 "n_unique_designs": profile.n_unique_designs,
             }
         return {
             "status": "READY",
             "reason": None,
+            "dataset_ref": dataset.get("dataset_version"),
+            "dataset_hash": dataset.get("dataset_hash"),
             "n_samples": profile.n_samples,
             "n_unique_designs": profile.n_unique_designs,
         }
@@ -816,13 +926,7 @@ class Topic2ApplicationService:
         Macro dataset rows do NOT count (阶段二 T5): only explicit
         single/multi-pulse observations with absolute fluence qualify.
         """
-        task_spec = task_spec or {}
-        observations = list(task_spec.get("calibration_observations") or [])
-        if not observations and effective_execution_mode("research", task_spec) in (
-            "DEMO_FIXTURE",
-            "SANDBOX",
-        ):
-            observations = self._calibration_fixture_observations()
+        observations = self._parameter_observations(bus)
         if not observations:
             return set()
         has_absolute_fluence = any(
@@ -863,148 +967,6 @@ class Topic2ApplicationService:
         spec["random_seed"] = random_seed
         return spec
 
-    # ------------------------------------------------------------ demo path
-
-    def _run_demo_slice(
-        self, task_spec: dict[str, Any], bus: WorkflowEventBus, random_seed: int
-    ) -> dict[str, Any]:
-        """Frozen DEMO_SCENARIO_01 over the fixed 5-paper pilot set.
-
-        Real PDFs when the literature archive is present; otherwise the
-        offline synthetic-ledger fallback (same contract, honest evidence).
-        """
-        from demo.t2_slice.pipeline import run_vertical_slice
-
-        csv_path = Path(self.fixture_csv) if self.fixture_csv else (
-            Path(__file__).resolve().parents[3]
-            / "data"
-            / "test_fixture"
-            / "topic2_experiments_v1.csv"
-        )
-        documents, mentions_by_paper, regions_by_paper = self._pilot_documents(bus)
-        bus.emit(
-            VALIDATION,
-            f"演示文献集：{len(documents)} 篇（固定 pilot set）",
-            stage="literature_evidence",
-            details={"paper_count": len(documents)},
-        )
-        result = run_vertical_slice(
-            csv_path=csv_path,
-            documents=documents,
-            mentions_by_paper=mentions_by_paper,
-            regions_by_paper=regions_by_paper,
-            task_spec=task_spec,
-            random_seed=random_seed,
-        )
-        for region in SLICE_STAGE_LABELS:
-            if region in result:
-                artifact_id = self._persist_artifact(bus.run_id, region, result[region])
-                bus.emit(
-                    ARTIFACT_CREATED,
-                    f"{region} 完成（{artifact_id}）",
-                    stage=region,
-                    artifact_refs=[{"type": region, "id": artifact_id}],
-                )
-        summary = self._demo_summary(result, task_spec, random_seed, bus.run_id)
-        artifact_id = self._persist_artifact(
-            bus.run_id, "Topic2ApplicationResult", summary
-        )
-        bus.emit(
-            ARTIFACT_CREATED,
-            f"应用结果汇总已生成（{artifact_id}）",
-            stage="application_result",
-            artifact_refs=[{"type": "Topic2ApplicationResult", "id": artifact_id}],
-        )
-        return summary
-
-    def _pilot_documents(self, bus: WorkflowEventBus) -> tuple[list, dict, dict]:
-        try:
-            from demo.t2_slice.resources import resolve_literature_archive
-            from ultrafast_ingestion import PyMuPDFDocumentParser
-            from ultrafast_ingestion.mentions.extractor import extract_mentions
-            from ultrafast_ingestion.tables.models import table_regions
-
-            archive = resolve_literature_archive()
-        except Exception:
-            archive = None
-        if archive is None:
-            bus.emit(
-                WARNING,
-                "文献档案不可用，演示退回离线 synthetic ledger（真实论文链需 ULTRAFAST_PILOT_ARCHIVE）",
-                stage="literature_evidence",
-            )
-            return self._synthetic_documents()
-
-        parser = PyMuPDFDocumentParser()
-        documents, mentions_by_paper, regions_by_paper = [], {}, {}
-        for paper_id in PILOT_PAPER_IDS:
-            try:
-                from demo.t2_slice.resources import resolve_pilot_pdf
-
-                pdf = resolve_pilot_pdf(paper_id)
-                doc = parser.parse(pdf)
-                documents.append(doc)
-                mentions_by_paper[doc.paper_id] = extract_mentions(doc)
-                regions_by_paper[doc.paper_id] = table_regions(doc)
-            except Exception as exc:
-                bus.emit(
-                    WARNING,
-                    f"论文 {paper_id} 跳过：{exc}",
-                    stage="literature_evidence",
-                )
-        if not documents:
-            raise ValueError("no pilot documents could be loaded")
-        return documents, mentions_by_paper, regions_by_paper
-
-    def _synthetic_documents(self) -> tuple[list, dict, dict]:
-        """Offline fallback: one synthetic paper covering frequency/scan bounds."""
-        from ultrafast_ingestion.mentions.extractor import extract_mentions
-        from ultrafast_ingestion.models.document import (
-            PageBlock,
-            ScientificDocument,
-            Section,
-        )
-
-        text = (
-            "The laser was operated at 1030 nm with a repetition rate of 200 kHz "
-            "and a pulse width of 300 fs. The scan speed was 300 mm/s."
-        )
-        block = PageBlock(
-            paper_id="p_demo",
-            document_version_id="dv_test_0000000000000000",
-            page_index=0,
-            bbox=(0.0, 0.0, 500.0, 100.0),
-            block_index=0,
-            reading_order=0,
-            text=text,
-            section_id="s1",
-            section_path="Methods",
-        )
-        section = Section(
-            section_id="s1",
-            title="Methods",
-            section_type="methods",
-            level=1,
-            page_start=0,
-            page_end=0,
-            path="Methods",
-        )
-        doc = ScientificDocument(
-            paper_id="p_demo",
-            document_version_id="dv_test_0000000000000000",
-            pdf_path="",
-            pdf_sha256="",
-            parser_name="synthetic",
-            parser_version="0",
-            schema_version="synthetic",
-            config_hash="synthetic",
-            pages=[[block]],
-            sections=[section],
-            blocks_by_id={block.block_id(): block},
-        )
-        mentions = extract_mentions(doc)
-        return [doc], {doc.paper_id: mentions}, {doc.paper_id: []}
-
     # ---------------------------------------------------------- research stages
 
     def _stage_prepare_task(
@@ -1014,20 +976,68 @@ class Topic2ApplicationService:
         execution_mode = effective_execution_mode(
             "research", task_spec
         )
+        execution_profile_id, execution_revision_id = self._execution_equipment_ref(
+            task_spec, scope
+        )
         snapshot = resolve_machine_snapshot(
-            equipment_profile_id=scope.equipment_id,
+            equipment_profile_id=execution_profile_id,
+            equipment_revision_id=execution_revision_id,
             run_mode="research",
             task_spec=task_spec,
             agent_proxy_target=self.agent_proxy_target,
             fixture_profiles=self.settings.equipment_profiles,
         )
         snapshot_payload = snapshot.model_dump(mode="json")
+        data_state = self._data_state(
+            scope,
+            task_spec,
+            execution_mode=execution_mode,
+        )
+        dataset_artifact = self._persist_artifact(
+            bus.run_id,
+            "DatasetRef",
+            {
+                "schema_version": "dataset-ref-v1",
+                "dataset_ref": task_spec.get("dataset_ref"),
+                "equipment_scope_id": scope.equipment_id,
+                **data_state,
+            },
+            input_refs=[
+                {
+                    "type": "DatasetResource",
+                    "id": str(task_spec.get("dataset_ref") or "unresolved"),
+                }
+            ],
+            schema_version="dataset-ref-v1",
+        )
         snapshot_artifact = self._persist_artifact(
             bus.run_id,
             "MachineProfileSnapshot",
             snapshot_payload,
             input_refs=[{"type": "TaskScope", "id": scope.task_context_id or "task"}],
             schema_version=snapshot.schema_version,
+        )
+        execution_context = self._build_execution_context(
+            task_spec,
+            snapshot_payload,
+        )
+        execution_context_artifact = self._persist_artifact(
+            bus.run_id,
+            "ExecutionContext",
+            execution_context,
+            input_refs=[
+                {"type": "MachineProfileSnapshot", "id": snapshot_artifact},
+                {"type": "TaskScope", "id": scope.task_context_id or "task"},
+            ],
+            schema_version="execution-context-v1",
+        )
+        observation_set_artifact, observation_artifacts = (
+            self._persist_task_observations(
+                task_spec,
+                scope,
+                bus,
+                execution_mode=execution_mode,
+            )
         )
         bus.emit(
             VALIDATION,
@@ -1055,7 +1065,12 @@ class Topic2ApplicationService:
             "meets_identification": capability["meets_identification"],
             "meets_modeling": capability["meets_modeling"],
             "machine_snapshot_artifact_id": snapshot_artifact,
+            "dataset_artifact_id": dataset_artifact,
+            "execution_context_artifact_id": execution_context_artifact,
+            "observation_set_artifact_id": observation_set_artifact,
+            "observation_count": len(observation_artifacts),
             "resource_status": snapshot.resource_status,
+            "execution_context_status": execution_context["status"],
         }
         bus.emit(
             VALIDATION,
@@ -1070,6 +1085,19 @@ class Topic2ApplicationService:
                 "geometry_type": scope.geometry_type,
             },
             "machine_profile_snapshot": snapshot_payload,
+            "execution_context": execution_context,
+            "dataset_ref": {
+                "artifact_id": dataset_artifact,
+                "dataset_version": data_state.get("dataset_ref"),
+                "equipment_scope_id": scope.equipment_id,
+                "status": data_state.get("status"),
+            },
+            "execution_equipment_ref": {
+                "equipment_profile_id": execution_profile_id,
+                "revision_id": execution_revision_id,
+            },
+            "calibration_observation_set_ref": observation_set_artifact,
+            "calibration_observation_refs": observation_artifacts,
             "execution_mode": execution_mode,
             "random_seed": random_seed,
             "capability_summary": capability,
@@ -1081,6 +1109,13 @@ class Topic2ApplicationService:
             input_refs=[
                 {"type": "TaskScope", "id": scope.task_context_id or "task"},
                 {"type": "MachineProfileSnapshot", "id": snapshot_artifact},
+                {"type": "DatasetRef", "id": dataset_artifact},
+                {"type": "ExecutionContext", "id": execution_context_artifact},
+                *(
+                    [{"type": "CalibrationObservationSet", "id": observation_set_artifact}]
+                    if observation_set_artifact
+                    else []
+                ),
             ],
             schema_version="task-state-v1",
         )
@@ -1108,7 +1143,7 @@ class Topic2ApplicationService:
                 "device_properties": task_spec.get("device_properties") or scope.device_properties,
             },
             data_rows=rows,
-            machine_profile=self._machine_fields(bus),
+            machine_profile=self._machine_capability_fields(bus),
             knowledge_state={},
             input_refs=[
                 ArtifactRef(type="TaskState", id=task_state_id),
@@ -1157,20 +1192,27 @@ class Topic2ApplicationService:
         """Stage 2: DataState + TargetPhysicsReadiness (real backend report)."""
         rows = self.topic2._rows_for_scope(scope)
         profile = build_data_profile(rows)
+        dataset = self.repository.dataset(
+            str(task_spec.get("dataset_ref") or ""), real_only=True
+        )
+        if dataset is None and effective_execution_mode("research", task_spec) == "SANDBOX":
+            dataset = self.repository.latest_dataset(real_only=True)
         summary = {
             "n_samples": profile.n_samples,
             "n_unique_designs": profile.n_unique_designs,
-            "dataset_version": (self.repository.latest_dataset() or {}).get(
-                "dataset_version"
-            ),
-            "dataset_hash": (self.repository.latest_dataset() or {}).get("dataset_hash"),
+            "dataset_version": (dataset or {}).get("dataset_version"),
+            "dataset_hash": (dataset or {}).get("dataset_hash"),
+            "dataset_ref_artifact_id": self._latest_artifact_id(bus, "DatasetRef"),
         }
         trace = ScientificTrace(bus, "assess_data")
         dataset_artifact = self._persist_artifact(
             bus.run_id,
             "DataProfile",
             summary,
-            input_refs=[{"type": "TaskScope", "id": scope.task_context_id or "task"}],
+            input_refs=[
+                {"type": "TaskScope", "id": scope.task_context_id or "task"},
+                {"type": "DatasetRef", "id": self._latest_artifact_id(bus, "DatasetRef")},
+            ],
         )
         trace.artifact_created(
             "DataProfile",
@@ -1329,10 +1371,11 @@ class Topic2ApplicationService:
     ) -> dict[str, Any]:
         """Capability/computation gaps -> ScientificNeedSet -> KnowledgeRequirementSet.
 
-        M2: RESOURCE_INPUT needs (equipment fields) are classified in the
-        ScientificNeedSet and never become literature requirements.  Only
-        SCIENTIFIC_KNOWLEDGE / CALIBRATION_OBSERVATION needs enter the
-        KnowledgeRequirementSet consumed by retrieval.
+        M2: RESOURCE_INPUT needs (task execution setpoints or equipment
+        fields) are classified in the ScientificNeedSet and never become
+        literature requirements. Only SCIENTIFIC_KNOWLEDGE /
+        CALIBRATION_OBSERVATION needs enter the KnowledgeRequirementSet
+        consumed by retrieval.
         """
         trace = ScientificTrace(bus, "analyze_knowledge_requirements")
         capability_ref = self._latest_artifact_id(bus, "ScientificCapabilityReport")
@@ -1935,14 +1978,14 @@ class Topic2ApplicationService:
                 "rejected": rejected_count,
             },
         )
-        evidence_ir = [
-            item.model_dump(mode="json") if hasattr(item, "model_dump") else dict(item)
-            for item in evidence
-        ]
-        evidence_ir.extend(resolution_evidence)
-        evidence_ir.extend(
-            dict(item) for item in (task_spec.get("evidence_ir") or [])
-        )
+        # Canonical EvidenceIR is produced only by RequirementResolution.
+        # Legacy repository evidence stays visible in ExistingKnowledgeSummary
+        # but never bypasses Candidate -> Condition -> Applicability.
+        evidence_ir = list(resolution_evidence)
+        if execution_mode == "SANDBOX":
+            evidence_ir.extend(
+                dict(item) for item in (task_spec.get("evidence_ir") or [])
+            )
         evidence_ir_artifact = self._persist_artifact(
             bus.run_id,
             "EvidenceIRSet",
@@ -2014,16 +2057,38 @@ class Topic2ApplicationService:
             stage="prepare_knowledge",
             details={"phase": "compiling_prior", "evidence": len(evidence_ir)},
         )
-        prior_set = compile_typed_priors(evidence_ir)
+        applicability_refs = {
+            str(item.get("evidence_id")): str(item.get("applicability_report_id"))
+            for item in ((resolution or {}).get("applicability") or [])
+            if item.get("evidence_id") and item.get("applicability_report_id")
+        }
+        prior_set = compile_typed_priors(
+            evidence_ir,
+            applicability_refs=applicability_refs,
+        )
         prior_set = self._merge_demo_fixture_priors(
             prior_set,
             execution_mode=execution_mode,
+            task_spec=task_spec,
+            scope=scope,
         )
         prior_set_artifact = self._persist_artifact(
             bus.run_id,
             "PriorObjectSet",
             prior_set.model_dump(mode="json"),
-            input_refs=[{"type": "EvidenceIRSet", "id": evidence_ir_artifact}],
+            input_refs=[
+                {"type": "EvidenceIRSet", "id": evidence_ir_artifact},
+                *(
+                    [
+                        {
+                            "type": "ApplicabilityReportSet",
+                            "id": self._latest_artifact_id(bus, "ApplicabilityReportSet"),
+                        }
+                    ]
+                    if resolution
+                    else []
+                ),
+            ],
             schema_version=prior_set.schema_version,
         )
         trace.operation_completed(
@@ -2140,105 +2205,159 @@ class Topic2ApplicationService:
     def _stage_satisfy_requirements(
         self, task_spec: dict[str, Any], scope: TaskScope, bus: WorkflowEventBus, random_seed: int
     ) -> dict[str, Any]:
-        """Stage 6: requirement-specific satisfaction -> KnowledgeState.
-
-        V0 uses DETERMINISTIC_PROVISIONAL with requirement-specific coverage:
-        an evidence only satisfies requirements whose required_evidence_roles
-        contain its claim_type. A single parameter_effect evidence therefore
-        never satisfies a threshold requirement. SATISFIED requires governed
-        evidence, PARTIALLY_SATISFIED requires accepted evidence, data_quality
-        can never be satisfied by literature. The workflow never blocks.
-        """
+        """EvidenceIRSet + PriorObjectSet -> authoritative KnowledgeState."""
         requirements = self._latest_requirements(bus)
-        evidence = self._evidence_for_scope(scope)
+        evidence_set = self._latest_artifact_content(bus, "EvidenceIRSet") or {}
+        evidence_items = [
+            dict(item)
+            for item in evidence_set.get("items") or []
+            if isinstance(item, dict)
+        ]
+        prior_set = self._latest_artifact_content(bus, "PriorObjectSet") or {}
+        priors = [
+            dict(item)
+            for item in prior_set.get("priors") or []
+            if isinstance(item, dict)
+        ]
+        conflict_prior_ids = {
+            str(ref.get("id"))
+            for conflict in prior_set.get("conflicts") or []
+            for ref in conflict.get("prior_refs") or []
+            if isinstance(ref, dict) and ref.get("id")
+        }
+        prior_by_evidence: dict[str, list[dict[str, Any]]] = {}
+        for prior in priors:
+            for ref in prior.get("evidence_refs") or []:
+                if isinstance(ref, dict) and ref.get("id"):
+                    prior_by_evidence.setdefault(str(ref["id"]), []).append(prior)
         bus.emit(
             VALIDATION,
             f"需求满足评估: {len(requirements)} 条需求",
             stage="satisfy_requirements",
             details={"phase": "evaluating_satisfaction", "requirements": len(requirements)},
         )
-        bundle = self.topic2.compile_evidence(
-            EvidenceCompileRequest(scope=scope, evidence=evidence)
+        accepted_reviews = {
+            "approved",
+            "accepted",
+            "accepted_as_literature_evidence",
+            "governed",
+        }
+        observation_ids = [
+            artifact_id for artifact_id, _ in self._artifact_contents(bus, "Observation")
+        ]
+        observation_capabilities = self._observation_capabilities(
+            scope, task_spec, bus
         )
-        accepted = bundle.get("accepted") or []
-        accepted_by_claim_type: dict[str, set[str]] = {}
-        for item in accepted:
-            claim_type = str(item.get("claim_type") or "")
-            accepted_by_claim_type.setdefault(claim_type, set()).add(
-                str(item.get("evidence_id"))
-            )
-        accepted_types = {str(item.get("claim_type")) for item in accepted}
-        governed_evidence_ids: set[str] = set()
-        prior = self._latest_governed_prior(bus)
-        governed_by_claim_type: dict[str, set[str]] = {}
-        if prior:
-            for evidence_id in prior.get("evidence_ids") or []:
-                governed_evidence_ids.add(str(evidence_id))
-        if governed_evidence_ids:
-            # governed 证据同样按 claim_type 归类（来自同批 evidence）
-            for item in accepted:
-                if str(item.get("evidence_id")) in governed_evidence_ids:
-                    claim_type = str(item.get("claim_type") or "")
-                    governed_by_claim_type.setdefault(claim_type, set()).add(
-                        str(item.get("evidence_id"))
-                    )
-
-        satisfactions = []
+        satisfactions: list[dict[str, Any]] = []
+        resolved_requirements: list[dict[str, Any]] = []
         for requirement in requirements:
-            roles = requirement.get("required_evidence_roles") or []
-            basis: list[str] = []
+            requirement_id = str(requirement["requirement_id"])
+            roles = {
+                str(role) for role in requirement.get("required_evidence_roles") or []
+            }
+            matching = [
+                item
+                for item in evidence_items
+                if str(item.get("review_status") or "").lower() in accepted_reviews
+                and (
+                    requirement_id
+                    in {str(value) for value in item.get("requirement_ids") or []}
+                    or (
+                        not item.get("requirement_ids")
+                        and str(item.get("claim_type") or "") in roles
+                    )
+                )
+            ]
+            evidence_ids = {
+                str(item.get("evidence_id"))
+                for item in matching
+                if item.get("evidence_id")
+            }
+            matching_priors = [
+                prior
+                for evidence_id in evidence_ids
+                for prior in prior_by_evidence.get(evidence_id, [])
+            ]
+            prior_ids = {
+                str(prior.get("prior_id"))
+                for prior in matching_priors
+                if prior.get("prior_id")
+            }
+            basis = sorted({*evidence_ids, *prior_ids})
             reasons: list[str] = []
             if not roles:
-                # 文献不可满足的需求（如 data_quality）：如实 UNSATISFIED
-                reasons.append("该需求由实验数据决定，文献无法满足")
+                reasons.append("该需求不由文献或 PriorObject 满足")
                 status = "UNSATISFIED"
+            elif (
+                str(requirement.get("type") or "") == "PARAMETER_PRIOR"
+                and "F_th_eff" in observation_capabilities
+            ):
+                status = "SATISFIED"
+                basis = sorted({*basis, *observation_ids})
+            elif prior_ids.intersection(conflict_prior_ids):
+                status = "SATISFIED_WITH_CONFLICT"
+                reasons.append("匹配先验存在未解决冲突；禁止静默平均")
+            elif matching_priors:
+                status = "SATISFIED"
+            elif matching:
+                status = "PARTIALLY_SATISFIED"
+                reasons.append("匹配 EvidenceIR 尚未编译成可消费 PriorObject")
             else:
-                covered_governed: set[str] = set()
-                covered_accepted: set[str] = set()
-                for role in roles:
-                    covered_governed.update(governed_by_claim_type.get(role, set()))
-                    covered_accepted.update(accepted_by_claim_type.get(role, set()))
-                if covered_governed:
-                    status = "SATISFIED"
-                    basis = sorted(covered_governed)
-                elif covered_accepted:
-                    status = "PARTIALLY_SATISFIED"
-                    basis = sorted(covered_accepted)
-                    reasons.append("存在匹配证据但尚未进入受治理先验")
-                else:
-                    status = "UNSATISFIED"
-                    reasons.append(
-                        f"无匹配证据（需要 claim_type ∈ {roles}，现有 accepted claim_types ∈ {sorted(accepted_types) or '∅'}）"
-                    )
+                status = "UNSATISFIED"
+                reasons.append(
+                    f"无匹配 EvidenceIR（需要 claim_type ∈ {sorted(roles)}）"
+                )
             satisfactions.append(
                 {
-                    "requirement_id": requirement["requirement_id"],
+                    "requirement_id": requirement_id,
                     "status": status,
                     "assessment_method": "DETERMINISTIC_PROVISIONAL",
-                    "assessment_version": "satisfaction-v0.2",
+                    "assessment_version": "satisfaction-v1",
                     "basis_refs": basis,
                     "unresolved_reasons": reasons,
                 }
             )
-
+            resolved_requirements.append(
+                {
+                    **dict(requirement),
+                    "status": {
+                        "SATISFIED": "KNOWN",
+                        "PARTIALLY_SATISFIED": "PARTIAL",
+                        "SATISFIED_WITH_CONFLICT": "MISMATCH",
+                        "UNSATISFIED": "UNKNOWN",
+                    }[status],
+                }
+            )
         missing_topics = [
             requirement["requirement_id"]
-            for requirement, satisfaction in zip(requirements, satisfactions)
+            for requirement, satisfaction in zip(resolved_requirements, satisfactions)
             if satisfaction["status"] == "UNSATISFIED"
         ]
+        corpus = self._latest_artifact_content(bus, "ScientificCorpusPack") or {}
+        ledger = self._latest_artifact_content(bus, "CandidateLedger") or {}
+        accepted_types = {
+            str(item.get("claim_type"))
+            for item in evidence_items
+            if item.get("claim_type")
+        }
         knowledge_state = {
-            "requirements": requirements,
+            "requirements": resolved_requirements,
             "satisfactions": satisfactions,
             "existing_knowledge": {
-                "evidence_count": len(evidence),
-                "governed_evidence_count": len(governed_evidence_ids),
-                "candidate_count": 0,
-                "paper_count": 0,
+                "evidence_count": len(evidence_items),
+                "governed_evidence_count": len(prior_by_evidence),
+                "candidate_count": len(ledger.get("candidates") or []),
+                "paper_count": len(
+                    (corpus.get("corpus_pack") or {}).get("sources") or []
+                ),
                 "topics": sorted(accepted_types),
             },
             "missing_topics": missing_topics,
-            "assessment_version": "knowledge-state-v0.1",
+            "assessment_version": "knowledge-state-v1",
         }
+        knowledge_state = KnowledgeState.model_validate(knowledge_state).model_dump(
+            mode="json"
+        )
         artifact_id = self._persist_artifact(
             bus.run_id,
             "KnowledgeState",
@@ -2249,10 +2368,23 @@ class Topic2ApplicationService:
                     "id": self._latest_artifact_id(bus, "KnowledgeRequirementSet"),
                 },
                 {
-                    "type": "EvidenceCompileResult",
-                    "id": self._latest_artifact_id(bus, "EvidenceCompileResult"),
+                    "type": "EvidenceIRSet",
+                    "id": self._latest_artifact_id(bus, "EvidenceIRSet"),
                 },
+                {
+                    "type": "PriorObjectSet",
+                    "id": self._latest_artifact_id(bus, "PriorObjectSet"),
+                },
+                {
+                    "type": "ApplicabilityReportSet",
+                    "id": self._latest_artifact_id(bus, "ApplicabilityReportSet"),
+                },
+                *(
+                    {"type": "Observation", "id": artifact_id}
+                    for artifact_id in observation_ids
+                ),
             ],
+            schema_version="knowledge-state-v1",
         )
         trace = ScientificTrace(bus, "satisfy_requirements")
         satisfied = sum(1 for s in satisfactions if s["status"] == "SATISFIED")
@@ -2333,27 +2465,134 @@ class Topic2ApplicationService:
         content = snapshot.get("content")
         return dict(content) if isinstance(content, dict) else None
 
+    def _artifact_contents(
+        self, bus: WorkflowEventBus, artifact_type: str
+    ) -> list[tuple[str, dict[str, Any]]]:
+        items: list[tuple[str, dict[str, Any]]] = []
+        for artifact in self.repository.list_application_artifacts(bus.run_id):
+            if artifact["artifact_type"] != artifact_type:
+                continue
+            stored = self.repository.application_artifact(artifact["artifact_id"])
+            snapshot = (stored or {}).get("content") or {}
+            content = snapshot.get("content")
+            if isinstance(content, dict):
+                items.append((str(artifact["artifact_id"]), dict(content)))
+        return items
+
     def _machine_snapshot(self, bus: WorkflowEventBus) -> dict[str, Any]:
         """Canonical MachineProfileSnapshot artifact for this run."""
         return self._latest_artifact_content(bus, "MachineProfileSnapshot") or {}
+
+    def _execution_context(self, bus: WorkflowEventBus) -> dict[str, Any]:
+        """Verified task setpoints, kept separate from equipment capability."""
+        return self._latest_artifact_content(bus, "ExecutionContext") or {}
+
+    @staticmethod
+    def _build_execution_context(
+        task_spec: dict[str, Any], machine_snapshot: dict[str, Any]
+    ) -> dict[str, Any]:
+        process = task_spec.get("process_parameters") or {}
+        raw_value = process.get("laser_power_W")
+        location = str(process.get("laser_power_location") or "")
+        bound = (machine_snapshot.get("machine_bounds") or {}).get("laser_power_W") or {}
+        lower, upper = bound.get("lower"), bound.get("upper")
+        reasons: list[str] = []
+        try:
+            value = float(raw_value)
+        except (TypeError, ValueError):
+            value = None
+        if value is None or value <= 0:
+            reasons.append("laser_power_W 缺失或不是正数")
+        if location != "WORKPIECE_SURFACE_INCIDENT":
+            reasons.append("laser_power_location 必须为 WORKPIECE_SURFACE_INCIDENT")
+        if lower is None or upper is None:
+            reasons.append("设备版本缺少材料表面入射平均功率边界")
+        elif value is not None and not (float(lower) <= value <= float(upper)):
+            reasons.append(
+                f"laser_power_W={value:g} W 超出设备实测边界 [{float(lower):g}, {float(upper):g}] W"
+            )
+        if machine_snapshot.get("resource_status") != "READY":
+            reasons.append("设备版本尚未达到 READY")
+        return {
+            "schema_version": "execution-context-v1",
+            "status": "READY" if not reasons else "BLOCKED",
+            "setpoints": {
+                "laser_power_W": {
+                    "value": value,
+                    "unit": "W",
+                    "location": "WORKPIECE_SURFACE_INCIDENT",
+                    "status": "VERIFIED" if not reasons else "UNVERIFIED",
+                    "source": "task_spec.process_parameters.laser_power_W",
+                }
+            },
+            "bounds": (
+                {"laser_power_W": {"lower": float(lower), "upper": float(upper)}}
+                if lower is not None and upper is not None
+                else {}
+            ),
+            "reasons": reasons,
+            "equipment_profile_id": machine_snapshot.get("equipment_profile_id"),
+            "revision_id": machine_snapshot.get("revision_id"),
+        }
 
     def _machine_fields(self, bus: WorkflowEventBus) -> dict[str, Any]:
         """Verified machine facts for physics - snapshot only, never task_spec."""
         snapshot = self._machine_snapshot(bus)
         fields = snapshot.get("fields") or {}
-        return {
+        values = {
             str(state.get("parameter")): state["value"]
             for state in fields.values()
             if isinstance(state, dict)
             and state.get("value") is not None
             and state.get("status") in ("VERIFIED", "DERIVED")
         }
+        execution = self._execution_context(bus)
+        power = ((execution.get("setpoints") or {}).get("laser_power_W") or {})
+        if execution.get("status") == "READY" and power.get("status") == "VERIFIED":
+            values["actual_power_W"] = power.get("value")
+            values["laser_power_W"] = power.get("value")
+        return values
+
+    def _machine_capability_fields(self, bus: WorkflowEventBus) -> dict[str, Any]:
+        """Verified values plus explicit verification flags for preflight.
+
+        ScientificCapabilityAnalyzer deliberately treats a bare numeric machine
+        value as UNVERIFIED.  Preserve the MachineProfileSnapshot decision when
+        adapting the artifact into that analyzer instead of silently dropping
+        its field status.
+        """
+        snapshot = self._machine_snapshot(bus)
+        fields = snapshot.get("fields") or {}
+        values: dict[str, Any] = {}
+        for state in fields.values():
+            if not isinstance(state, dict):
+                continue
+            parameter = str(state.get("parameter") or "")
+            value = state.get("value")
+            if (
+                not parameter
+                or value is None
+                or state.get("status") not in ("VERIFIED", "DERIVED")
+            ):
+                continue
+            values[parameter] = value
+            values[f"{parameter}_verified"] = True
+        execution = self._execution_context(bus)
+        power = ((execution.get("setpoints") or {}).get("laser_power_W") or {})
+        if execution.get("status") == "READY" and power.get("status") == "VERIFIED":
+            values["actual_power_W"] = power.get("value")
+            values["actual_power_W_verified"] = True
+            values["laser_power_W"] = power.get("value")
+            values["laser_power_W_verified"] = True
+        return values
 
     def _merge_demo_fixture_priors(
         self,
         prior_set: PriorObjectSet,
         *,
         execution_mode: str,
+        task_spec: dict[str, Any],
+        scope: TaskScope,
     ) -> PriorObjectSet:
         """DEMO_FIXTURE only: merge explicit fixture priors (阶段二 T4).
 
@@ -2363,12 +2602,23 @@ class Topic2ApplicationService:
         """
         if execution_mode != "DEMO_FIXTURE":
             return prior_set
+        requested_ref = str(task_spec.get("prior_set_ref") or "").strip()
+        if not requested_ref:
+            return prior_set
         fixture_path = self.settings.prior_fixture_path
         if fixture_path is None or not Path(fixture_path).exists():
             return prior_set
         try:
             payload = json.loads(Path(fixture_path).read_text(encoding="utf-8"))
         except (json.JSONDecodeError, OSError):
+            return prior_set
+        execution_profile_id, _ = self._execution_equipment_ref(task_spec, scope)
+        if (
+            str(payload.get("prior_set_id") or "") != requested_ref
+            or str(payload.get("equipment_profile_id") or "")
+            != execution_profile_id
+            or str(payload.get("material") or "") != scope.material
+        ):
             return prior_set
         existing = {
             str(item.parameter)
@@ -2416,16 +2666,116 @@ class Topic2ApplicationService:
             update={"priors": [*prior_set.priors, *added]}
         )
 
-    def _calibration_fixture_observations(self) -> list[dict[str, Any]]:
-        """DEMO_FIXTURE calibration observations (pre-installed fixture file)."""
+    def _calibration_fixture_payload(self) -> dict[str, Any]:
+        """Read the declared DEMO observation resource; never infer its identity."""
         fixture_path = self.settings.calibration_fixture_path
         if fixture_path is None or not Path(fixture_path).exists():
-            return []
+            return {}
         try:
             payload = json.loads(Path(fixture_path).read_text(encoding="utf-8"))
         except (json.JSONDecodeError, OSError):
-            return []
-        return list(payload.get("observations") or [])
+            return {}
+        return dict(payload) if isinstance(payload, dict) else {}
+
+    def _resolve_task_observations(
+        self,
+        task_spec: dict[str, Any],
+        scope: TaskScope,
+        *,
+        execution_mode: str,
+    ) -> tuple[str | None, list[dict[str, Any]]]:
+        if execution_mode == "SANDBOX" and task_spec.get("calibration_observations"):
+            return "sandbox-task-observations", [
+                dict(item) for item in task_spec.get("calibration_observations") or []
+            ]
+        resource_ref = str(
+            task_spec.get("calibration_observation_set_ref") or ""
+        ).strip()
+        if not resource_ref:
+            return None, []
+        if execution_mode != "DEMO_FIXTURE":
+            # Research observations must eventually resolve through a research
+            # repository.  A local demo fixture is never a research fallback.
+            return None, []
+        payload = self._calibration_fixture_payload()
+        if str(payload.get("observation_set_id") or "") != resource_ref:
+            return None, []
+        execution_profile_id, _ = self._execution_equipment_ref(task_spec, scope)
+        if str(payload.get("equipment_profile_id") or "") != execution_profile_id:
+            return None, []
+        if str(payload.get("material") or "") != scope.material:
+            return None, []
+        return resource_ref, [dict(item) for item in payload.get("observations") or []]
+
+    def _persist_task_observations(
+        self,
+        task_spec: dict[str, Any],
+        scope: TaskScope,
+        bus: WorkflowEventBus,
+        *,
+        execution_mode: str,
+    ) -> tuple[str | None, list[str]]:
+        resource_ref, raw_items = self._resolve_task_observations(
+            task_spec,
+            scope,
+            execution_mode=execution_mode,
+        )
+        if not raw_items:
+            return None, []
+        validated = [ParameterObservation.model_validate(item) for item in raw_items]
+        set_artifact = self._persist_artifact(
+            bus.run_id,
+            "CalibrationObservationSet",
+            {
+                "schema_version": "calibration-observations-v1",
+                "observation_set_id": resource_ref,
+                "source_quality": (
+                    "SYNTHETIC_TEST_FIXTURE"
+                    if execution_mode != "SANDBOX"
+                    else "SANDBOX_TASK_OVERRIDE"
+                ),
+                "count": len(validated),
+            },
+            input_refs=[
+                {"type": "CalibrationObservationResource", "id": resource_ref or "sandbox"}
+            ],
+            schema_version="calibration-observations-v1",
+        )
+        artifact_ids: list[str] = []
+        for observation in validated:
+            original_ref = observation.data_ref
+            content = {
+                "schema_version": "parameter-observation-v1",
+                **observation.model_dump(mode="json"),
+                "source_data_ref": original_ref,
+                "observation_set_ref": set_artifact,
+            }
+            artifact_id = self._persist_artifact(
+                bus.run_id,
+                "Observation",
+                content,
+                input_refs=[
+                    {"type": "CalibrationObservationSet", "id": set_artifact}
+                ],
+                schema_version="parameter-observation-v1",
+            )
+            artifact_ids.append(artifact_id)
+        return set_artifact, artifact_ids
+
+    def _parameter_observations(
+        self, bus: WorkflowEventBus
+    ) -> list[dict[str, Any]]:
+        observations: list[dict[str, Any]] = []
+        for artifact_id, content in self._artifact_contents(bus, "Observation"):
+            raw = {
+                key: content.get(key)
+                for key in ParameterObservation.model_fields
+            }
+            raw["data_ref"] = artifact_id
+            observations.append(
+                ParameterObservation.model_validate(raw).model_dump(mode="json")
+            )
+        return observations
 
     def _evidence_for_scope(self, scope: TaskScope) -> list[Evidence]:
         """Existing (persisted) evidence only - canonical literature evidence
@@ -2508,7 +2858,7 @@ class Topic2ApplicationService:
                 TargetCoordinateEvaluator,
                 build_target_condition_spec,
             )
-        except Exception as exc:
+        except Exception as exc:  # noqa: BLE001 - readiness must fail closed
             return {
                 "status": "BLOCKED",
                 "coordinates": [],
@@ -2543,7 +2893,7 @@ class Topic2ApplicationService:
                 else json.loads(json.dumps(evaluated, default=str))
             )
             return report
-        except Exception as exc:
+        except Exception as exc:  # noqa: BLE001 - readiness must fail closed
             return {
                 "status": "BLOCKED",
                 "coordinates": [],
@@ -2565,7 +2915,7 @@ class Topic2ApplicationService:
             )
             response.raise_for_status()
             bounds = response.json().get("machine_bounds") or {}
-        except Exception:
+        except Exception:  # noqa: BLE001 - optional agent lookup
             return None
         diameter = bounds.get("spot_diameter_um")
         if isinstance(diameter, (list, tuple)) and len(diameter) == 2:
@@ -2645,6 +2995,13 @@ class Topic2ApplicationService:
 
         parameter_priors = [item for item in prior_set.priors if isinstance(item, ParameterPrior)]
         data_profile_id = self._latest_artifact_id(bus, "DataProfile")
+        observation_artifact_ids = [
+            artifact_id for artifact_id, _ in self._artifact_contents(bus, "Observation")
+        ]
+        observation_refs = [
+            {"type": "Observation", "id": artifact_id}
+            for artifact_id in observation_artifact_ids
+        ]
         trace.operation_started(
             "parameter-identification-v1",
             "有界多起点参数辨识与可辨识性审计",
@@ -2652,15 +3009,11 @@ class Topic2ApplicationService:
                 {"type": "DataProfile", "id": data_profile_id},
                 {"type": "PriorObjectSet", "id": prior_set_artifact},
                 {"type": "CanonicalPhysicsState", "id": canonical_artifact},
+                *observation_refs,
             ],
         )
         engine = ParameterIdentificationEngine()
-        observations = list(task_spec.get("calibration_observations") or [])
-        if not observations and effective_execution_mode("research", task_spec) in (
-            "DEMO_FIXTURE",
-            "SANDBOX",
-        ):
-            observations = self._calibration_fixture_observations()
+        observations = self._parameter_observations(bus)
         if observations:
             identifiability, calibration = engine.identify(
                 observations,
@@ -2672,6 +3025,10 @@ class Topic2ApplicationService:
                     ArtifactRef(type="DataProfile", id=data_profile_id),
                     ArtifactRef(type="PriorObjectSet", id=prior_set_artifact),
                     ArtifactRef(type="CanonicalPhysicsState", id=canonical_artifact),
+                    *(
+                        ArtifactRef(type="Observation", id=artifact_id)
+                        for artifact_id in observation_artifact_ids
+                    ),
                 ],
             )
         else:
@@ -2681,6 +3038,10 @@ class Topic2ApplicationService:
                     ArtifactRef(type="DataProfile", id=data_profile_id),
                     ArtifactRef(type="PriorObjectSet", id=prior_set_artifact),
                     ArtifactRef(type="CanonicalPhysicsState", id=canonical_artifact),
+                    *(
+                        ArtifactRef(type="Observation", id=artifact_id)
+                        for artifact_id in observation_artifact_ids
+                    ),
                 ],
             )
         ident_artifact = self._persist_artifact(
@@ -2690,6 +3051,7 @@ class Topic2ApplicationService:
             input_refs=[
                 {"type": "DataProfile", "id": data_profile_id},
                 {"type": "PriorObjectSet", "id": prior_set_artifact},
+                *observation_refs,
             ],
             schema_version=identifiability.schema_version,
         )
@@ -2700,6 +3062,10 @@ class Topic2ApplicationService:
                     ArtifactRef(type="PriorObjectSet", id=prior_set_artifact),
                     ArtifactRef(type="DataProfile", id=data_profile_id),
                     ArtifactRef(type="CanonicalPhysicsState", id=canonical_artifact),
+                    *(
+                        ArtifactRef(type="Observation", id=artifact_id)
+                        for artifact_id in observation_artifact_ids
+                    ),
                 ]
             }
         )
@@ -2712,6 +3078,7 @@ class Topic2ApplicationService:
                 {"type": "PriorObjectSet", "id": prior_set_artifact},
                 {"type": "DataProfile", "id": data_profile_id},
                 {"type": "CanonicalPhysicsState", "id": canonical_artifact},
+                *observation_refs,
             ],
             schema_version=calibration.schema_version,
         )
@@ -2903,11 +3270,15 @@ class Topic2ApplicationService:
             },
         }
 
-    def _stage_plan_process(
+    def _stage_simulate_morphology(
         self, task_spec: dict[str, Any], scope: TaskScope, bus: WorkflowEventBus, random_seed: int
     ) -> dict[str, Any]:
-        """TargetGeometry -> candidate paths -> Simulator -> ToolpathPlan."""
-        trace = ScientificTrace(bus, "plan_process")
+        """TargetGeometry -> parameterized candidates -> morphology simulation.
+
+        This stage deliberately does not issue ToolpathPlan.  Gate D consumes
+        its MorphologySimulationResult before the planning stage is allowed.
+        """
+        trace = ScientificTrace(bus, "simulate_morphology")
         model_artifact = self._latest_artifact_id(bus, "LocalRemovalModel")
         model_payload = self._latest_artifact_content(bus, "LocalRemovalModel")
         if not model_payload:
@@ -2969,9 +3340,39 @@ class Topic2ApplicationService:
                     "peak fluence is required (no threshold*2 fallback outside SANDBOX)"
                 )
             peak_fluence = model.threshold_J_cm2 * 2.0
+        planning_bounds = self._machine_bounds(
+            scope,
+            rows,
+            snapshot_bounds=(self._machine_snapshot(bus) or {}).get(
+                "machine_bounds"
+            ),
+        )
+        requested_laser = task_spec.get("laser_parameters") or {}
+
+        def feasible_laser_value(name: str, fallback: float) -> float:
+            explicit = requested_laser.get(name)
+            value = float(explicit if explicit is not None else fallback)
+            bound = planning_bounds.get(name) or {}
+            lower = bound.get("lower")
+            upper = bound.get("upper")
+            if explicit is not None:
+                return value  # ToolpathPlanner validates explicit requests.
+            if lower is not None:
+                value = max(value, float(lower))
+            if upper is not None:
+                value = min(value, float(upper))
+            return value
+
         laser = {
-            "frequency_kHz": float((task_spec.get("laser_parameters") or {}).get("frequency_kHz") or median("frequency_kHz", 100.0)),
-            "scan_speed_mm_s": float((task_spec.get("laser_parameters") or {}).get("scan_speed_mm_s") or median("scan_speed_mm_s", 100.0)),
+            "frequency_kHz": feasible_laser_value(
+                "frequency_kHz", median("frequency_kHz", 100.0)
+            ),
+            "scan_speed_mm_s": feasible_laser_value(
+                "scan_speed_mm_s", median("scan_speed_mm_s", 100.0)
+            ),
+            "pulse_width_ps": feasible_laser_value(
+                "pulse_width_ps", median("pulse_width_ps", 0.3)
+            ),
             "peak_fluence_J_cm2": float(peak_fluence),
         }
         units = {
@@ -2983,11 +3384,7 @@ class Topic2ApplicationService:
         }
         machine_constraints = [
             ConstraintValue(name=name, lower=value["lower"], upper=value["upper"], unit=units[name])
-            for name, value in self._machine_bounds(
-                scope,
-                rows,
-                snapshot_bounds=(self._machine_snapshot(bus) or {}).get("machine_bounds"),
-            ).items()
+            for name, value in planning_bounds.items()
         ]
         prior_payload = self._latest_artifact_content(bus, "PriorObjectSet") or {}
         prior_set = PriorObjectSet.model_validate(prior_payload)
@@ -3055,9 +3452,9 @@ class Topic2ApplicationService:
                 ],
             }
         )
-        plan_artifact = self._persist_artifact(
+        candidate_set_artifact = self._persist_artifact(
             bus.run_id,
-            "ToolpathPlan",
+            "ToolpathCandidateSet",
             plan.model_dump(mode="json"),
             input_refs=[
                 {"type": "MorphologySimulationResult", "id": simulation_artifact},
@@ -3065,6 +3462,132 @@ class Topic2ApplicationService:
                 {"type": "CanonicalPhysicsState", "id": canonical_artifact},
                 {"type": "PriorObjectSet", "id": self._latest_artifact_id(bus, "PriorObjectSet")},
             ],
+            schema_version="toolpath-candidate-set-v1",
+        )
+        trace.operation_completed(
+            "simulator-driven-toolpath-planning",
+            f"候选路径仿真完成（{simulation_artifact}）",
+            output_refs=[
+                {"type": "MorphologySimulationResult", "id": simulation_artifact},
+                {"type": "ToolpathCandidateSet", "id": candidate_set_artifact},
+            ],
+            counts={"candidates": len(plan.candidate_summary), "pulses": simulation.pulse_count},
+            reason_codes=["candidate_comparison_only_gate_d_pending"],
+        )
+        trace.artifact_created(
+            "MorphologySimulationResult",
+            simulation_artifact,
+            input_refs=[
+                {"type": "LocalRemovalModel", "id": model_artifact},
+                {"type": "CanonicalPhysicsState", "id": canonical_artifact},
+            ],
+        )
+        trace.artifact_created(
+            "ToolpathCandidateSet",
+            candidate_set_artifact,
+            input_refs=[
+                {"type": "MorphologySimulationResult", "id": simulation_artifact},
+                {"type": "LocalRemovalModel", "id": model_artifact},
+                {
+                    "type": "PriorObjectSet",
+                    "id": self._latest_artifact_id(bus, "PriorObjectSet"),
+                },
+            ],
+        )
+        return {
+            "meta": {
+                "simulation_artifact_id": simulation_artifact,
+                "candidate_set_artifact_id": candidate_set_artifact,
+                "canonical_physics_artifact_id": canonical_artifact,
+                "candidate_count": len(plan.candidate_summary),
+            },
+            "content": {
+                "target_geometry": geometry.model_dump(mode="json"),
+                "morphology_simulation": simulation.model_dump(mode="json"),
+                "toolpath_candidate_set": plan.model_dump(mode="json"),
+            },
+        }
+
+    def _stage_plan_process(
+        self, task_spec: dict[str, Any], scope: TaskScope, bus: WorkflowEventBus, random_seed: int
+    ) -> dict[str, Any]:
+        """Issue ToolpathPlan only after Gate D validated simulation+bounds."""
+        trace = ScientificTrace(bus, "plan_process")
+        candidate_set_artifact = self._latest_artifact_id(bus, "ToolpathCandidateSet")
+        candidate_payload = self._latest_artifact_content(bus, "ToolpathCandidateSet")
+        simulation_artifact = self._latest_artifact_id(bus, "MorphologySimulationResult")
+        simulation_payload = self._latest_artifact_content(
+            bus, "MorphologySimulationResult"
+        )
+        if (
+            not candidate_payload
+            or not simulation_payload
+            or simulation_artifact.endswith("-unavailable")
+        ):
+            raise ValueError("ToolpathCandidateSet and MorphologySimulationResult are required")
+        prior_payload = self._latest_artifact_content(bus, "PriorObjectSet") or {}
+        evidence_payload = self._latest_artifact_content(bus, "EvidenceIRSet") or {}
+        evidence_ids = {
+            str(ref.get("id"))
+            for prior in prior_payload.get("priors") or []
+            for ref in prior.get("evidence_refs") or []
+            if isinstance(ref, dict) and ref.get("id")
+        }
+        evidence_items = [
+            item
+            for item in evidence_payload.get("items") or []
+            if str(item.get("evidence_id") or "") in evidence_ids
+        ]
+        paper_ids = {
+            str(ref.get("id"))
+            for item in evidence_items
+            for ref in item.get("source_refs") or []
+            if isinstance(ref, dict)
+            and ref.get("type") == "Paper"
+            and ref.get("id")
+        }
+        plan = ToolpathPlan.model_validate(candidate_payload).model_copy(
+            update={
+                "input_refs": [
+                    ArtifactRef(type="ToolpathCandidateSet", id=candidate_set_artifact),
+                    ArtifactRef(type="MorphologySimulationResult", id=simulation_artifact),
+                    ArtifactRef(
+                        type="LocalRemovalModel",
+                        id=self._latest_artifact_id(bus, "LocalRemovalModel"),
+                    ),
+                    ArtifactRef(
+                        type="CanonicalPhysicsState",
+                        id=self._latest_artifact_id(bus, "CanonicalPhysicsState"),
+                    ),
+                    ArtifactRef(
+                        type="PriorObjectSet",
+                        id=self._latest_artifact_id(bus, "PriorObjectSet"),
+                    ),
+                    ArtifactRef(
+                        type="EvidenceIRSet",
+                        id=self._latest_artifact_id(bus, "EvidenceIRSet"),
+                    ),
+                ],
+                "evidence_refs": [
+                    ArtifactRef(type="EvidenceIR", id=evidence_id)
+                    for evidence_id in sorted(evidence_ids)
+                ],
+                "paper_refs": [
+                    ArtifactRef(type="Paper", id=paper_id)
+                    for paper_id in sorted(paper_ids)
+                ],
+            }
+        )
+        trace.operation_started(
+            "issue-toolpath-plan",
+            "Gate D 通过后签发 ToolpathPlan",
+            input_refs=[item.model_dump(mode="json") for item in plan.input_refs],
+        )
+        plan_artifact = self._persist_artifact(
+            bus.run_id,
+            "ToolpathPlan",
+            plan.model_dump(mode="json"),
+            input_refs=[item.model_dump(mode="json") for item in plan.input_refs],
             schema_version=plan.schema_version,
         )
         baseline_ref = ArtifactRef(
@@ -3106,36 +3629,23 @@ class Topic2ApplicationService:
             schema_version=correction.schema_version,
         )
         trace.operation_completed(
-            "simulator-driven-toolpath-planning",
+            "issue-toolpath-plan",
             f"路径规划完成（{plan_artifact}）",
             output_refs=[
                 {"type": "MorphologySimulationResult", "id": simulation_artifact},
                 {"type": "ToolpathPlan", "id": plan_artifact},
                 {"type": "ProcessCorrectionInterface", "id": correction_artifact},
             ],
-            counts={"candidates": len(plan.candidate_summary), "pulses": simulation.pulse_count},
+            counts={
+                "candidates": len(plan.candidate_summary),
+                "pulses": int(simulation_payload.get("pulse_count") or 0),
+            },
             reason_codes=["selected_by_morphology_error_plus_machining_time"],
-        )
-        trace.artifact_created(
-            "MorphologySimulationResult",
-            simulation_artifact,
-            input_refs=[
-                {"type": "LocalRemovalModel", "id": model_artifact},
-                {"type": "CanonicalPhysicsState", "id": canonical_artifact},
-            ],
         )
         trace.artifact_created(
             "ToolpathPlan",
             plan_artifact,
-            input_refs=[
-                {"type": "MorphologySimulationResult", "id": simulation_artifact},
-                {"type": "LocalRemovalModel", "id": model_artifact},
-                {"type": "CanonicalPhysicsState", "id": canonical_artifact},
-                {
-                    "type": "PriorObjectSet",
-                    "id": self._latest_artifact_id(bus, "PriorObjectSet"),
-                },
-            ],
+            input_refs=[item.model_dump(mode="json") for item in plan.input_refs],
         )
         trace.artifact_created(
             "ProcessCorrectionInterface",
@@ -3145,25 +3655,18 @@ class Topic2ApplicationService:
                 {"type": "ModelTrainingResult", "id": baseline_ref.id},
             ],
         )
-        # B0 compatibility: keep the proven BO comparison as a secondary
-        # diagnostic inside the canonical planning stage. ToolpathPlan remains
-        # the final planning artifact.
-        legacy_optimization = self._stage_optimization(
-            task_spec, scope, bus, random_seed
-        )["content"]
         return {
             "meta": {
                 "simulation_artifact_id": simulation_artifact,
                 "toolpath_plan_artifact_id": plan_artifact,
-                "canonical_physics_artifact_id": canonical_artifact,
+                "candidate_set_artifact_id": candidate_set_artifact,
                 "path_family": plan.path_family.value,
             },
             "content": {
-                "target_geometry": geometry.model_dump(mode="json"),
-                "morphology_simulation": simulation.model_dump(mode="json"),
+                "target_geometry": dict(task_spec.get("target_geometry") or {}),
+                "morphology_simulation": simulation_payload,
                 "toolpath_plan": plan.model_dump(mode="json"),
                 "process_correction": correction.model_dump(mode="json"),
-                "legacy_optimization": legacy_optimization,
             },
         }
 
@@ -3173,7 +3676,7 @@ class Topic2ApplicationService:
         """Persist an observation and explicit update intents without claiming validation."""
         payload = task_spec.get("observation")
         if not isinstance(payload, dict):
-            raise ValueError("evaluate_observation requires task_spec.observation")
+            raise TypeError("evaluate_observation requires task_spec.observation")
         origin_raw = payload.get("origin")
         if not origin_raw:
             raise ValueError("observation.origin is required")
@@ -3293,7 +3796,7 @@ class Topic2ApplicationService:
                     )
                 )
                 prior_artifact = prepared.get("governed_prior_artifact")
-            except Exception as exc:
+            except Exception as exc:  # noqa: BLE001 - governed prior fails closed
                 warnings.append(
                     f"governed prior 签发失败（fails closed）：{exc}"
                 )
@@ -3385,10 +3888,12 @@ class Topic2ApplicationService:
         *,
         snapshot_bounds: dict[str, dict[str, float]] | None = None,
     ) -> dict[str, dict[str, float]]:
-        """Data-range bounds with canonical machine-bound refinement when available.
+        """Data-supported bounds intersected with canonical machine bounds.
 
         Canonical snapshot bounds (MachineProfileSnapshot) are preferred over
         the active agent bounds - every physics consumer reads the snapshot.
+        Fixed machine settings (lower == upper) remain fixed; a disjoint data /
+        machine range fails closed instead of emitting an unexecutable plan.
         """
         frame = pd.DataFrame(rows).dropna(
             subset=[scope.target, *CORE_PARAMETER_NAMES]
@@ -3424,10 +3929,13 @@ class Topic2ApplicationService:
                 if name not in agent:
                     continue
                 lo, hi = agent[name]
-                if lo >= hi:
-                    continue
-                if hi <= data[name][0] or lo >= data[name][1]:
-                    continue
+                if lo > hi:
+                    raise ValueError(f"invalid machine bound for {name}: {lo} > {hi}")
+                if hi < data[name][0] or lo > data[name][1]:
+                    raise ValueError(
+                        f"dataset range and execution machine bound do not overlap for {name}: "
+                        f"data={data[name]}, machine={[lo, hi]}"
+                    )
                 data[name] = [max(data[name][0], lo), min(data[name][1], hi)]
         return {name: {"lower": v[0], "upper": v[1]} for name, v in data.items()}
 
@@ -3443,7 +3951,7 @@ class Topic2ApplicationService:
             )
             response.raise_for_status()
             bounds = response.json().get("machine_bounds") or {}
-        except Exception:
+        except Exception:  # noqa: BLE001 - optional agent lookup
             return None
         result: dict[str, tuple[float, float]] = {}
         pulse = bounds.get("pulse_width_fs")
@@ -3580,8 +4088,9 @@ class Topic2ApplicationService:
         learning = result.get("baseline_learning") or {}
         modeling = learning.get("modeling") or {}
         identification = learning.get("identification") or {}
+        simulation_stage = result.get("simulate_morphology") or {}
         planning = result.get("plan_process") or {}
-        bo = planning.get("legacy_optimization") or {}
+        bo: dict[str, Any] = {}
         calibration_stage = result.get("calibrate_physics") or {}
         process_model_stage = result.get("establish_process_model") or {}
         capability = result.get("assess_capability") or {}
@@ -3601,7 +4110,7 @@ class Topic2ApplicationService:
         local_removal = process_model_stage.get("local_removal_model") or {}
         physical_state = process_model_stage.get("physical_model_state") or {}
         toolpath_plan = planning.get("toolpath_plan")
-        morphology_simulation = planning.get("morphology_simulation")
+        morphology_simulation = simulation_stage.get("morphology_simulation")
         process_correction = planning.get("process_correction")
         observation_result = (
             result.get("evaluate_observation") or {}
@@ -3614,6 +4123,11 @@ class Topic2ApplicationService:
             or []
         )
         satisfactions = knowledge_state.get("satisfactions") or []
+        execution_profile_id, execution_revision_id = self._execution_equipment_ref(
+            task_spec, scope
+        )
+        existing_knowledge = knowledge_state.get("existing_knowledge") or {}
+        canonical_evidence = list(prepare.get("evidence_ir") or [])
         return {
             "runId": run_id,
             "workflowVersion": self.workflow_version,
@@ -3621,7 +4135,12 @@ class Topic2ApplicationService:
                 "material": scope.material,
                 "laserType": scope.laser_type,
                 "geometry": scope.geometry_type,
-                "equipment": scope.equipment_id,
+                "datasetRef": task_spec.get("dataset_ref"),
+                "datasetEquipmentScope": scope.equipment_id,
+                "executionEquipmentRef": {
+                    "equipmentProfileId": execution_profile_id,
+                    "revisionId": execution_revision_id,
+                },
                 "target": scope.target,
                 "randomSeed": random_seed,
                 "sampleCount": (assess.get("dataset") or {}).get("n_samples"),
@@ -3641,8 +4160,11 @@ class Topic2ApplicationService:
                 "trainingRunId": modeling.get("run_id"),
             },
             "scientificBasis": {
-                "candidateCount": len(bundle.get("candidates") or []),
-                "evidenceCount": len(bundle.get("accepted") or []),
+                "paperCount": existing_knowledge.get("paper_count", 0),
+                "candidateCount": existing_knowledge.get(
+                    "candidate_count", len(bundle.get("candidates") or [])
+                ),
+                "evidenceCount": len(canonical_evidence),
                 "governedEvidenceCount": len(typed_prior_set.get("input_refs") or []),
                 "typedPriorCount": len(typed_prior_set.get("priors") or []),
             },
@@ -3693,6 +4215,13 @@ class Topic2ApplicationService:
                 "replayable": False,
                 "artifactLineage": {
                     "ScientificCapabilityReport": self._latest_artifact_id_for_run(run_id, "ScientificCapabilityReport"),
+                    "DatasetRef": self._latest_artifact_id_for_run(run_id, "DatasetRef"),
+                    "MachineProfileSnapshot": self._latest_artifact_id_for_run(
+                        run_id, "MachineProfileSnapshot"
+                    ),
+                    "CalibrationObservationSet": self._latest_artifact_id_for_run(
+                        run_id, "CalibrationObservationSet"
+                    ),
                     "KnowledgeRequirementSet": self._latest_artifact_id_for_run(run_id, "KnowledgeRequirementSet"),
                     "EvidenceIRSet": self._latest_artifact_id_for_run(run_id, "EvidenceIRSet"),
                     "PriorObjectSet": self._latest_artifact_id_for_run(run_id, "PriorObjectSet"),
@@ -3710,84 +4239,6 @@ class Topic2ApplicationService:
                         run_id, "ObservationResult"
                     ),
                 },
-            },
-        }
-
-    def _demo_summary(
-        self,
-        slice_result: dict[str, Any],
-        task_spec: dict[str, Any],
-        random_seed: int,
-        run_id: str,
-    ) -> dict[str, Any]:
-        learning = slice_result.get("process_learning") or {}
-        bo = slice_result.get("bo") or {}
-        cfa = slice_result.get("cfa") or {}
-        e2p = slice_result.get("e2p_prior") or {}
-        governed = e2p.get("governed_prior") or {}
-        audit = slice_result.get("audit") or {}
-        facet_summary = audit.get("cfa_facets") or {}
-        if isinstance(facet_summary, dict) and facet_summary:
-            cfa_facets = facet_summary
-        else:
-            cfa_facets = {}
-        return {
-            "runId": run_id,
-            "workflowVersion": self.workflow_version,
-            "targetTask": {
-                "material": (slice_result.get("target_task") or {}).get("material"),
-                "laserType": (slice_result.get("target_task") or {}).get(
-                    "laser_type"
-                ),
-                "geometry": (slice_result.get("target_task") or {}).get("geometry"),
-                "equipment": task_spec.get("equipment_profile_id"),
-                "target": (slice_result.get("target_task") or {}).get("objective"),
-                "randomSeed": random_seed,
-                "sampleCount": (slice_result.get("target_task") or {}).get(
-                    "sample_count"
-                ),
-            },
-            "processLearning": {
-                "selectedFeatureView": learning.get("selected_feature_view"),
-                "selectedModel": learning.get("selected_model"),
-                "modelComparison": learning.get("cv_metrics") or {},
-                "cvFolds": learning.get("cv_folds"),
-                "featureViews": learning.get("feature_views") or {},
-                "identificationRunId": None,
-                "trainingRunId": None,
-            },
-            "scientificBasis": {
-                "paperCount": (slice_result.get("literature_evidence") or {}).get(
-                    "paper_count"
-                ),
-                "evidenceCount": e2p.get("accepted_count"),
-                "governedEvidenceCount": len(governed.get("evidence_ids") or []),
-                "governedPrior": governed,
-                "priorCount": e2p.get("prior_count"),
-            },
-            "cfa": {
-                "version": (cfa.get("calibration_status") or "uncalibrated"),
-                "calibrationStatus": cfa.get("calibration_status"),
-                "facetSummary": cfa_facets,
-                "warnings": list(cfa.get("warnings") or []),
-                "targetPhysicsReadiness": cfa.get("target_physics_readiness"),
-                "reports": cfa.get("reports") or [],
-            },
-            "optimization": {
-                "vanilla": bo.get("vanilla"),
-                "evidenceAssisted": bo.get("evidence_assisted"),
-                "priorAppliedEvidence": bo.get("prior_applied_evidence"),
-            },
-            "audit": {
-                "evidenceIds": list(governed.get("evidence_ids") or []),
-                "priorContentHash": governed.get("content_hash"),
-                "boRunIds": [
-                    audit.get("bo_run_id_vanilla"),
-                    audit.get("bo_run_id_assisted"),
-                ],
-                "modelVersion": audit.get("model_version"),
-                "replayable": True,
-                "ledgerVersionIds": list(audit.get("ledger_version_ids") or []),
             },
         }
 
@@ -3823,7 +4274,9 @@ class Topic2ApplicationService:
     def events(self, run_id: str, after_sequence: int = 0) -> list[dict[str, Any]]:
         if self.repository.application_run(run_id) is None:
             raise ValueError(f"application run not found: {run_id}")
-        return self.repository.workflow_events(run_id, after_sequence=after_sequence)
+        return self.repository.application_workflow_events(
+            run_id, after_sequence=after_sequence
+        )
 
     def artifacts(self, run_id: str) -> list[dict[str, Any]]:
         if self.repository.application_run(run_id) is None:

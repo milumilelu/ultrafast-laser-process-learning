@@ -10,7 +10,6 @@ from ultrafast_memory.db.session import get_connection
 from ultrafast_memory.equipment.schemas import EquipmentProfileCreate, EquipmentProfileUpdate
 from ultrafast_memory.equipment.validation import validate_equipment_payload
 
-
 SECTION_TABLES = {
     "laser_source": "laser_source_config",
     "optical_setup": "optical_setup_config",
@@ -29,6 +28,8 @@ SECTION_COLUMNS = {
         "average_power_max_W",
         "rated_max_power_W",
         "actual_max_power_W",
+        "workpiece_incident_power_min_W",
+        "workpiece_incident_power_max_W",
         "frequency_min_kHz",
         "frequency_max_kHz",
         "pulse_energy_max_uJ",
@@ -87,6 +88,7 @@ def create_equipment_profile(req: EquipmentProfileCreate) -> dict[str, Any]:
         req.optical_setup,
         req.motion_system,
         req.process_capability,
+        req.field_verification,
         require_active_minimum=req.set_active,
     )
     now = utc_now_iso()
@@ -106,16 +108,25 @@ def create_equipment_profile(req: EquipmentProfileCreate) -> dict[str, Any]:
         "calibration_date": req.calibration_date,
         "valid_until": req.valid_until,
         "notes": req.notes,
+        "field_verification_json": json.dumps(
+            req.field_verification, ensure_ascii=False
+        ),
     }
     with get_connection() as conn:
         if req.set_active:
             _deactivate_all(conn)
         conn.execute(
             """
-            INSERT INTO equipment_profile VALUES (
+            INSERT INTO equipment_profile (
+              equipment_profile_id, profile_name, machine_id, manufacturer,
+              model, location, status, is_active, created_by, created_at,
+              updated_at, calibration_date, valid_until, notes,
+              field_verification_json
+            ) VALUES (
               :equipment_profile_id, :profile_name, :machine_id, :manufacturer,
               :model, :location, :status, :is_active, :created_by, :created_at,
-              :updated_at, :calibration_date, :valid_until, :notes
+              :updated_at, :calibration_date, :valid_until, :notes,
+              :field_verification_json
             )
             """,
             profile,
@@ -126,11 +137,34 @@ def create_equipment_profile(req: EquipmentProfileCreate) -> dict[str, Any]:
     return {"equipment_profile_id": equipment_profile_id, "revision_id": revision_id, "is_active": req.set_active}
 
 
-def list_equipment_profiles() -> list[dict[str, Any]]:
+def list_equipment_profiles(*, user_facing: bool = False) -> list[dict[str, Any]]:
     init_database()
     with get_connection() as conn:
-        rows = conn.execute("SELECT * FROM equipment_profile ORDER BY is_active DESC, updated_at DESC").fetchall()
-    return [dict(row) for row in rows]
+        rows = conn.execute(
+            "SELECT equipment_profile_id FROM equipment_profile "
+            "ORDER BY is_active DESC, updated_at DESC"
+        ).fetchall()
+        profiles = [
+            _load_profile(conn, row["equipment_profile_id"]) for row in rows
+        ]
+        for profile in profiles:
+            if profile is not None:
+                profile["revisions"] = _list_revisions(
+                    conn, profile["equipment_profile_id"]
+                )
+    visible = [profile for profile in profiles if profile is not None]
+    if user_facing:
+        visible = [profile for profile in visible if not _looks_like_test_profile(profile)]
+    return visible
+
+
+def _looks_like_test_profile(profile: dict[str, Any]) -> bool:
+    """Keep legacy test/demo equipment out of user-facing selectors."""
+    identity = " ".join(
+        str(profile.get(key) or "")
+        for key in ("profile_name", "machine_id", "created_by", "notes")
+    ).upper()
+    return any(marker in identity for marker in ("E2E", "FIXTURE", "DEMO", "TEST"))
 
 
 def get_active_equipment_profile() -> dict[str, Any] | None:
@@ -159,6 +193,7 @@ def activate_equipment_profile(equipment_profile_id: str, changed_by: str | None
         profile.get("optical_setup"),
         profile.get("motion_system"),
         profile.get("process_capability"),
+        profile.get("field_verification"),
         require_active_minimum=True,
     )
     now = utc_now_iso()
@@ -183,6 +218,10 @@ def update_equipment_profile(equipment_profile_id: str, req: EquipmentProfileUpd
         "motion_system": update.pop("motion_system", None),
         "process_capability": update.pop("process_capability", None),
     }
+    verification_update = update.pop("field_verification", None)
+    merged_verification = dict(current.get("field_verification") or {})
+    if verification_update is not None:
+        merged_verification.update(verification_update)
     merged_sections = {}
     for name in SECTION_TABLES:
         current_section = dict(current.get(name) or {})
@@ -194,8 +233,13 @@ def update_equipment_profile(equipment_profile_id: str, req: EquipmentProfileUpd
         merged_sections["optical_setup"],
         merged_sections["motion_system"],
         merged_sections["process_capability"],
+        merged_verification,
         require_active_minimum=bool(current.get("is_active")),
     )
+    if verification_update is not None:
+        update["field_verification_json"] = json.dumps(
+            merged_verification, ensure_ascii=False
+        )
     changed_by = update.pop("changed_by", None)
     update["updated_at"] = utc_now_iso()
     assignments = [f"{key} = ?" for key in update if key in _profile_columns()]
@@ -227,6 +271,59 @@ def latest_revision_id(equipment_profile_id: str) -> str | None:
             (equipment_profile_id,),
         ).fetchone()
     return row["revision_id"] if row else None
+
+
+def list_equipment_profile_revisions(
+    equipment_profile_id: str,
+) -> list[dict[str, Any]]:
+    init_database()
+    with get_connection() as conn:
+        exists = conn.execute(
+            "SELECT 1 FROM equipment_profile WHERE equipment_profile_id = ?",
+            (equipment_profile_id,),
+        ).fetchone()
+        if not exists:
+            raise ValueError(
+                f"equipment profile not found: {equipment_profile_id}"
+            )
+        return _list_revisions(conn, equipment_profile_id)
+
+
+def get_equipment_profile_revision(
+    equipment_profile_id: str, revision_id: str
+) -> dict[str, Any]:
+    init_database()
+    with get_connection() as conn:
+        row = conn.execute(
+            """
+            SELECT revision_id, revision_number, changed_by, changed_at,
+                   change_summary, snapshot_json
+            FROM equipment_config_revision
+            WHERE equipment_profile_id = ? AND revision_id = ?
+            """,
+            (equipment_profile_id, revision_id),
+        ).fetchone()
+    if not row:
+        raise ValueError(
+            f"equipment revision not found: {equipment_profile_id}@{revision_id}"
+        )
+    try:
+        snapshot = json.loads(row["snapshot_json"] or "{}")
+    except json.JSONDecodeError as exc:
+        raise ValueError(
+            f"equipment revision snapshot is invalid: {revision_id}"
+        ) from exc
+    profile = _decode_profile_payload(snapshot)
+    profile.update(
+        {
+            "revision_id": row["revision_id"],
+            "revision_number": row["revision_number"],
+            "changed_by": row["changed_by"],
+            "changed_at": row["changed_at"],
+            "change_summary": row["change_summary"],
+        }
+    )
+    return profile
 
 
 def _deactivate_all(conn) -> None:
@@ -270,7 +367,7 @@ def _load_profile(conn, equipment_profile_id: str) -> dict[str, Any] | None:
     row = conn.execute("SELECT * FROM equipment_profile WHERE equipment_profile_id = ?", (equipment_profile_id,)).fetchone()
     if not row:
         return None
-    profile = dict(row)
+    profile = _decode_profile_payload(dict(row))
     for section, table in SECTION_TABLES.items():
         section_row = conn.execute(f"SELECT * FROM {table} WHERE equipment_profile_id = ?", (equipment_profile_id,)).fetchone()
         profile[section] = _section_dict(dict(section_row)) if section_row else {}
@@ -320,9 +417,23 @@ def _create_revision(conn, equipment_profile_id: str, changed_by: str | None, ch
     return revision_id
 
 
+def _list_revisions(conn, equipment_profile_id: str) -> list[dict[str, Any]]:
+    rows = conn.execute(
+        """
+        SELECT revision_id, revision_number, changed_by, changed_at,
+               change_summary
+        FROM equipment_config_revision
+        WHERE equipment_profile_id = ?
+        ORDER BY revision_number DESC, changed_at DESC
+        """,
+        (equipment_profile_id,),
+    ).fetchall()
+    return [dict(row) for row in rows]
+
+
 def _load_profile_snapshot(conn, equipment_profile_id: str) -> dict[str, Any]:
     profile = conn.execute("SELECT * FROM equipment_profile WHERE equipment_profile_id = ?", (equipment_profile_id,)).fetchone()
-    snapshot = dict(profile) if profile else {}
+    snapshot = _decode_profile_payload(dict(profile)) if profile else {}
     for section, table in SECTION_TABLES.items():
         row = conn.execute(f"SELECT * FROM {table} WHERE equipment_profile_id = ?", (equipment_profile_id,)).fetchone()
         snapshot[section] = _section_dict(dict(row)) if row else {}
@@ -341,8 +452,16 @@ def _profile_columns() -> set[str]:
         "calibration_date",
         "valid_until",
         "notes",
+        "field_verification_json",
         "updated_at",
     }
+
+
+def _decode_profile_payload(profile: dict[str, Any]) -> dict[str, Any]:
+    raw = profile.pop("field_verification_json", None)
+    if "field_verification" not in profile:
+        profile["field_verification"] = _loads(raw, {})
+    return profile
 
 
 def _loads(value: str | None, default: Any) -> Any:

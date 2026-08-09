@@ -25,7 +25,6 @@ from ultrafast_knowledge.corpus.schemas import (
     RetrievalTrace,
 )
 from ultrafast_knowledge.rag.metadata_filter import enforce_purpose, metadata_for_hit
-from ultrafast_knowledge.rag.query_service import query_rag
 from ultrafast_knowledge.rag.relaxed_query import query_rag_relaxed
 from ultrafast_memory.core.ids import stable_id
 from ultrafast_memory.db.session import get_connection
@@ -110,6 +109,7 @@ class ScientificCorpusBuilder:
                 if not enforce_purpose(hit, "parameter_recommendation"):
                     continue
                 all_filtered += 1
+                hit_metadata = metadata_for_hit(hit)
                 paper_id = str(hit.get("paper_id") or "unknown")
                 source = sources.setdefault(
                     paper_id,
@@ -120,10 +120,14 @@ class ScientificCorpusBuilder:
                         title=str(hit.get("title") or ""),
                         material_id=task_scope.get("material"),
                         process_type=task_scope.get("process_type"),
+                        metadata=hit_metadata,
                     ),
                 )
+                for key, value in hit_metadata.items():
+                    if value is not None and key not in source.metadata:
+                        source.metadata[key] = value
                 section_type = _map_section_type(
-                    str(hit.get("section_type") or metadata_for_hit(hit).get("section_type"))
+                    str(hit.get("section_type") or hit_metadata.get("section_type"))
                 )
                 section = self._upsert_section(source, section_type)
                 if hit.get("page_start") is not None:

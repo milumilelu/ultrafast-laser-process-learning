@@ -401,6 +401,8 @@ class ToolpathPlan(StrictModel):
     machine_constraints: list[ConstraintValue]
     simulation_ref: ArtifactRef
     planning_prior_refs: list[ArtifactRef] = Field(default_factory=list)
+    evidence_refs: list[ArtifactRef] = Field(default_factory=list)
+    paper_refs: list[ArtifactRef] = Field(default_factory=list)
     status: PlanStatus
     objective_value: float
     candidate_summary: list[dict[str, Any]] = Field(default_factory=list)

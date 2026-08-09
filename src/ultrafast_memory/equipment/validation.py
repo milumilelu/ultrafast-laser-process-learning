@@ -2,7 +2,6 @@ from __future__ import annotations
 
 from typing import Any
 
-
 NON_NEGATIVE_FIELDS = {
     "wavelength_nm",
     "pulse_width_min_fs",
@@ -12,6 +11,8 @@ NON_NEGATIVE_FIELDS = {
     "average_power_max_W",
     "rated_max_power_W",
     "actual_max_power_W",
+    "workpiece_incident_power_min_W",
+    "workpiece_incident_power_max_W",
     "frequency_min_kHz",
     "frequency_max_kHz",
     "pulse_energy_max_uJ",
@@ -40,6 +41,7 @@ NON_NEGATIVE_FIELDS = {
 RANGE_PAIRS = (
     ("pulse_width_min_fs", "pulse_width_max_fs"),
     ("average_power_min_W", "average_power_max_W"),
+    ("workpiece_incident_power_min_W", "workpiece_incident_power_max_W"),
     ("frequency_min_kHz", "frequency_max_kHz"),
     ("focus_offset_min_um", "focus_offset_max_um"),
     ("scan_speed_min_mm_s", "scan_speed_max_mm_s"),
@@ -54,6 +56,7 @@ def validate_equipment_payload(
     optical_setup: dict[str, Any] | None = None,
     motion_system: dict[str, Any] | None = None,
     process_capability: dict[str, Any] | None = None,
+    field_verification: dict[str, str] | None = None,
     require_active_minimum: bool = False,
 ) -> None:
     sections = [laser_source or {}, optical_setup or {}, motion_system or {}, process_capability or {}]
@@ -71,13 +74,19 @@ def validate_equipment_payload(
     fixed = merged.get("pulse_width_fixed_fs")
     min_width = merged.get("pulse_width_min_fs")
     max_width = merged.get("pulse_width_max_fs")
-    if fixed is not None and min_width is not None and max_width is not None:
-        if float(fixed) < float(min_width) or float(fixed) > float(max_width):
-            raise ValueError("pulse_width_fixed_fs conflicts with pulse_width_min/max_fs")
+    if (
+        fixed is not None
+        and min_width is not None
+        and max_width is not None
+        and (float(fixed) < float(min_width) or float(fixed) > float(max_width))
+    ):
+        raise ValueError("pulse_width_fixed_fs conflicts with pulse_width_min/max_fs")
     rated_max = merged.get("rated_max_power_W")
-    actual_max = merged.get("actual_max_power_W")
-    if rated_max is not None and actual_max is not None and float(actual_max) > float(rated_max):
-        raise ValueError("actual_max_power_W cannot be greater than rated_max_power_W")
+    workpiece_max = merged.get("workpiece_incident_power_max_W")
+    if rated_max is not None and workpiece_max is not None and float(workpiece_max) > float(rated_max):
+        raise ValueError(
+            "workpiece_incident_power_max_W cannot be greater than rated_max_power_W"
+        )
     if require_active_minimum:
         pulse_available = (
             (laser_source or {}).get("pulse_width_fixed_fs") is not None
@@ -86,14 +95,10 @@ def validate_equipment_payload(
                 and (laser_source or {}).get("pulse_width_max_fs") is not None
             )
         )
-        power_available = (
-            (laser_source or {}).get("actual_max_power_W") is not None
-            or (
-                (laser_source or {}).get("average_power_min_W") is not None
-                and (laser_source or {}).get("average_power_max_W") is not None
-            )
-        )
         required = {
+            "wavelength_nm": laser_source or {},
+            "workpiece_incident_power_min_W": laser_source or {},
+            "workpiece_incident_power_max_W": laser_source or {},
             "frequency_min_kHz": laser_source or {},
             "frequency_max_kHz": laser_source or {},
             "scan_speed_min_mm_s": motion_system or {},
@@ -103,10 +108,47 @@ def validate_equipment_payload(
         missing = [key for key, section in required.items() if section.get(key) is None]
         if not pulse_available:
             missing.append("pulse_width_fs")
-        if not power_available:
-            missing.append("actual_max_power_W")
         if missing:
             raise ValueError("active equipment profile missing required fields: " + ", ".join(missing))
+
+        verification = field_verification or {}
+        verification_keys = [
+            "wavelength_nm",
+            "workpiece_incident_power_min_W",
+            "workpiece_incident_power_max_W",
+            "frequency_min_kHz",
+            "frequency_max_kHz",
+            "scan_speed_min_mm_s",
+            "scan_speed_max_mm_s",
+            "spot_diameter_um",
+        ]
+        if (laser_source or {}).get("pulse_width_fixed_fs") is not None:
+            verification_keys.append("pulse_width_fixed_fs")
+        else:
+            verification_keys.extend(
+                ["pulse_width_min_fs", "pulse_width_max_fs"]
+            )
+        missing_verification = [
+            key for key in verification_keys if not verification.get(key)
+        ]
+        if missing_verification:
+            raise ValueError(
+                "active equipment profile missing field verification: "
+                + ", ".join(missing_verification)
+            )
+        non_measured_surface_bounds = [
+            key
+            for key in (
+                "workpiece_incident_power_min_W",
+                "workpiece_incident_power_max_W",
+            )
+            if str(verification.get(key) or "").upper() != "MEASURED"
+        ]
+        if non_measured_surface_bounds:
+            raise ValueError(
+                "active equipment profile requires measured workpiece-plane power bounds: "
+                + ", ".join(non_measured_surface_bounds)
+            )
 
 
 def validate_override_within_bounds(

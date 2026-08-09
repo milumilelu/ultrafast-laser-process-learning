@@ -40,6 +40,15 @@ _DEFAULT_SCOPE = {
     "target": "depth_um",
 }
 
+_GOLDEN_CACHE_REQUIREMENTS = [
+    {"requirement_id": "KR-001", "type": "PARAMETER_PRIOR"},
+    {"requirement_id": "KR-002", "type": "MECHANISM_MODEL"},
+    {"requirement_id": "KR-003", "type": "PATH_STRATEGY"},
+    {"requirement_id": "KR-004", "type": "parameter_effect"},
+    {"requirement_id": "KR-005", "type": "reported_optimum"},
+    {"requirement_id": "KR-006", "type": "process_mechanism"},
+]
+
 
 def _stable_id(prefix: str, *parts: Any) -> str:
     raw = ":".join(str(part) for part in parts).encode("utf-8")
@@ -403,7 +412,11 @@ def main() -> None:
 # ---------------------------------------------------------------------------
 
 
-def _project_document(doc: Any) -> None:
+def _project_document(
+    doc: Any,
+    *,
+    source_metadata: dict[str, Any] | None = None,
+) -> None:
     """Project one ScientificDocument into literature_paper/section/chunk."""
     import re
 
@@ -411,11 +424,11 @@ def _project_document(doc: Any) -> None:
     from ultrafast_memory.db.session import get_connection
 
     now = utc_now_iso()
-    paper_id = doc.paper_id
+    source_metadata = dict(source_metadata or {})
+    paper_id = str(source_metadata.get("paper_id") or doc.paper_id)
     title = (
-        str(doc.sections[0].title).strip()
-        if doc.sections
-        else paper_id
+        str(source_metadata.get("canonical_title") or "").strip()
+        or (str(doc.sections[0].title).strip() if doc.sections else paper_id)
     )
     normalized = re.sub(r"\s+", " ", title).strip().casefold()
     pdf_path = str(doc.pdf_path)
@@ -445,17 +458,17 @@ def _project_document(doc: Any) -> None:
                 "paper_id": paper_id,
                 "canonical_title": title,
                 "normalized_title": normalized,
-                "authors": None,
-                "year": None,
+                "authors": source_metadata.get("authors"),
+                "year": source_metadata.get("year"),
                 "doi": None,
-                "source": "pilot_pdf",
+                "source": source_metadata.get("source") or "pilot_pdf",
                 "url": pdf_path,
                 "scenario_id": None,
-                "material": None,
+                "material": source_metadata.get("material"),
                 "material_grade": None,
                 "component_type": None,
-                "process_type": None,
-                "laser_type": None,
+                "process_type": source_metadata.get("process_type"),
+                "laser_type": source_metadata.get("laser_type"),
                 "wavelength_nm": None,
                 "pulse_width_fs": None,
                 "power_or_energy": None,
@@ -471,7 +484,7 @@ def _project_document(doc: Any) -> None:
                 "not_usable_for_json": "[]",
                 "evidence_level": "literature_evidence",
                 "review_status": "accepted_as_literature_evidence",
-                "canonical_artifact_id": None,
+                "canonical_artifact_id": doc.document_version_id,
                 "created_at": now,
                 "updated_at": now,
             },
@@ -540,9 +553,14 @@ def _project_document(doc: Any) -> None:
                 "review_action_status": "accepted",
                 "not_usable_for": [],
                 "usable_for": ["parameter_recommendation"],
-                "fixture_label": "PILOT_PDF",
+                "fixture_label": source_metadata.get("fixture_label") or "PILOT_PDF",
                 "pdf_ref": pdf_path,
                 "pdf_sha256": pdf_sha256,
+                "scientific_document_ref": doc.document_version_id,
+                "scientific_document_paper_id": doc.paper_id,
+                "material": source_metadata.get("material"),
+                "process_type": source_metadata.get("process_type"),
+                "laser_type": source_metadata.get("laser_type"),
                 "page_start": int(section.page_start or 0),
             }
             conn.execute(
@@ -570,6 +588,144 @@ def _project_document(doc: Any) -> None:
                 ),
             )
         conn.commit()
+
+
+def _write_curated_fixture_pdf(paper: dict[str, Any], path: Path) -> None:
+    """Materialize an explicitly synthetic PDF source for the Golden E2E."""
+    import pymupdf
+
+    path.parent.mkdir(parents=True, exist_ok=True)
+    document = pymupdf.open()
+    for page_index, section in enumerate(paper.get("sections") or []):
+        page = document.new_page(width=595, height=842)
+        page.insert_textbox(
+            pymupdf.Rect(50, 35, 545, 80),
+            "CURATED LITERATURE FIXTURE - SYNTHETIC, NOT A REAL PUBLICATION",
+            fontsize=11,
+            fontname="helv",
+            color=(0.7, 0.0, 0.0),
+            align=1,
+        )
+        if page_index == 0:
+            page.insert_textbox(
+                pymupdf.Rect(50, 95, 545, 165),
+                str(paper.get("canonical_title") or paper.get("paper_id")),
+                fontsize=16,
+                fontname="hebo",
+                align=1,
+            )
+            page.insert_textbox(
+                pymupdf.Rect(50, 170, 545, 195),
+                f"Fixture author label: {paper.get('authors') or 'synthetic'}",
+                fontsize=9,
+                fontname="helv",
+                align=1,
+            )
+            heading_top = 225
+        else:
+            heading_top = 105
+        heading = str(section.get("section_title") or section.get("section_type") or "OTHER")
+        page.insert_textbox(
+            pymupdf.Rect(55, heading_top, 540, heading_top + 35),
+            heading.upper(),
+            fontsize=14,
+            fontname="hebo",
+        )
+        page.insert_textbox(
+            pymupdf.Rect(55, heading_top + 45, 540, 780),
+            str(section.get("text") or ""),
+            fontsize=11,
+            fontname="helv",
+            lineheight=1.35,
+        )
+    metadata = {
+        "title": str(paper.get("canonical_title") or paper.get("paper_id")),
+        "author": "CURATED_LITERATURE_FIXTURE",
+        "subject": "SYNTHETIC_TEST_FIXTURE - NOT SCIENTIFIC VALIDATION",
+        "keywords": "CURATED_LITERATURE_FIXTURE,SYNTHETIC_TEST_FIXTURE",
+    }
+    document.set_metadata(metadata)
+    document.save(str(path))
+    document.close()
+
+
+def seed_golden_pdf_corpus(
+    *,
+    pdf_dir: Path,
+    task_scope: dict[str, Any] | None = None,
+    model: str = "scientific-reading-v1",
+    corpus_path: Path | None = None,
+    requirements: list[dict[str, Any]] | None = None,
+) -> dict[str, Any]:
+    """Create, parse and ingest 3-8 explicit fixture PDFs before ApplicationRun.
+
+    Unlike ``seed_golden_corpus``, this path cannot populate literature rows
+    directly from JSON: every source must pass PDF -> ScientificDocument ->
+    literature projection.  JSON is used only to materialize deterministic,
+    clearly-labelled test PDFs and their pre-recorded LLM analyses.
+    """
+    from packages.process_contracts.schemas import TaskScope
+    from ultrafast_ingestion import PyMuPDFDocumentParser
+    from ultrafast_knowledge.rag.index_service import create_index, index_pending_chunks
+    from ultrafast_memory.db.init_db import init_database
+
+    init_database()
+    payload_path = corpus_path or _CORPUS_PATH
+    corpus_payload = json.loads(payload_path.read_text(encoding="utf-8"))
+    raw_scope = dict(task_scope or corpus_payload.get("task_scope") or _DEFAULT_SCOPE)
+    raw_scope.setdefault(
+        "equipment_id",
+        raw_scope.get("dataset_equipment_scope_id")
+        or raw_scope.get("equipment_profile_id"),
+    )
+    raw_scope.setdefault("target", raw_scope.get("objective_metric"))
+    scope = TaskScope.model_validate(
+        {key: raw_scope.get(key) for key in TaskScope.model_fields if key in raw_scope}
+    ).model_dump(mode="json")
+    papers = list(corpus_payload.get("papers") or [])
+    if not 3 <= len(papers) <= 8:
+        raise ValueError("Golden PDF corpus must contain 3-8 papers")
+    parser = PyMuPDFDocumentParser()
+    document_refs: list[dict[str, Any]] = []
+    for paper in papers:
+        pdf_path = Path(pdf_dir) / f"{paper['paper_id']}.pdf"
+        _write_curated_fixture_pdf(paper, pdf_path)
+        document = parser.parse(pdf_path)
+        _project_document(
+            document,
+            source_metadata={
+                **paper,
+                "source": "curated_pdf_fixture",
+                "fixture_label": "CURATED_LITERATURE_FIXTURE",
+            },
+        )
+        document_refs.append(
+            {
+                "paper_id": paper["paper_id"],
+                "scientific_document_paper_id": document.paper_id,
+                "document_version_id": document.document_version_id,
+                "pdf_ref": str(pdf_path),
+                "pdf_sha256": document.pdf_sha256,
+                "fixture_label": "CURATED_LITERATURE_FIXTURE",
+            }
+        )
+    index = create_index({"index_name": "literature_default"})
+    index_pending_chunks(index["index_id"])
+    seeded = _build_and_seed_cache(
+        corpus_payload,
+        scope,
+        model=model,
+        requirements=requirements or _GOLDEN_CACHE_REQUIREMENTS,
+    )
+    return {
+        "label": "CURATED_LITERATURE_FIXTURE",
+        "source_format": "PDF",
+        "papers": len(papers),
+        "task_scope": scope,
+        "index_id": index["index_id"],
+        "document_refs": document_refs,
+        **seeded,
+    }
 
 
 def seed_from_pdfs(
