@@ -159,7 +159,14 @@ class LocalRemovalModelFactory:
         delta, delta_semantics, delta_source = parameter_value("delta_eff", 1.0)
         alpha, alpha_semantics, alpha_source = parameter_value("alpha_defocus", 0.02)
         thermal, thermal_semantics, thermal_source = parameter_value("thermal_memory_eff", 0.0)
-        radius = float(beam_radius_um or 10.0)
+        if beam_radius_um is None:
+            raise ValueError(
+                "beam_radius_um is required for RECONSTRUCTED LocalRemovalModel "
+                "(no silent computational default; resolve from the equipment snapshot)"
+            )
+        radius = float(beam_radius_um)
+        if radius <= 0:
+            raise ValueError(f"beam_radius_um must be positive, got {radius}")
         kernel = gaussian_kernel(
             radius_um=radius,
             peak_depth_um=max(delta * max(math.log(max(2.0 / threshold, 1.0)), 0.1), 1e-6),
@@ -206,16 +213,17 @@ class LocalRemovalModelFactory:
         mechanism_priors: Iterable[MechanismModelPrior | dict[str, Any]] = (),
         input_refs: list[ArtifactRef] | None = None,
     ) -> LocalRemovalModel:
-        reconstructed = self.reconstructed(
-            calibration=calibration,
-            parameter_priors=parameter_priors,
-            mechanism_priors=mechanism_priors,
-            input_refs=input_refs,
-        )
         kernel = (
             empirical_kernel
             if isinstance(empirical_kernel, RemovalKernel)
             else RemovalKernel.model_validate(empirical_kernel)
+        )
+        reconstructed = self.reconstructed(
+            calibration=calibration,
+            parameter_priors=parameter_priors,
+            mechanism_priors=mechanism_priors,
+            beam_radius_um=float(kernel.radius_um),
+            input_refs=input_refs,
         )
         return self._build(
             mode=RemovalModelMode.HYBRID,

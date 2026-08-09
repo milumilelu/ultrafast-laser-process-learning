@@ -20,6 +20,7 @@ const DRAFT = {
   geometryType: 'rectangular_groove',
   objectiveMetric: 'depth_um' as const,
   equipmentProfileId: '',
+  executionMode: 'DEMO_FIXTURE' as const,
   taskContextRef: null,
   runId: null,
   version: 1,

@@ -12,6 +12,10 @@ export interface TaskDraft {
   geometryType: string
   objectiveMetric: 'depth_um' | 'roughness_um' | ''
   equipmentProfileId: string
+  /** Backend execution mode: RESEARCH (fail closed, real LLM) or
+   * DEMO_FIXTURE (pre-installed fixtures + recorded analysis cache).
+   * The workbench defaults to DEMO_FIXTURE. */
+  executionMode: 'RESEARCH' | 'DEMO_FIXTURE' | 'SANDBOX' | ''
   taskContextRef: string | null
   runId: string | null
   version: number
@@ -35,6 +39,7 @@ export function emptyTaskDraft(): TaskDraft {
     geometryType: '',
     objectiveMetric: '',
     equipmentProfileId: '',
+    executionMode: 'DEMO_FIXTURE',
     taskContextRef: null,
     runId: null,
     version: 1,
@@ -74,6 +79,7 @@ export function draftToTaskSpec(draft: TaskDraft): Record<string, unknown> {
     geometry_type: draft.geometryType,
     objective_metric: draft.objectiveMetric,
     equipment_profile_id: draft.equipmentProfileId,
+    execution_mode: draft.executionMode || undefined,
     task_context_id: draft.taskContextRef ?? undefined,
     task_context_version: draft.taskContextRef ? draft.version : undefined,
   }

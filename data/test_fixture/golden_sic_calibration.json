@@ -1,0 +1,148 @@
+{
+  "schema_version": "calibration-observations-v1",
+  "origin": "SYNTHETIC_TEST_FIXTURE",
+  "equipment_profile_id": "DEMO-FS-LASER-01",
+  "material": "SiC",
+  "observations": [
+    {
+      "peak_fluence_J_cm2": 0.9,
+      "pulse_count": 1,
+      "depth_um": 0.053,
+      "data_ref": "CAL-SIC-001",
+      "origin": "SYNTHETIC_TEST_FIXTURE"
+    },
+    {
+      "peak_fluence_J_cm2": 0.9,
+      "pulse_count": 2,
+      "depth_um": 0.1746,
+      "data_ref": "CAL-SIC-002",
+      "origin": "SYNTHETIC_TEST_FIXTURE"
+    },
+    {
+      "peak_fluence_J_cm2": 0.9,
+      "pulse_count": 4,
+      "depth_um": 0.5266,
+      "data_ref": "CAL-SIC-003",
+      "origin": "SYNTHETIC_TEST_FIXTURE"
+    },
+    {
+      "peak_fluence_J_cm2": 0.9,
+      "pulse_count": 8,
+      "depth_um": 1.4739,
+      "data_ref": "CAL-SIC-004",
+      "origin": "SYNTHETIC_TEST_FIXTURE"
+    },
+    {
+      "peak_fluence_J_cm2": 0.9,
+      "pulse_count": 16,
+      "depth_um": 3.8846,
+      "data_ref": "CAL-SIC-005",
+      "origin": "SYNTHETIC_TEST_FIXTURE"
+    },
+    {
+      "peak_fluence_J_cm2": 1.0,
+      "pulse_count": 1,
+      "depth_um": 0.1004,
+      "data_ref": "CAL-SIC-006",
+      "origin": "SYNTHETIC_TEST_FIXTURE"
+    },
+    {
+      "peak_fluence_J_cm2": 1.0,
+      "pulse_count": 2,
+      "depth_um": 0.2695,
+      "data_ref": "CAL-SIC-007",
+      "origin": "SYNTHETIC_TEST_FIXTURE"
+    },
+    {
+      "peak_fluence_J_cm2": 1.0,
+      "pulse_count": 4,
+      "depth_um": 0.7163,
+      "data_ref": "CAL-SIC-008",
+      "origin": "SYNTHETIC_TEST_FIXTURE"
+    },
+    {
+      "peak_fluence_J_cm2": 1.0,
+      "pulse_count": 8,
+      "depth_um": 1.8532,
+      "data_ref": "CAL-SIC-009",
+      "origin": "SYNTHETIC_TEST_FIXTURE"
+    },
+    {
+      "peak_fluence_J_cm2": 1.0,
+      "pulse_count": 16,
+      "depth_um": 4.6431,
+      "data_ref": "CAL-SIC-010",
+      "origin": "SYNTHETIC_TEST_FIXTURE"
+    },
+    {
+      "peak_fluence_J_cm2": 1.2,
+      "pulse_count": 1,
+      "depth_um": 0.1825,
+      "data_ref": "CAL-SIC-011",
+      "origin": "SYNTHETIC_TEST_FIXTURE"
+    },
+    {
+      "peak_fluence_J_cm2": 1.2,
+      "pulse_count": 2,
+      "depth_um": 0.4335,
+      "data_ref": "CAL-SIC-012",
+      "origin": "SYNTHETIC_TEST_FIXTURE"
+    },
+    {
+      "peak_fluence_J_cm2": 1.2,
+      "pulse_count": 4,
+      "depth_um": 1.0445,
+      "data_ref": "CAL-SIC-013",
+      "origin": "SYNTHETIC_TEST_FIXTURE"
+    },
+    {
+      "peak_fluence_J_cm2": 1.2,
+      "pulse_count": 8,
+      "depth_um": 2.5095,
+      "data_ref": "CAL-SIC-014",
+      "origin": "SYNTHETIC_TEST_FIXTURE"
+    },
+    {
+      "peak_fluence_J_cm2": 1.2,
+      "pulse_count": 16,
+      "depth_um": 5.9559,
+      "data_ref": "CAL-SIC-015",
+      "origin": "SYNTHETIC_TEST_FIXTURE"
+    },
+    {
+      "peak_fluence_J_cm2": 1.5,
+      "pulse_count": 1,
+      "depth_um": 0.2829,
+      "data_ref": "CAL-SIC-016",
+      "origin": "SYNTHETIC_TEST_FIXTURE"
+    },
+    {
+      "peak_fluence_J_cm2": 1.5,
+      "pulse_count": 2,
+      "depth_um": 0.6344,
+      "data_ref": "CAL-SIC-017",
+      "origin": "SYNTHETIC_TEST_FIXTURE"
+    },
+    {
+      "peak_fluence_J_cm2": 1.5,
+      "pulse_count": 4,
+      "depth_um": 1.4461,
+      "data_ref": "CAL-SIC-018",
+      "origin": "SYNTHETIC_TEST_FIXTURE"
+    },
+    {
+      "peak_fluence_J_cm2": 1.5,
+      "pulse_count": 8,
+      "depth_um": 3.3128,
+      "data_ref": "CAL-SIC-019",
+      "origin": "SYNTHETIC_TEST_FIXTURE"
+    },
+    {
+      "peak_fluence_J_cm2": 1.5,
+      "pulse_count": 16,
+      "depth_um": 7.5625,
+      "data_ref": "CAL-SIC-020",
+      "origin": "SYNTHETIC_TEST_FIXTURE"
+    }
+  ]
+}

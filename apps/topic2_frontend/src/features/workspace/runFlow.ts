@@ -3,7 +3,12 @@
  */
 
 import { runsApi } from '../../api/runs'
-import { getTaskDraft, saveTaskDraft, type TaskDraft } from '../../stores/taskDrafts'
+import {
+  draftToTaskSpec,
+  getTaskDraft,
+  saveTaskDraft,
+  type TaskDraft,
+} from '../../stores/taskDrafts'
 
 export interface RunFlowResult {
   runId: string
@@ -20,16 +25,7 @@ export async function createOrContinueRun(
   if (!draft.runId) {
     const summary = await runsApi.createRun({
       mode: 'research',
-      task_spec: {
-        material: draft.material,
-        laser_type: draft.laserType,
-        process_type: draft.processType,
-        geometry_type: draft.geometryType,
-        objective_metric: draft.objectiveMetric,
-        equipment_profile_id: draft.equipmentProfileId,
-        task_context_id: draft.taskContextRef ?? undefined,
-        task_context_version: draft.taskContextRef ? draft.version : undefined,
-      },
+      task_spec: draftToTaskSpec(draft),
       stages,
       client_request_id: `task-${draft.taskId}`,
     })

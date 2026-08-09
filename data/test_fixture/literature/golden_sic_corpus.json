@@ -1,0 +1,420 @@
+{
+ "schema_version": "curated-literature-corpus-v1",
+ "label": "CURATED_LITERATURE_FIXTURE",
+ "task_scope": {
+  "material": "SiC",
+  "laser_type": "fs",
+  "process_type": "fs_laser_processing",
+  "geometry_type": "rectangular_groove",
+  "target": "depth_um"
+ },
+ "papers": [
+  {
+   "paper_id": "sic-threshold-001",
+   "canonical_title": "Single-pulse ablation threshold of 4H-SiC with 1030 nm femtosecond pulses",
+   "authors": "Demo Author A",
+   "year": 2021,
+   "material": "SiC",
+   "laser_type": "fs",
+   "process_type": "fs_laser_processing",
+   "sections": [
+    {
+     "section_type": "methods",
+     "page_start": 2,
+     "text": "Experiments were performed on polished 4H-SiC substrates using a femtosecond laser at 1030 nm wavelength with a pulse duration of 300 fs. The laser was operated at a repetition rate of 100 kHz. The beam radius at the sample surface was approximately 8 um. Single pulses with peak fluence between 0.5 and 2.0 J/cm2 were applied to form craters."
+    },
+    {
+     "section_type": "results",
+     "page_start": 4,
+     "text": "The single-pulse ablation threshold of SiC was determined from the crater diameter method. The effective ablation threshold fluence F_th_eff was found to be in the range 0.65 to 0.95 J/cm2 for 300 fs pulses at 1030 nm. Crater morphology showed a smooth central region with a shallow rim, consistent with thermal and non-thermal ablation contributions."
+    }
+   ]
+  },
+  {
+   "paper_id": "sic-incubation-002",
+   "canonical_title": "Incubation effects in multi-pulse femtosecond ablation of silicon carbide",
+   "authors": "Demo Author B",
+   "year": 2022,
+   "material": "SiC",
+   "laser_type": "fs",
+   "process_type": "fs_laser_processing",
+   "sections": [
+    {
+     "section_type": "methods",
+     "page_start": 2,
+     "text": "Multi-pulse ablation experiments were carried out on SiC with femtosecond pulses at 1030 nm, 300 fs pulse width, at repetition rates from 50 to 500 kHz. Pulse counts from 1 to 100 were applied at constant peak fluence. The incubation coefficient S was extracted by fitting the pulse-count dependence of the ablation threshold."
+    },
+    {
+     "section_type": "results",
+     "page_start": 4,
+     "text": "A power-law incubation model describes the threshold decrease with pulse count: theta(N) = theta(1) * N^(S-1). The fitted incubation coefficient S was 0.78, with a plausible range of 0.70 to 0.90 for SiC under femtosecond irradiation. Higher repetition rates led to stronger heat accumulation and slightly enhanced incubation."
+    }
+   ]
+  },
+  {
+   "paper_id": "sic-groove-003",
+   "canonical_title": "Femtosecond laser micro-grooving of SiC: influence of scan speed, hatch spacing and repetition rate on groove depth",
+   "authors": "Demo Author C",
+   "year": 2021,
+   "material": "SiC",
+   "laser_type": "fs",
+   "process_type": "fs_laser_processing",
+   "sections": [
+    {
+     "section_type": "methods",
+     "page_start": 3,
+     "text": "Rectangular grooves were machined in SiC with a femtosecond laser (1030 nm, 300 fs). The scan speed ranged from 50 to 2000 mm/s, hatch spacing from 10 to 60 um, and the repetition rate from 50 to 500 kHz. The number of passes varied between 1 and 20. Groove depth was measured with an optical profilometer."
+    },
+    {
+     "section_type": "results",
+     "page_start": 5,
+     "text": "Groove depth increased with the number of passes and decreased with scan speed and hatch spacing. A repetition rate in the range 200 to 400 kHz yielded the highest depth per pass at constant fluence. Depth per pass in the range 0.5 to 1.5 um was observed for shallow grooves at 1.0 to 1.5 J/cm2."
+    }
+   ]
+  },
+  {
+   "paper_id": "sic-depth-004",
+   "canonical_title": "Depth control in shallow femtosecond laser pockets on 4H-SiC",
+   "authors": "Demo Author D",
+   "year": 2023,
+   "material": "SiC",
+   "laser_type": "fs",
+   "process_type": "fs_laser_processing",
+   "sections": [
+    {
+     "section_type": "methods",
+     "page_start": 2,
+     "text": "Shallow rectangular pockets with target depths between 10 and 40 um were machined on 4H-SiC. Two path strategies were compared: unidirectional raster and cross-hatch. A raster spacing of 10 to 20 um and a cross-hatch step of 20 um were used at a scan speed of 100 to 200 mm/s."
+    },
+    {
+     "section_type": "results",
+     "page_start": 4,
+     "text": "Cross-hatch paths produced more uniform depth over the pocket area and reduced bottom roughness compared to unidirectional raster for shallow targets around 20 um. Depth uniformity improved when the hatch spacing was below the effective spot diameter. Cross-hatch is a soft preferred strategy for shallow 2.5D pockets on SiC."
+    }
+   ]
+  },
+  {
+   "paper_id": "sic-crater-005",
+   "canonical_title": "Crater morphology and effective penetration depth in femtosecond ablation of silicon carbide",
+   "authors": "Demo Author E",
+   "year": 2020,
+   "material": "SiC",
+   "laser_type": "fs",
+   "process_type": "fs_laser_processing",
+   "sections": [
+    {
+     "section_type": "methods",
+     "page_start": 3,
+     "text": "Single and multi-pulse craters were produced on SiC with a femtosecond laser at 1030 nm. The crater depth was measured as a function of peak fluence from 0.6 to 3.0 J/cm2 and pulse count from 1 to 50. The effective penetration depth delta_eff was estimated from the logarithmic ablation law."
+    },
+    {
+     "section_type": "results",
+     "page_start": 5,
+     "text": "The effective ablation depth per logarithmic fluence unit was in the range 0.3 to 0.7 um for SiC at 300 fs. Saturation of the crater depth was observed above 2.0 J/cm2. The crater profiles confirmed a shallow 2.5D interaction topology without deep aspect-ratio confinement."
+    }
+   ]
+  },
+  {
+   "paper_id": "sic-pulse-006",
+   "canonical_title": "Pulse duration influence on ablation efficiency of silicon carbide",
+   "authors": "Demo Author F",
+   "year": 2022,
+   "material": "SiC",
+   "laser_type": "fs",
+   "process_type": "fs_laser_processing",
+   "sections": [
+    {
+     "section_type": "methods",
+     "page_start": 2,
+     "text": "Ablation of SiC was compared for pulse durations from 200 fs to 10 ps at 1030 nm. The repetition rate was 100 kHz and the peak fluence was kept at 1.2 J/cm2. Groove depth was recorded after a fixed number of passes."
+    },
+    {
+     "section_type": "results",
+     "page_start": 4,
+     "text": "Shorter pulses in the femtosecond regime produced slightly higher ablation depth per pass and lower heat-affected-zone damage. For pulse widths below 1 ps the depth variation was small, while at 10 ps the efficiency decreased noticeably."
+    }
+   ]
+  }
+ ],
+ "analyses": {
+  "sic-threshold-001": {
+   "thresholds": [
+    {
+     "item_id": "TH-SIC-001",
+     "type": "threshold",
+     "parameter": "F_th_eff",
+     "property": "F_th_eff",
+     "value": 0.8,
+     "target": "depth_um",
+     "lower": 0.65,
+     "upper": 0.95,
+     "unit": "J/cm2",
+     "semantic_role": "reported_optimum",
+     "conditions": {
+      "material_id": "SiC",
+      "process_type": "fs_laser_processing",
+      "wavelength_nm": 1030.0,
+      "frequency_kHz": 100.0,
+      "pulse_width_fs": 300.0
+     },
+     "page": 4,
+     "chunk_ids": [],
+     "extraction_notes": [
+      "crater diameter method, 300 fs, 1030 nm"
+     ]
+    }
+   ],
+   "material_properties": [
+    {
+     "item_id": "MP-SIC-001",
+     "type": "material_property",
+     "parameter": "wavelength_nm",
+     "property": "wavelength_nm",
+     "value": 1030.0,
+     "lower": 1030.0,
+     "upper": 1030.0,
+     "unit": "nm",
+     "semantic_role": "experimental_condition",
+     "conditions": {
+      "material_id": "SiC",
+      "wavelength_nm": 1030.0,
+      "frequency_kHz": 100.0,
+      "pulse_width_fs": 300.0
+     },
+     "page": 2
+    }
+   ],
+   "knowledge_gaps": [],
+   "internal_conflicts": []
+  },
+  "sic-incubation-002": {
+   "mechanisms": [
+    {
+     "item_id": "MECH-SIC-001",
+     "type": "mechanism",
+     "name": "POWER_LAW_INCUBATION",
+     "expression": "theta(N) = theta(1) * N^(S-1)",
+     "variables": {
+      "S": "incubation coefficient"
+     },
+     "semantic_role": "observed_relation",
+     "conditions": {
+      "material_id": "SiC",
+      "process_type": "fs_laser_processing",
+      "wavelength_nm": 1030.0,
+      "frequency_kHz": 200.0,
+      "pulse_width_fs": 300.0,
+      "scan_speed_mm_s": 300.0
+     },
+     "page": 4,
+     "assumptions": [
+      "power-law threshold decrease with pulse count"
+     ],
+     "extraction_notes": [
+      "incubation coefficient S fitted between 0.70 and 0.90"
+     ]
+    }
+   ],
+   "knowledge_gaps": [],
+   "internal_conflicts": []
+  },
+  "sic-groove-003": {
+   "parameter_ranges": [
+    {
+     "item_id": "PR-GROOVE-001",
+     "type": "parameter_range",
+     "parameter": "frequency_kHz",
+     "lower": 200.0,
+     "upper": 400.0,
+     "unit": "kHz",
+     "semantic_role": "reported_optimum",
+     "conditions": {
+      "material_id": "SiC",
+      "process_type": "fs_laser_processing",
+      "hatch_spacing_um": 15.0,
+      "wavelength_nm": 1030.0,
+      "frequency_kHz": 300.0,
+      "pulse_width_fs": 300.0,
+      "scan_speed_mm_s": 150.0
+     },
+     "page": 5,
+     "extraction_notes": [
+      "highest depth per pass at constant fluence"
+     ]
+    },
+    {
+     "item_id": "PR-GROOVE-002",
+     "type": "parameter_range",
+     "parameter": "scan_speed_mm_s",
+     "lower": 50.0,
+     "upper": 300.0,
+     "unit": "mm/s",
+     "semantic_role": "scanned_range",
+     "conditions": {
+      "material_id": "SiC",
+      "hatch_spacing_um": 15.0,
+      "wavelength_nm": 1030.0,
+      "frequency_kHz": 300.0,
+      "pulse_width_fs": 300.0,
+      "scan_speed_mm_s": 150.0
+     },
+     "page": 3
+    },
+    {
+     "item_id": "PR-GROOVE-003",
+     "type": "parameter_range",
+     "parameter": "hatch_spacing_um",
+     "lower": 10.0,
+     "upper": 20.0,
+     "unit": "um",
+     "semantic_role": "scanned_range",
+     "conditions": {
+      "material_id": "SiC",
+      "hatch_spacing_um": 15.0,
+      "wavelength_nm": 1030.0,
+      "frequency_kHz": 300.0,
+      "pulse_width_fs": 300.0,
+      "scan_speed_mm_s": 150.0
+     },
+     "page": 3
+    }
+   ],
+   "parameter_effects": [
+    {
+     "item_id": "PE-GROOVE-001",
+     "type": "parameter_effect",
+     "parameter": "scan_speed_mm_s",
+     "relation": "negative",
+     "semantic_role": "observed_relation",
+     "conditions": {
+      "material_id": "SiC",
+      "hatch_spacing_um": 15.0,
+      "wavelength_nm": 1030.0,
+      "frequency_kHz": 300.0,
+      "pulse_width_fs": 300.0,
+      "scan_speed_mm_s": 150.0
+     },
+     "page": 5,
+     "extraction_notes": [
+      "depth decreases with scan speed"
+     ]
+    },
+    {
+     "item_id": "PE-GROOVE-002",
+     "type": "parameter_effect",
+     "parameter": "passes",
+     "relation": "positive",
+     "semantic_role": "observed_relation",
+     "conditions": {
+      "material_id": "SiC",
+      "hatch_spacing_um": 15.0,
+      "wavelength_nm": 1030.0,
+      "frequency_kHz": 300.0,
+      "pulse_width_fs": 300.0,
+      "scan_speed_mm_s": 150.0
+     },
+     "page": 5,
+     "extraction_notes": [
+      "depth increases with passes"
+     ]
+    }
+   ],
+   "knowledge_gaps": [],
+   "internal_conflicts": []
+  },
+  "sic-depth-004": {
+   "reported_optima": [
+    {
+     "item_id": "RO-DEPTH-001",
+     "type": "reported_optimum",
+     "parameter": "path_strategy",
+     "name": "CROSS_HATCH",
+     "semantic_role": "reported_optimum",
+     "conditions": {
+      "material_id": "SiC",
+      "geometry_type": "rectangular_groove",
+      "hatch_spacing_um": 15.0,
+      "passes": 4,
+      "frequency_kHz": 300.0,
+      "scan_speed_mm_s": 150.0
+     },
+     "page": 4,
+     "extraction_notes": [
+      "cross-hatch preferred for shallow 2.5D pockets, uniform depth"
+     ]
+    }
+   ],
+   "parameter_ranges": [
+    {
+     "item_id": "PR-DEPTH-001",
+     "type": "parameter_range",
+     "parameter": "scan_speed_mm_s",
+     "lower": 100.0,
+     "upper": 200.0,
+     "unit": "mm/s",
+     "semantic_role": "reported_optimum",
+     "conditions": {
+      "material_id": "SiC",
+      "hatch_spacing_um": 15.0,
+      "passes": 4,
+      "frequency_kHz": 300.0,
+      "scan_speed_mm_s": 150.0
+     },
+     "page": 2
+    }
+   ],
+   "knowledge_gaps": [],
+   "internal_conflicts": []
+  },
+  "sic-crater-005": {
+   "material_properties": [
+    {
+     "item_id": "MP-CRATER-001",
+     "type": "material_property",
+     "parameter": "delta_eff",
+     "property": "delta_eff",
+     "value": 0.5,
+     "lower": 0.3,
+     "upper": 0.7,
+     "unit": "um",
+     "semantic_role": "observed_relation",
+     "conditions": {
+      "material_id": "SiC",
+      "peak_fluence_J_cm2": 1.2,
+      "wavelength_nm": 1030.0,
+      "pulse_width_fs": 300.0
+     },
+     "page": 5,
+     "extraction_notes": [
+      "effective penetration depth per logarithmic fluence unit"
+     ]
+    }
+   ],
+   "knowledge_gaps": [],
+   "internal_conflicts": []
+  },
+  "sic-pulse-006": {
+   "parameter_effects": [
+    {
+     "item_id": "PE-PULSE-001",
+     "type": "parameter_effect",
+     "parameter": "pulse_width_ps",
+     "relation": "negative",
+     "semantic_role": "observed_relation",
+     "conditions": {
+      "material_id": "SiC",
+      "wavelength_nm": 1030.0,
+      "frequency_kHz": 100.0,
+      "pulse_width_fs": 300.0
+     },
+     "page": 4,
+     "extraction_notes": [
+      "depth per pass decreases for pulses above 1 ps"
+     ]
+    }
+   ],
+   "knowledge_gaps": [],
+   "internal_conflicts": []
+  }
+ }
+}

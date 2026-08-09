@@ -7,7 +7,7 @@ import { config } from '../config'
 import type { ArtifactMeta, ArtifactSnapshot } from '../domain/artifact'
 import { buildQuery, jsonBody, request } from './client'
 
-export type RunStatus = 'running' | 'completed' | 'failed'
+export type RunStatus = 'running' | 'completed' | 'failed' | 'blocked'
 
 export interface RunStageStatus {
   status: string
@@ -41,6 +41,7 @@ export type WorkflowEventType =
   | 'RUN_STARTED'
   | 'RUN_COMPLETED'
   | 'RUN_FAILED'
+  | 'RUN_BLOCKED'
   | 'STAGE_STARTED'
   | 'STAGE_PROGRESS'
   | 'STAGE_COMPLETED'

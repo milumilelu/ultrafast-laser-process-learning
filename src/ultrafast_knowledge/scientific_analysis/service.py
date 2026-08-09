@@ -116,7 +116,7 @@ class ScientificKnowledgeService:
 
         if level == "FAST":
             return {
-                **self._pack_from_analyses(analyses, pack),
+                **self._pack_from_analyses(analyses, pack).model_dump(mode="json"),
                 "pipeline_report": report,
             }
 

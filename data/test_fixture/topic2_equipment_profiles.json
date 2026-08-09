@@ -1,0 +1,66 @@
+{
+  "DEMO-FS-LASER-01": {
+    "equipment_profile_id": "DEMO-FS-LASER-01",
+    "revision_id": "rev-1",
+    "profile_name": "Demo Femto Laser 01",
+    "machine_id": "DEMO-FS-LASER-01",
+    "manufacturer": "demo",
+    "model": "Femto-01",
+    "status": "active",
+    "is_active": 1,
+    "laser_source": {
+      "laser_name": "Femto-01",
+      "wavelength_nm": 1030.0,
+      "pulse_width_fixed_fs": 300.0,
+      "average_power_min_W": 1.0,
+      "average_power_max_W": 20.0,
+      "actual_power_W": 10.0,
+      "frequency_min_kHz": 50.0,
+      "frequency_max_kHz": 1000.0
+    },
+    "optical_setup": {
+      "objective_name": "f-theta",
+      "spot_diameter_um": 16.0,
+      "focal_length_mm": 163.0
+    },
+    "motion_system": {
+      "scan_system_type": "galvo",
+      "scan_speed_min_mm_s": 50.0,
+      "scan_speed_max_mm_s": 2000.0,
+      "work_area_x_mm": 100.0,
+      "work_area_y_mm": 100.0
+    },
+    "process_capability": {
+      "passes_min": 1,
+      "passes_max": 50,
+      "hatch_spacing_min_um": 5.0,
+      "hatch_spacing_max_um": 100.0,
+      "path_strategies_supported": ["RASTER", "CROSS_HATCH"]
+    }
+  },
+  "EQ-TEST-FS": {
+    "equipment_profile_id": "EQ-TEST-FS",
+    "revision_id": "rev-1",
+    "profile_name": "Test Femto Laser",
+    "machine_id": "EQ-TEST-FS",
+    "status": "active",
+    "is_active": 1,
+    "laser_source": {
+      "wavelength_nm": 1030.0,
+      "pulse_width_fixed_fs": 300.0,
+      "actual_power_W": 10.0,
+      "frequency_min_kHz": 10.0,
+      "frequency_max_kHz": 2000.0
+    },
+    "optical_setup": {
+      "spot_diameter_um": 16.0
+    },
+    "motion_system": {
+      "scan_speed_min_mm_s": 1.0,
+      "scan_speed_max_mm_s": 5000.0
+    },
+    "process_capability": {
+      "path_strategies_supported": ["RASTER", "CROSS_HATCH"]
+    }
+  }
+}

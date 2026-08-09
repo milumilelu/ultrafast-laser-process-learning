@@ -34,8 +34,6 @@ export interface WorkspaceSection {
   label: string
   /** Backend stage whose completion makes this section meaningful. */
   unlockStage?: CanonicalStage
-  /** Next-iteration sections that are not yet implemented in the frontend. */
-  pending?: boolean
 }
 
 export const WORKSPACE_SECTIONS: WorkspaceSection[] = [
@@ -43,8 +41,8 @@ export const WORKSPACE_SECTIONS: WorkspaceSection[] = [
   { id: 'capability', label: '能力', unlockStage: 'assess_capability' },
   { id: 'knowledge', label: '知识', unlockStage: 'satisfy_requirements' },
   { id: 'calibration', label: '标定', unlockStage: 'calibrate_physics' },
-  { id: 'simulation', label: '仿真', unlockStage: 'establish_process_model', pending: true },
-  { id: 'planning', label: '规划', unlockStage: 'plan_process', pending: true },
+  { id: 'simulation', label: '仿真', unlockStage: 'establish_process_model' },
+  { id: 'planning', label: '规划', unlockStage: 'plan_process' },
 ]
 
 /** Continue-to checkpoints for the "继续" control (spec §三十二). */

@@ -11,6 +11,7 @@ const COMPLETE_DRAFT = {
   geometryType: 'rectangular_groove',
   objectiveMetric: 'depth_um' as const,
   equipmentProfileId: 'EQ-1',
+  executionMode: 'DEMO_FIXTURE' as const,
   taskContextRef: null,
   runId: null,
   version: 1,

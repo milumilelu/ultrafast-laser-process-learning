@@ -15,7 +15,11 @@ import { useApplicationRun, useRunEvents, useRunArtifacts } from './useRunState'
 import { OverviewSection } from './OverviewSection'
 import { CapabilitySection } from '../capability/CapabilitySection'
 import { KnowledgeSection } from '../knowledge/KnowledgeSection'
+import { NeedsPanel, ReadingPanel } from '../knowledge/NeedsPanel'
+import { ConditionTracePanel } from '../knowledge/ConditionTracePanel'
 import { CalibrationSection } from '../calibration/CalibrationSection'
+import { SimulationSection } from '../simulation/SimulationSection'
+import { PlanningSection } from '../planning/PlanningSection'
 import { EmptyState, ErrorBanner } from '../../components/ui/Card'
 import { createOrContinueRun } from './runFlow'
 
@@ -114,7 +118,6 @@ function WorkspaceInner({ taskId, section }: { taskId: string; section: string }
                 >
                   <StatusBadge tone={executionTone(exec)} label={executionLabel(exec)} />
                   <span className="workflow-label">{ws.label}</span>
-                  {ws.pending && <span className="workflow-pending">下一迭代</span>}
                 </NavLink>
               </li>
             )
@@ -140,15 +143,24 @@ function WorkspaceInner({ taskId, section }: { taskId: string; section: string }
           <CapabilitySection artifact={artifacts.data?.get('ScientificCapabilityReport')} />
         )}
         {section === 'knowledge' && (
-          <KnowledgeSection
-            taskId={taskId}
-            requirements={artifacts.data?.get('KnowledgeRequirementSet')}
-            queryPlans={artifacts.data?.get('LiteratureRetrievalQueryPlan')}
-            evidence={artifacts.data?.get('EvidenceIRSet')}
-            priors={artifacts.data?.get('PriorObjectSet')}
-            knowledgeState={artifacts.data?.get('KnowledgeState')}
-            developerMode={developerMode}
-          />
+          <>
+            <NeedsPanel artifact={artifacts.data?.get('ScientificNeedSet')} />
+            <ReadingPanel artifact={artifacts.data?.get('ScientificCorpusPack')} />
+            <ConditionTracePanel
+              ledger={artifacts.data?.get('CandidateLedger')}
+              conditions={artifacts.data?.get('SourceConditionSet')}
+              reconstructibility={artifacts.data?.get('ReconstructibilityReportSet')}
+            />
+            <KnowledgeSection
+              taskId={taskId}
+              requirements={artifacts.data?.get('KnowledgeRequirementSet')}
+              queryPlans={artifacts.data?.get('RequirementRetrievalPlan')}
+              evidence={artifacts.data?.get('EvidenceIRSet')}
+              priors={artifacts.data?.get('PriorObjectSet')}
+              knowledgeState={artifacts.data?.get('KnowledgeState')}
+              developerMode={developerMode}
+            />
+          </>
         )}
         {section === 'calibration' && (
           <CalibrationSection
@@ -160,10 +172,16 @@ function WorkspaceInner({ taskId, section }: { taskId: string; section: string }
             developerMode={developerMode}
           />
         )}
-        {(section === 'simulation' || section === 'planning') && (
-          <EmptyState
-            message={`「${section === 'simulation' ? '仿真' : '规划'}」在下一迭代实现（F4/F5）`}
-            hint="后端已产出 MorphologySimulationResult / ToolpathPlan artifact，本工作台下一迭代将直接消费展示。"
+        {section === 'simulation' && (
+          <SimulationSection
+            simulation={artifacts.data?.get('MorphologySimulationResult')}
+            model={artifacts.data?.get('LocalRemovalModel')}
+          />
+        )}
+        {section === 'planning' && (
+          <PlanningSection
+            plan={artifacts.data?.get('ToolpathPlan')}
+            simulation={artifacts.data?.get('MorphologySimulationResult')}
           />
         )}
       </section>

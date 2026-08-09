@@ -73,6 +73,7 @@ def _task() -> dict[str, Any]:
         "equipment_profile_id": "EQ-TEST-FS",
         "geometry_type": "rectangular_groove",
         "objective_metric": "depth_um",
+        "execution_mode": "SANDBOX",
         "target_geometry": {
             "width_um": 30.0,
             "height_um": 24.0,

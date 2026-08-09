@@ -15,6 +15,8 @@ import { StatusBadge } from '../../components/ui/StatusBadge'
 import { Button } from '../../components/ui/Button'
 import { DependencyChain } from '../../components/scientific/DependencyChain'
 import { SnapshotMeta } from '../../components/scientific/Artifact'
+import { EquipmentCard } from '../../components/scientific/EquipmentCard'
+import { ControlStateCard } from '../../components/scientific/ControlStateCard'
 import { TaskForm } from './TaskForm'
 
 interface OverviewSectionProps {
@@ -129,6 +131,9 @@ export function OverviewSection({
           {busy && <Spinner />}
         </div>
       )}
+
+      <ControlStateCard control={run?.result?.runControlState as Record<string, unknown> | undefined} />
+      <EquipmentCard artifact={artifacts?.get('MachineProfileSnapshot')} />
 
       <div className="cards-grid">
         <Card title="Scientific Capability" actions={<StatusBadge tone={scientificTone(scientificStatusFrom(capabilityStatus))} label={scientificLabel(scientificStatusFrom(capabilityStatus))} />}>

@@ -18,12 +18,14 @@ from packages.scientific_computation.contracts import (
     CapabilityRequirement,
     IdentifiabilityStatus,
     InteractionTopology,
+    MechanismParameterRequirement,
     ParameterIdentifiability,
     ProvenanceRecord,
     ScientificCapabilityReport,
     ScientificStatus,
     SimulationFidelity,
 )
+from packages.scientific_computation.mechanism_registry import MechanismRegistry
 
 _DATA_INPUTS: tuple[tuple[str, str], ...] = (
     ("pulse_width_ps", "ps"),
@@ -296,12 +298,18 @@ class ScientificCapabilityAnalyzer:
             InteractionTopology.OPEN_SURFACE,
             InteractionTopology.SHALLOW_2_5D,
         }
+        active_models = MechanismRegistry.active_models(task)
+        mechanism_parameters = [
+            MechanismParameterRequirement.model_validate(spec)
+            for spec in MechanismRegistry.required_parameters(active_models)
+        ]
         status = ScientificStatus.PARTIAL if simulation_supported else ScientificStatus.UNKNOWN
         payload_for_id = {
             "task": task,
             "available": [item.model_dump(mode="json") for item in available],
             "missing": [item.model_dump(mode="json") for item in missing],
             "identifiability": [item.model_dump(mode="json") for item in identifiability],
+            "mechanism_parameters": mechanism_parameters,
         }
         return ScientificCapabilityReport(
             capability_id=_stable_id("capability", payload_for_id),
@@ -322,6 +330,7 @@ class ScientificCapabilityAnalyzer:
             missing=missing,
             identifiability=identifiability,
             recommended_requirements=requirements,
+            mechanism_parameter_requirements=mechanism_parameters,
             status=status,
             reason_codes=(
                 ["terminal_macro_data_requires_effective_parameters"]

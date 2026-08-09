@@ -21,11 +21,19 @@ export interface ArtifactSnapshot<T = Record<string, unknown>> {
 }
 
 export const PHYSICS_TO_PLANNING_ARTIFACT_TYPES = [
+  'TaskState',
+  'MachineProfileSnapshot',
   'ScientificCapabilityReport',
+  'ScientificNeedSet',
   'KnowledgeRequirementSet',
   'KnowledgeState',
-  'LiteratureRetrievalQueryPlan',
+  'RequirementRetrievalPlan',
+  'ScientificCorpusPack',
+  'CandidateLedger',
+  'SourceConditionSet',
+  'ReconstructibilityReportSet',
   'EvidenceIRSet',
+  'ApplicabilityReportSet',
   'PriorObjectSet',
   'CanonicalPhysicsState',
   'IdentifiabilityReport',

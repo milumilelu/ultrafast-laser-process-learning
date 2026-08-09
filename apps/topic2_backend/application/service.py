@@ -26,9 +26,14 @@ from typing import Any, ClassVar
 
 import pandas as pd
 
+from apps.topic2_backend.application.equipment import (
+    effective_execution_mode,
+    resolve_machine_snapshot,
+)
 from apps.topic2_backend.application.events import (
     ARTIFACT_CREATED,
     ERROR,
+    RUN_BLOCKED,
     RUN_COMPLETED,
     RUN_FAILED,
     RUN_STARTED,
@@ -38,6 +43,20 @@ from apps.topic2_backend.application.events import (
     VALIDATION,
     WARNING,
     WorkflowEventBus,
+)
+from apps.topic2_backend.application.gates import (
+    STAGE_PHASES,
+    GateResult,
+    StageBlockedError,
+    active_mechanism_required,
+    knowledge_gate,
+    physical_model_gate,
+    planning_gate,
+    resource_gate,
+    run_control_state,
+)
+from apps.topic2_backend.application.requirement_resolution import (
+    resolve_requirement_chain,
 )
 from apps.topic2_backend.application.trace import ScientificTrace
 from apps.topic2_backend.service import Topic2Service
@@ -77,12 +96,18 @@ from packages.scientific_computation.contracts import (
     ProvenanceRecord,
     RemovalKernel,
     RemovalModelMode,
+    ScientificCapabilityReport,
     ScientificStatus,
     SimulationFidelity,
     TargetGeometry,
 )
 from packages.scientific_computation.identification import ParameterIdentificationEngine
 from packages.scientific_computation.local_removal import LocalRemovalModelFactory
+from packages.scientific_computation.needs import (
+    ScientificNeedType,
+    classify_requirement,
+    compile_scientific_needs,
+)
 from packages.scientific_computation.planning import ToolpathPlanner
 from packages.scientific_retrieval.planner import plan_retrieval
 
@@ -166,6 +191,8 @@ class Topic2ApplicationService:
         agent_proxy_target: str | None = None,
         fixture_csv: str | None = None,
         workflow_version: str = WORKFLOW_VERSION,
+        resolution_llm_client: Any | None = None,
+        resolution_model: str = "scientific-reading-v1",
     ):
         self.topic2 = topic2
         self.repository = topic2.repository
@@ -174,6 +201,8 @@ class Topic2ApplicationService:
         self.agent_proxy_target = agent_proxy_target
         self.workflow_version = workflow_version
         self.fixture_csv = fixture_csv
+        self.resolution_llm_client = resolution_llm_client
+        self.resolution_model = resolution_model
 
     # --------------------------------------------------------------- scoping
 
@@ -184,7 +213,9 @@ class Topic2ApplicationService:
             return TaskScope.model_validate(payload)
         material = payload.get("material")
         laser_type = payload.get("laser_type")
-        equipment_id = payload.get("equipment_profile_id")
+        equipment_id = payload.get("equipment_profile_id") or payload.get(
+            "execution_equipment_ref"
+        )
         geometry_type = payload.get("geometry_type")
         target = payload.get("objective_metric")
         missing = [
@@ -309,6 +340,54 @@ class Topic2ApplicationService:
             bus.emit(RUN_COMPLETED, "应用运行完成", stage="application")
             run = self.repository.application_run(run_id) or {}
             return self._run_summary(run)
+        except StageBlockedError as exc:
+            bus.emit(
+                RUN_BLOCKED,
+                f"应用运行被 Gate {exc.gate} 阻止：{'；'.join(exc.reasons)}",
+                stage="application",
+                details={
+                    "gate": exc.gate,
+                    "phase": exc.phase,
+                    "reasons": exc.reasons,
+                    "next_actions": exc.next_actions,
+                },
+            )
+            self.repository.save_application_run(
+                {
+                    "application_run_id": run_id,
+                    "client_request_id": client_request_id,
+                    "task_context_ref": task_ref,
+                    "mode": mode,
+                    "workflow_version": self.workflow_version,
+                    "status": "blocked",
+                    "stage_status": {
+                        stage: {"status": "completed"}
+                        for stage in requested_stages
+                        if stage
+                        in ((exc.run_control_state or {}).get("completed_stages") or [])
+                    }
+                    if mode == "research"
+                    else {},
+                    "result": {
+                        "runControlState": exc.run_control_state
+                        or {
+                            "schema_version": "run-control-state-v1",
+                            "execution_mode": effective_execution_mode(
+                                mode, task_spec
+                            ),
+                            "current_phase": exc.phase,
+                            "phase_status": "BLOCKED",
+                            "blocking_reasons": exc.reasons,
+                            "next_actions": exc.next_actions,
+                            "completed_stages": [],
+                        }
+                    },
+                    "task_spec": task_spec,
+                    "stage_results": {},
+                    "completed_at": timestamp(),
+                }
+            )
+            return self._run_summary(self.repository.application_run(run_id) or {})
         except Exception as exc:
             bus.emit(
                 ERROR,
@@ -414,6 +493,7 @@ class Topic2ApplicationService:
                 "status": "running",
                 "stage_status": merged_status,
                 "task_spec": task_spec,
+                "result": run.get("result"),
                 "stage_results": run.get("stage_results") or {},
             }
         )
@@ -453,6 +533,54 @@ class Topic2ApplicationService:
             )
             bus.emit(RUN_COMPLETED, "应用运行完成", stage="application")
             return self._run_summary(self.repository.application_run(run_id) or {})
+        except StageBlockedError as exc:
+            bus.emit(
+                RUN_BLOCKED,
+                f"应用运行续跑被 Gate {exc.gate} 阻止：{'；'.join(exc.reasons)}",
+                stage="application",
+                details={
+                    "gate": exc.gate,
+                    "phase": exc.phase,
+                    "reasons": exc.reasons,
+                    "next_actions": exc.next_actions,
+                },
+            )
+            completed = set((exc.run_control_state or {}).get("completed_stages") or [])
+            self.repository.save_application_run(
+                {
+                    "application_run_id": run_id,
+                    "client_request_id": client_request_id,
+                    "task_context_ref": run["task_context_ref"],
+                    "mode": "research",
+                    "workflow_version": self.workflow_version,
+                    "status": "blocked",
+                    "stage_status": {
+                        **{
+                            stage: {"status": "completed"}
+                            for stage in (run.get("stage_status") or {})
+                        },
+                        **{
+                            stage: {"status": "completed"}
+                            for stage in completed
+                        },
+                    },
+                    "result": {
+                        "runControlState": exc.run_control_state
+                        or {
+                            "schema_version": "run-control-state-v1",
+                            "current_phase": exc.phase,
+                            "phase_status": "BLOCKED",
+                            "blocking_reasons": exc.reasons,
+                            "next_actions": exc.next_actions,
+                            "completed_stages": [],
+                        }
+                    },
+                    "task_spec": task_spec,
+                    "stage_results": run.get("stage_results") or {},
+                    "completed_at": timestamp(),
+                }
+            )
+            return self._run_summary(self.repository.application_run(run_id) or {})
         except Exception as exc:
             bus.emit(
                 ERROR,
@@ -486,21 +614,159 @@ class Topic2ApplicationService:
         random_seed: int,
         existing_result: dict[str, Any] | None = None,
     ) -> tuple[dict[str, Any], dict[str, Any]]:
-        """Execute stages over an (optional) existing result; return (summary, stage_results)."""
+        """Execute stages over an (optional) existing result; return (summary, stage_results).
+
+        M4: canonical gates are evaluated before their phase - a BLOCKED gate
+        stops the run (fail closed) unless execution mode is SANDBOX.
+        """
         result: dict[str, Any] = dict(existing_result or {})
+        execution_mode = effective_execution_mode("research", task_spec)
+        completed: list[str] = []
+        gate_results: list[GateResult] = self._previous_gate_results(bus)
         for stage in stages:
+            gate = self._gate_before_stage(stage, scope, bus, execution_mode)
+            if gate is not None:
+                gate_results.append(gate)
+                if gate.status == "BLOCKED":
+                    control = run_control_state(
+                        gates=gate_results,
+                        execution_mode=execution_mode,
+                        current_phase=STAGE_PHASES.get(stage, "UNKNOWN"),
+                        phase_status="BLOCKED",
+                        completed_stages=completed,
+                    )
+                    bus.emit(
+                        VALIDATION,
+                        f"Gate {gate.name} BLOCKED: {'; '.join(gate.reasons)}",
+                        stage=stage,
+                        details=gate.to_dict(),
+                    )
+                    raise StageBlockedError(
+                        gate.name,
+                        reasons=gate.reasons,
+                        next_actions=gate.next_actions,
+                        phase=STAGE_PHASES.get(stage, "UNKNOWN"),
+                        run_control_state=control,
+                    )
             bus.emit(STAGE_STARTED, STAGE_LABELS[stage], stage=stage)
             handler = getattr(self, f"_stage_{stage}")
             stage_result = handler(task_spec, scope, bus, random_seed=random_seed)
             result[stage] = stage_result["content"]
+            completed.append(stage)
             bus.emit(
                 STAGE_COMPLETED,
                 f"{STAGE_LABELS[stage]} 完成",
                 stage=stage,
                 details=stage_result["meta"],
             )
+        last_phase = STAGE_PHASES.get(completed[-1] if completed else stages[0], "UNKNOWN")
+        final_status = "COMPLETED" if last_phase == "PLANNING" else "READY"
+        control = run_control_state(
+            gates=gate_results,
+            execution_mode=execution_mode,
+            current_phase=last_phase,
+            phase_status=final_status,
+            completed_stages=completed,
+        )
         summary = self._research_summary(result, scope, task_spec, random_seed, bus.run_id)
+        summary["runControlState"] = control
         return summary, result
+
+    def _previous_gate_results(self, bus: WorkflowEventBus) -> list[GateResult]:
+        """Gates evaluated in earlier checkpoint segments (same run).
+
+        RunControlState lives in the run result (手册 §15), not as an artifact.
+        """
+        run = self.repository.application_run(bus.run_id) or {}
+        payload = ((run.get("result") or {}).get("runControlState")) or {}
+        return [
+            GateResult(
+                name=str(item.get("gate") or name),
+                status=str(item.get("status") or "BLOCKED"),
+                reasons=list(item.get("reasons") or []),
+                next_actions=list(item.get("next_actions") or []),
+            )
+            for name, item in (payload.get("gates") or {}).items()
+            if isinstance(item, dict)
+        ]
+
+    def _gate_before_stage(
+        self,
+        stage: str,
+        scope: TaskScope,
+        bus: WorkflowEventBus,
+        execution_mode: str,
+    ) -> GateResult | None:
+        """Evaluate the canonical gate that guards `stage` (fail closed)."""
+        try:
+            if stage == "assess_capability":
+                return resource_gate(
+                    self._machine_snapshot(bus), execution_mode=execution_mode
+                )
+            if stage == "calibrate_physics":
+                capability = (
+                    self._latest_artifact_content(bus, "ScientificCapabilityReport")
+                    or {}
+                )
+                required = active_mechanism_required(
+                    list(
+                        capability.get("mechanism_parameter_requirements") or []
+                    )
+                )
+                prior_params = self._evidence_prior_parameters(bus)
+                try:
+                    rows = self.topic2._rows_for_scope(scope)
+                    has_observations = bool(rows) or bool(
+                        self._calibration_fixture_observations()
+                    )
+                except Exception:  # noqa: BLE001 - no rows for scope -> observation source unknown
+                    has_observations = bool(self._calibration_fixture_observations())
+                return knowledge_gate(
+                    mechanism_required=required,
+                    machine_fields=set(self._machine_fields(bus)),
+                    prior_parameters=prior_params,
+                    has_observations=has_observations,
+                    execution_mode=execution_mode,
+                )
+            if stage == "establish_process_model":
+                return physical_model_gate(
+                    self._latest_artifact_content(bus, "CalibrationResult"),
+                    execution_mode=execution_mode,
+                )
+            if stage == "plan_process":
+                model_available = bool(
+                    self._latest_artifact_content(bus, "LocalRemovalModel")
+                )
+                bounds = (
+                    self._machine_snapshot(bus) or {}
+                ).get("machine_bounds") or {}
+                return planning_gate(
+                    model_available=model_available,
+                    machine_bounds=bounds,
+                    execution_mode=execution_mode,
+                )
+        except Exception as exc:  # noqa: BLE001 - gate evaluation must fail closed
+            return GateResult(
+                stage, "BLOCKED", [f"gate evaluation failed: {exc}"]
+            )
+        return None
+
+    def _evidence_prior_parameters(self, bus: WorkflowEventBus) -> set[str]:
+        """Parameters with numeric ranges in the current EvidenceIRSet."""
+        payload = self._latest_artifact_content(bus, "EvidenceIRSet") or {}
+        parameters: set[str] = set()
+        for item in payload.get("items") or []:
+            claim = dict(item.get("claim") or {})
+            lower, upper = claim.get("lower"), claim.get("upper")
+            parameter = item.get("parameter") or claim.get("parameter")
+            if (
+                isinstance(lower, (int, float))
+                and isinstance(upper, (int, float))
+                and float(lower) < float(upper)
+                and parameter
+            ):
+                parameters.add(str(parameter))
+        return parameters
 
     def _demo_task_spec(self, random_seed: int) -> dict[str, Any]:
         spec = dict(DEMO_SCENARIO_01)
@@ -654,7 +920,39 @@ class Topic2ApplicationService:
     def _stage_prepare_task(
         self, task_spec: dict[str, Any], scope: TaskScope, bus: WorkflowEventBus, random_seed: int
     ) -> dict[str, Any]:
-        """Stage 1: canonical task + scope capability."""
+        """Stage 1: canonical task + equipment snapshot + scope capability."""
+        execution_mode = effective_execution_mode(
+            "research", task_spec
+        )
+        snapshot = resolve_machine_snapshot(
+            equipment_profile_id=scope.equipment_id,
+            run_mode="research",
+            task_spec=task_spec,
+            agent_proxy_target=self.agent_proxy_target,
+            fixture_profiles=self.settings.equipment_profiles,
+        )
+        snapshot_payload = snapshot.model_dump(mode="json")
+        snapshot_artifact = self._persist_artifact(
+            bus.run_id,
+            "MachineProfileSnapshot",
+            snapshot_payload,
+            input_refs=[{"type": "TaskScope", "id": scope.task_context_id or "task"}],
+            schema_version=snapshot.schema_version,
+        )
+        bus.emit(
+            VALIDATION,
+            (
+                f"设备快照：{snapshot.resource_status}（{snapshot.source_quality}）"
+                + (f"，缺失：{', '.join(snapshot.missing_required)}" if snapshot.missing_required else "")
+            ),
+            stage="prepare_task",
+            details={
+                "resource_status": snapshot.resource_status,
+                "source_quality": snapshot.source_quality,
+                "missing_required": snapshot.missing_required,
+                "execution_mode": execution_mode,
+            },
+        )
         capability = self.topic2.scope_capability(
             material=scope.material,
             laser_type=scope.laser_type,
@@ -666,6 +964,8 @@ class Topic2ApplicationService:
             "n_unique_designs": capability["n_unique_designs"],
             "meets_identification": capability["meets_identification"],
             "meets_modeling": capability["meets_modeling"],
+            "machine_snapshot_artifact_id": snapshot_artifact,
+            "resource_status": snapshot.resource_status,
         }
         bus.emit(
             VALIDATION,
@@ -679,7 +979,8 @@ class Topic2ApplicationService:
             "target_geometry": task_spec.get("target_geometry") or {
                 "geometry_type": scope.geometry_type,
             },
-            "machine_profile": task_spec.get("machine_profile") or {},
+            "machine_profile_snapshot": snapshot_payload,
+            "execution_mode": execution_mode,
             "random_seed": random_seed,
             "capability_summary": capability,
         }
@@ -687,7 +988,10 @@ class Topic2ApplicationService:
             bus.run_id,
             "TaskState",
             task_state,
-            input_refs=[{"type": "TaskScope", "id": scope.task_context_id or "task"}],
+            input_refs=[
+                {"type": "TaskScope", "id": scope.task_context_id or "task"},
+                {"type": "MachineProfileSnapshot", "id": snapshot_artifact},
+            ],
             schema_version="task-state-v1",
         )
         ScientificTrace(bus, "prepare_task").artifact_created(
@@ -714,9 +1018,15 @@ class Topic2ApplicationService:
                 "device_properties": task_spec.get("device_properties") or scope.device_properties,
             },
             data_rows=rows,
-            machine_profile=dict(task_spec.get("machine_profile") or {}),
+            machine_profile=self._machine_fields(bus),
             knowledge_state={},
-            input_refs=[ArtifactRef(type="TaskState", id=task_state_id)],
+            input_refs=[
+                ArtifactRef(type="TaskState", id=task_state_id),
+                ArtifactRef(
+                    type="MachineProfileSnapshot",
+                    id=self._latest_artifact_id(bus, "MachineProfileSnapshot"),
+                ),
+            ],
         )
         content = report.model_dump(mode="json")
         artifact_id = self._persist_artifact(
@@ -778,7 +1088,12 @@ class Topic2ApplicationService:
             name=f"数据状态快照（{dataset_artifact}）",
             counts={"n_samples": summary["n_samples"]},
         )
-        readiness = self._target_readiness(rows, scope)
+        snapshot_spot = self._machine_fields(bus).get("beam_radius_um")
+        readiness = self._target_readiness(
+            rows,
+            scope,
+            spot_diameter_um=float(snapshot_spot) * 2.0 if snapshot_spot else None,
+        )
         coordinates = self._readiness_coordinates(readiness)
         cfa = {
             "version": "uncalibrated-cfa-v0.1",
@@ -922,26 +1237,33 @@ class Topic2ApplicationService:
     def _stage_analyze_knowledge_requirements(
         self, task_spec: dict[str, Any], scope: TaskScope, bus: WorkflowEventBus, random_seed: int
     ) -> dict[str, Any]:
-        """Capability/computation gaps -> canonical KnowledgeRequirementSet.
+        """Capability/computation gaps -> ScientificNeedSet -> KnowledgeRequirementSet.
 
-        LLM questions may be added later, but downstream computation gaps own
-        priority and provenance in V1.
+        M2: RESOURCE_INPUT needs (equipment fields) are classified in the
+        ScientificNeedSet and never become literature requirements.  Only
+        SCIENTIFIC_KNOWLEDGE / CALIBRATION_OBSERVATION needs enter the
+        KnowledgeRequirementSet consumed by retrieval.
         """
         trace = ScientificTrace(bus, "analyze_knowledge_requirements")
+        capability_ref = self._latest_artifact_id(bus, "ScientificCapabilityReport")
+        capability = self._latest_artifact_content(bus, "ScientificCapabilityReport") or {}
+        capability_report = ScientificCapabilityReport.model_validate(capability)
         trace.operation_started(
             "requirement-compilation",
-            "计算缺口驱动的知识需求编译",
+            "计算缺口驱动的科学需求编译（四类 Need）",
             input_refs=[
+                {"type": "ScientificCapabilityReport", "id": capability_ref},
                 {
-                    "type": "ScientificCapabilityReport",
-                    "id": self._latest_artifact_id(bus, "ScientificCapabilityReport"),
-                }
+                    "type": "MachineProfileSnapshot",
+                    "id": self._latest_artifact_id(bus, "MachineProfileSnapshot"),
+                },
             ],
         )
-        capability = self._latest_artifact_content(bus, "ScientificCapabilityReport") or {}
         capability_requirements = list(capability.get("recommended_requirements") or [])
         requirements: list[dict[str, Any]] = []
         for item in capability_requirements:
+            if classify_requirement(item) == ScientificNeedType.RESOURCE_INPUT:
+                continue
             normalized = dict(item)
             question = normalized.get("scientific_question") or normalized.get("question")
             normalized["scientific_question"] = question
@@ -957,6 +1279,8 @@ class Topic2ApplicationService:
         for item in self._knowledge_requirements(scope, bus):
             if item["type"] == "threshold" and "PARAMETER_PRIOR" in existing_types:
                 continue
+            if item["type"] in ("physics_dependency", "PHYSICS_DEPENDENCY"):
+                continue
             next_id = f"KR-{len(requirements) + 1:03d}"
             requirements.append(
                 {
@@ -968,11 +1292,52 @@ class Topic2ApplicationService:
                     "provenance": [
                         {
                             "type": "ScientificCapabilityReport",
-                            "id": self._latest_artifact_id(bus, "ScientificCapabilityReport"),
+                            "id": capability_ref,
                         }
                     ],
                 }
             )
+        rows = self.topic2._rows_for_scope(scope)
+        need_set = compile_scientific_needs(
+            capability_report,
+            machine_snapshot=self._machine_snapshot(bus),
+            data_rows=rows,
+            requirements=requirements,
+            input_refs=[
+                ArtifactRef(type="ScientificCapabilityReport", id=capability_ref),
+                ArtifactRef(
+                    type="MachineProfileSnapshot",
+                    id=self._latest_artifact_id(bus, "MachineProfileSnapshot"),
+                ),
+            ],
+        )
+        need_set_artifact = self._persist_artifact(
+            bus.run_id,
+            "ScientificNeedSet",
+            need_set.model_dump(mode="json"),
+            input_refs=[
+                {"type": "ScientificCapabilityReport", "id": capability_ref},
+                {
+                    "type": "MachineProfileSnapshot",
+                    "id": self._latest_artifact_id(bus, "MachineProfileSnapshot"),
+                },
+            ],
+            schema_version=need_set.schema_version,
+        )
+        need_counts = {
+            str(need_type): len(need_set.needs_of(need_type))
+            for need_type in ScientificNeedType
+        }
+        trace.validation(
+            (
+                f"科学需求：{len(need_set.needs)} 条"
+                f"（资源 {need_counts[ScientificNeedType.RESOURCE_INPUT]} /"
+                f" 文献 {need_counts[ScientificNeedType.SCIENTIFIC_KNOWLEDGE]} /"
+                f" 观测 {need_counts[ScientificNeedType.CALIBRATION_OBSERVATION]} /"
+                f" 数据 {need_counts[ScientificNeedType.TARGET_DATA]}）"
+            ),
+            counts=need_counts,
+        )
         diagnostics = self._knowledge_diagnostics(scope)
         trace.validation(
             f"知识需求：{len(requirements)} 条（{len(diagnostics['missing_inputs'])} 项物理输入缺失）",
@@ -982,7 +1347,6 @@ class Topic2ApplicationService:
                 "blocked_coordinates": len(diagnostics["blocked_coordinates"]),
             },
         )
-        capability_ref = self._latest_artifact_id(bus, "ScientificCapabilityReport")
         artifact_id = self._persist_artifact(
             bus.run_id,
             "KnowledgeRequirementSet",
@@ -990,6 +1354,7 @@ class Topic2ApplicationService:
             input_refs=[
                 {"type": "ScientificCapabilityReport", "id": capability_ref},
                 {"type": "DataProfile", "id": self._latest_artifact_id(bus, "DataProfile")},
+                {"type": "ScientificNeedSet", "id": need_set_artifact},
             ],
             schema_version="knowledge-requirement-set-v1",
         )
@@ -1004,9 +1369,18 @@ class Topic2ApplicationService:
         )
         trace.operation_completed(
             "requirement-compilation",
-            f"知识需求清单生成（{artifact_id}）",
-            output_refs=[{"type": "KnowledgeRequirementSet", "id": artifact_id}],
-            counts={"requirements": len(requirements)},
+            f"科学需求清单生成（{need_set_artifact}）",
+            output_refs=[
+                {"type": "ScientificNeedSet", "id": need_set_artifact},
+                {"type": "KnowledgeRequirementSet", "id": artifact_id},
+            ],
+            counts={"needs": len(need_set.needs), "requirements": len(requirements)},
+        )
+        trace.artifact_created(
+            "ScientificNeedSet",
+            need_set_artifact,
+            input_refs=[{"type": "ScientificCapabilityReport", "id": capability_ref}],
+            counts=need_counts,
         )
         trace.artifact_created(
             "KnowledgeRequirementSet",
@@ -1016,10 +1390,16 @@ class Topic2ApplicationService:
         return {
             "meta": {
                 "artifact_id": artifact_id,
+                "need_set_artifact_id": need_set_artifact,
                 "compatibility_artifact_id": legacy_artifact_id,
                 "requirement_count": len(requirements),
+                "need_counts": need_counts,
             },
-            "content": {"requirements": requirements, "diagnostics": diagnostics},
+            "content": {
+                "requirements": requirements,
+                "diagnostics": diagnostics,
+                "scientific_needs": need_set.model_dump(mode="json"),
+            },
         }
 
     # Explicit migration alias for stored/legacy callers.  It is not part of
@@ -1164,12 +1544,11 @@ class Topic2ApplicationService:
     def _stage_prepare_knowledge(
         self, task_spec: dict[str, Any], scope: TaskScope, bus: WorkflowEventBus, random_seed: int
     ) -> dict[str, Any]:
-        """Stage 5: knowledge preparation with traced sub-operations.
+        """Stage 5: knowledge preparation with the canonical resolution chain.
 
-        V0: existing knowledge check (evidence table) + literature retrieval
-        (agent candidates, graceful). Document parsing / candidate discovery /
-        condition reconstruction land in later phases and emit honest
-        'not executed' warnings instead of pretending.
+        M3: KnowledgeRequirement -> QueryPlan -> Corpus -> LLM reading
+        (cache-first) -> validation -> EvidenceIR -> applicability.  The old
+        agent RAG evidence route is removed from the primary path.
         """
         trace = ScientificTrace(bus, "prepare_knowledge")
         requirements = self._latest_requirements(bus)
@@ -1179,7 +1558,7 @@ class Topic2ApplicationService:
         ]
         query_plan_artifact = self._persist_artifact(
             bus.run_id,
-            "LiteratureRetrievalQueryPlan",
+            "RequirementRetrievalPlan",
             {
                 "schema_version": "requirement-retrieval-v1",
                 "plans": query_plans,
@@ -1194,11 +1573,190 @@ class Topic2ApplicationService:
             schema_version="requirement-retrieval-v1",
         )
         trace.artifact_created(
-            "LiteratureRetrievalQueryPlan",
+            "RequirementRetrievalPlan",
             query_plan_artifact,
             counts={"requirements": len(requirements), "query_plans": len(query_plans)},
         )
-        # sub-operation 1: existing knowledge check
+        execution_mode = effective_execution_mode("research", task_spec)
+        resolution: dict[str, Any] | None = None
+        if execution_mode in ("RESEARCH", "DEMO_FIXTURE"):
+            trace.operation_started(
+                "requirement-resolution",
+                "需求解析（语料构建 → LLM 精读 → 验证 → 条件链 → EvidenceIR）",
+                input_refs=[
+                    {
+                        "type": "RequirementRetrievalPlan",
+                        "id": query_plan_artifact,
+                    }
+                ],
+            )
+            try:
+                resolution = resolve_requirement_chain(
+                    scope.model_dump(mode="json"),
+                    requirements,
+                    execution_mode=execution_mode,
+                    llm_client=self.resolution_llm_client,
+                    model=self.resolution_model,
+                    progress_callback=self._resolution_progress(bus),
+                ).to_dict()
+            except Exception as exc:  # noqa: BLE001 - fail closed with honest warning
+                bus.emit(
+                    WARNING,
+                    f"需求解析失败（fail closed）：{exc}",
+                    stage="prepare_knowledge",
+                )
+                trace.warning(f"需求解析失败：{exc}")
+            if resolution:
+                # 阶段一 · 手册 §9: 五个独立冻结 artifact，Artifact → Service → Artifact
+                corpus_pack_artifact = self._persist_artifact(
+                    bus.run_id,
+                    "ScientificCorpusPack",
+                    {
+                        "schema_version": "evidence-corpus-pack-v1",
+                        "corpus_pack": resolution.get("corpus_pack") or {},
+                        "analysis_mapping": resolution.get("mapping_report") or {},
+                        "analysis_model": self.resolution_model,
+                    },
+                    input_refs=[
+                        {
+                            "type": "RequirementRetrievalPlan",
+                            "id": query_plan_artifact,
+                        }
+                    ],
+                )
+                ledger_artifact = self._persist_artifact(
+                    bus.run_id,
+                    "CandidateLedger",
+                    resolution.get("candidate_ledger") or {},
+                    input_refs=[
+                        {
+                            "type": "ScientificCorpusPack",
+                            "id": corpus_pack_artifact,
+                        }
+                    ],
+                    schema_version="candidate-ledger-v0.1",
+                )
+                conditions_artifact = self._persist_artifact(
+                    bus.run_id,
+                    "SourceConditionSet",
+                    {
+                        "schema_version": "source-condition-set-v1",
+                        "conditions": resolution.get("source_conditions") or [],
+                    },
+                    input_refs=[
+                        {"type": "CandidateLedger", "id": ledger_artifact},
+                        {"type": "ScientificCorpusPack", "id": corpus_pack_artifact},
+                    ],
+                )
+                reconstructibility_artifact = self._persist_artifact(
+                    bus.run_id,
+                    "ReconstructibilityReportSet",
+                    {
+                        "schema_version": "reconstructibility-report-set-v1",
+                        "reports": resolution.get("reconstructibility_reports") or [],
+                    },
+                    input_refs=[
+                        {"type": "SourceConditionSet", "id": conditions_artifact}
+                    ],
+                )
+                applicability_artifact = self._persist_artifact(
+                    bus.run_id,
+                    "ApplicabilityReportSet",
+                    {
+                        "schema_version": "applicability-report-set-v1",
+                        "items": resolution.get("applicability") or [],
+                    },
+                    input_refs=[
+                        {
+                            "type": "ReconstructibilityReportSet",
+                            "id": reconstructibility_artifact,
+                        }
+                    ],
+                )
+                trace.artifact_created(
+                    "ScientificCorpusPack",
+                    corpus_pack_artifact,
+                    counts={
+                        "sources": len(
+                            (resolution.get("corpus_pack") or {}).get("sources") or []
+                        ),
+                        "candidates": len(
+                            (resolution.get("knowledge_pack") or {}).get("candidates")
+                            or []
+                        ),
+                    },
+                )
+                trace.artifact_created(
+                    "CandidateLedger",
+                    ledger_artifact,
+                    counts={
+                        "candidates": len(
+                            (resolution.get("candidate_ledger") or {}).get(
+                                "candidates"
+                            )
+                            or []
+                        )
+                    },
+                )
+                trace.artifact_created(
+                    "SourceConditionSet",
+                    conditions_artifact,
+                    counts={
+                        "conditions": len(resolution.get("source_conditions") or [])
+                    },
+                )
+                trace.artifact_created(
+                    "ReconstructibilityReportSet",
+                    reconstructibility_artifact,
+                    counts={
+                        "reports": len(
+                            resolution.get("reconstructibility_reports") or []
+                        )
+                    },
+                )
+                trace.artifact_created(
+                    "ApplicabilityReportSet",
+                    applicability_artifact,
+                    counts={
+                        "items": len(resolution.get("applicability") or [])
+                    },
+                )
+                trace.operation_completed(
+                    "requirement-resolution",
+                    (
+                        f"需求解析完成：{len(resolution['evidence_ir'])} 条 Evidence"
+                        f"（{resolution['mapping_report'].get('from_cache', 0)} 条来自预录缓存）"
+                        if resolution.get("evidence_ir")
+                        else "需求解析完成：0 条 Evidence（语料/验证无产出）"
+                    ),
+                    output_refs=[
+                        {"type": "ScientificCorpusPack", "id": corpus_pack_artifact},
+                        {"type": "CandidateLedger", "id": ledger_artifact},
+                        {"type": "SourceConditionSet", "id": conditions_artifact},
+                        {
+                            "type": "ReconstructibilityReportSet",
+                            "id": reconstructibility_artifact,
+                        },
+                    ],
+                    counts={
+                        "evidence": len(resolution.get("evidence_ir") or []),
+                        "candidates": len(
+                            (resolution.get("knowledge_pack") or {}).get("candidates")
+                            or []
+                        ),
+                        "conditions": len(resolution.get("source_conditions") or []),
+                        "reports": len(
+                            resolution.get("reconstructibility_reports") or []
+                        ),
+                        "rejected": len(
+                            (resolution.get("validation") or {}).get(
+                                "rejected_candidates"
+                            )
+                            or []
+                        ),
+                    },
+                )
+        # sub-operation 1: existing knowledge check (persisted evidence only)
         trace.operation_started(
             "prepare-existing-check",
             "已有知识检查",
@@ -1224,25 +1782,28 @@ class Topic2ApplicationService:
             counts={"evidence": len(evidence), "topics": len(existing["topics"])},
             output_refs=[],
         )
-        # sub-operation 2: literature retrieval (agent candidates, graceful)
+        # sub-operation 2: literature retrieval (resolution chain)
         trace.operation_started(
             "prepare-literature-retrieval",
-            "文献检索（Agent 候选）",
-            input_refs=[{"type": "TaskScope", "id": scope.task_context_id or "task"}],
+            "文献检索（RequirementResolutionService）",
+            input_refs=[
+                {
+                    "type": "RequirementRetrievalPlan",
+                    "id": query_plan_artifact,
+                }
+            ],
         )
-        retrieved_count = len(evidence)
+        resolution_evidence = list((resolution or {}).get("evidence_ir") or [])
         trace.operation_completed(
             "prepare-literature-retrieval",
-            f"文献候选：{retrieved_count} 条",
-            counts={"retrieved": retrieved_count},
+            f"文献证据：{len(resolution_evidence)} 条",
+            counts={"retrieved": len(resolution_evidence)},
             reason_codes=(
-                ["agent_candidates"]
-                if retrieved_count
-                else ["no_agent_or_no_candidates"]
+                ["requirement_resolution_chain"]
+                if resolution_evidence
+                else ["no_sources_or_no_validated_candidates"]
             ),
         )
-        for sub in ("document_parse", "candidate_discovery", "condition_reconstruction"):
-            trace.warning(f"{sub} 暂未执行（后续阶段接入 canonical 文献链）")
         bundle = self.topic2.compile_evidence(
             EvidenceCompileRequest(scope=scope, evidence=evidence)
         )
@@ -1273,6 +1834,7 @@ class Topic2ApplicationService:
             item.model_dump(mode="json") if hasattr(item, "model_dump") else dict(item)
             for item in evidence
         ]
+        evidence_ir.extend(resolution_evidence)
         evidence_ir.extend(
             dict(item) for item in (task_spec.get("evidence_ir") or [])
         )
@@ -1283,10 +1845,45 @@ class Topic2ApplicationService:
                 "schema_version": "evidence-ir-set-v1",
                 "items": evidence_ir,
                 "query_plan_ref": query_plan_artifact,
+                "ledger_ref": (
+                    self._latest_artifact_id(bus, "CandidateLedger")
+                    if resolution
+                    else None
+                ),
+                "condition_set_ref": (
+                    self._latest_artifact_id(bus, "SourceConditionSet")
+                    if resolution
+                    else None
+                ),
+                "reconstructibility_set_ref": (
+                    self._latest_artifact_id(bus, "ReconstructibilityReportSet")
+                    if resolution
+                    else None
+                ),
             },
             input_refs=[
-                {"type": "LiteratureRetrievalQueryPlan", "id": query_plan_artifact},
+                {"type": "RequirementRetrievalPlan", "id": query_plan_artifact},
                 {"type": "EvidenceCompileResult", "id": artifact_id},
+                *(
+                    [
+                        {
+                            "type": "CandidateLedger",
+                            "id": self._latest_artifact_id(bus, "CandidateLedger"),
+                        },
+                        {
+                            "type": "SourceConditionSet",
+                            "id": self._latest_artifact_id(bus, "SourceConditionSet"),
+                        },
+                        {
+                            "type": "ReconstructibilityReportSet",
+                            "id": self._latest_artifact_id(
+                                bus, "ReconstructibilityReportSet"
+                            ),
+                        },
+                    ]
+                    if resolution
+                    else []
+                ),
             ],
             schema_version="evidence-ir-set-v1",
         )
@@ -1294,7 +1891,7 @@ class Topic2ApplicationService:
             "EvidenceIRSet",
             evidence_ir_artifact,
             input_refs=[
-                {"type": "LiteratureRetrievalQueryPlan", "id": query_plan_artifact}
+                {"type": "RequirementRetrievalPlan", "id": query_plan_artifact}
             ],
             counts={"evidence": len(evidence_ir)},
         )
@@ -1311,8 +1908,38 @@ class Topic2ApplicationService:
                 "evidence_ir": evidence_ir,
                 "evidence_count": len(evidence),
                 "existing_knowledge": existing,
+                "resolution": resolution,
             },
         }
+
+    def _resolution_progress(
+        self, bus: WorkflowEventBus
+    ) -> Callable[[str, dict[str, Any]], None]:
+        """Map ScientificKnowledgeService progress events to workflow events."""
+
+        def on_progress(stage: str, detail: dict[str, Any]) -> None:
+            if stage == "mapping":
+                current = detail.get("current") or 0
+                total = detail.get("total") or 0
+                cached = bool(detail.get("cached"))
+                bus.emit(
+                    VALIDATION,
+                    (
+                        f"LLM 精读 {current}/{total}"
+                        + ("（预录缓存）" if cached else "")
+                    ),
+                    stage="prepare_knowledge",
+                    details={"phase": "llm_reading", "current": current, "total": total},
+                )
+            elif stage == "validating":
+                bus.emit(
+                    VALIDATION,
+                    f"确定性验证：{detail.get('validated', 0)} 通过 / {detail.get('rejected', 0)} 拒绝",
+                    stage="prepare_knowledge",
+                    details={"phase": "validation", **detail},
+                )
+
+        return on_progress
 
     def _stage_satisfy_requirements(
         self, task_spec: dict[str, Any], scope: TaskScope, bus: WorkflowEventBus, random_seed: int
@@ -1504,7 +2131,36 @@ class Topic2ApplicationService:
         content = snapshot.get("content")
         return dict(content) if isinstance(content, dict) else None
 
+    def _machine_snapshot(self, bus: WorkflowEventBus) -> dict[str, Any]:
+        """Canonical MachineProfileSnapshot artifact for this run."""
+        return self._latest_artifact_content(bus, "MachineProfileSnapshot") or {}
+
+    def _machine_fields(self, bus: WorkflowEventBus) -> dict[str, Any]:
+        """Verified machine facts for physics - snapshot only, never task_spec."""
+        snapshot = self._machine_snapshot(bus)
+        fields = snapshot.get("fields") or {}
+        return {
+            str(state.get("parameter")): state["value"]
+            for state in fields.values()
+            if isinstance(state, dict)
+            and state.get("value") is not None
+            and state.get("status") in ("VERIFIED", "DERIVED")
+        }
+
+    def _calibration_fixture_observations(self) -> list[dict[str, Any]]:
+        """DEMO_FIXTURE calibration observations (pre-installed fixture file)."""
+        fixture_path = self.settings.calibration_fixture_path
+        if fixture_path is None or not Path(fixture_path).exists():
+            return []
+        try:
+            payload = json.loads(Path(fixture_path).read_text(encoding="utf-8"))
+        except (json.JSONDecodeError, OSError):
+            return []
+        return list(payload.get("observations") or [])
+
     def _evidence_for_scope(self, scope: TaskScope) -> list[Evidence]:
+        """Existing (persisted) evidence only - canonical literature evidence
+        enters via the RequirementResolutionService chain in prepare_knowledge."""
         items: list[Evidence] = []
         seen: set[str] = set()
         with self.repository.connection() as db:
@@ -1515,40 +2171,10 @@ class Topic2ApplicationService:
                 continue
             try:
                 item = Evidence.model_validate(payload)
-            except Exception:
+            except Exception:  # noqa: BLE001,S112 - malformed evidence row skipped
                 continue
             seen.add(item.evidence_id)
             items.append(item)
-        if self.agent_proxy_target:
-            try:
-                import httpx
-
-                response = httpx.post(
-                    f"{self.agent_proxy_target.rstrip('/')}/e2p/evidence-candidates",
-                    json={
-                        "task_scope": {
-                            "material": scope.material,
-                            "laser_type": scope.laser_type,
-                            "geometry_type": scope.geometry_type,
-                            "equipment_id": scope.equipment_id,
-                            "target": scope.target,
-                        },
-                        "top_k": 20,
-                    },
-                    timeout=60.0,
-                )
-                response.raise_for_status()
-                for candidate in response.json().get("evidence", []):
-                    if candidate.get("evidence_id") in seen:
-                        continue
-                    try:
-                        item = Evidence.model_validate(candidate)
-                    except Exception:
-                        continue
-                    seen.add(item.evidence_id)
-                    items.append(item)
-            except Exception:
-                pass
         return items
 
     @staticmethod
@@ -1596,7 +2222,11 @@ class Topic2ApplicationService:
         return coordinates
 
     def _target_readiness(
-        self, rows: list[dict[str, Any]], scope: TaskScope
+        self,
+        rows: list[dict[str, Any]],
+        scope: TaskScope,
+        *,
+        spot_diameter_um: float | None = None,
     ) -> dict[str, Any]:
         if not rows:
             return {
@@ -1622,14 +2252,15 @@ class Topic2ApplicationService:
             frame.to_csv(handle, index=False)
             tmp_path = Path(handle.name)
         try:
-            spot = self._agent_spot_diameter_um()
+            if spot_diameter_um is None:
+                spot_diameter_um = self._agent_spot_diameter_um()
             spec = build_target_condition_spec(
                 tmp_path,
                 equipment_profile={
-                    "spot_radius_um": (spot / 2.0, "um", False),
-                    "spot_diameter_um": (spot, "um", False),
+                    "spot_radius_um": (spot_diameter_um / 2.0, "um", False),
+                    "spot_diameter_um": (spot_diameter_um, "um", False),
                 }
-                if spot
+                if spot_diameter_um
                 else {
                     "spot_radius_um": (None, "um", False),
                     "spot_diameter_um": (None, "um", False),
@@ -1678,25 +2309,19 @@ class Topic2ApplicationService:
         """E2P typed Prior compilation followed by independent parameter ID."""
         trace = ScientificTrace(bus, "calibrate_physics")
         rows = self.topic2._rows_for_scope(scope)
-        machine = {
-            **dict(scope.device_properties or {}),
-            **dict(task_spec.get("machine_profile") or {}),
-        }
+        machine = self._machine_fields(bus)
 
         def median(name: str) -> float | None:
             values = sorted(float(row[name]) for row in rows if row.get(name) is not None)
             return values[len(values) // 2] if values else None
 
         canonical_inputs: dict[str, float | int | None] = {
-            "average_power_W": machine.get("average_power_W")
-            or machine.get("actual_power_W")
-            or machine.get("laser_power_W"),
+            "average_power_W": machine.get("actual_power_W"),
             "frequency_kHz": median("frequency_kHz"),
             "pulse_width_ps": median("pulse_width_ps"),
             "scan_speed_mm_s": median("scan_speed_mm_s"),
             "hatch_spacing_um": median("hatch_spacing_um"),
-            "beam_radius_um": machine.get("beam_radius_um")
-            or machine.get("spot_radius_um"),
+            "beam_radius_um": machine.get("beam_radius_um"),
             "passes": median("passes"),
         }
         dataset_inputs = {
@@ -1712,15 +2337,7 @@ class Topic2ApplicationService:
             if value is not None
             and (
                 name in dataset_inputs
-                or bool(machine.get(f"{name}_verified", False))
-                or (
-                    name == "average_power_W"
-                    and bool(machine.get("actual_power_W_verified", False))
-                )
-                or (
-                    name == "beam_radius_um"
-                    and bool(machine.get("spot_radius_um_verified", False))
-                )
+                or name in ("average_power_W", "beam_radius_um")
             )
         }
         canonical = PhysicsCanonicalizer().canonicalize(
@@ -1794,6 +2411,11 @@ class Topic2ApplicationService:
         )
         engine = ParameterIdentificationEngine()
         observations = list(task_spec.get("calibration_observations") or [])
+        if not observations and effective_execution_mode("research", task_spec) in (
+            "DEMO_FIXTURE",
+            "SANDBOX",
+        ):
+            observations = self._calibration_fixture_observations()
         if observations:
             identifiability, calibration = engine.identify(
                 observations,
@@ -1941,15 +2563,12 @@ class Topic2ApplicationService:
                 input_refs=refs,
             )
         else:
-            machine = {
-                **dict(scope.device_properties or {}),
-                **dict(task_spec.get("machine_profile") or {}),
-            }
+            machine = self._machine_fields(bus)
             model = factory.reconstructed(
                 calibration=calibration,
                 parameter_priors=parameter_priors,
                 mechanism_priors=mechanism_priors,
-                beam_radius_um=machine.get("beam_radius_um") or machine.get("spot_radius_um"),
+                beam_radius_um=machine.get("beam_radius_um"),
                 grid_spacing_um=float((task_spec.get("target_geometry") or {}).get("grid_spacing_um") or 2.0),
                 input_refs=refs,
             )
@@ -2070,7 +2689,11 @@ class Topic2ApplicationService:
         }
         machine_constraints = [
             ConstraintValue(name=name, lower=value["lower"], upper=value["upper"], unit=units[name])
-            for name, value in self._machine_bounds(scope, rows).items()
+            for name, value in self._machine_bounds(
+                scope,
+                rows,
+                snapshot_bounds=(self._machine_snapshot(bus) or {}).get("machine_bounds"),
+            ).items()
         ]
         prior_payload = self._latest_artifact_content(bus, "PriorObjectSet") or {}
         prior_set = PriorObjectSet.model_validate(prior_payload)
@@ -2449,9 +3072,17 @@ class Topic2ApplicationService:
     # ----------------------------------------------------- bounds & BO (BE-5)
 
     def _machine_bounds(
-        self, scope: TaskScope, rows: list[dict[str, Any]]
+        self,
+        scope: TaskScope,
+        rows: list[dict[str, Any]],
+        *,
+        snapshot_bounds: dict[str, dict[str, float]] | None = None,
     ) -> dict[str, dict[str, float]]:
-        """Data-range bounds with agent machine-bound refinement when reachable."""
+        """Data-range bounds with canonical machine-bound refinement when available.
+
+        Canonical snapshot bounds (MachineProfileSnapshot) are preferred over
+        the active agent bounds - every physics consumer reads the snapshot.
+        """
         frame = pd.DataFrame(rows).dropna(
             subset=[scope.target, *CORE_PARAMETER_NAMES]
         )
@@ -2470,7 +3101,17 @@ class Topic2ApplicationService:
             if low == high:
                 high = low + 1
             data["passes"] = [float(low), float(high)]
-        agent = self._agent_machine_bounds()
+        agent: dict[str, tuple[float, float]] | None = None
+        if snapshot_bounds:
+            agent = {
+                name: (float(value["lower"]), float(value["upper"]))
+                for name, value in snapshot_bounds.items()
+                if isinstance(value, dict)
+                and value.get("lower") is not None
+                and value.get("upper") is not None
+            }
+        if not agent:
+            agent = self._agent_machine_bounds()
         if agent:
             for name in CORE_PARAMETER_NAMES:
                 if name not in agent:

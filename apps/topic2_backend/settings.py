@@ -2,13 +2,31 @@
 
 from __future__ import annotations
 
+import json
 import os
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from pathlib import Path
+from typing import Any
 
 import yaml
 
 ROOT = Path(__file__).resolve().parents[2]
+
+
+def _load_equipment_fixtures(path: Path | None) -> dict[str, dict[str, Any]]:
+    if path is None or not path.exists():
+        return {}
+    try:
+        payload = json.loads(path.read_text(encoding="utf-8"))
+    except (json.JSONDecodeError, OSError):
+        return {}
+    if not isinstance(payload, dict):
+        return {}
+    return {
+        key: dict(value)
+        for key, value in payload.items()
+        if isinstance(value, dict)
+    }
 
 
 @dataclass(frozen=True)
@@ -17,8 +35,11 @@ class Settings:
     fixture_path: Path = ROOT / "data" / "test_fixture" / "topic2_experiments_v1.csv"
     artifact_dir: Path = ROOT / "model_artifacts"
     report_dir: Path = ROOT / "outputs" / "topic2_acceptance"
+    equipment_profiles_path: Path | None = None
+    calibration_fixture_path: Path | None = None
     auto_seed_fixture: bool = True
     random_seed: int = 42
+    equipment_profiles: dict[str, dict[str, Any]] = field(default_factory=dict)
     cv_folds: int = 5
     bo_beta: float = 2.0
     lambda_0: float = 0.2
@@ -42,6 +63,28 @@ class Settings:
         modeling = config.get("modeling", {})
         optimization = config.get("optimization", {})
         paths = config.get("paths", {})
+        equipment_profiles_path = Path(
+            os.getenv(
+                "TOPIC2_EQUIPMENT_PROFILES",
+                str(
+                    ROOT
+                    / paths.get(
+                        "equipment_profiles", "data/test_fixture/topic2_equipment_profiles.json"
+                    )
+                ),
+            )
+        )
+        calibration_fixture_path = Path(
+            os.getenv(
+                "TOPIC2_CALIBRATION_FIXTURE",
+                str(
+                    ROOT
+                    / paths.get(
+                        "calibration_fixture", "data/test_fixture/golden_sic_calibration.json"
+                    )
+                ),
+            )
+        )
         return cls(
             database_path=Path(
                 os.getenv(
@@ -69,6 +112,9 @@ class Settings:
                     ROOT / paths.get("report_dir", "outputs/topic2_acceptance"),
                 )
             ),
+            equipment_profiles_path=equipment_profiles_path,
+            equipment_profiles=_load_equipment_fixtures(equipment_profiles_path),
+            calibration_fixture_path=calibration_fixture_path,
             auto_seed_fixture=os.getenv(
                 "TOPIC2_AUTO_SEED_FIXTURE", str(config.get("auto_seed_fixture", True))
             ).lower()

@@ -152,6 +152,18 @@ class CapabilityRequirement(StrictModel):
     provenance: list[ArtifactRef] = Field(default_factory=list)
 
 
+class MechanismParameterRequirement(StrictModel):
+    """A parameter required by an active mechanism model (registry-driven)."""
+
+    parameter: str = Field(min_length=1)
+    role: str = Field(min_length=1)
+    unit: str = Field(min_length=1)
+    bounds: list[float] = Field(min_length=2, max_length=2)
+    calibration_supported: bool
+    fallback: Literal["PRIOR", "MISSING"]
+    source_model: str = Field(min_length=1)
+
+
 class ScientificCapabilityReport(StrictModel):
     schema_version: str = SCHEMA_VERSION
     capability_id: str = Field(min_length=1)
@@ -164,6 +176,9 @@ class ScientificCapabilityReport(StrictModel):
     missing: list[CapabilityInput] = Field(default_factory=list)
     identifiability: list[ParameterIdentifiability] = Field(default_factory=list)
     recommended_requirements: list[CapabilityRequirement] = Field(default_factory=list)
+    mechanism_parameter_requirements: list[MechanismParameterRequirement] = Field(
+        default_factory=list
+    )
     status: ScientificStatus
     reason_codes: list[str] = Field(default_factory=list)
     provenance: list[ProvenanceRecord] = Field(default_factory=list)
