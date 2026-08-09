@@ -4,7 +4,7 @@ import { useMemo, useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import { runsApi, type WorkflowEvent } from '../../api/runs'
 import { useQuery } from '@tanstack/react-query'
-import { CANONICAL_STAGES, STAGE_LABEL } from '../../domain/stages'
+import { STAGE_LABEL } from '../../domain/stages'
 import { useUiStore } from '../../stores/ui'
 import { Card, EmptyState, ErrorBanner, Spinner } from '../../components/ui/Card'
 import { StatusBadge } from '../../components/ui/StatusBadge'
@@ -18,9 +18,14 @@ const TABS = [
   { id: 'compare', label: 'Compare' },
 ]
 
+const EXECUTION_MODE_LABEL: Record<string, string> = {
+  RESEARCH: 'Research',
+}
+
 export function RunInspectorPage() {
   const { runId } = useParams()
   const [tab, setTab] = useState('flow')
+  const [selectedArtifactId, setSelectedArtifactId] = useState<string | null>(null)
   const developerMode = useUiStore((state) => state.developerMode)
 
   const runQuery = useQuery({
@@ -42,6 +47,11 @@ export function RunInspectorPage() {
     queryKey: ['run-inspector-artifacts', runId],
     queryFn: () => runsApi.getArtifacts(runId as string),
     enabled: Boolean(runId),
+  })
+  const artifactQuery = useQuery({
+    queryKey: ['run-inspector-artifact', selectedArtifactId],
+    queryFn: () => runsApi.getArtifact(selectedArtifactId as string),
+    enabled: Boolean(selectedArtifactId),
   })
 
   const run = runQuery.data
@@ -89,7 +99,15 @@ export function RunInspectorPage() {
               <tbody>
                 {artifactsQuery.data.items.map((item) => (
                   <tr key={item.artifact_id}>
-                    <td className="mono">{item.artifact_id}</td>
+                    <td>
+                      <button
+                        type="button"
+                        className="link"
+                        onClick={() => setSelectedArtifactId(item.artifact_id)}
+                      >
+                        <span className="mono">{item.artifact_id}</span>
+                      </button>
+                    </td>
                     <td>{item.artifact_type}</td>
                     <td>{item.created_at}</td>
                   </tr>
@@ -98,6 +116,18 @@ export function RunInspectorPage() {
             </table>
           ) : (
             <EmptyState message="尚无 artifacts" />
+          )}
+          {selectedArtifactId && (
+            <details open className="dev-payload">
+              <summary>{selectedArtifactId}</summary>
+              {artifactQuery.isLoading ? (
+                <Spinner />
+              ) : artifactQuery.isError ? (
+                <ErrorBanner message={(artifactQuery.error as Error).message} />
+              ) : (
+                <pre className="mono small">{JSON.stringify(artifactQuery.data, null, 2)}</pre>
+              )}
+            </details>
           )}
         </Card>
       )}
@@ -154,16 +184,21 @@ export function FlowDag({ events, developerMode }: { events: WorkflowEvent[]; de
   const nodes = useMemo(() => {
     const stageEvents = new Map<string, { started: WorkflowEvent | null; completed: WorkflowEvent | null }>()
     for (const event of events) {
-      if (!event.stage) continue
+      if (
+        !event.stage ||
+        (event.type !== 'STAGE_STARTED' && event.type !== 'STAGE_COMPLETED')
+      ) continue
       const entry = stageEvents.get(event.stage) ?? { started: null, completed: null }
       if (event.type === 'STAGE_STARTED') entry.started = event
       if (event.type === 'STAGE_COMPLETED') entry.completed = event
       stageEvents.set(event.stage, entry)
     }
-    const order = CANONICAL_STAGES
     return [...stageEvents.entries()]
-      .map(([stage, entry]) => ({ stage, ...entry, order: order.indexOf(stage as (typeof order)[number]) }))
-      .filter((node) => node.order >= 0)
+      .map(([stage, entry]) => ({
+        stage,
+        ...entry,
+        order: entry.started?.sequence ?? entry.completed?.sequence ?? Number.MAX_SAFE_INTEGER,
+      }))
       .sort((a, b) => a.order - b.order)
   }, [events])
 
@@ -180,7 +215,7 @@ export function FlowDag({ events, developerMode }: { events: WorkflowEvent[]; de
           <li key={node.stage} className="flow-node">
             <div className="flow-node-head">
               <span className="flow-index">{index + 1}</span>
-              <span className="flow-stage">{STAGE_LABEL[node.stage as keyof typeof STAGE_LABEL] ?? node.stage}</span>
+              <span className="flow-stage">{STAGE_LABEL[node.stage] ?? node.stage}</span>
               <span className="flow-key mono">{node.stage}</span>
               <StatusBadge
                 tone={node.completed ? 'ok' : node.started ? 'info' : 'neutral'}
@@ -225,7 +260,7 @@ export function RunsPage() {
             <thead>
               <tr>
                 <th>run_id</th>
-                <th>mode</th>
+                <th>执行模式</th>
                 <th>status</th>
                 <th>workflow</th>
                 <th>created_at</th>
@@ -236,7 +271,7 @@ export function RunsPage() {
               {query.data.items.map((run) => (
                 <tr key={run.application_run_id}>
                   <td className="mono">{run.application_run_id.slice(0, 20)}…</td>
-                  <td>{run.mode}</td>
+                  <td>{EXECUTION_MODE_LABEL[run.execution_mode ?? ''] ?? run.execution_mode ?? '—'}</td>
                   <td>
                     <StatusBadge
                       tone={run.status === 'completed' ? 'ok' : run.status === 'failed' ? 'err' : 'info'}

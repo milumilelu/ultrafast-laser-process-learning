@@ -2,6 +2,7 @@
  * recommended ToolpathPlan with full lineage. */
 
 import { useMemo } from 'react'
+import { Link } from 'react-router-dom'
 import type { ArtifactSnapshot } from '../../domain/artifact'
 import { buildPlanView, PATH_FAMILY_LABEL, PLAN_STATUS_LABEL } from '../../domain/planning'
 import { Card, EmptyState } from '../../components/ui/Card'
@@ -10,9 +11,11 @@ import { StatusBadge } from '../../components/ui/StatusBadge'
 export function PlanningSection({
   plan,
   simulation,
+  taskId,
 }: {
   plan?: ArtifactSnapshot
   simulation?: ArtifactSnapshot
+  taskId: string
 }) {
   const view = useMemo(
     () => buildPlanView(plan?.content as Record<string, unknown>),
@@ -120,7 +123,11 @@ export function PlanningSection({
           </li>
           <li className="lineage-node">
             <span className="lineage-label">MorphologySimulationResult</span>
-            <span className="lineage-meta">{simulation ? String((simulation.content as Record<string, unknown>).simulation_id) : '—'}</span>
+            <span className="lineage-meta">
+              <Link to={`/workspace/${taskId}/simulation`}>
+                {simulation ? String((simulation.content as Record<string, unknown>).simulation_id) : '—'}
+              </Link>
+            </span>
           </li>
           {view.planningPriorRefs.length > 0 && (
             <li className="lineage-node">
@@ -128,6 +135,18 @@ export function PlanningSection({
               <span className="lineage-meta">{view.planningPriorRefs.map((ref) => ref.id).join(', ')}</span>
             </li>
           )}
+          {view.evidenceRefs.map((ref) => (
+            <li key={`${ref.type}:${ref.id}`} className="lineage-node">
+              <span className="lineage-label">EvidenceIR</span>
+              <span className="lineage-meta"><Link to={`/workspace/${taskId}/knowledge?evidence=${encodeURIComponent(ref.id)}`}>{ref.id}</Link></span>
+            </li>
+          ))}
+          {view.paperRefs.map((ref) => (
+            <li key={`${ref.type}:${ref.id}`} className="lineage-node">
+              <span className="lineage-label">Paper</span>
+              <span className="lineage-meta"><Link to={`/resources/literature?paper=${encodeURIComponent(ref.id)}`}>{ref.id}</Link></span>
+            </li>
+          ))}
         </ol>
       </Card>
     </div>

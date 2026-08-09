@@ -17,7 +17,7 @@ export interface ApplicationRunRecord {
   application_run_id: string
   status: RunStatus
   task_context_ref: string
-  mode: 'demo' | 'research'
+  mode: 'research'
   workflow_version: string
   stage_status: Record<string, RunStageStatus>
   task_spec?: Record<string, unknown> | null
@@ -30,7 +30,8 @@ export interface ApplicationRunSummary {
   application_run_id: string
   status: RunStatus
   task_context_ref: string
-  mode: 'demo' | 'research'
+  mode: 'research'
+  execution_mode?: 'RESEARCH'
   workflow_version: string
   stage_status: Record<string, RunStageStatus>
   created_at: string
@@ -73,7 +74,7 @@ export interface ArtifactRefLite {
 }
 
 export interface CreateRunPayload {
-  mode?: 'demo' | 'research'
+  mode?: 'research'
   task_spec?: Record<string, unknown>
   stages?: string[]
   client_request_id?: string
@@ -110,8 +111,8 @@ export const runsApi = {
     return request(config.topic2ApiUrl, `/application-runs/${runId}`)
   },
 
-  listRuns(mode?: 'demo' | 'research'): Promise<{ items: ApplicationRunSummary[] }> {
-    return request(config.topic2ApiUrl, `/application-runs${buildQuery({ mode })}`)
+  listRuns(): Promise<{ items: ApplicationRunSummary[] }> {
+    return request(config.topic2ApiUrl, '/application-runs')
   },
 
   getResult(runId: string): Promise<Record<string, unknown>> {
@@ -133,7 +134,4 @@ export const runsApi = {
     return request(config.topic2ApiUrl, `/artifacts/${artifactId}`)
   },
 
-  replay(runId: string): Promise<Record<string, unknown>> {
-    return request(config.topic2ApiUrl, `/application-runs/${runId}/replay`, { method: 'POST' })
-  },
 }

@@ -25,6 +25,12 @@ export interface RequirementSetContent {
     satisfaction_criteria?: string[]
     status?: string
   }>
+  satisfactions?: Array<{
+    requirement_id?: string
+    status?: string
+    basis_refs?: string[]
+    unresolved_reasons?: string[]
+  }>
   diagnostics?: Record<string, unknown>
 }
 
@@ -102,8 +108,18 @@ export interface EvidenceItemView {
   [key: string]: unknown
 }
 
+export interface RequirementSummary {
+  total: number
+  satisfied: number
+  partial: number
+  unresolved: number
+}
+
 export function buildRequirements(content: RequirementSetContent | undefined | null): RequirementView[] {
   if (!content?.requirements) return []
+  const satisfactionByRequirement = new Map(
+    (content.satisfactions ?? []).map((item) => [item.requirement_id ?? '', item.status ?? '']),
+  )
   return content.requirements.map((req) => ({
     requirementId: req.requirement_id ?? '',
     type: req.type ?? 'OTHER',
@@ -113,8 +129,32 @@ export function buildRequirements(content: RequirementSetContent | undefined | n
     triggerReasons: req.trigger_reasons ?? [],
     requiredEvidenceRoles: req.required_evidence_roles ?? [],
     satisfactionCriteria: req.satisfaction_criteria ?? [],
-    status: req.status ?? 'UNKNOWN',
+    status: satisfactionByRequirement.get(req.requirement_id ?? '') || req.status || 'UNKNOWN',
   }))
+}
+
+/** Summarize either requirement scientific statuses or KnowledgeState
+ * satisfaction statuses without mixing their vocabularies. */
+export function summarizeRequirements(requirements: RequirementView[]): RequirementSummary {
+  return requirements.reduce<RequirementSummary>(
+    (summary, requirement) => {
+      const status = requirement.status.toUpperCase()
+      summary.total += 1
+      if (status === 'SATISFIED' || status === 'KNOWN') {
+        summary.satisfied += 1
+      } else if (
+        status === 'PARTIALLY_SATISFIED' ||
+        status === 'SATISFIED_WITH_CONFLICT' ||
+        status === 'PARTIAL'
+      ) {
+        summary.partial += 1
+      } else {
+        summary.unresolved += 1
+      }
+      return summary
+    },
+    { total: 0, satisfied: 0, partial: 0, unresolved: 0 },
+  )
 }
 
 export function buildQueryPlans(content: QueryPlanContent | undefined | null): QueryPlanView[] {

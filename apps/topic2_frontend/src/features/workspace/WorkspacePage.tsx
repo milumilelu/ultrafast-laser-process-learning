@@ -7,7 +7,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { Link, Navigate, NavLink, useParams } from 'react-router-dom'
 import { WORKSPACE_SECTIONS } from '../../domain/stages'
 import { buildRunControl } from '../../domain/control'
-import { getTaskDraft, listTaskDrafts, saveTaskDraft, emptyTaskDraft } from '../../stores/taskDrafts'
+import { useTaskDraft, listTaskDrafts, saveTaskDraft, emptyTaskDraft } from '../../stores/taskDrafts'
 import { useUiStore } from '../../stores/ui'
 import { StatusBadge } from '../../components/ui/StatusBadge'
 import { Button } from '../../components/ui/Button'
@@ -33,7 +33,7 @@ export function WorkspacePage() {
 }
 
 function WorkspaceInner({ taskId, section }: { taskId: string; section: string }) {
-  const draft = getTaskDraft(taskId)
+  const draft = useTaskDraft(taskId)
   const developerMode = useUiStore((state) => state.developerMode)
   const runId = draft?.runId ?? null
   const run = useApplicationRun(runId)
@@ -58,7 +58,7 @@ function WorkspaceInner({ taskId, section }: { taskId: string; section: string }
         setBusy(false)
       }
     },
-    [taskId, queryClient],
+    [taskId, queryClient, draft],
   )
 
   const continueMutation = useMutation({
@@ -194,6 +194,7 @@ function WorkspaceInner({ taskId, section }: { taskId: string; section: string }
         )}
         {section === 'planning' && (
           <PlanningSection
+            taskId={taskId}
             plan={artifacts.data?.get('ToolpathPlan')}
             simulation={artifacts.data?.get('MorphologySimulationResult')}
           />

@@ -18,7 +18,7 @@ export interface EquipmentView {
   schemaVersion: string
   equipmentProfileId: string
   revisionId: string | null
-  sourceQuality: 'RESEARCH_AGENT' | 'DEMO_FIXTURE' | 'TASK_OVERRIDE' | 'UNKNOWN'
+  sourceQuality: 'RESEARCH_AGENT' | 'UNRESOLVED' | 'UNKNOWN'
   resourceStatus: 'READY' | 'PARTIAL' | 'BLOCKED'
   fields: EquipmentFieldView[]
   machineBounds: EquipmentBoundsView[]
@@ -43,7 +43,8 @@ export interface EquipmentContent {
 
 export const EQUIPMENT_FIELD_LABEL: Record<string, string> = {
   wavelength_nm: '波长',
-  actual_power_W: '实际功率',
+  workpiece_incident_power_min_W: '材料表面入射平均功率下限',
+  workpiece_incident_power_max_W: '材料表面入射平均功率上限',
   beam_radius_um: '光束半径',
   pulse_width_min_fs: '脉宽下限',
   pulse_width_max_fs: '脉宽上限',
@@ -55,8 +56,7 @@ export const EQUIPMENT_FIELD_LABEL: Record<string, string> = {
 
 export const SOURCE_QUALITY_LABEL: Record<EquipmentView['sourceQuality'], string> = {
   RESEARCH_AGENT: '研究模式（设备档案库）',
-  DEMO_FIXTURE: '演示夹具（DEMO_FIXTURE）',
-  TASK_OVERRIDE: '沙盒覆盖（provisional）',
+  UNRESOLVED: '未解析',
   UNKNOWN: '未知',
 }
 
@@ -88,7 +88,7 @@ export function buildEquipmentView(content: EquipmentContent | null | undefined)
     equipmentProfileId: String(raw.equipment_profile_id ?? ''),
     revisionId: raw.revision_id ?? null,
     sourceQuality:
-      quality === 'RESEARCH_AGENT' || quality === 'DEMO_FIXTURE' || quality === 'TASK_OVERRIDE'
+      quality === 'RESEARCH_AGENT' || quality === 'UNRESOLVED'
         ? quality
         : 'UNKNOWN',
     resourceStatus:

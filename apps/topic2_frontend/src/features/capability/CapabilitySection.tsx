@@ -4,15 +4,14 @@ import { useMemo } from 'react'
 import type { ArtifactSnapshot } from '../../domain/artifact'
 import {
   buildCapabilityView,
-  buildChainStatus,
   type CapabilityInputRow,
 } from '../../domain/capability'
 import { scientificLabel, scientificTone } from '../../domain/status'
 import { Card, EmptyState } from '../../components/ui/Card'
 import { StatusBadge } from '../../components/ui/StatusBadge'
-import { DependencyChain } from '../../components/scientific/DependencyChain'
 import { DeveloperPayload, SnapshotMeta } from '../../components/scientific/Artifact'
 import { DataTable } from '../../components/ui/Tabs'
+import { Link } from 'react-router-dom'
 
 const SOURCE_LABEL: Record<CapabilityInputRow['source'], string> = {
   MEASURED: '实测',
@@ -41,7 +40,9 @@ export function CapabilitySection({
     () => buildCapabilityView(artifact?.content as Record<string, unknown>),
     [artifact],
   )
-  const chain = useMemo(() => buildChainStatus(view), [view])
+  const equipmentNeedsAttention = view?.inputs.some(
+    (input) => input.source === 'MACHINE_PROFILE' && input.status !== 'AVAILABLE',
+  ) ?? false
 
   if (!view) {
     return (
@@ -62,17 +63,22 @@ export function CapabilitySection({
         <StatusBadge tone={scientificTone(view.status as never)} label={scientificLabel(view.status as never)} />
       </div>
 
-      <Card title="执行能力依赖图" className="capability-graph">
-        <p className="card-hint">
-          每个节点由后端可解析的物理输入决定；红色为阻塞链（spec §七）。
-        </p>
-        <DependencyChain nodes={chain.nodes} />
+      <Card title="后端能力状态" className="capability-graph">
+        <p className="card-hint">状态、缺口与可辨识性均直接来自 ScientificCapabilityReport。</p>
+        <div className="card-stat">interaction topology: {view.interactionTopology}</div>
+        <div className="card-stat">supported fidelity: {view.supportedFidelity.join(', ') || '未声明'}</div>
         <DeveloperPayload payload={artifact?.content} />
         <SnapshotMeta snapshot={artifact} />
       </Card>
 
       <Card title="输入解析器" className="capability-resolver">
         <p className="card-hint">来源语义由后端 artifact 决定，前端不做科学判断（spec §八）。</p>
+        {equipmentNeedsAttention && (
+          <div className="next-actions">
+            <div className="next-actions-title">设备输入缺失或未核验</div>
+            <Link className="link" to="/resources/equipment">打开设备档案，补齐物理字段并生成新 revision</Link>
+          </div>
+        )}
         <DataTable<CapabilityInputRow>
           columns={[
             { key: 'name', label: '输入' },

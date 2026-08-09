@@ -21,6 +21,7 @@ export const router = createBrowserRouter([
       { path: 'runs', element: <RunsPage /> },
       { path: 'runs/:runId', element: <RunInspectorPage /> },
       { path: 'resources/materials', element: <ResourcesPage kind="materials" /> },
+      { path: 'resources/equipment', element: <ResourcesPage kind="machines" /> },
       { path: 'resources/machines', element: <ResourcesPage kind="machines" /> },
       { path: 'resources/literature', element: <ResourcesPage kind="literature" /> },
       { path: 'settings', element: <SettingsPage /> },

@@ -4,16 +4,15 @@ import { useMemo, useState } from 'react'
 import { Link } from 'react-router-dom'
 import type { ApplicationRunRecord, WorkflowEvent } from '../../api/runs'
 import type { ArtifactSnapshot } from '../../domain/artifact'
-import { buildCapabilityView, buildChainStatus, recommendNextAction } from '../../domain/capability'
-import { buildRequirements } from '../../domain/knowledge'
+import { buildCapabilityView } from '../../domain/capability'
+import { buildRunControl, PHASE_LABEL, type RunControlContent } from '../../domain/control'
+import { buildRequirements, summarizeRequirements } from '../../domain/knowledge'
 import { buildCalibrationView } from '../../domain/calibration'
-import { CANONICAL_STAGES } from '../../domain/stages'
 import { scientificLabel, scientificTone, scientificStatusFrom } from '../../domain/status'
-import { getTaskDraft } from '../../stores/taskDrafts'
+import { isTaskDraftComplete, useTaskDraft } from '../../stores/taskDrafts'
 import { Card, EmptyState, Spinner } from '../../components/ui/Card'
 import { StatusBadge } from '../../components/ui/StatusBadge'
 import { Button } from '../../components/ui/Button'
-import { DependencyChain } from '../../components/scientific/DependencyChain'
 import { SnapshotMeta } from '../../components/scientific/Artifact'
 import { EquipmentCard } from '../../components/scientific/EquipmentCard'
 import { ControlStateCard } from '../../components/scientific/ControlStateCard'
@@ -38,7 +37,7 @@ export function OverviewSection({
   busy,
   onContinue,
 }: OverviewSectionProps) {
-  const draft = getTaskDraft(taskId)
+  const draft = useTaskDraft(taskId)
   const [editing, setEditing] = useState(false)
   const [hint, setHint] = useState<string | null>(null)
 
@@ -47,14 +46,15 @@ export function OverviewSection({
     return buildCapabilityView(snapshot?.content as Record<string, unknown>)
   }, [artifacts])
 
-  const chain = useMemo(() => buildChainStatus(capability), [capability])
+  const control = useMemo(
+    () => buildRunControl(run?.result?.runControlState as RunControlContent | undefined),
+    [run],
+  )
 
   const knowledge = useMemo(() => {
-    const snapshot = artifacts?.get('KnowledgeRequirementSet')
+    const snapshot = artifacts?.get('KnowledgeState') ?? artifacts?.get('KnowledgeRequirementSet')
     const requirements = buildRequirements(snapshot?.content as Record<string, unknown>)
-    const satisfied = requirements.filter((r) => r.status === 'KNOWN' || r.status === 'PARTIAL').length
-    const unresolved = requirements.length - satisfied
-    return { total: requirements.length, satisfied, unresolved }
+    return summarizeRequirements(requirements)
   }, [artifacts])
 
   const calibration = useMemo(() => {
@@ -66,29 +66,13 @@ export function OverviewSection({
     return { estimated, priorOnly: view.parameters.length - estimated, notIdentifiable, hasRun: true }
   }, [artifacts])
 
-  const planning = useMemo(() => {
-    const plan = artifacts?.get('ToolpathPlan')
-    const model = artifacts?.get('LocalRemovalModel')
-    if (plan) return { status: 'KNOWN', detail: '已生成 ToolpathPlan' }
-    if (model) return { status: 'PARTIAL', detail: '已有 LocalRemovalModel，尚未规划路径' }
-    return { status: 'UNKNOWN', detail: '尚未建立局部去除模型' }
-  }, [artifacts])
-
-  const nextAction = useMemo(() => recommendNextAction(capability, runStatus), [capability, runStatus])
+  const planningPhase = control.phases.PLANNING ?? { status: 'NOT_RUN' as const, blockingReasons: [] }
+  const nextAction = control.nextActions[0]
 
   const capabilityStatus = capability ? capability.status : 'UNKNOWN'
-  const stageCount = CANONICAL_STAGES.filter((stage) => run?.stage_status?.[stage]?.status === 'completed').length
+  const stageCount = control.completedStages.length
 
-  const draftComplete = Boolean(
-    draft &&
-      draft.material &&
-      draft.laserType &&
-      draft.geometryType &&
-      draft.objectiveMetric &&
-      draft.equipmentProfileId &&
-      draft.targetGeometry &&
-      draft.targetGeometry.target_depth_um > 0,
-  )
+  const draftComplete = Boolean(draft && isTaskDraftComplete(draft))
   const handleStart = () => {
     if (!draftComplete) {
       setEditing(true)
@@ -131,7 +115,7 @@ export function OverviewSection({
 
       {draft.runId && (
         <div className="overview-runline">
-          第 {stageCount}/{CANONICAL_STAGES.length} 阶段完成 · Run 状态:{' '}
+          后端确认 {stageCount} 个 stage 完成 · Run 状态:{' '}
           <strong>{runStatus ?? '…'}</strong>
           {busy && <Spinner />}
         </div>
@@ -149,12 +133,6 @@ export function OverviewSection({
                 {capability.inputs.length} 物理输入可解析
               </div>
               <div className="card-stat">Simulator {capability.supportedFidelity.join(', ') || '未声明'}</div>
-              {chain.nodes.length > 0 && (
-                <details>
-                  <summary>执行能力依赖</summary>
-                  <DependencyChain nodes={chain.nodes} />
-                </details>
-              )}
             </>
           ) : (
             <EmptyState message="尚未生成 ScientificCapabilityReport" hint="点击「开始运行」执行能力预检。" />
@@ -162,11 +140,11 @@ export function OverviewSection({
           <SnapshotMeta snapshot={artifacts?.get('ScientificCapabilityReport')} />
         </Card>
 
-        <Card title="Knowledge" actions={<StatusBadge tone={knowledge.total === 0 ? 'neutral' : knowledge.unresolved > 0 ? 'warn' : 'ok'} label={`${knowledge.total === 0 ? '未生成' : knowledge.unresolved > 0 ? '部分' : '就绪'}`} />}>
+        <Card title="Knowledge" actions={<StatusBadge tone={knowledge.total === 0 ? 'neutral' : knowledge.unresolved > 0 || knowledge.partial > 0 ? 'warn' : 'ok'} label={`${knowledge.total === 0 ? '未生成' : knowledge.unresolved > 0 || knowledge.partial > 0 ? '部分' : '就绪'}`} />}>
           {knowledge.total > 0 ? (
             <>
               <div className="card-stat">{knowledge.total} 个需求</div>
-              <div className="card-stat">{knowledge.satisfied} 已满足 · {knowledge.unresolved} 未解决</div>
+              <div className="card-stat">{knowledge.satisfied} 已满足 · {knowledge.partial} 部分 · {knowledge.unresolved} 未解决</div>
               <div className="card-links">
                 <Link to={`/workspace/${taskId}/knowledge`}>查看需求详情 →</Link>
               </div>
@@ -190,21 +168,24 @@ export function OverviewSection({
           )}
         </Card>
 
-        <Card title="Planning" actions={<StatusBadge tone={planning.status === 'KNOWN' ? 'ok' : planning.status === 'PARTIAL' ? 'warn' : 'neutral'} label={planning.status === 'KNOWN' ? '就绪' : planning.status === 'PARTIAL' ? '部分' : '受阻'} />}>
-          <div className="card-stat">{planning.detail}</div>
+        <Card title="Planning" actions={<StatusBadge tone={planningPhase.status === 'COMPLETED' || planningPhase.status === 'READY' ? 'ok' : planningPhase.status === 'PARTIAL' ? 'warn' : planningPhase.status === 'BLOCKED' ? 'err' : 'neutral'} label={PHASE_LABEL[planningPhase.status]} />}>
+          <div className="card-stat">后端阶段状态：{PHASE_LABEL[planningPhase.status]}</div>
+          {planningPhase.blockingReasons.map((reason) => <div key={reason} className="warning-note">{reason}</div>)}
         </Card>
       </div>
 
       <Card title="Recommended Next Action" className="next-action-card">
         <div className="next-action">
-          <div className="next-action-message">{nextAction.message}</div>
-          <div className="next-action-detail">{nextAction.detail}</div>
-          {nextAction.missingInputs.length > 0 && (
+          <div className="next-action-message">{nextAction?.type ?? (control.phaseStatus === 'COMPLETED' ? 'RUN_COMPLETE' : 'START_RUN')}</div>
+          <div className="next-action-detail">
+            {nextAction ? '由后端 RunControlState 返回' : control.phaseStatus === 'COMPLETED' ? '主链已完成' : '创建 ApplicationRun 以获取后端下一步动作'}
+          </div>
+          {(nextAction?.missing?.length ?? 0) > 0 && (
             <div className="next-action-missing">
-              缺少: {nextAction.missingInputs.join(', ')}
+              缺少: {nextAction?.missing?.join(', ')}
             </div>
           )}
-          {nextAction.kind === 'CONTINUE' && (
+          {nextAction && ['CONTINUE_RUN', 'RESUME_RUN'].includes(nextAction.type) && (
             <div className="next-action-actions">
               <Button onClick={() => onContinue()}>{busy ? '运行中…' : '继续'}</Button>
             </div>

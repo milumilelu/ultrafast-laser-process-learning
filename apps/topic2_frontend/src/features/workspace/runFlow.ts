@@ -8,6 +8,7 @@ import {
   getTaskDraft,
   saveTaskDraft,
   type TaskDraft,
+  isTaskDraftComplete,
 } from '../../stores/taskDrafts'
 
 export interface RunFlowResult {
@@ -37,11 +38,5 @@ export async function createOrContinueRun(
 }
 
 export function assertTaskDraftComplete(draft: TaskDraft): boolean {
-  return Boolean(
-    draft.material &&
-      draft.laserType &&
-      draft.geometryType &&
-      draft.objectiveMetric &&
-      draft.equipmentProfileId,
-  )
+  return isTaskDraftComplete(draft)
 }

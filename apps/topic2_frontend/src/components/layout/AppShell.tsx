@@ -1,6 +1,6 @@
 import { NavLink, useParams } from 'react-router-dom'
 import { useUiStore } from '../../stores/ui'
-import { getTaskDraft } from '../../stores/taskDrafts'
+import { useTaskDraft } from '../../stores/taskDrafts'
 import { useApplicationRun } from '../../features/workspace/useRunState'
 
 const NAV_ITEMS = [
@@ -8,7 +8,7 @@ const NAV_ITEMS = [
   { to: '/knowledge', label: '科学知识', match: '/knowledge' },
   { to: '/data', label: '实验数据', match: '/data' },
   { to: '/runs', label: '运行记录', match: '/runs' },
-  { to: '/resources/materials', label: '资源', match: '/resources' },
+  { to: '/resources/equipment', label: '资源', match: '/resources' },
   { to: '/settings', label: '系统', match: '/settings' },
 ]
 
@@ -35,7 +35,7 @@ export function NavRail() {
 /** Global context bar: task / material / process / target / dataset / machine / run. */
 export function GlobalContextBar() {
   const { taskId } = useParams()
-  const draft = taskId ? getTaskDraft(taskId) : null
+  const draft = useTaskDraft(taskId ?? '')
   const developerMode = useUiStore((state) => state.developerMode)
   const toggleDeveloperMode = useUiStore((state) => state.toggleDeveloperMode)
   const run = useApplicationRun(draft?.runId ?? null)
@@ -60,8 +60,21 @@ export function GlobalContextBar() {
                 Target: <strong>{draft.objectiveMetric.replace('_um', '')} ↓</strong>
               </span>
             )}
+            {draft.datasetRef && (
+              <span className="context-chip">
+                Dataset: <strong>{draft.datasetRef}</strong>
+              </span>
+            )}
             {draft.equipmentProfileId && (
-              <span className="context-chip">Machine: <strong>{draft.equipmentProfileId}</strong></span>
+              <span className="context-chip">
+                Execution profile: <strong>{draft.equipmentProfileId}</strong>
+                {draft.equipmentRevisionId ? `@${draft.equipmentRevisionId}` : ''}
+              </span>
+            )}
+            {draft.workpieceIncidentPowerW > 0 && (
+              <span className="context-chip">
+                Task power: <strong>{draft.workpieceIncidentPowerW} W</strong> @ material surface
+              </span>
             )}
             {draft.runId && (
               <span className="context-chip">
@@ -75,7 +88,7 @@ export function GlobalContextBar() {
         )}
       </div>
       <div className="global-modes">
-        <span className="mode-label">Research</span>
+        {draft && <span className="mode-label">Research</span>}
         <button
           className={`mode-toggle ${developerMode ? 'mode-toggle-on' : ''}`}
           onClick={toggleDeveloperMode}

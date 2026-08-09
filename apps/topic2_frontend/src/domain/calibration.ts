@@ -121,18 +121,27 @@ export interface RegistryRow {
 
 const PARAMETER_ROLES: Record<string, string> = {
   wavelength: 'Optical',
+  wavelength_nm: 'Optical',
   beam_radius: 'Optical',
+  beam_radius_um: 'Optical',
   spot_radius: 'Optical',
+  spot_radius_um: 'Optical',
   actual_power: 'Source',
+  actual_power_w: 'Source',
   average_power: 'Source',
+  average_power_w: 'Source',
   pulse_width: 'Source',
+  pulse_width_ps: 'Source',
   frequency: 'Source',
+  frequency_khz: 'Source',
   scan_speed: 'Kinematic',
+  scan_speed_mm_s: 'Kinematic',
   hatch_spacing: 'Kinematic',
+  hatch_spacing_um: 'Kinematic',
   passes: 'Kinematic',
-  F_th: 'Interaction',
+  f_th: 'Interaction',
   f_th_eff: 'Interaction',
-  incubation_S: 'Interaction',
+  incubation_s: 'Interaction',
   delta_eff: 'Ablation',
   alpha_defocus: 'Optical',
   thermal_diffusivity: 'Material',
@@ -183,7 +192,21 @@ export function buildParameterRegistry(input: RegistryInput): RegistryRow[] {
     row.unit = row.unit || input.unit
     row.requiredBy.push(...input.requiredBy)
     if (input.status === 'AVAILABLE' || input.status === 'UNVERIFIED') {
-      if (row.source === 'MISSING') row.source = input.status === 'UNVERIFIED' ? 'PRIOR_ONLY' : 'MEASURED'
+      if (row.source === 'MISSING') {
+        if (input.status === 'UNVERIFIED') {
+          row.source = 'PROVISIONAL'
+        } else if (input.source === 'MACHINE_PROFILE') {
+          row.source = 'MACHINE_PROFILE'
+        } else if (input.source === 'LITERATURE_PRIOR') {
+          row.source = 'PRIOR_ONLY'
+        } else if (input.source === 'CALIBRATED') {
+          row.source = 'CALIBRATED'
+        } else if (input.source === 'DERIVED') {
+          row.source = 'DERIVED'
+        } else {
+          row.source = 'MEASURED'
+        }
+      }
     }
   }
 

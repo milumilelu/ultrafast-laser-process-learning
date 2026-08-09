@@ -15,6 +15,7 @@ export type ScientificStatus = 'KNOWN' | 'PARTIAL' | 'UNKNOWN' | 'MISMATCH'
 
 export type ParameterStatus =
   | 'MEASURED'
+  | 'MACHINE_PROFILE'
   | 'DERIVED'
   | 'PRIOR_ONLY'
   | 'CALIBRATED'
@@ -120,6 +121,7 @@ export function scientificStatusFrom(raw: string | null | undefined): Scientific
 
 const PARAMETER_TONE: Record<ParameterStatus, Tone> = {
   MEASURED: 'ok',
+  MACHINE_PROFILE: 'info',
   DERIVED: 'info',
   PRIOR_ONLY: 'warn',
   CALIBRATED: 'ok',
@@ -130,6 +132,7 @@ const PARAMETER_TONE: Record<ParameterStatus, Tone> = {
 
 const PARAMETER_LABEL: Record<ParameterStatus, string> = {
   MEASURED: '实测',
+  MACHINE_PROFILE: '设备档案',
   DERIVED: '派生',
   PRIOR_ONLY: '仅文献先验',
   CALIBRATED: '已标定',

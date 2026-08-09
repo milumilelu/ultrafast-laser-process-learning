@@ -22,6 +22,8 @@ export interface PlanView {
   simulationRef: { type: string; id: string } | null
   inputRefs: { type: string; id: string }[]
   planningPriorRefs: { type: string; id: string }[]
+  evidenceRefs: { type: string; id: string }[]
+  paperRefs: { type: string; id: string }[]
   pathParameters: Record<string, unknown>
 }
 
@@ -52,6 +54,9 @@ export interface PlanContent {
   }>
   simulation_ref?: { type?: string; id?: string }
   planning_prior_refs?: Array<{ type?: string; id?: string }>
+  evidence_refs?: Array<{ type?: string; id?: string }>
+  paper_refs?: Array<{ type?: string; id?: string }>
+  input_refs?: Array<{ type?: string; id?: string }>
   path_parameters?: Record<string, unknown>
 }
 
@@ -97,8 +102,19 @@ export function buildPlanView(content: PlanContent | null | undefined): PlanView
     simulationRef: raw.simulation_ref?.id
       ? { type: String(raw.simulation_ref.type ?? ''), id: String(raw.simulation_ref.id) }
       : null,
-    inputRefs: [],
+    inputRefs: (raw.input_refs ?? []).map((ref) => ({
+      type: String(ref.type ?? ''),
+      id: String(ref.id ?? ''),
+    })),
     planningPriorRefs: (raw.planning_prior_refs ?? []).map((ref) => ({
+      type: String(ref.type ?? ''),
+      id: String(ref.id ?? ''),
+    })),
+    evidenceRefs: (raw.evidence_refs ?? []).map((ref) => ({
+      type: String(ref.type ?? ''),
+      id: String(ref.id ?? ''),
+    })),
+    paperRefs: (raw.paper_refs ?? []).map((ref) => ({
       type: String(ref.type ?? ''),
       id: String(ref.id ?? ''),
     })),

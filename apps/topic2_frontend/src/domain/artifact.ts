@@ -22,7 +22,10 @@ export interface ArtifactSnapshot<T = Record<string, unknown>> {
 
 export const PHYSICS_TO_PLANNING_ARTIFACT_TYPES = [
   'TaskState',
+  'DatasetRef',
   'MachineProfileSnapshot',
+  'CalibrationObservationSet',
+  'Observation',
   'ScientificCapabilityReport',
   'ScientificNeedSet',
   'KnowledgeRequirementSet',
@@ -41,6 +44,7 @@ export const PHYSICS_TO_PLANNING_ARTIFACT_TYPES = [
   'PhysicalModelState',
   'LocalRemovalModel',
   'MorphologySimulationResult',
+  'ToolpathCandidateSet',
   'ToolpathPlan',
   'ProcessLearningResult',
   'ObservationResult',

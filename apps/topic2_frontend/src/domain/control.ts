@@ -16,6 +16,10 @@ export interface NextActionView {
   missing?: string[]
   parameters?: string[]
   sourceQuality?: string
+  resumeStage?: string
+  targetPhase?: string
+  requirementIds?: string[]
+  observationTypes?: string[]
 }
 
 export interface PhaseView {
@@ -72,6 +76,14 @@ export function buildRunControl(content: RunControlContent | null | undefined): 
             missing: Array.isArray(action.missing) ? action.missing.map(String) : undefined,
             parameters: Array.isArray(action.parameters) ? action.parameters.map(String) : undefined,
             sourceQuality: action.source_quality ? String(action.source_quality) : undefined,
+            resumeStage: action.resume_stage ? String(action.resume_stage) : undefined,
+            targetPhase: action.target_phase ? String(action.target_phase) : undefined,
+            requirementIds: Array.isArray(action.requirement_ids)
+              ? action.requirement_ids.map(String)
+              : undefined,
+            observationTypes: Array.isArray(action.observation_types)
+              ? action.observation_types.map(String)
+              : undefined,
           }))
         : [],
     }
@@ -104,6 +116,14 @@ export function buildRunControl(content: RunControlContent | null | undefined): 
           missing: Array.isArray(action.missing) ? action.missing.map(String) : undefined,
           parameters: Array.isArray(action.parameters) ? action.parameters.map(String) : undefined,
           sourceQuality: action.source_quality ? String(action.source_quality) : undefined,
+          resumeStage: action.resume_stage ? String(action.resume_stage) : undefined,
+          targetPhase: action.target_phase ? String(action.target_phase) : undefined,
+          requirementIds: Array.isArray(action.requirement_ids)
+            ? action.requirement_ids.map(String)
+            : undefined,
+          observationTypes: Array.isArray(action.observation_types)
+            ? action.observation_types.map(String)
+            : undefined,
         }))
       : [],
     completedStages: Array.isArray(raw.completed_stages)
@@ -141,6 +161,7 @@ export const PHASE_LABEL_SHORT: Record<string, string> = {
   KNOWLEDGE: '知识解析',
   CALIBRATION: '物理标定',
   MODEL: '过程建模',
+  SIMULATION: '形貌仿真',
   PLANNING: '路径规划',
   OBSERVATION: '观察闭环',
   COMPLETED: '完成',

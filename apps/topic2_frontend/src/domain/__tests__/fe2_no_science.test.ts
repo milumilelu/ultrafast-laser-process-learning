@@ -17,7 +17,11 @@ const FORBIDDEN_IDENTIFIERS = [
 ]
 
 describe('FE-2: no scientific logic in frontend source', () => {
-  const sources = import.meta.glob('../../**/*.{ts,tsx}', { as: 'raw', eager: true }) as Record<
+  const sources = import.meta.glob('../../**/*.{ts,tsx}', {
+    query: '?raw',
+    import: 'default',
+    eager: true,
+  }) as Record<
     string,
     string
   >

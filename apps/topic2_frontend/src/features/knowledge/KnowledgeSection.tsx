@@ -1,6 +1,7 @@
 /** Knowledge section (spec §十-§十一): requirement-centric lineage with inspector. */
 
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
+import { Link, useSearchParams } from 'react-router-dom'
 import type { ArtifactSnapshot } from '../../domain/artifact'
 import {
   buildEvidenceItems,
@@ -29,6 +30,7 @@ interface KnowledgeSectionProps {
 const REQ_TONE: Record<string, 'ok' | 'warn' | 'neutral'> = {
   SATISFIED: 'ok',
   PARTIALLY_SATISFIED: 'warn',
+  SATISFIED_WITH_CONFLICT: 'warn',
   UNSATISFIED: 'neutral',
 }
 
@@ -37,11 +39,13 @@ export function KnowledgeSection({
   queryPlans,
   evidence,
   priors,
+  knowledgeState,
   developerMode,
 }: KnowledgeSectionProps) {
+  const [searchParams] = useSearchParams()
   const requirementsView = useMemo(
-    () => buildRequirements(requirements?.content as Record<string, unknown>),
-    [requirements],
+    () => buildRequirements((knowledgeState ?? requirements)?.content as Record<string, unknown>),
+    [knowledgeState, requirements],
   )
   const plansView = useMemo(
     () => buildQueryPlans(queryPlans?.content as Record<string, unknown>),
@@ -61,19 +65,50 @@ export function KnowledgeSection({
   const planForRequirement = (requirementId: string) =>
     plansView.find((plan) => plan.requirementId === requirementId)
 
-  const priorsForRequirement = (): PriorView[] => priorsView
-
   const evidenceForRequirement = (requirementId: string) => {
     const plan = planForRequirement(requirementId)
-    if (!plan) return evidenceItems
-    const planRef = plan.queryPlanId
-    if (!planRef) return evidenceItems
-    const matched = evidenceItems.filter((item) => {
-      const refs = String(item.query_plan_ref ?? item.queryPlanRef ?? '')
-      return refs.includes(planRef)
+    return evidenceItems.filter((item) => {
+      const requirementIds = Array.isArray(item.requirement_ids)
+        ? item.requirement_ids.map(String)
+        : []
+      if (requirementIds.length > 0) return requirementIds.includes(requirementId)
+      if (!plan?.queryPlanId) return false
+      const queryRefs = Array.isArray(item.query_plan_refs)
+        ? item.query_plan_refs
+        : item.query_plan_ref
+          ? [item.query_plan_ref]
+          : []
+      return queryRefs.some((ref) =>
+        String(typeof ref === 'object' && ref !== null ? (ref as Record<string, unknown>).id : ref) ===
+        plan.queryPlanId,
+      )
     })
-    return matched.length > 0 ? matched : evidenceItems
   }
+
+  const priorsForRequirement = (requirementId: string): PriorView[] => {
+    const evidenceIds = new Set(
+      evidenceForRequirement(requirementId)
+        .map((item) => String(item.evidence_id ?? item.id ?? ''))
+        .filter(Boolean),
+    )
+    return priorsView.filter((prior) =>
+      prior.evidenceRefs.some((ref) => evidenceIds.has(ref.id)),
+    )
+  }
+
+  useEffect(() => {
+    const requestedEvidenceId = searchParams.get('evidence')
+    if (!requestedEvidenceId) return
+    const requestedEvidence = evidenceItems.find(
+      (item) => String(item.evidence_id ?? item.id ?? '') === requestedEvidenceId,
+    )
+    if (!requestedEvidence) return
+    setSelectedEvidence(requestedEvidence)
+    const requirement = requirementsView.find((candidate) =>
+      evidenceForRequirement(candidate.requirementId).includes(requestedEvidence),
+    )
+    if (requirement) setSelectedRequirement(requirement)
+  }, [evidenceItems, requirementsView, searchParams])
 
   if (requirementsView.length === 0 && priorsView.length === 0) {
     return (
@@ -113,7 +148,7 @@ export function KnowledgeSection({
                       <span className="requirement-id">{req.requirementId}</span>
                       <StatusBadge
                         tone={REQ_TONE[req.status] ?? 'neutral'}
-                        label={req.status === 'SATISFIED' ? '已满足' : req.status === 'PARTIALLY_SATISFIED' ? '部分满足' : '未满足'}
+                        label={requirementStatusLabel(req.status)}
                       />
                     </div>
                     <div className="requirement-question">{req.scientificQuestion || req.type}</div>
@@ -179,10 +214,10 @@ export function KnowledgeSection({
                 </div>
                 <div className="lineage-node">
                   <span className="lineage-label">PriorObjects</span>
-                  {priorsForRequirement().length === 0 ? (
+                  {priorsForRequirement(selectedRequirement.requirementId).length === 0 ? (
                     <div className="lineage-meta">暂无 prior</div>
                   ) : (
-                    priorsForRequirement().map((prior) => (
+                    priorsForRequirement(selectedRequirement.requirementId).map((prior) => (
                       <div key={prior.priorId} className="prior-mini">
                         <div className="prior-mini-head">
                           <span className="prior-type">{prior.priorType}</span>
@@ -300,7 +335,13 @@ function EvidenceInspector({ item, developerMode }: { item: EvidenceItemView; de
               <div key={`s-${index}`} className="kv-row">
                 <dt>source {index + 1}</dt>
                 <dd>
-                  <code>{String((ref as Record<string, unknown>).id ?? ref)}</code>
+                  {sourceRefId(ref) ? (
+                    <Link to={`/resources/literature?paper=${encodeURIComponent(sourceRefId(ref))}`}>
+                      <code>{sourceRefId(ref)}</code>
+                    </Link>
+                  ) : (
+                    <code>{String(ref)}</code>
+                  )}
                 </dd>
               </div>
             ))}
@@ -332,6 +373,19 @@ function EvidenceInspector({ item, developerMode }: { item: EvidenceItemView; de
       </div>
     </div>
   )
+}
+
+function requirementStatusLabel(status: string): string {
+  if (status === 'SATISFIED') return '已满足'
+  if (status === 'PARTIALLY_SATISFIED') return '部分满足'
+  if (status === 'SATISFIED_WITH_CONFLICT') return '冲突待决'
+  return '未满足'
+}
+
+function sourceRefId(ref: unknown): string {
+  if (typeof ref === 'string') return ref
+  if (typeof ref !== 'object' || ref === null) return ''
+  return String((ref as Record<string, unknown>).id ?? '')
 }
 
 function pickKeys(item: EvidenceItemView, keys: string[]): Array<[string, unknown]> {

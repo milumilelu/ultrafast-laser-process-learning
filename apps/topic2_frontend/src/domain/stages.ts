@@ -1,21 +1,5 @@
-/** Canonical Physics-to-Planning workflow stages (backend ALL_STAGES). */
-
-export const CANONICAL_STAGES = [
-  'prepare_task',
-  'assess_capability',
-  'assess_data',
-  'baseline_learning',
-  'analyze_knowledge_requirements',
-  'prepare_knowledge',
-  'satisfy_requirements',
-  'calibrate_physics',
-  'establish_process_model',
-  'plan_process',
-] as const
-
-export type CanonicalStage = (typeof CANONICAL_STAGES)[number]
-
-export const STAGE_LABEL: Record<CanonicalStage, string> = {
+/** Stage labels are presentation-only; ordering/status come from backend events. */
+export const STAGE_LABEL: Record<string, string> = {
   prepare_task: '任务准备',
   assess_capability: '能力预检',
   assess_data: '数据评估',
@@ -25,7 +9,9 @@ export const STAGE_LABEL: Record<CanonicalStage, string> = {
   satisfy_requirements: '需求满足',
   calibrate_physics: '物理标定',
   establish_process_model: '过程建模',
+  simulate_morphology: '形貌仿真',
   plan_process: '路径规划',
+  evaluate_observation: '观察闭环',
 }
 
 /** Workspace sections are pure display: each maps to a backend-computed
@@ -46,11 +32,3 @@ export const WORKSPACE_SECTIONS: WorkspaceSection[] = [
   { id: 'simulation', label: '仿真', phase: 'SIMULATION' },
   { id: 'planning', label: '规划', phase: 'PLANNING' },
 ]
-
-export function stageIndex(stage: CanonicalStage): number {
-  return CANONICAL_STAGES.indexOf(stage)
-}
-
-export function stagesThrough(stage: CanonicalStage): CanonicalStage[] {
-  return CANONICAL_STAGES.slice(0, stageIndex(stage) + 1)
-}
