@@ -1,9 +1,4 @@
-"""Scientific pipeline API（文档 §42.1-42.3）。
-
-POST /api/v1/scientific-retrieval/build-corpus
-POST /api/v1/scientific-analysis/analyze
-POST /api/v1/scientific-analysis/validate
-"""
+"""Requirement compiler and requirement-specific evidence API."""
 
 from __future__ import annotations
 
@@ -12,33 +7,26 @@ from typing import Any
 from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel, Field
 
-from ultrafast_knowledge.corpus.builder import ScientificCorpusBuilder
-from ultrafast_knowledge.corpus.schemas import EvidenceCorpusPack, RetrievalIntent
+from ultrafast_requirements import RequirementCompiler
 
 router = APIRouter(prefix="/api/v1", tags=["scientific-pipeline"])
 
 
-class BuildCorpusRequest(BaseModel):
-    task_scope: dict[str, Any]
-    task_context_id: str = "task-local"
-    task_context_version: int = 1
-    retrieval_intents: list[str] | None = None
+class CompileRequirementsRequest(BaseModel):
+    task_spec: dict[str, Any]
+    available_quantities: dict[str, Any] = Field(default_factory=dict)
 
 
 class AnalyzeRequest(BaseModel):
-    corpus_pack: EvidenceCorpusPack
+    task_spec: dict[str, Any]
+    available_quantities: dict[str, Any] = Field(default_factory=dict)
 
 
 class AnalyzeJobRequest(BaseModel):
-    """异步科学分析 Job（RAG 检索 → Map → Reduce → Selective Critic，实时进度）。"""
+    """Dependency compilation → paper retrieval → evidence extraction."""
 
-    task_scope: dict[str, Any]
-    retrieval_intents: list[str] | None = None
-    level: str = "E2P_STRICT"
-
-
-class ValidateRequest(BaseModel):
-    knowledge_pack: dict[str, Any]
+    task_spec: dict[str, Any]
+    available_quantities: dict[str, Any] = Field(default_factory=dict)
 
 
 class IdentificationV2Request(BaseModel):
@@ -55,34 +43,21 @@ class IdentificationV2Request(BaseModel):
     knowledge_pack: dict[str, Any] | None = None
 
 
-@router.post("/scientific-retrieval/build-corpus")
-def build_corpus(request: BuildCorpusRequest) -> dict[str, Any]:
-    intents = None
-    if request.retrieval_intents:
-        intents = []
-        for value in request.retrieval_intents:
-            try:
-                intents.append(RetrievalIntent(value))
-            except ValueError as exc:
-                raise HTTPException(
-                    400, detail={"code": "invalid_intent", "message": str(exc)}
-                ) from exc
+@router.post("/requirements/compile")
+def compile_requirements(request: CompileRequirementsRequest) -> dict[str, Any]:
     try:
-        pack = ScientificCorpusBuilder().build(
-            request.task_scope,
-            task_context_id=request.task_context_id,
-            task_context_version=request.task_context_version,
-            intents=intents,
+        result = RequirementCompiler().compile(
+            request.task_spec, request.available_quantities
         )
     except ValueError as exc:
         raise HTTPException(
-            400, detail={"code": "corpus_build_failed", "message": str(exc)}
+            400, detail={"code": "requirement_compile_failed", "message": str(exc)}
         ) from exc
-    return pack.model_dump(mode="json")
+    return result.model_dump(mode="json")
 
 
-@router.post("/scientific-analysis/analyze")
-def analyze_corpus(request: AnalyzeRequest) -> dict[str, Any]:
+@router.post("/scientific-evidence/analyze")
+def analyze_evidence(request: AnalyzeRequest) -> dict[str, Any]:
     from ultrafast_app.services.scientific_pipeline import (
         LLMNotConfiguredError,
         ScientificAnalysisService,
@@ -100,34 +75,12 @@ def analyze_corpus(request: AnalyzeRequest) -> dict[str, Any]:
             },
         ) from exc
     try:
-        result = service.analyze(request.corpus_pack)
+        result = service.analyze(request.task_spec, request.available_quantities)
     except ValueError as exc:
         raise HTTPException(
             400, detail={"code": "analysis_failed", "message": str(exc)}
         ) from exc
     return result
-
-
-@router.post("/scientific-analysis/validate")
-def validate_knowledge(request: ValidateRequest) -> dict[str, Any]:
-    from ultrafast_knowledge.scientific.schemas import ScientificKnowledgePack
-    from ultrafast_knowledge.scientific.validator import (
-        DeterministicScientificValidator,
-        default_source_checker,
-    )
-    from ultrafast_memory.db.session import get_connection
-
-    try:
-        pack = ScientificKnowledgePack.model_validate(request.knowledge_pack)
-    except Exception as exc:
-        raise HTTPException(
-            400, detail={"code": "invalid_knowledge_pack", "message": str(exc)}
-        ) from exc
-    validator = DeterministicScientificValidator(
-        source_checker=default_source_checker(get_connection)
-    )
-    result = validator.validate(pack)
-    return result.model_dump(mode="json")
 
 
 @router.post("/scientific-analysis/jobs")
@@ -137,9 +90,8 @@ def create_analysis_job(request: AnalyzeJobRequest) -> dict[str, Any]:
 
     service = get_job_service()
     job = service.create_job(
-        request.task_scope,
-        request.retrieval_intents,
-        level=request.level,
+        request.task_spec,
+        request.available_quantities,
     )
     return {"analysis_run_id": job.job_id, "status": job.status, "stage": job.stage}
 

@@ -1,12 +1,4 @@
-"""Scientific Analysis Job 服务（文档第十七节：异步 + 实时进度）。
-
-POST /scientific-analysis/jobs       → 立即返回 {analysis_run_id, status: queued}
-GET  /scientific-analysis/jobs/{id}  → 轮询：status + 阶段进度明细
-                                     （retrieving → mapping 3/6 → validating →
-                                       coverage → reducing → criticizing → completed）
-
-后台线程执行完整链路：RAG 检索（build corpus）→ Source Map → 验证 → 覆盖检查
-→ Reduce → Selective Critic。进度事件写入 job 状态，前端实时展示。
+"""Asynchronous Requirement Compiler + Evidence Pipeline jobs.
 
 Job 状态持久化到 SQLite（scientific_analysis_job 表）：
 - 服务重启后旧 job 仍可查询（终态恢复原状；非终态诚实标记 failed 并提示重跑）
@@ -26,16 +18,13 @@ from ultrafast_app.services.scientific_pipeline import (
     LLMNotConfiguredError,
     ScientificAnalysisService,
 )
-from ultrafast_knowledge.corpus.builder import ScientificCorpusBuilder
 
 STAGES = (
     "queued",
+    "compiling_requirements",
     "retrieving",
-    "mapping",
+    "extracting",
     "validating",
-    "coverage",
-    "reducing",
-    "criticizing",
     "completed",
     "failed",
 )
@@ -154,14 +143,12 @@ class ScientificAnalysisJobService:
     # ------------------------------------------------------------ public API
     def create_job(
         self,
-        task_scope: dict[str, Any],
-        retrieval_intents: list[str] | None = None,
-        *,
-        level: str = "E2P_STRICT",
+        task_spec: dict[str, Any],
+        available_quantities: dict[str, Any] | None = None,
     ) -> AnalysisJob:
         job = AnalysisJob(
             job_id=f"sa-{uuid.uuid4().hex[:12]}",
-            task_context_id=str(task_scope.get("task_context_id") or None),
+            task_context_id=str(task_spec.get("task_context_id") or None),
         )
         with self._lock:
             self._jobs[job.job_id] = job
@@ -174,7 +161,7 @@ class ScientificAnalysisJobService:
         self._persist(job)
         worker = threading.Thread(
             target=self._run,
-            args=(job.job_id, task_scope, retrieval_intents or [], level),
+            args=(job.job_id, task_spec, available_quantities or {}),
             daemon=True,
         )
         worker.start()
@@ -191,9 +178,8 @@ class ScientificAnalysisJobService:
     def _run(
         self,
         job_id: str,
-        task_scope: dict[str, Any],
-        retrieval_intents: list[str],
-        level: str,
+        task_spec: dict[str, Any],
+        available_quantities: dict[str, Any],
     ) -> None:
         job = self.get_job(job_id)
         if job is None:
@@ -206,102 +192,43 @@ class ScientificAnalysisJobService:
             job.touch()
             self._persist(job)
 
-        def emit(stage: str, detail: dict[str, Any]) -> None:
-            set_stage(stage, detail)
-            job.detail.append({"stage": stage, **detail})
-            job.touch()
-            self._persist(job)
-
         try:
-            # Stage 1: RAG 检索 → EvidenceCorpusPack
-            set_stage("retrieving", {"detail": "按任务 scope 构建多意图语料包"})
-            corpus = ScientificCorpusBuilder().build(
-                task_scope,
-                task_context_id=str(task_scope.get("task_context_id") or "web-task"),
-                intents=None,
+            set_stage(
+                "compiling_requirements",
+                {"detail": "按科学模型依赖图计算依赖闭包"},
             )
-            emit(
+            service = ScientificAnalysisService()
+            requirements = service.compile_requirements(task_spec, available_quantities)
+            job.detail.append(
+                {
+                    "stage": "compiling_requirements",
+                    "requirements": len(requirements.requirements),
+                    "unresolved": len(requirements.unresolved),
+                }
+            )
+            set_stage(
                 "retrieving",
                 {
-                    "sources": corpus.source_count(),
-                    "raw_hits": corpus.retrieval_trace.raw_hit_count,
-                    "source_list": [
-                        {
-                            "paper_id": source.paper_id,
-                            "title": (source.title or "")[:120],
-                            "sections": len(source.sections),
-                        }
-                        for source in corpus.sources[:10]
-                    ],
+                    "detail": "逐个知识需求执行论文级检索和论文内语义块检索",
+                    "knowledge_requirements": len(requirements.knowledge_requirements),
                 },
             )
-            set_stage("mapping", {"current": 0, "total": corpus.source_count()})
-
-            # Stage 2-6: Map → Validate → Coverage → Reduce → Critic
-            service = ScientificAnalysisService(level=level)
-            result = service.pipeline.analyze(
-                corpus,
-                level=level,
-                progress_callback=emit,
+            evidence = service.pipeline.analyze(requirements)
+            set_stage(
+                "validating",
+                {
+                    "detail": "校验数值、单位和 source_block_refs",
+                    "results": len(evidence.results),
+                    "valid_results": sum(item.valid for item in evidence.results),
+                },
             )
+            result = {
+                "requirement_set": requirements.model_dump(mode="json"),
+                "evidence_run": evidence.model_dump(mode="json"),
+            }
             job.result = result
             job.status = "completed"
-            set_stage("completed", {"detail": "科学分析完成"})
-            # 候选写入工艺记忆（knowledge_candidate + review task，pending_review）
-            try:
-                from ultrafast_knowledge.scientific.schemas import (
-                    ScientificKnowledgePack,
-                )
-                from ultrafast_knowledge.scientific.validator import (
-                    DeterministicScientificValidator,
-                    default_source_checker,
-                )
-                from ultrafast_memory.db.session import get_connection
-
-                pack = ScientificKnowledgePack.model_validate(result)
-                validator = DeterministicScientificValidator(
-                    source_checker=default_source_checker(get_connection)
-                )
-                validation = validator.validate(pack)
-                persisted = ScientificAnalysisService.persist_static(
-                    get_connection, pack, validation
-                )
-                job.detail.append(
-                    {
-                        "stage": "knowledge_memory",
-                        "persisted": len(persisted.get("persisted_candidate_ids", [])),
-                    }
-                )
-            except Exception as exc:  # noqa: BLE001 - 记忆写入失败不阻断
-                job.detail.append({"stage": "knowledge_memory", "error": str(exc)[:200]})
-            self._persist(job)
-            # Run Trace（审阅 §9）：贯穿 task→job→corpus→knowledge→pipeline 统计
-            try:
-                from ultrafast_app.services.scientific_trace import (
-                    RecommendationRunTraceService,
-                )
-
-                pipeline_stats = (result.get("pipeline_report") or {}).get("mapping", {})
-                pipeline_stats["reduce_candidates"] = (
-                    (result.get("pipeline_report") or {}).get("reduce", {}).get("candidates", 0)
-                )
-                pipeline_stats["critic_issues"] = (
-                    (result.get("pipeline_report") or {}).get("critic", {}).get("issues_found", 0)
-                )
-                pipeline_stats["coverage_ratio"] = (
-                    (result.get("pipeline_report") or {}).get("coverage", {}).get("coverage_ratio", 0.0)
-                )
-                RecommendationRunTraceService().record(
-                    task_id=str(task_scope.get("task_context_id")),
-                    job_id=job_id,
-                    corpus_pack_id=corpus.corpus_pack_id,
-                    knowledge_pack_id=result.get("knowledge_pack_id"),
-                    pipeline_stats=pipeline_stats,
-                    status="completed",
-                )
-            except Exception as exc:  # noqa: BLE001 - trace 失败不阻断
-                job.detail.append({"stage": "trace", "error": str(exc)[:200]})
-                self._persist(job)
+            set_stage("completed", {"detail": "需求编译与科学证据抽取完成"})
         except LLMNotConfiguredError as exc:
             job.status = "failed"
             job.error = str(exc)

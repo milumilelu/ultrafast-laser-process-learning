@@ -166,17 +166,21 @@ class ScientificCorpusBuilder:
         """Stage 2：同一论文的 Methods/Results/Tables 等 section 文本补充上下文。"""
         if not sources:
             return
-        wanted = sorted(
-            {section for intent in intents for section in section_priority_for(intent)}
-            | {section for intent in intents for section in context_sections_for(intent)}
-        )
+        priority: list[str] = []
+        for intent in intents:
+            for section in (*section_priority_for(intent), *context_sections_for(intent)):
+                if section not in priority:
+                    priority.append(section)
+        priority_rank = {section: index for index, section in enumerate(priority)}
+        wanted = set(priority)
         wanted_keys = {key for key, value in _SECTION_TYPE_MAP.items() if value in wanted}
         paper_ids = list(sources)
         try:
             with self.connection() as conn:
                 rows = conn.execute(
                     "SELECT paper_id, section_type, page_start, text "
-                    "FROM literature_section WHERE paper_id IN ({})".format(
+                    "FROM literature_section WHERE paper_id IN ({}) "
+                    "ORDER BY paper_id, page_start, section_id".format(
                         ",".join("?" * len(paper_ids))
                     ),
                     paper_ids,
@@ -192,7 +196,14 @@ class ScientificCorpusBuilder:
             source = sources.get(paper_id)
             if source is None:
                 continue
-            for row in sections[: self.context_sections_per_paper]:
+            ordered_sections = sorted(
+                sections,
+                key=lambda row: (
+                    priority_rank.get(_map_section_type(row["section_type"]), len(priority_rank)),
+                    int(row["page_start"] or 0),
+                ),
+            )
+            for row in ordered_sections[: self.context_sections_per_paper]:
                 section_type = _map_section_type(row["section_type"])
                 section = self._upsert_section(source, section_type)
                 if row["page_start"] is not None:
@@ -200,6 +211,12 @@ class ScientificCorpusBuilder:
                 text = str(row["text"] or "").strip()
                 if text and text not in section.text:
                     section.text = (section.text + "\n" + text).strip()
+            source.sections.sort(
+                key=lambda section: (
+                    priority_rank.get(section.section_type, len(priority_rank)),
+                    section.page if section.page is not None else 10**9,
+                )
+            )
 
     @staticmethod
     def _upsert_section(source: CorpusSource, section_type: str) -> CorpusSection:

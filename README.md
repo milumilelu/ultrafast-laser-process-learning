@@ -79,13 +79,14 @@ src/
 ├── ultrafast_shared/         # 共享基础设施（units/config/db）
 ├── ultrafast_domain/         # 领域模型（leaf）
 ├── ultrafast_physics/        # 物理特征引擎 + Formula Registry（leaf）
+├── ultrafast_requirements/   # 科学依赖图 + Requirement Compiler（不执行下游模型）
 ├── ultrafast_ingestion/      # PDF 解析 → mention → candidate ledger → condition 编译
 ├── ultrafast_reconstructibility/  # M6 Source 侧依赖重建（五类未知区分）
 ├── ultrafast_interaction/    # M8 CanonicalInteractionState / Target readiness
 ├── ultrafast_cfa/            # M9 Uncalibrated CFA（五 facet，无概率）
 ├── ultrafast_e2p/            # 证据适用性/编译 → GovernedPriorArtifact
 ├── ultrafast_bo/             # 治理化 GP-UCB（vanilla / evidence-assisted）
-├── ultrafast_knowledge/      # 知识治理（证据审核路径）
+├── ultrafast_knowledge/      # 两级论文/语义块检索 + 单 Requirement EvidenceIR 抽取
 ├── ultrafast_memory/         # 迁移自旧仓库（db/ids/config）
 └── ultrafast_integrations/   # 存储/集成
 demo/t2_slice/                # 垂直切片编排 + 文献资源解析（RF-2）
