@@ -1,0 +1,568 @@
+{
+  "provider": "deepseek",
+  "model": "deepseek-v4-flash",
+  "api_mode": "live",
+  "api_calls": [
+    {
+      "request_id": "d7c22a43-8877-44ce-9bd4-8052f255bacf",
+      "created": 1786291130,
+      "model": "deepseek-v4-flash",
+      "usage": {
+        "prompt_tokens": 2214,
+        "completion_tokens": 2060,
+        "total_tokens": 4274,
+        "prompt_tokens_details": {
+          "cached_tokens": 2176
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 1923
+        },
+        "prompt_cache_hit_tokens": 2176,
+        "prompt_cache_miss_tokens": 38
+      }
+    },
+    {
+      "request_id": "bfaffccb-f76d-41e4-ad96-1f0f3f452f03",
+      "created": 1786291147,
+      "model": "deepseek-v4-flash",
+      "usage": {
+        "prompt_tokens": 2130,
+        "completion_tokens": 320,
+        "total_tokens": 2450,
+        "prompt_tokens_details": {
+          "cached_tokens": 2048
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 239
+        },
+        "prompt_cache_hit_tokens": 2048,
+        "prompt_cache_miss_tokens": 82
+      }
+    },
+    {
+      "request_id": "c828a995-3989-4583-b57c-f9ca85c6a0ed",
+      "created": 1786291150,
+      "model": "deepseek-v4-flash",
+      "usage": {
+        "prompt_tokens": 2692,
+        "completion_tokens": 202,
+        "total_tokens": 2894,
+        "prompt_tokens_details": {
+          "cached_tokens": 2688
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 121
+        },
+        "prompt_cache_hit_tokens": 2688,
+        "prompt_cache_miss_tokens": 4
+      }
+    },
+    {
+      "request_id": "f2089d3e-b102-45cb-b84b-ac5c00fb51c1",
+      "created": 1786291152,
+      "model": "deepseek-v4-flash",
+      "usage": {
+        "prompt_tokens": 7332,
+        "completion_tokens": 177,
+        "total_tokens": 7509,
+        "prompt_tokens_details": {
+          "cached_tokens": 7296
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 96
+        },
+        "prompt_cache_hit_tokens": 7296,
+        "prompt_cache_miss_tokens": 36
+      }
+    },
+    {
+      "request_id": "1545cdf5-bf16-418c-be9c-f134c9c8553e",
+      "created": 1786291155,
+      "model": "deepseek-v4-flash",
+      "usage": {
+        "prompt_tokens": 2115,
+        "completion_tokens": 173,
+        "total_tokens": 2288,
+        "prompt_tokens_details": {
+          "cached_tokens": 2048
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 92
+        },
+        "prompt_cache_hit_tokens": 2048,
+        "prompt_cache_miss_tokens": 67
+      }
+    },
+    {
+      "request_id": "ac36d544-1513-4632-b04a-2fda5beb94b2",
+      "created": 1786291157,
+      "model": "deepseek-v4-flash",
+      "usage": {
+        "prompt_tokens": 2051,
+        "completion_tokens": 298,
+        "total_tokens": 2349,
+        "prompt_tokens_details": {
+          "cached_tokens": 2048
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 217
+        },
+        "prompt_cache_hit_tokens": 2048,
+        "prompt_cache_miss_tokens": 3
+      }
+    },
+    {
+      "request_id": "4fd16870-4c8f-4718-8814-c73723122131",
+      "created": 1786291159,
+      "model": "deepseek-v4-flash",
+      "usage": {
+        "prompt_tokens": 9847,
+        "completion_tokens": 263,
+        "total_tokens": 10110,
+        "prompt_tokens_details": {
+          "cached_tokens": 9728
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 182
+        },
+        "prompt_cache_hit_tokens": 9728,
+        "prompt_cache_miss_tokens": 119
+      }
+    },
+    {
+      "request_id": "a704b110-d961-48c5-b693-9b59a82c9cf1",
+      "created": 1786291162,
+      "model": "deepseek-v4-flash",
+      "usage": {
+        "prompt_tokens": 2144,
+        "completion_tokens": 264,
+        "total_tokens": 2408,
+        "prompt_tokens_details": {
+          "cached_tokens": 2048
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 183
+        },
+        "prompt_cache_hit_tokens": 2048,
+        "prompt_cache_miss_tokens": 96
+      }
+    }
+  ],
+  "real_pdf_count": 4,
+  "positive_requirement": {
+    "requirement_id": "req-f06fa82d034d2201",
+    "quantity": "ablation_threshold_J_m2",
+    "role": "material_threshold",
+    "required_by": [
+      "incubation_ablation_depth"
+    ],
+    "acceptable_sources": [
+      "structured_knowledge",
+      "literature",
+      "calibration",
+      "unresolved"
+    ],
+    "expected_unit": "J/m2",
+    "conditions": {
+      "material": "diamond",
+      "laser_type": "fs"
+    },
+    "resolution_policy": "require_observed_or_governed_value",
+    "status": "missing",
+    "category": "KNOWLEDGE_REQUIREMENT",
+    "derivation_capability_id": null,
+    "query_terms": [
+      "ablation threshold",
+      "threshold fluence"
+    ],
+    "supplied_value": null,
+    "variable_semantic": "MODEL_PARAMETER",
+    "resolution_chain": [
+      {
+        "order": 1,
+        "source": "structured_knowledge",
+        "status": "pending",
+        "failure_reason": null
+      },
+      {
+        "order": 2,
+        "source": "literature",
+        "status": "pending",
+        "failure_reason": null
+      },
+      {
+        "order": 3,
+        "source": "calibration",
+        "status": "pending",
+        "failure_reason": null
+      },
+      {
+        "order": 4,
+        "source": "unresolved",
+        "status": "pending",
+        "failure_reason": null
+      }
+    ],
+    "current_resolution_step": 0
+  },
+  "positive_paper_evidence": [
+    {
+      "paper_id": "04_arxiv_2502.16530.pdf",
+      "document_version_id": "7246e0c1f441c326",
+      "requirement_id": "req-f06fa82d034d2201",
+      "quantity": "ablation_threshold_J_m2",
+      "status": "FOUND",
+      "value": 3.0,
+      "lower": null,
+      "upper": null,
+      "unit": "J/cm2",
+      "conditions": {
+        "laser_type": "fs",
+        "material": "diamond"
+      },
+      "semantic_role": "material_threshold",
+      "source_block_refs": [
+        "04_arxiv_2502.16530.pdf:p6:b22"
+      ],
+      "confidence": 0.95,
+      "conflict_values": [],
+      "evidence_quote": "fs-laser ablation threshold of diamond (3.0 J/cm2)",
+      "validation_errors": [],
+      "validation_state": "validated",
+      "governance_status": "unreviewed",
+      "prompt_version": "requirement-extraction-v2"
+    },
+    {
+      "paper_id": "10_arxiv_2411.18093.pdf",
+      "document_version_id": "a1bcf8fc709ee8ca",
+      "requirement_id": "req-f06fa82d034d2201",
+      "quantity": "ablation_threshold_J_m2",
+      "status": "NOT_FOUND",
+      "value": null,
+      "lower": null,
+      "upper": null,
+      "unit": null,
+      "conditions": {},
+      "semantic_role": null,
+      "source_block_refs": [],
+      "confidence": 0.0,
+      "conflict_values": [],
+      "evidence_quote": null,
+      "validation_errors": [],
+      "validation_state": "validated",
+      "governance_status": "unreviewed",
+      "prompt_version": "requirement-extraction-v2"
+    },
+    {
+      "paper_id": "13_arxiv_2411.18868.pdf",
+      "document_version_id": "54ff0f11c275dff9",
+      "requirement_id": "req-f06fa82d034d2201",
+      "quantity": "ablation_threshold_J_m2",
+      "status": "NOT_FOUND",
+      "value": null,
+      "lower": null,
+      "upper": null,
+      "unit": null,
+      "conditions": {},
+      "semantic_role": null,
+      "source_block_refs": [],
+      "confidence": 0.0,
+      "conflict_values": [],
+      "evidence_quote": null,
+      "validation_errors": [],
+      "validation_state": "validated",
+      "governance_status": "unreviewed",
+      "prompt_version": "requirement-extraction-v2"
+    },
+    {
+      "paper_id": "11_arxiv_2404.09906.pdf",
+      "document_version_id": "198b422fe1d20600",
+      "requirement_id": "req-f06fa82d034d2201",
+      "quantity": "ablation_threshold_J_m2",
+      "status": "NOT_FOUND",
+      "value": null,
+      "lower": null,
+      "upper": null,
+      "unit": null,
+      "conditions": {},
+      "semantic_role": null,
+      "source_block_refs": [],
+      "confidence": 1.0,
+      "conflict_values": [],
+      "evidence_quote": null,
+      "validation_errors": [],
+      "validation_state": "validated",
+      "governance_status": "unreviewed",
+      "prompt_version": "requirement-extraction-v2"
+    }
+  ],
+  "positive_aggregate": {
+    "requirement_id": "req-f06fa82d034d2201",
+    "quantity": "ablation_threshold_J_m2",
+    "status": "FOUND",
+    "value": 3.0,
+    "lower": null,
+    "upper": null,
+    "unit": "J/cm2",
+    "conditions": {
+      "laser_type": "fs",
+      "material": "diamond"
+    },
+    "semantic_role": "material_threshold",
+    "source_block_refs": [
+      "04_arxiv_2502.16530.pdf:p6:b22"
+    ],
+    "confidence": 0.95,
+    "conflict_values": [],
+    "evidence_quote": "fs-laser ablation threshold of diamond (3.0 J/cm2)",
+    "validation_errors": [],
+    "validation_state": "validated",
+    "governance_status": "unreviewed",
+    "prompt_version": "requirement-extraction-v2"
+  },
+  "positive_warnings": [],
+  "governance_warnings": [
+    "req-f06fa82d034d2201: structured knowledge governance=unreviewed; retrieval and extraction were not restricted"
+  ],
+  "negative_requirement": {
+    "requirement_id": "req-live-negative",
+    "quantity": "nonexistent_material_constant",
+    "role": "negative_live_acceptance",
+    "required_by": [
+      "incubation_ablation_depth"
+    ],
+    "acceptable_sources": [
+      "structured_knowledge",
+      "literature",
+      "calibration",
+      "unresolved"
+    ],
+    "expected_unit": null,
+    "conditions": {
+      "material": "diamond",
+      "laser_type": "fs"
+    },
+    "resolution_policy": "require_observed_or_governed_value",
+    "status": "missing",
+    "category": "KNOWLEDGE_REQUIREMENT",
+    "derivation_capability_id": null,
+    "query_terms": [
+      "nonexistent material constant qzxv"
+    ],
+    "supplied_value": null,
+    "variable_semantic": "MODEL_PARAMETER",
+    "resolution_chain": [
+      {
+        "order": 1,
+        "source": "structured_knowledge",
+        "status": "pending",
+        "failure_reason": null
+      },
+      {
+        "order": 2,
+        "source": "literature",
+        "status": "pending",
+        "failure_reason": null
+      },
+      {
+        "order": 3,
+        "source": "calibration",
+        "status": "pending",
+        "failure_reason": null
+      },
+      {
+        "order": 4,
+        "source": "unresolved",
+        "status": "pending",
+        "failure_reason": null
+      }
+    ],
+    "current_resolution_step": 0
+  },
+  "negative_paper_evidence": [
+    {
+      "paper_id": "04_arxiv_2502.16530.pdf",
+      "document_version_id": "7246e0c1f441c326",
+      "requirement_id": "req-live-negative",
+      "quantity": "nonexistent_material_constant",
+      "status": "NOT_FOUND",
+      "value": null,
+      "lower": null,
+      "upper": null,
+      "unit": null,
+      "conditions": {},
+      "semantic_role": null,
+      "source_block_refs": [],
+      "confidence": 1.0,
+      "conflict_values": [],
+      "evidence_quote": null,
+      "validation_errors": [],
+      "validation_state": "validated",
+      "governance_status": "unreviewed",
+      "prompt_version": "requirement-extraction-v2"
+    },
+    {
+      "paper_id": "13_arxiv_2411.18868.pdf",
+      "document_version_id": "54ff0f11c275dff9",
+      "requirement_id": "req-live-negative",
+      "quantity": "nonexistent_material_constant",
+      "status": "NOT_FOUND",
+      "value": null,
+      "lower": null,
+      "upper": null,
+      "unit": null,
+      "conditions": {},
+      "semantic_role": null,
+      "source_block_refs": [],
+      "confidence": 0.0,
+      "conflict_values": [],
+      "evidence_quote": null,
+      "validation_errors": [],
+      "validation_state": "validated",
+      "governance_status": "unreviewed",
+      "prompt_version": "requirement-extraction-v2"
+    },
+    {
+      "paper_id": "11_arxiv_2404.09906.pdf",
+      "document_version_id": "198b422fe1d20600",
+      "requirement_id": "req-live-negative",
+      "quantity": "nonexistent_material_constant",
+      "status": "NOT_FOUND",
+      "value": null,
+      "lower": null,
+      "upper": null,
+      "unit": null,
+      "conditions": {},
+      "semantic_role": null,
+      "source_block_refs": [],
+      "confidence": 0.0,
+      "conflict_values": [],
+      "evidence_quote": null,
+      "validation_errors": [],
+      "validation_state": "validated",
+      "governance_status": "unreviewed",
+      "prompt_version": "requirement-extraction-v2"
+    },
+    {
+      "paper_id": "10_arxiv_2411.18093.pdf",
+      "document_version_id": "a1bcf8fc709ee8ca",
+      "requirement_id": "req-live-negative",
+      "quantity": "nonexistent_material_constant",
+      "status": "NOT_FOUND",
+      "value": null,
+      "lower": null,
+      "upper": null,
+      "unit": null,
+      "conditions": {},
+      "semantic_role": null,
+      "source_block_refs": [],
+      "confidence": 0.0,
+      "conflict_values": [],
+      "evidence_quote": null,
+      "validation_errors": [],
+      "validation_state": "validated",
+      "governance_status": "unreviewed",
+      "prompt_version": "requirement-extraction-v2"
+    }
+  ],
+  "negative_aggregate": {
+    "requirement_id": "req-live-negative",
+    "quantity": "nonexistent_material_constant",
+    "status": "NOT_FOUND",
+    "value": null,
+    "lower": null,
+    "upper": null,
+    "unit": null,
+    "conditions": {
+      "material": "diamond",
+      "laser_type": "fs"
+    },
+    "semantic_role": null,
+    "source_block_refs": [],
+    "confidence": 0.0,
+    "conflict_values": [],
+    "evidence_quote": null,
+    "validation_errors": [],
+    "validation_state": "validated",
+    "governance_status": "unreviewed",
+    "prompt_version": "requirement-extraction-v2"
+  },
+  "negative_fallback_requirements": [
+    {
+      "requirement_id": "calibration-66ad78f600d2ad30",
+      "quantity": "nonexistent_material_constant",
+      "role": "negative_live_acceptance",
+      "required_by": [
+        "incubation_ablation_depth"
+      ],
+      "acceptable_sources": [
+        "calibration",
+        "unresolved"
+      ],
+      "expected_unit": null,
+      "conditions": {
+        "material": "diamond",
+        "laser_type": "fs"
+      },
+      "resolution_policy": "run_targeted_calibration_then_mark_unresolved",
+      "status": "missing",
+      "category": "CALIBRATION_REQUIREMENT",
+      "derivation_capability_id": null,
+      "query_terms": [
+        "nonexistent material constant qzxv"
+      ],
+      "supplied_value": null,
+      "variable_semantic": "MODEL_PARAMETER",
+      "resolution_chain": [
+        {
+          "order": 1,
+          "source": "structured_knowledge",
+          "status": "failed",
+          "failure_reason": "literature_resolution_not_found"
+        },
+        {
+          "order": 2,
+          "source": "literature",
+          "status": "failed",
+          "failure_reason": "literature_resolution_not_found"
+        },
+        {
+          "order": 3,
+          "source": "calibration",
+          "status": "pending",
+          "failure_reason": null
+        },
+        {
+          "order": 4,
+          "source": "unresolved",
+          "status": "pending",
+          "failure_reason": null
+        }
+      ],
+      "current_resolution_step": 2
+    }
+  ],
+  "metrics": {
+    "paper_recall_at_k": 1.0,
+    "evidence_block_recall_at_k": 1.0,
+    "paper_mrr": 1.0,
+    "source_attribution_accuracy": 1.0,
+    "numerical_extraction_precision": 1.0,
+    "numerical_extraction_recall": 1.0,
+    "unit_accuracy": 1.0,
+    "condition_linkage_accuracy": 1.0,
+    "false_satisfied_rate": 0.0
+  },
+  "gates": {
+    "positive_found": true,
+    "positive_value_3_J_cm2": true,
+    "positive_mechanically_valid": true,
+    "positive_source_attributed": true,
+    "negative_not_satisfied": true,
+    "false_satisfied_rate_zero": true,
+    "only_condition_complete_findings_ingested": true,
+    "eight_live_api_calls_recorded": true,
+    "provider_request_ids_present": true
+  },
+  "passed": true
+}

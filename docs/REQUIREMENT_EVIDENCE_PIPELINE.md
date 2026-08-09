@@ -118,3 +118,14 @@ Global Block fallback、金刚石烧蚀阈值 `3.0 J/cm2` 的逐论文抽取、�
 MRR、数值抽取 Precision/Recall、单位正确率、条件绑定正确率与 Source Attribution Accuracy
 均为 1.0，负例 False-Satisfied Rate 为 0。固定 LLM
 响应只记录对真实原文的抽取结果；测试不伪造论文正文，也不依赖外部模型服务。
+
+另有真实模型验收：
+
+```powershell
+$env:DEEPSEEK_API_KEY = "<secret>"
+.venv\Scripts\python.exe scripts\run_live_evidence_acceptance.py
+```
+
+2026-08-09 的 DeepSeek V4 Flash 实际调用结果与限制见
+`docs/validation/DEEPSEEK_V4_FLASH_EVIDENCE_ACCEPTANCE_20260809.md`。固定响应测试用于日常
+确定性 CI，不能替代这项真实模型验收。
