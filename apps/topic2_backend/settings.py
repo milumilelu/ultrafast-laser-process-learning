@@ -37,6 +37,7 @@ class Settings:
     report_dir: Path = ROOT / "outputs" / "topic2_acceptance"
     equipment_profiles_path: Path | None = None
     calibration_fixture_path: Path | None = None
+    prior_fixture_path: Path | None = None
     auto_seed_fixture: bool = True
     random_seed: int = 42
     equipment_profiles: dict[str, dict[str, Any]] = field(default_factory=dict)
@@ -85,6 +86,17 @@ class Settings:
                 ),
             )
         )
+        prior_fixture_path = Path(
+            os.getenv(
+                "TOPIC2_PRIOR_FIXTURE",
+                str(
+                    ROOT
+                    / paths.get(
+                        "prior_fixture", "data/test_fixture/golden_sic_priors.json"
+                    )
+                ),
+            )
+        )
         return cls(
             database_path=Path(
                 os.getenv(
@@ -115,6 +127,7 @@ class Settings:
             equipment_profiles_path=equipment_profiles_path,
             equipment_profiles=_load_equipment_fixtures(equipment_profiles_path),
             calibration_fixture_path=calibration_fixture_path,
+            prior_fixture_path=prior_fixture_path,
             auto_seed_fixture=os.getenv(
                 "TOPIC2_AUTO_SEED_FIXTURE", str(config.get("auto_seed_fixture", True))
             ).lower()

@@ -58,7 +58,7 @@
     "schema_version": "run-control-state-v1",
     "execution_mode": "DEMO_FIXTURE",
     "current_phase": "PLANNING",
-    "phase_status": "PARTIAL",
+    "phase_status": "COMPLETED",
     "gates": {
      "A": {
       "gate": "A",
@@ -68,20 +68,9 @@
      },
      "B": {
       "gate": "B",
-      "status": "PARTIAL",
-      "reasons": [
-       "alpha_defocus: 无文献先验（显式计算默认并标注）",
-       "thermal_memory_eff: 无文献先验（显式计算默认并标注）"
-      ],
-      "next_actions": [
-       {
-        "type": "ADD_LITERATURE_PRIORS",
-        "parameters": [
-         "alpha_defocus: 无文献先验（显式计算默认并标注）",
-         "thermal_memory_eff: 无文献先验（显式计算默认并标注）"
-        ]
-       }
-      ]
+      "status": "READY",
+      "reasons": [],
+      "next_actions": []
      },
      "C": {
       "gate": "C",
@@ -97,15 +86,7 @@
      }
     },
     "blocking_reasons": [],
-    "next_actions": [
-     {
-      "type": "ADD_LITERATURE_PRIORS",
-      "parameters": [
-       "alpha_defocus: 无文献先验（显式计算默认并标注）",
-       "thermal_memory_eff: 无文献先验（显式计算默认并标注）"
-      ]
-     }
-    ],
+    "next_actions": [],
     "completed_stages": [
      "prepare_knowledge",
      "satisfy_requirements",
@@ -119,7 +100,7 @@
  },
  "artifacts": {
   "DataProfile": {
-   "id": "DataProfile-c7ec1e9f5853dcca",
+   "id": "DataProfile-6e34193c98f1d0d1",
    "type": "DataProfile",
    "schema_version": "v1",
    "content": {
@@ -130,11 +111,11 @@
    }
   },
   "MachineProfileSnapshot": {
-   "id": "MachineProfileSnapshot-aa09477b7d59be90",
+   "id": "MachineProfileSnapshot-a5deaa4ff743c02f",
    "type": "MachineProfileSnapshot",
    "schema_version": "machine-profile-snapshot-v1",
    "content": {
-    "created_at": "2026-08-09T03:26:06.182932+00:00",
+    "created_at": "2026-08-09T05:11:58.703672+00:00",
     "equipment_profile_id": "DEMO-FS-LASER-01",
     "fields": {
      "actual_power_W": {
@@ -260,7 +241,7 @@
    }
   },
   "ScientificCapabilityReport": {
-   "id": "ScientificCapabilityReport-963f369a7a86043b",
+   "id": "ScientificCapabilityReport-d41779fcf97a9943",
    "type": "ScientificCapabilityReport",
    "schema_version": "physics-to-planning-v1",
    "content": {
@@ -418,11 +399,11 @@
     ],
     "input_refs": [
      {
-      "id": "TaskState-374615725c8cb106",
+      "id": "TaskState-7c9d7c1370748dd2",
       "type": "TaskState"
      },
      {
-      "id": "MachineProfileSnapshot-aa09477b7d59be90",
+      "id": "MachineProfileSnapshot-a5deaa4ff743c02f",
       "type": "MachineProfileSnapshot"
      }
     ],
@@ -517,11 +498,11 @@
       "priority": "high",
       "provenance": [
        {
-        "id": "TaskState-374615725c8cb106",
+        "id": "TaskState-7c9d7c1370748dd2",
         "type": "TaskState"
        },
        {
-        "id": "MachineProfileSnapshot-aa09477b7d59be90",
+        "id": "MachineProfileSnapshot-a5deaa4ff743c02f",
         "type": "MachineProfileSnapshot"
        }
       ],
@@ -545,11 +526,11 @@
       "priority": "high",
       "provenance": [
        {
-        "id": "TaskState-374615725c8cb106",
+        "id": "TaskState-7c9d7c1370748dd2",
         "type": "TaskState"
        },
        {
-        "id": "MachineProfileSnapshot-aa09477b7d59be90",
+        "id": "MachineProfileSnapshot-a5deaa4ff743c02f",
         "type": "MachineProfileSnapshot"
        }
       ],
@@ -574,11 +555,11 @@
       "priority": "low",
       "provenance": [
        {
-        "id": "TaskState-374615725c8cb106",
+        "id": "TaskState-7c9d7c1370748dd2",
         "type": "TaskState"
        },
        {
-        "id": "MachineProfileSnapshot-aa09477b7d59be90",
+        "id": "MachineProfileSnapshot-a5deaa4ff743c02f",
         "type": "MachineProfileSnapshot"
        }
       ],
@@ -607,13 +588,13 @@
      "F2_DEFOCUS_RECURSION"
     ],
     "task_ref": {
-     "id": "TaskState-374615725c8cb106",
+     "id": "TaskState-7c9d7c1370748dd2",
      "type": "TaskState"
     }
    }
   },
   "TargetPhysicsReadiness": {
-   "id": "TargetPhysicsReadiness-345d5b85a93d7cce",
+   "id": "TargetPhysicsReadiness-ae7eb019b0c4c44a",
    "type": "TargetPhysicsReadiness",
    "schema_version": "v1",
    "content": {
@@ -878,7 +859,7 @@
       {
        "field_name": "pulse_width_ps",
        "input_name": "pulse_width_s",
-       "provenance": "dataset:tmpu_89hger.csv",
+       "provenance": "dataset:tmpa6my3c62.csv",
        "source": "DATASET",
        "unit": "ps",
        "value": 0.3,
@@ -887,7 +868,7 @@
       {
        "field_name": "frequency_kHz",
        "input_name": "frequency_Hz",
-       "provenance": "dataset:tmpu_89hger.csv",
+       "provenance": "dataset:tmpa6my3c62.csv",
        "source": "DATASET",
        "unit": "kHz",
        "value": 200.0,
@@ -896,7 +877,7 @@
       {
        "field_name": "scan_speed_mm_s",
        "input_name": "scan_speed_m_s",
-       "provenance": "dataset:tmpu_89hger.csv",
+       "provenance": "dataset:tmpa6my3c62.csv",
        "source": "DATASET",
        "unit": "mm/s",
        "value": 100.0,
@@ -905,7 +886,7 @@
       {
        "field_name": "hatch_spacing_um",
        "input_name": "hatch_spacing_m",
-       "provenance": "dataset:tmpu_89hger.csv",
+       "provenance": "dataset:tmpa6my3c62.csv",
        "source": "DATASET",
        "unit": "um",
        "value": 10.0,
@@ -914,7 +895,7 @@
       {
        "field_name": "passes",
        "input_name": "passes",
-       "provenance": "dataset:tmpu_89hger.csv",
+       "provenance": "dataset:tmpa6my3c62.csv",
        "source": "DATASET",
        "unit": "",
        "value": 2.0,
@@ -932,7 +913,7 @@
    }
   },
   "TaskState": {
-   "id": "TaskState-374615725c8cb106",
+   "id": "TaskState-7c9d7c1370748dd2",
    "type": "TaskState",
    "schema_version": "task-state-v1",
    "content": {
@@ -969,7 +950,7 @@
     },
     "execution_mode": "DEMO_FIXTURE",
     "machine_profile_snapshot": {
-     "created_at": "2026-08-09T03:26:06.182932+00:00",
+     "created_at": "2026-08-09T05:11:58.703672+00:00",
      "equipment_profile_id": "DEMO-FS-LASER-01",
      "fields": {
       "actual_power_W": {
@@ -1118,7 +1099,7 @@
    }
   },
   "ProcessLearningResult": {
-   "id": "ProcessLearningResult-d37dc8f273d14726",
+   "id": "ProcessLearningResult-551112e2f636c8df",
    "type": "ProcessLearningResult",
    "schema_version": "v1",
    "content": {
@@ -1220,12 +1201,12 @@
       "rank": 5
      }
     ],
-    "run_id": "pi-d03159b452a64086978fe61113bf4242",
+    "run_id": "pi-96de515cbd344baab43461d065cb45d8",
     "target": "depth_um"
    }
   },
   "KnowledgeRequirementSet": {
-   "id": "KnowledgeRequirementSet-e25302a6017eac28",
+   "id": "KnowledgeRequirementSet-21fd6bef6ce51079",
    "type": "KnowledgeRequirementSet",
    "schema_version": "knowledge-requirement-set-v1",
    "content": {
@@ -1241,11 +1222,11 @@
       "priority": "high",
       "provenance": [
        {
-        "id": "TaskState-374615725c8cb106",
+        "id": "TaskState-7c9d7c1370748dd2",
         "type": "TaskState"
        },
        {
-        "id": "MachineProfileSnapshot-aa09477b7d59be90",
+        "id": "MachineProfileSnapshot-a5deaa4ff743c02f",
         "type": "MachineProfileSnapshot"
        }
       ],
@@ -1270,11 +1251,11 @@
       "priority": "high",
       "provenance": [
        {
-        "id": "TaskState-374615725c8cb106",
+        "id": "TaskState-7c9d7c1370748dd2",
         "type": "TaskState"
        },
        {
-        "id": "MachineProfileSnapshot-aa09477b7d59be90",
+        "id": "MachineProfileSnapshot-a5deaa4ff743c02f",
         "type": "MachineProfileSnapshot"
        }
       ],
@@ -1300,11 +1281,11 @@
       "priority": "low",
       "provenance": [
        {
-        "id": "TaskState-374615725c8cb106",
+        "id": "TaskState-7c9d7c1370748dd2",
         "type": "TaskState"
        },
        {
-        "id": "MachineProfileSnapshot-aa09477b7d59be90",
+        "id": "MachineProfileSnapshot-a5deaa4ff743c02f",
         "type": "MachineProfileSnapshot"
        }
       ],
@@ -1328,7 +1309,7 @@
       "priority": "medium",
       "provenance": [
        {
-        "id": "ScientificCapabilityReport-963f369a7a86043b",
+        "id": "ScientificCapabilityReport-d41779fcf97a9943",
         "type": "ScientificCapabilityReport"
        }
       ],
@@ -1351,7 +1332,7 @@
       "priority": "medium",
       "provenance": [
        {
-        "id": "ScientificCapabilityReport-963f369a7a86043b",
+        "id": "ScientificCapabilityReport-d41779fcf97a9943",
         "type": "ScientificCapabilityReport"
        }
       ],
@@ -1373,7 +1354,7 @@
       "priority": "low",
       "provenance": [
        {
-        "id": "ScientificCapabilityReport-963f369a7a86043b",
+        "id": "ScientificCapabilityReport-d41779fcf97a9943",
         "type": "ScientificCapabilityReport"
        }
       ],
@@ -1395,7 +1376,7 @@
    }
   },
   "KnowledgeRequirements": {
-   "id": "KnowledgeRequirements-ec5fa38d9dd22873",
+   "id": "KnowledgeRequirements-d816d1f6667f6fb0",
    "type": "KnowledgeRequirements",
    "schema_version": "knowledge-requirement-set-v1-compat",
    "content": {
@@ -1411,11 +1392,11 @@
       "priority": "high",
       "provenance": [
        {
-        "id": "TaskState-374615725c8cb106",
+        "id": "TaskState-7c9d7c1370748dd2",
         "type": "TaskState"
        },
        {
-        "id": "MachineProfileSnapshot-aa09477b7d59be90",
+        "id": "MachineProfileSnapshot-a5deaa4ff743c02f",
         "type": "MachineProfileSnapshot"
        }
       ],
@@ -1440,11 +1421,11 @@
       "priority": "high",
       "provenance": [
        {
-        "id": "TaskState-374615725c8cb106",
+        "id": "TaskState-7c9d7c1370748dd2",
         "type": "TaskState"
        },
        {
-        "id": "MachineProfileSnapshot-aa09477b7d59be90",
+        "id": "MachineProfileSnapshot-a5deaa4ff743c02f",
         "type": "MachineProfileSnapshot"
        }
       ],
@@ -1470,11 +1451,11 @@
       "priority": "low",
       "provenance": [
        {
-        "id": "TaskState-374615725c8cb106",
+        "id": "TaskState-7c9d7c1370748dd2",
         "type": "TaskState"
        },
        {
-        "id": "MachineProfileSnapshot-aa09477b7d59be90",
+        "id": "MachineProfileSnapshot-a5deaa4ff743c02f",
         "type": "MachineProfileSnapshot"
        }
       ],
@@ -1498,7 +1479,7 @@
       "priority": "medium",
       "provenance": [
        {
-        "id": "ScientificCapabilityReport-963f369a7a86043b",
+        "id": "ScientificCapabilityReport-d41779fcf97a9943",
         "type": "ScientificCapabilityReport"
        }
       ],
@@ -1521,7 +1502,7 @@
       "priority": "medium",
       "provenance": [
        {
-        "id": "ScientificCapabilityReport-963f369a7a86043b",
+        "id": "ScientificCapabilityReport-d41779fcf97a9943",
         "type": "ScientificCapabilityReport"
        }
       ],
@@ -1543,7 +1524,7 @@
       "priority": "low",
       "provenance": [
        {
-        "id": "ScientificCapabilityReport-963f369a7a86043b",
+        "id": "ScientificCapabilityReport-d41779fcf97a9943",
         "type": "ScientificCapabilityReport"
        }
       ],
@@ -1565,7 +1546,7 @@
    }
   },
   "ModelTrainingResult": {
-   "id": "ModelTrainingResult-2c32940c8a98474b",
+   "id": "ModelTrainingResult-ccd173389c815438",
    "type": "ModelTrainingResult",
    "schema_version": "v1",
    "content": {
@@ -1597,7 +1578,7 @@
     "dataset_version": "topic2-fixture-v1",
     "model_id": "model-1aeccea1d38b813e",
     "model_version": "topic2-model-core-v1-6afe4d857a",
-    "run_id": "train-82d1619d88d54435a65175b2b8cf74cd",
+    "run_id": "train-2f934e0d3142413d893ac22e05d7115f",
     "selected_model": "GPR",
     "validation_metrics": {
      "GPR": {
@@ -1640,21 +1621,21 @@
    }
   },
   "ScientificNeedSet": {
-   "id": "ScientificNeedSet-6ad16de7703dc5a7",
+   "id": "ScientificNeedSet-d672baefad7d6782",
    "type": "ScientificNeedSet",
    "schema_version": "scientific-need-set-v1",
    "content": {
     "input_refs": [
      {
-      "id": "ScientificCapabilityReport-963f369a7a86043b",
+      "id": "ScientificCapabilityReport-d41779fcf97a9943",
       "type": "ScientificCapabilityReport"
      },
      {
-      "id": "MachineProfileSnapshot-aa09477b7d59be90",
+      "id": "MachineProfileSnapshot-a5deaa4ff743c02f",
       "type": "MachineProfileSnapshot"
      }
     ],
-    "need_set_id": "NEED-5d53077c6341ef47",
+    "need_set_id": "NEED-2441fab24d59c279",
     "needs": [
      {
       "need_id": "NEED-4848f7485a12f71c",
@@ -1662,11 +1643,11 @@
       "priority": "high",
       "provenance": [
        {
-        "id": "TaskState-374615725c8cb106",
+        "id": "TaskState-7c9d7c1370748dd2",
         "type": "TaskState"
        },
        {
-        "id": "MachineProfileSnapshot-aa09477b7d59be90",
+        "id": "MachineProfileSnapshot-a5deaa4ff743c02f",
         "type": "MachineProfileSnapshot"
        }
       ],
@@ -1687,11 +1668,11 @@
       "priority": "high",
       "provenance": [
        {
-        "id": "TaskState-374615725c8cb106",
+        "id": "TaskState-7c9d7c1370748dd2",
         "type": "TaskState"
        },
        {
-        "id": "MachineProfileSnapshot-aa09477b7d59be90",
+        "id": "MachineProfileSnapshot-a5deaa4ff743c02f",
         "type": "MachineProfileSnapshot"
        }
       ],
@@ -1712,11 +1693,11 @@
       "priority": "low",
       "provenance": [
        {
-        "id": "TaskState-374615725c8cb106",
+        "id": "TaskState-7c9d7c1370748dd2",
         "type": "TaskState"
        },
        {
-        "id": "MachineProfileSnapshot-aa09477b7d59be90",
+        "id": "MachineProfileSnapshot-a5deaa4ff743c02f",
         "type": "MachineProfileSnapshot"
        }
       ],
@@ -1737,7 +1718,7 @@
       "priority": "medium",
       "provenance": [
        {
-        "id": "ScientificCapabilityReport-963f369a7a86043b",
+        "id": "ScientificCapabilityReport-d41779fcf97a9943",
         "type": "ScientificCapabilityReport"
        }
       ],
@@ -1756,7 +1737,7 @@
       "priority": "medium",
       "provenance": [
        {
-        "id": "ScientificCapabilityReport-963f369a7a86043b",
+        "id": "ScientificCapabilityReport-d41779fcf97a9943",
         "type": "ScientificCapabilityReport"
        }
       ],
@@ -1775,7 +1756,7 @@
       "priority": "low",
       "provenance": [
        {
-        "id": "ScientificCapabilityReport-963f369a7a86043b",
+        "id": "ScientificCapabilityReport-d41779fcf97a9943",
         "type": "ScientificCapabilityReport"
        }
       ],
@@ -1794,11 +1775,11 @@
       "priority": "high",
       "provenance": [
        {
-        "id": "ScientificCapabilityReport-963f369a7a86043b",
+        "id": "ScientificCapabilityReport-d41779fcf97a9943",
         "type": "ScientificCapabilityReport"
        },
        {
-        "id": "MachineProfileSnapshot-aa09477b7d59be90",
+        "id": "MachineProfileSnapshot-a5deaa4ff743c02f",
         "type": "MachineProfileSnapshot"
        }
       ],
@@ -1819,11 +1800,11 @@
       "priority": "high",
       "provenance": [
        {
-        "id": "ScientificCapabilityReport-963f369a7a86043b",
+        "id": "ScientificCapabilityReport-d41779fcf97a9943",
         "type": "ScientificCapabilityReport"
        },
        {
-        "id": "MachineProfileSnapshot-aa09477b7d59be90",
+        "id": "MachineProfileSnapshot-a5deaa4ff743c02f",
         "type": "MachineProfileSnapshot"
        }
       ],
@@ -1844,11 +1825,11 @@
       "priority": "high",
       "provenance": [
        {
-        "id": "ScientificCapabilityReport-963f369a7a86043b",
+        "id": "ScientificCapabilityReport-d41779fcf97a9943",
         "type": "ScientificCapabilityReport"
        },
        {
-        "id": "MachineProfileSnapshot-aa09477b7d59be90",
+        "id": "MachineProfileSnapshot-a5deaa4ff743c02f",
         "type": "MachineProfileSnapshot"
        }
       ],
@@ -1869,11 +1850,11 @@
       "priority": "high",
       "provenance": [
        {
-        "id": "ScientificCapabilityReport-963f369a7a86043b",
+        "id": "ScientificCapabilityReport-d41779fcf97a9943",
         "type": "ScientificCapabilityReport"
        },
        {
-        "id": "MachineProfileSnapshot-aa09477b7d59be90",
+        "id": "MachineProfileSnapshot-a5deaa4ff743c02f",
         "type": "MachineProfileSnapshot"
        }
       ],
@@ -1893,7 +1874,7 @@
    }
   },
   "ApplicabilityReportSet": {
-   "id": "ApplicabilityReportSet-2a292a5131e48ca0",
+   "id": "ApplicabilityReportSet-a3907e2d0f64b240",
    "type": "ApplicabilityReportSet",
    "schema_version": "v1",
    "content": {
@@ -2023,7 +2004,7 @@
    }
   },
   "CandidateLedger": {
-   "id": "CandidateLedger-afd1ecf5d7249d59",
+   "id": "CandidateLedger-014be8035efec67c",
    "type": "CandidateLedger",
    "schema_version": "candidate-ledger-v0.1",
    "content": {
@@ -2804,68 +2785,8 @@
     "schema_version": "candidate-ledger-v0.1"
    }
   },
-  "CanonicalPhysicsState": {
-   "id": "CanonicalPhysicsState-a536dbcd5e16c4e5",
-   "type": "CanonicalPhysicsState",
-   "schema_version": "physics-to-planning-v1",
-   "content": {
-    "input_refs": [
-     {
-      "id": "ScientificCapabilityReport-963f369a7a86043b",
-      "type": "ScientificCapabilityReport"
-     },
-     {
-      "id": "DataProfile-c7ec1e9f5853dcca",
-      "type": "DataProfile"
-     }
-    ],
-    "missing_inputs": [],
-    "provenance": [
-     {
-      "role": "shared_source_target_transform",
-      "source_ref": "PhysicsCanonicalizer:v1",
-      "source_type": "DETERMINISTIC_COMPUTATION"
-     }
-    ],
-    "quantities": {
-     "accumulated_fluence_proxy": {
-      "status": "AVAILABLE",
-      "unit": "J/cm2",
-      "value": 3183.098861837907
-     },
-     "effective_pulses": {
-      "status": "AVAILABLE",
-      "unit": "count",
-      "value": 64.0
-     },
-     "peak_fluence": {
-      "status": "AVAILABLE",
-      "unit": "J/cm2",
-      "value": 49.735919716217296
-     },
-     "pulse_energy": {
-      "status": "AVAILABLE",
-      "unit": "uJ",
-      "value": 50.0
-     },
-     "pulse_overlap": {
-      "status": "AVAILABLE",
-      "unit": "fraction",
-      "value": 0.96875
-     },
-     "pulse_spacing": {
-      "status": "AVAILABLE",
-      "unit": "um",
-      "value": 0.5
-     }
-    },
-    "schema_version": "physics-to-planning-v1",
-    "state_id": "canonical-physics-eb11489d39d20e99",
-    "status": "KNOWN"
-   }
-  },
   "EvidenceCompileResult": {
-   "id": "EvidenceCompileResult-e448136260f87279",
+   "id": "EvidenceCompileResult-c28d054e2c8d612b",
    "type": "EvidenceCompileResult",
    "schema_version": "v1",
    "content": {
@@ -2877,11 +2798,11 @@
    }
   },
   "EvidenceIRSet": {
-   "id": "EvidenceIRSet-5e8056ebacf37ab4",
+   "id": "EvidenceIRSet-abe1166b2580c7d7",
    "type": "EvidenceIRSet",
    "schema_version": "evidence-ir-set-v1",
    "content": {
-    "condition_set_ref": "SourceConditionSet-9423d81ea5ae3681",
+    "condition_set_ref": "SourceConditionSet-ef7e0ba73033c85c",
     "items": [
      {
       "applicability_status": "WEAK",
@@ -3730,14 +3651,14 @@
       "target": null
      }
     ],
-    "ledger_ref": "CandidateLedger-afd1ecf5d7249d59",
-    "query_plan_ref": "RequirementRetrievalPlan-f7fbd54f7dfed1c4",
-    "reconstructibility_set_ref": "ReconstructibilityReportSet-8c4e588775831ffb",
+    "ledger_ref": "CandidateLedger-014be8035efec67c",
+    "query_plan_ref": "RequirementRetrievalPlan-aa4e7be2fd56952e",
+    "reconstructibility_set_ref": "ReconstructibilityReportSet-ddd346d04f4020f9",
     "schema_version": "evidence-ir-set-v1"
    }
   },
   "KnowledgeState": {
-   "id": "KnowledgeState-b5135be2d9f5fa32",
+   "id": "KnowledgeState-76633d5041aa435e",
    "type": "KnowledgeState",
    "schema_version": "v1",
    "content": {
@@ -3762,11 +3683,11 @@
       "priority": "high",
       "provenance": [
        {
-        "id": "TaskState-374615725c8cb106",
+        "id": "TaskState-7c9d7c1370748dd2",
         "type": "TaskState"
        },
        {
-        "id": "MachineProfileSnapshot-aa09477b7d59be90",
+        "id": "MachineProfileSnapshot-a5deaa4ff743c02f",
         "type": "MachineProfileSnapshot"
        }
       ],
@@ -3791,11 +3712,11 @@
       "priority": "high",
       "provenance": [
        {
-        "id": "TaskState-374615725c8cb106",
+        "id": "TaskState-7c9d7c1370748dd2",
         "type": "TaskState"
        },
        {
-        "id": "MachineProfileSnapshot-aa09477b7d59be90",
+        "id": "MachineProfileSnapshot-a5deaa4ff743c02f",
         "type": "MachineProfileSnapshot"
        }
       ],
@@ -3821,11 +3742,11 @@
       "priority": "low",
       "provenance": [
        {
-        "id": "TaskState-374615725c8cb106",
+        "id": "TaskState-7c9d7c1370748dd2",
         "type": "TaskState"
        },
        {
-        "id": "MachineProfileSnapshot-aa09477b7d59be90",
+        "id": "MachineProfileSnapshot-a5deaa4ff743c02f",
         "type": "MachineProfileSnapshot"
        }
       ],
@@ -3849,7 +3770,7 @@
       "priority": "medium",
       "provenance": [
        {
-        "id": "ScientificCapabilityReport-963f369a7a86043b",
+        "id": "ScientificCapabilityReport-d41779fcf97a9943",
         "type": "ScientificCapabilityReport"
        }
       ],
@@ -3872,7 +3793,7 @@
       "priority": "medium",
       "provenance": [
        {
-        "id": "ScientificCapabilityReport-963f369a7a86043b",
+        "id": "ScientificCapabilityReport-d41779fcf97a9943",
         "type": "ScientificCapabilityReport"
        }
       ],
@@ -3894,7 +3815,7 @@
       "priority": "low",
       "provenance": [
        {
-        "id": "ScientificCapabilityReport-963f369a7a86043b",
+        "id": "ScientificCapabilityReport-d41779fcf97a9943",
         "type": "ScientificCapabilityReport"
        }
       ],
@@ -3978,7 +3899,7 @@
    }
   },
   "PriorObjectSet": {
-   "id": "PriorObjectSet-4e2e51a35401702d",
+   "id": "PriorObjectSet-37919f107c2927c1",
    "type": "PriorObjectSet",
    "schema_version": "e2p-prior-object-v1",
    "content": {
@@ -4333,6 +4254,42 @@
       "uncertainty": "UNKNOWN",
       "unit": "um",
       "upper": 0.7
+     },
+     {
+      "applicability_refs": [],
+      "assumptions": [
+       "DEMO_FIXTURE fixture prior - explicit, not hardcoded"
+      ],
+      "conflict_group_id": null,
+      "conflict_status": "NONE",
+      "evidence_refs": [
+       {
+        "id": "demo-fixture-alpha-defocus",
+        "type": "DemoFixturePrior"
+       }
+      ],
+      "input_refs": [
+       {
+        "id": "demo-fixture-alpha-defocus",
+        "type": "DemoFixturePrior"
+       }
+      ],
+      "lower": 0.01,
+      "parameter": "alpha_defocus",
+      "parameter_semantics": "EFFECTIVE",
+      "prior_id": "demo-fixture-prior-alpha_defocus",
+      "prior_type": "ParameterPrior",
+      "provenance": [
+       {
+        "id": "demo-fixture-alpha-defocus",
+        "type": "DemoFixturePrior"
+       }
+      ],
+      "schema_version": "e2p-prior-object-v1",
+      "status": "EXTERNAL_PRIOR",
+      "uncertainty": "LOW",
+      "unit": "1/um",
+      "upper": 0.05
      }
     ],
     "provenance": [
@@ -4392,7 +4349,7 @@
    }
   },
   "ReconstructibilityReportSet": {
-   "id": "ReconstructibilityReportSet-8c4e588775831ffb",
+   "id": "ReconstructibilityReportSet-ddd346d04f4020f9",
    "type": "ReconstructibilityReportSet",
    "schema_version": "v1",
    "content": {
@@ -5689,7 +5646,7 @@
    }
   },
   "RequirementRetrievalPlan": {
-   "id": "RequirementRetrievalPlan-f7fbd54f7dfed1c4",
+   "id": "RequirementRetrievalPlan-aa4e7be2fd56952e",
    "type": "RequirementRetrievalPlan",
    "schema_version": "requirement-retrieval-v1",
    "content": {
@@ -5705,7 +5662,7 @@
         "fs"
        ]
       },
-      "query_plan_id": "query-plan-98d4a9f3e791ddaa",
+      "query_plan_id": "query-plan-de428e9c4d38435b",
       "query_terms": [
        "SiC",
        "ablation threshold",
@@ -5742,7 +5699,7 @@
         "fs"
        ]
       },
-      "query_plan_id": "query-plan-1a0437ac3eb6d440",
+      "query_plan_id": "query-plan-e39cc13df29565c1",
       "query_terms": [
        "SiC",
        "incubation model",
@@ -5779,7 +5736,7 @@
         "fs"
        ]
       },
-      "query_plan_id": "query-plan-52003acf2a26ff31",
+      "query_plan_id": "query-plan-2f02f038983f053b",
       "query_terms": [
        "SiC",
        "toolpath",
@@ -5817,7 +5774,7 @@
         "fs"
        ]
       },
-      "query_plan_id": "query-plan-072c68880b0b0890",
+      "query_plan_id": "query-plan-214037720e90fb46",
       "query_terms": [
        "SiC"
       ],
@@ -5851,7 +5808,7 @@
         "fs"
        ]
       },
-      "query_plan_id": "query-plan-5d3da1fcba84ab77",
+      "query_plan_id": "query-plan-fe16fca710a32f62",
       "query_terms": [
        "SiC"
       ],
@@ -5885,7 +5842,7 @@
         "fs"
        ]
       },
-      "query_plan_id": "query-plan-87f48d87d235128a",
+      "query_plan_id": "query-plan-a56cfd9f77a1713a",
       "query_terms": [
        "SiC",
        "ablation mechanism",
@@ -5917,7 +5874,7 @@
    }
   },
   "ScientificCorpusPack": {
-   "id": "ScientificCorpusPack-5bacb912b33e7fc8",
+   "id": "ScientificCorpusPack-536974a21c6ae588",
    "type": "ScientificCorpusPack",
    "schema_version": "v1",
    "content": {
@@ -5931,7 +5888,7 @@
     "analysis_model": "scientific-reading-v1",
     "corpus_pack": {
      "corpus_pack_id": "corpus_pack_791509894f5af107",
-     "created_at": "2026-08-09T03:26:10.348399Z",
+     "created_at": "2026-08-09T05:12:03.483143Z",
      "retrieval_intents": [
       "threshold",
       "material_property",
@@ -5968,7 +5925,7 @@
        "threshold": "SiC femtosecond rectangular_groove depth_um ablation threshold fluence incubation coefficient single pulse"
       },
       "raw_hit_count": 108,
-      "retrieval_run_id": "corpus_c15b50aa07ae46d5",
+      "retrieval_run_id": "corpus_45aa3e0735f23c2d",
       "source_count": 6,
       "warnings": []
      },
@@ -6170,7 +6127,7 @@
    }
   },
   "SourceConditionSet": {
-   "id": "SourceConditionSet-9423d81ea5ae3681",
+   "id": "SourceConditionSet-ef7e0ba73033c85c",
    "type": "SourceConditionSet",
    "schema_version": "v1",
    "content": {
@@ -6504,7 +6461,7 @@
    }
   },
   "CalibrationResult": {
-   "id": "CalibrationResult-9c4b7c9d6a3ae486",
+   "id": "CalibrationResult-fb185cbb0069ce3a",
    "type": "CalibrationResult",
    "schema_version": "physics-to-planning-v1",
    "content": {
@@ -6522,19 +6479,19 @@
     },
     "input_refs": [
      {
-      "id": "IdentifiabilityReport-98e2e698e54aaac1",
+      "id": "IdentifiabilityReport-7063751e53ba2dd0",
       "type": "IdentifiabilityReport"
      },
      {
-      "id": "PriorObjectSet-4e2e51a35401702d",
+      "id": "PriorObjectSet-37919f107c2927c1",
       "type": "PriorObjectSet"
      },
      {
-      "id": "DataProfile-c7ec1e9f5853dcca",
+      "id": "DataProfile-6e34193c98f1d0d1",
       "type": "DataProfile"
      },
      {
-      "id": "CanonicalPhysicsState-a536dbcd5e16c4e5",
+      "id": "CanonicalPhysicsState-0a73f495a49e74e3",
       "type": "CanonicalPhysicsState"
      }
     ],
@@ -6942,22 +6899,82 @@
     "validation_data_refs": []
    }
   },
+  "CanonicalPhysicsState": {
+   "id": "CanonicalPhysicsState-0a73f495a49e74e3",
+   "type": "CanonicalPhysicsState",
+   "schema_version": "physics-to-planning-v1",
+   "content": {
+    "input_refs": [
+     {
+      "id": "ScientificCapabilityReport-d41779fcf97a9943",
+      "type": "ScientificCapabilityReport"
+     },
+     {
+      "id": "DataProfile-6e34193c98f1d0d1",
+      "type": "DataProfile"
+     }
+    ],
+    "missing_inputs": [],
+    "provenance": [
+     {
+      "role": "shared_source_target_transform",
+      "source_ref": "PhysicsCanonicalizer:v1",
+      "source_type": "DETERMINISTIC_COMPUTATION"
+     }
+    ],
+    "quantities": {
+     "accumulated_fluence_proxy": {
+      "status": "AVAILABLE",
+      "unit": "J/cm2",
+      "value": 3183.098861837907
+     },
+     "effective_pulses": {
+      "status": "AVAILABLE",
+      "unit": "count",
+      "value": 64.0
+     },
+     "peak_fluence": {
+      "status": "AVAILABLE",
+      "unit": "J/cm2",
+      "value": 49.735919716217296
+     },
+     "pulse_energy": {
+      "status": "AVAILABLE",
+      "unit": "uJ",
+      "value": 50.0
+     },
+     "pulse_overlap": {
+      "status": "AVAILABLE",
+      "unit": "fraction",
+      "value": 0.96875
+     },
+     "pulse_spacing": {
+      "status": "AVAILABLE",
+      "unit": "um",
+      "value": 0.5
+     }
+    },
+    "schema_version": "physics-to-planning-v1",
+    "state_id": "canonical-physics-eb11489d39d20e99",
+    "status": "KNOWN"
+   }
+  },
   "IdentifiabilityReport": {
-   "id": "IdentifiabilityReport-98e2e698e54aaac1",
+   "id": "IdentifiabilityReport-7063751e53ba2dd0",
    "type": "IdentifiabilityReport",
    "schema_version": "physics-to-planning-v1",
    "content": {
     "input_refs": [
      {
-      "id": "DataProfile-c7ec1e9f5853dcca",
+      "id": "DataProfile-6e34193c98f1d0d1",
       "type": "DataProfile"
      },
      {
-      "id": "PriorObjectSet-4e2e51a35401702d",
+      "id": "PriorObjectSet-37919f107c2927c1",
       "type": "PriorObjectSet"
      },
      {
-      "id": "CanonicalPhysicsState-a536dbcd5e16c4e5",
+      "id": "CanonicalPhysicsState-0a73f495a49e74e3",
       "type": "CanonicalPhysicsState"
      }
     ],
@@ -7011,28 +7028,30 @@
    }
   },
   "LocalRemovalModel": {
-   "id": "LocalRemovalModel-a74a3e540b03e3ff",
+   "id": "LocalRemovalModel-b4d3417212cd76fc",
    "type": "LocalRemovalModel",
    "schema_version": "physics-to-planning-v1",
    "content": {
-    "alpha_defocus_per_um": 0.02,
+    "alpha_defocus_per_um": 0.030000000000000002,
     "assumptions": [
-     "F_th_eff source=target_calibration",
-     "incubation_S source=target_calibration",
-     "delta_eff source=target_calibration",
-     "alpha_defocus source=explicit_computational_default",
-     "thermal_memory_eff source=explicit_computational_default",
-     "provisional defaults are computation hypotheses, not material constants"
+     "critical parameters are bound from calibration or priors; unresolved optional mechanisms are INACTIVE, never defaulted"
     ],
     "delta_um": 0.4499963150313335,
+    "inactive_mechanisms": [
+     {
+      "mechanism": "THERMAL_MEMORY",
+      "reason": "no supporting thermal prior or calibration evidence",
+      "status": "INACTIVE"
+     }
+    ],
     "incubation_S": 0.7799967581203117,
     "input_refs": [
      {
-      "id": "CalibrationResult-9c4b7c9d6a3ae486",
+      "id": "CalibrationResult-fb185cbb0069ce3a",
       "type": "CalibrationResult"
      },
      {
-      "id": "PriorObjectSet-4e2e51a35401702d",
+      "id": "PriorObjectSet-37919f107c2927c1",
       "type": "PriorObjectSet"
      },
      {
@@ -7045,6 +7064,10 @@
      },
      {
       "id": "parameter-prior-d467c8a5840f0e03",
+      "type": "ParameterPrior"
+     },
+     {
+      "id": "demo-fixture-prior-alpha_defocus",
       "type": "ParameterPrior"
      },
      {
@@ -7161,7 +7184,49 @@
      ]
     },
     "mode": "RECONSTRUCTED",
-    "model_id": "local-removal-62ffe3f7e1923aa8",
+    "model_id": "local-removal-79b4b9b91c42599d",
+    "parameter_bindings": [
+     {
+      "parameter": "F_th_eff",
+      "semantics": "PROVISIONAL",
+      "source_ref": "calibration:calibration-3a00a101efeacc2c",
+      "source_type": "TARGET_CALIBRATION",
+      "unit": "J/cm2",
+      "value": 0.799999091379535
+     },
+     {
+      "parameter": "incubation_S",
+      "semantics": "PROVISIONAL",
+      "source_ref": "calibration:calibration-3a00a101efeacc2c",
+      "source_type": "TARGET_CALIBRATION",
+      "unit": "dimensionless",
+      "value": 0.7799967581203117
+     },
+     {
+      "parameter": "delta_eff",
+      "semantics": "PROVISIONAL",
+      "source_ref": "calibration:calibration-3a00a101efeacc2c",
+      "source_type": "TARGET_CALIBRATION",
+      "unit": "um",
+      "value": 0.4499963150313335
+     },
+     {
+      "parameter": "beam_radius_um",
+      "semantics": "PHYSICAL",
+      "source_ref": "machine-profile-snapshot",
+      "source_type": "DERIVED",
+      "unit": "um",
+      "value": 8.0
+     },
+     {
+      "parameter": "alpha_defocus",
+      "semantics": "PROVISIONAL",
+      "source_ref": "demo-fixture-prior-alpha_defocus",
+      "source_type": "DEMO_FIXTURE",
+      "unit": "1/um",
+      "value": 0.030000000000000002
+     }
+    ],
     "parameter_semantics": {
      "F_th_eff": "PROVISIONAL",
      "alpha_defocus": "PROVISIONAL",
@@ -7183,259 +7248,259 @@
    }
   },
   "MorphologySimulationResult": {
-   "id": "MorphologySimulationResult-5a5a6471e10b66f1",
+   "id": "MorphologySimulationResult-5d71f667803703ef",
    "type": "MorphologySimulationResult",
    "schema_version": "physics-to-planning-v1",
    "content": {
     "deterministic_seed": 42,
     "difference_field_um": [
      [
-      -9.594539766058723,
-      -7.159720293780756,
-      -5.008914736780593,
-      -3.3302195490450686,
-      -2.0975502984839913,
-      -1.3180603541589129,
-      -1.2478687837284355,
-      -1.1845194811229973,
-      -0.8614266404642237,
-      -0.8708936398374476,
-      -1.4349025391373331,
-      -2.5162086623918185,
-      -4.095955391652286,
-      -6.007859613000795,
-      -8.203117295816808,
-      -10.55437145927451
+      -8.6143302846354,
+      -5.9368026198093435,
+      -3.5892214186448115,
+      -1.6929800758597757,
+      -0.40468361012327136,
+      0.4336744823671985,
+      0.569358556173345,
+      0.6088099544796073,
+      0.9445690497818688,
+      0.8192565704561758,
+      0.04045129606419451,
+      -1.3058182073881675,
+      -3.0024083987438495,
+      -5.121257370741535,
+      -7.411261003861069,
+      -9.950959019679777
      ],
      [
-      -7.793464959423938,
-      -4.930306247398059,
-      -2.3565336969518924,
-      -0.25860645662835324,
-      1.187132912085545,
-      1.9098420672720025,
-      2.022677683662014,
-      2.068729959755892,
-      2.0501638813113736,
-      2.291620104781096,
-      1.6289542171915663,
-      0.5513812355631167,
-      -1.0182412303961037,
-      -3.1020263945796422,
-      -5.635911806311215,
-      -8.469840445066481
+      -6.777134143712523,
+      -3.8238792367136796,
+      -1.0886897923881804,
+      1.146855709908536,
+      2.7709048965075525,
+      3.636809619124957,
+      3.771783821582069,
+      3.794456775009934,
+      4.0840919971573655,
+      3.9453695207587387,
+      3.1501497228653115,
+      1.7776022588565965,
+      0.0802867152892972,
+      -2.140956817482163,
+      -4.777323555951446,
+      -7.691904187391184
      ],
      [
-      -6.624066415162163,
-      -3.507360387737087,
-      -0.6830138702886082,
-      1.6633782910878558,
-      3.3560560011421217,
-      4.233999190633142,
-      4.343513859918154,
-      4.398851558191989,
-      4.350704654651469,
-      4.151509941089959,
-      3.701967179851099,
-      2.7008804873266286,
-      0.997412256488694,
-      -1.3366888049473822,
-      -3.859286471493231,
-      -6.949334476734943
+      -5.6816828078520505,
+      -2.528442992516471,
+      0.3395060918244788,
+      2.7508143335424258,
+      4.555643958446247,
+      5.573966657553722,
+      5.692195784660662,
+      5.81333603363769,
+      5.803857197963737,
+      5.973925866262984,
+      5.2380802088259735,
+      4.126480253270202,
+      2.279205113914699,
+      -0.14382686888624718,
+      -2.9916175690743536,
+      -6.1295034917413815
      ],
      [
-      -6.455446947777924,
-      -3.275390094486255,
-      -0.32127875982799026,
-      2.1018210388684153,
-      3.8843216076130354,
-      4.551798325458023,
-      5.048981018884376,
-      5.089804521228821,
-      5.139291235572184,
-      5.0747703439630065,
-      4.806216431972569,
-      3.833141086942195,
-      2.0494568513753997,
-      -0.37002176981266643,
-      -3.2599322827580828,
-      -6.439092560986481
+      -5.528558680566864,
+      -2.3319783047796783,
+      0.5840865609608947,
+      3.047033339449282,
+      4.906771654409866,
+      5.728276567692735,
+      6.4790475853921095,
+      6.554007224302147,
+      6.455264736798128,
+      6.387184660484131,
+      5.888447887214326,
+      4.739244550710971,
+      2.853986690857493,
+      0.39428537661776275,
+      -2.5070741849545684,
+      -5.687110913923778
      ],
      [
-      -7.041201350413424,
-      -3.9611831453270057,
-      -1.1818938982107987,
-      1.131213859120951,
-      2.8072081717153026,
-      3.7743194911373585,
-      4.190951837093571,
-      4.196554027134745,
-      4.118357130395907,
-      3.9669276761037047,
-      3.86353164837055,
-      2.997255105490055,
-      1.3212655737576533,
-      -0.9991655802103949,
-      -3.7844113561897323,
-      -6.857233051457477
+      -6.330585309370903,
+      -3.25129887660297,
+      -0.4727893411078874,
+      1.872313016636447,
+      3.540244501011255,
+      4.664257591582665,
+      5.282060812329313,
+      5.3233530207048005,
+      5.2668466231875755,
+      5.401873363565699,
+      5.335705278874045,
+      4.289054113991085,
+      2.5168286209857804,
+      0.1503038703303936,
+      -2.6667584677282186,
+      -5.772852660755621
      ],
      [
-      -8.604804439281601,
-      -5.813551425203393,
-      -3.319451887435541,
-      -1.5296679384558693,
-      0.25014929055199175,
-      1.3247864153029347,
-      1.8593598419425206,
-      1.8622418184500695,
-      1.790758672281438,
-      1.6235237256842652,
-      1.4344999826405491,
-      0.7253198889381061,
-      -0.6919362835107101,
-      -2.7386715616922253,
-      -5.2484990916196566,
-      -8.04366624498993
+      -7.961341924857383,
+      -5.151948481599343,
+      -2.422584084516508,
+      -0.30143444893152704,
+      1.886190016362594,
+      3.143391815628867,
+      4.1381469310721535,
+      4.375785036297124,
+      4.740951218646206,
+      4.632362611093207,
+      4.356627806866591,
+      3.4646722458920713,
+      1.7956168519612312,
+      -0.5146847018939589,
+      -3.3366721413839784,
+      -6.475156352624984
      ],
      [
-      -10.46754789054719,
-      -8.108199066377473,
-      -5.053048537297277,
-      -2.9546349415670257,
-      -0.9248176389516019,
-      0.26483181899556385,
-      0.9347300200716333,
-      0.9810306773152959,
-      0.9405661681008972,
-      0.7930800753971639,
-      0.8584451976449543,
-      0.04316710579792371,
-      -1.2365979443319794,
-      -2.9784292904655807,
-      -5.478083643295047,
-      -8.370381279347313
+      -9.651534714130655,
+      -6.2422064372244215,
+      -3.1447235306234056,
+      -0.4580742564844833,
+      1.4184984410256796,
+      3.1925620772719867,
+      4.010323101571245,
+      4.37442437548437,
+      4.440623202960534,
+      4.331334383490507,
+      4.020560906603507,
+      3.1581581195310378,
+      1.7815060143683965,
+      -0.4722667986237177,
+      -3.3090579349189717,
+      -6.5267630476581555
      ],
      [
-      -8.363701006127986,
-      -5.528267080947517,
-      -2.9820745942035813,
-      -0.8963859854617588,
-      0.6788578733295694,
-      1.7621390376539452,
-      2.4346232802740104,
-      2.4965340389147705,
-      2.215764908131149,
-      2.1795968687192655,
-      2.082249290679414,
-      1.3208256520586978,
-      -0.1458013186518663,
-      -2.2504950651091207,
-      -4.8209953826452985,
-      -7.670713695338669
+      -7.385466302610773,
+      -4.468127643808781,
+      -1.82547842686499,
+      0.39337038676751845,
+      2.0498165518086076,
+      3.4418888262654015,
+      4.270209412217657,
+      4.458233645359854,
+      4.561561779157124,
+      4.2514180871545015,
+      4.169256620714666,
+      3.230167173300323,
+      1.578176339787376,
+      -0.6637838538208456,
+      -3.338386825978869,
+      -6.284443878933825
      ],
      [
-      -6.814181628538746,
-      -3.708916048442706,
-      -0.8984383389140618,
-      1.4444610450409137,
-      3.1610623745855584,
-      4.134199928183346,
-      4.259813085839173,
-      4.495580029400852,
-      4.579292172933496,
-      4.548761353926224,
-      4.437450863724457,
-      3.5335726792161672,
-      1.8225835106731658,
-      -0.5284553437646586,
-      -3.348947871811724,
-      -6.465516459045347
+      -5.768584800657482,
+      -2.628418534799316,
+      0.22321851060970133,
+      2.627424744895695,
+      4.472300350181278,
+      5.593334601529783,
+      6.386905140447862,
+      6.526116435684056,
+      6.220535331633986,
+      6.303457575464865,
+      6.155071233003639,
+      5.060487275935326,
+      3.228704337722572,
+      0.8008092397098494,
+      -2.067307373391319,
+      -5.230788587454423
      ],
      [
-      -6.311692832369985,
-      -3.1140587604002405,
-      -0.2144719293916637,
-      2.2139076068348835,
-      3.9898755710513214,
-      4.971249377774942,
-      5.2691764569807304,
-      5.355017460329968,
-      5.363117248354353,
-      5.335922022921597,
-      4.809150005819937,
-      4.144571371548395,
-      2.3535041296704797,
-      -0.077403677786549,
-      -2.9801176658368362,
-      -6.182758199275753
+      -5.066781315883201,
+      -1.8571306145404805,
+      1.0461350806290426,
+      3.521049373937913,
+      5.422414836407029,
+      6.568067988675917,
+      6.755322423737322,
+      6.907226974028141,
+      7.119577437060908,
+      7.097208813619478,
+      6.569970733860423,
+      5.403950955775521,
+      3.498058145250951,
+      1.0188854200693775,
+      -1.8935879130925422,
+      -5.091494612771786
      ],
      [
-      -6.473221833048834,
-      -3.3610140269948836,
-      -0.5484803511641267,
-      1.7912740843422412,
-      3.4786176087680687,
-      4.37240853788175,
-      4.188272064928185,
-      4.37865586797891,
-      4.4870757764666145,
-      4.4965453334703795,
-      4.0828083143503235,
-      3.1112470583008616,
-      1.4129343178639253,
-      -0.9191952830762133,
-      -3.716995382419025,
-      -6.808004454717947
+      -5.389237744157967,
+      -2.2575714132557465,
+      0.56662044920499,
+      2.965809437875901,
+      4.791584484115436,
+      5.8907005978562665,
+      6.0281532385426715,
+      6.377662383039681,
+      6.4250409343904025,
+      6.047795438436825,
+      5.421413809210062,
+      4.394582741311339,
+      2.602076156457386,
+      0.20930893102669046,
+      -2.6230822648686463,
+      -5.74817652247615
      ],
      [
-      -7.691557332580544,
-      -4.842082982736626,
-      -2.2886904864694806,
-      -0.20575458319303408,
-      1.2275906789464734,
-      1.9593919614684019,
-      2.189578213297672,
-      2.0566088921577226,
-      2.1651875990339384,
-      2.174921060801779,
-      1.665795260221362,
-      0.601043971494871,
-      -1.210809329787761,
-      -3.013405139565215,
-      -5.537351457219049,
-      -8.363673950470218
+      -6.569779938129548,
+      -3.660687045312507,
+      -1.0544747439657414,
+      1.131443320852071,
+      2.747169242988882,
+      3.636861760797519,
+      3.9854602722057493,
+      4.203915066868248,
+      4.255074154844557,
+      4.004527650995431,
+      3.1101873076046544,
+      1.9793548946495854,
+      0.3544734984245217,
+      -1.8201625665757177,
+      -4.423598401161248,
+      -7.308820248101005
      ],
      [
-      -9.589517808347468,
-      -7.205008013763996,
-      -5.0942080901950995,
-      -3.524459880688628,
-      -2.313961367965991,
-      -1.4423601706871132,
-      -1.2067197156319835,
-      -1.0400862852110073,
-      -0.9349348916404452,
-      -0.9058544470996175,
-      -1.6844974453607655,
-      -2.6700185035760313,
-      -4.110639223477989,
-      -6.240866987528538,
-      -8.471850915914128,
-      -10.817975952374843
+      -8.326868082240926,
+      -5.791700449986092,
+      -3.5397330039588475,
+      -1.704731531291813,
+      -0.4502432708961699,
+      0.36025393491859603,
+      0.7880031312892761,
+      0.9884509781943791,
+      1.044350103607787,
+      0.549614712699448,
+      -0.006913993858681522,
+      -1.1330884279415798,
+      -2.9492029062184564,
+      -4.821120003057592,
+      -7.285202848554226,
+      -9.76625618492387
      ]
     ],
     "fidelity": "F2_DEFOCUS_RECURSION",
     "input_refs": [
      {
-      "id": "LocalRemovalModel-a74a3e540b03e3ff",
+      "id": "LocalRemovalModel-b4d3417212cd76fc",
       "type": "LocalRemovalModel"
      },
      {
-      "id": "CanonicalPhysicsState-a536dbcd5e16c4e5",
+      "id": "CanonicalPhysicsState-0a73f495a49e74e3",
       "type": "CanonicalPhysicsState"
      },
      {
-      "id": "local-removal-62ffe3f7e1923aa8",
+      "id": "local-removal-79b4b9b91c42599d",
       "type": "LocalRemovalModel"
      },
      {
@@ -7459,255 +7524,255 @@
       "type": "PlanningPreferencePrior"
      },
      {
-      "id": "local-removal-62ffe3f7e1923aa8",
+      "id": "local-removal-79b4b9b91c42599d",
       "type": "LocalRemovalModel"
      }
     ],
     "local_removal_model_ref": {
-     "id": "local-removal-62ffe3f7e1923aa8",
+     "id": "local-removal-79b4b9b91c42599d",
      "type": "LocalRemovalModel"
     },
     "metrics": {
      "machining_time_s": 0.00094,
-     "max_depth_um": 25.363117248354353,
-     "mean_depth_um": 19.227978989245234,
-     "morphology_rmse_um": 4.234240008099217,
-     "removed_volume_um3": 15997.678519052035
+     "max_depth_um": 27.119577437060908,
+     "mean_depth_um": 20.725535116929393,
+     "morphology_rmse_um": 4.432416715104883,
+     "removed_volume_um3": 17243.645217285255
     },
     "predicted_depth_field_um": [
      [
-      10.405460233941277,
-      12.840279706219244,
-      14.991085263219407,
-      16.66978045095493,
-      17.90244970151601,
-      18.681939645841087,
-      18.752131216271565,
-      18.815480518877003,
-      19.138573359535776,
-      19.129106360162552,
-      18.565097460862667,
-      17.48379133760818,
-      15.904044608347714,
-      13.992140386999205,
-      11.796882704183192,
-      9.44562854072549
+      11.3856697153646,
+      14.063197380190656,
+      16.41077858135519,
+      18.307019924140224,
+      19.59531638987673,
+      20.4336744823672,
+      20.569358556173345,
+      20.608809954479607,
+      20.94456904978187,
+      20.819256570456176,
+      20.040451296064195,
+      18.694181792611833,
+      16.99759160125615,
+      14.878742629258465,
+      12.58873899613893,
+      10.049040980320223
      ],
      [
-      12.206535040576062,
-      15.06969375260194,
-      17.643466303048108,
-      19.741393543371647,
-      21.187132912085545,
-      21.909842067272002,
-      22.022677683662014,
-      22.068729959755892,
-      22.050163881311374,
-      22.291620104781096,
-      21.628954217191566,
-      20.551381235563117,
-      18.981758769603896,
-      16.897973605420358,
-      14.364088193688785,
-      11.530159554933519
+      13.222865856287477,
+      16.17612076328632,
+      18.91131020761182,
+      21.146855709908536,
+      22.770904896507552,
+      23.636809619124957,
+      23.77178382158207,
+      23.794456775009934,
+      24.084091997157365,
+      23.94536952075874,
+      23.15014972286531,
+      21.777602258856597,
+      20.080286715289297,
+      17.859043182517837,
+      15.222676444048554,
+      12.308095812608816
      ],
      [
-      13.375933584837837,
-      16.492639612262913,
-      19.316986129711392,
-      21.663378291087856,
-      23.35605600114212,
-      24.233999190633142,
-      24.343513859918154,
-      24.39885155819199,
-      24.35070465465147,
-      24.15150994108996,
-      23.7019671798511,
-      22.70088048732663,
-      20.997412256488694,
-      18.663311195052618,
-      16.14071352850677,
-      13.050665523265057
+      14.31831719214795,
+      17.47155700748353,
+      20.33950609182448,
+      22.750814333542426,
+      24.555643958446247,
+      25.573966657553722,
+      25.69219578466066,
+      25.81333603363769,
+      25.803857197963737,
+      25.973925866262984,
+      25.238080208825973,
+      24.126480253270202,
+      22.2792051139147,
+      19.856173131113753,
+      17.008382430925646,
+      13.870496508258618
      ],
      [
-      13.544553052222076,
-      16.724609905513745,
-      19.67872124017201,
-      22.101821038868415,
-      23.884321607613035,
-      24.551798325458023,
-      25.048981018884376,
-      25.08980452122882,
-      25.139291235572184,
-      25.074770343963007,
-      24.80621643197257,
-      23.833141086942195,
-      22.0494568513754,
-      19.629978230187334,
-      16.740067717241917,
-      13.56090743901352
+      14.471441319433136,
+      17.66802169522032,
+      20.584086560960895,
+      23.047033339449282,
+      24.906771654409866,
+      25.728276567692735,
+      26.47904758539211,
+      26.554007224302147,
+      26.455264736798128,
+      26.38718466048413,
+      25.888447887214326,
+      24.73924455071097,
+      22.853986690857493,
+      20.394285376617763,
+      17.49292581504543,
+      14.312889086076222
      ],
      [
-      12.958798649586576,
-      16.038816854672994,
-      18.8181061017892,
-      21.13121385912095,
-      22.807208171715303,
-      23.77431949113736,
-      24.19095183709357,
-      24.196554027134745,
-      24.118357130395907,
-      23.966927676103705,
-      23.86353164837055,
-      22.997255105490055,
-      21.321265573757653,
-      19.000834419789605,
-      16.215588643810268,
-      13.142766948542523
+      13.669414690629097,
+      16.74870112339703,
+      19.527210658892113,
+      21.872313016636447,
+      23.540244501011255,
+      24.664257591582665,
+      25.282060812329313,
+      25.3233530207048,
+      25.266846623187575,
+      25.4018733635657,
+      25.335705278874045,
+      24.289054113991085,
+      22.51682862098578,
+      20.150303870330394,
+      17.33324153227178,
+      14.227147339244379
      ],
      [
-      11.395195560718399,
-      14.186448574796607,
-      16.68054811256446,
-      18.47033206154413,
-      20.25014929055199,
-      21.324786415302935,
-      21.85935984194252,
-      21.86224181845007,
-      21.790758672281438,
-      21.623523725684265,
-      21.43449998264055,
-      20.725319888938106,
-      19.30806371648929,
-      17.261328438307775,
-      14.751500908380343,
-      11.95633375501007
+      12.038658075142617,
+      14.848051518400657,
+      17.577415915483492,
+      19.698565551068473,
+      21.886190016362594,
+      23.143391815628867,
+      24.138146931072153,
+      24.375785036297124,
+      24.740951218646206,
+      24.632362611093207,
+      24.35662780686659,
+      23.46467224589207,
+      21.79561685196123,
+      19.48531529810604,
+      16.66332785861602,
+      13.524843647375016
      ],
      [
-      9.53245210945281,
-      11.891800933622527,
-      14.946951462702723,
-      17.045365058432974,
-      19.075182361048398,
-      20.264831818995564,
-      20.934730020071633,
-      20.981030677315296,
-      20.940566168100897,
-      20.793080075397164,
-      20.858445197644954,
-      20.043167105797924,
-      18.76340205566802,
-      17.02157070953442,
-      14.521916356704953,
-      11.629618720652687
+      10.348465285869345,
+      13.757793562775579,
+      16.855276469376594,
+      19.541925743515517,
+      21.41849844102568,
+      23.192562077271987,
+      24.010323101571245,
+      24.37442437548437,
+      24.440623202960534,
+      24.331334383490507,
+      24.020560906603507,
+      23.158158119531038,
+      21.781506014368397,
+      19.527733201376282,
+      16.69094206508103,
+      13.473236952341844
      ],
      [
-      11.636298993872014,
-      14.471732919052483,
-      17.01792540579642,
-      19.10361401453824,
-      20.67885787332957,
-      21.762139037653945,
-      22.43462328027401,
-      22.49653403891477,
-      22.21576490813115,
-      22.179596868719266,
-      22.082249290679414,
-      21.320825652058698,
-      19.854198681348134,
-      17.74950493489088,
-      15.179004617354702,
-      12.32928630466133
+      12.614533697389227,
+      15.531872356191219,
+      18.17452157313501,
+      20.39337038676752,
+      22.049816551808608,
+      23.4418888262654,
+      24.270209412217657,
+      24.458233645359854,
+      24.561561779157124,
+      24.2514180871545,
+      24.169256620714666,
+      23.230167173300323,
+      21.578176339787376,
+      19.336216146179154,
+      16.66161317402113,
+      13.715556121066175
      ],
      [
-      13.185818371461254,
-      16.291083951557294,
-      19.10156166108594,
-      21.444461045040914,
-      23.16106237458556,
-      24.134199928183346,
-      24.259813085839173,
-      24.495580029400852,
-      24.579292172933496,
-      24.548761353926224,
-      24.437450863724457,
-      23.533572679216167,
-      21.822583510673166,
-      19.47154465623534,
-      16.651052128188276,
-      13.534483540954653
+      14.231415199342518,
+      17.371581465200684,
+      20.2232185106097,
+      22.627424744895695,
+      24.47230035018128,
+      25.593334601529783,
+      26.386905140447862,
+      26.526116435684056,
+      26.220535331633986,
+      26.303457575464865,
+      26.15507123300364,
+      25.060487275935326,
+      23.228704337722572,
+      20.80080923970985,
+      17.93269262660868,
+      14.769211412545577
      ],
      [
-      13.688307167630015,
-      16.88594123959976,
-      19.785528070608336,
-      22.213907606834884,
-      23.98987557105132,
-      24.971249377774942,
-      25.26917645698073,
-      25.355017460329968,
-      25.363117248354353,
-      25.335922022921597,
-      24.809150005819937,
-      24.144571371548395,
-      22.35350412967048,
-      19.92259632221345,
-      17.019882334163164,
-      13.817241800724247
+      14.933218684116799,
+      18.14286938545952,
+      21.046135080629043,
+      23.521049373937913,
+      25.42241483640703,
+      26.568067988675917,
+      26.755322423737322,
+      26.90722697402814,
+      27.119577437060908,
+      27.097208813619478,
+      26.569970733860423,
+      25.40395095577552,
+      23.49805814525095,
+      21.018885420069378,
+      18.106412086907458,
+      14.908505387228214
      ],
      [
-      13.526778166951166,
-      16.638985973005116,
-      19.451519648835873,
-      21.79127408434224,
-      23.47861760876807,
-      24.37240853788175,
-      24.188272064928185,
-      24.37865586797891,
-      24.487075776466614,
-      24.49654533347038,
-      24.082808314350324,
-      23.11124705830086,
-      21.412934317863925,
-      19.080804716923787,
-      16.283004617580975,
-      13.191995545282053
+      14.610762255842033,
+      17.742428586744253,
+      20.56662044920499,
+      22.9658094378759,
+      24.791584484115436,
+      25.890700597856267,
+      26.02815323854267,
+      26.37766238303968,
+      26.425040934390402,
+      26.047795438436825,
+      25.421413809210062,
+      24.39458274131134,
+      22.602076156457386,
+      20.20930893102669,
+      17.376917735131354,
+      14.25182347752385
      ],
      [
-      12.308442667419456,
-      15.157917017263374,
-      17.71130951353052,
-      19.794245416806966,
-      21.227590678946473,
-      21.959391961468402,
-      22.189578213297672,
-      22.056608892157723,
-      22.16518759903394,
-      22.17492106080178,
-      21.665795260221362,
-      20.60104397149487,
-      18.78919067021224,
-      16.986594860434785,
-      14.46264854278095,
-      11.636326049529782
+      13.430220061870452,
+      16.339312954687493,
+      18.94552525603426,
+      21.13144332085207,
+      22.747169242988882,
+      23.63686176079752,
+      23.98546027220575,
+      24.203915066868248,
+      24.255074154844557,
+      24.00452765099543,
+      23.110187307604654,
+      21.979354894649585,
+      20.35447349842452,
+      18.179837433424282,
+      15.576401598838752,
+      12.691179751898995
      ],
      [
-      10.410482191652532,
-      12.794991986236004,
-      14.9057919098049,
-      16.475540119311372,
-      17.68603863203401,
-      18.557639829312887,
-      18.793280284368016,
-      18.959913714788993,
-      19.065065108359555,
-      19.094145552900383,
-      18.315502554639234,
-      17.32998149642397,
-      15.889360776522011,
-      13.759133012471462,
-      11.528149084085872,
-      9.182024047625157
+      11.673131917759074,
+      14.208299550013908,
+      16.460266996041153,
+      18.295268468708187,
+      19.54975672910383,
+      20.360253934918596,
+      20.788003131289276,
+      20.98845097819438,
+      21.044350103607787,
+      20.549614712699448,
+      19.99308600614132,
+      18.86691157205842,
+      17.050797093781544,
+      15.178879996942408,
+      12.714797151445774,
+      10.23374381507613
      ]
     ],
     "provenance": [
@@ -7719,308 +7784,308 @@
     ],
     "pulse_count": 48,
     "schema_version": "physics-to-planning-v1",
-    "simulation_id": "morphology-simulation-2b4857cc4ab469b1",
+    "simulation_id": "morphology-simulation-7c6551b200a8c098",
     "state": {
      "accumulated_fluence_J_cm2": [
       [
-       151.66203883603362,
-       190.33322819810442,
-       213.55480479904944,
-       223.21892976581023,
-       225.14091035139492,
-       224.82907667548926,
-       223.91349473978102,
-       223.61039069162706,
-       224.2162107206518,
-       223.96805339122116,
-       221.97257900650393,
-       218.08090574019795,
-       209.33886939169753,
-       192.27027139851322,
-       165.68662285384903,
-       129.56245315896837
+       152.8893330937456,
+       189.7748029103227,
+       210.3308431550084,
+       217.79706307501897,
+       218.59494507909696,
+       217.45815629186953,
+       216.11726201728968,
+       215.39650852650163,
+       215.3090755944388,
+       214.19574243168742,
+       211.78298829466425,
+       206.3544538003754,
+       196.70473343872226,
+       179.46872975590674,
+       154.43788583681504,
+       122.0150994419239
       ],
       [
-       143.36992955638055,
-       180.55954634588545,
-       203.63341028408522,
-       214.04878119877142,
-       217.21070671617773,
-       217.4540675058982,
-       217.03366772827633,
-       216.92842632792153,
-       216.71623671773946,
-       217.0930820959744,
-       214.85128203934244,
-       210.8584257308793,
-       202.26285039379695,
-       185.6747558551462,
-       159.4514614982647,
-       124.82973636657567
+       146.8489070859866,
+       182.57756946294148,
+       204.3291216352285,
+       213.28138920391646,
+       215.58291837246335,
+       215.75779976957753,
+       215.02248045139766,
+       214.57915716081348,
+       214.4655396601532,
+       213.21694360448538,
+       210.5612432877018,
+       204.88142756092856,
+       195.12040599776424,
+       177.96620322679283,
+       152.53095980046297,
+       120.19854416616005
       ],
       [
-       121.27240015258374,
-       153.90776202508573,
-       175.64551852973497,
-       187.0307617741644,
-       191.91397320751963,
-       193.94101047981627,
-       194.38092770056386,
-       194.71176965388636,
-       194.62885164055336,
-       193.62054967501422,
-       191.91062909528424,
-       188.26800441647413,
-       180.2691835920089,
-       165.50864266410684,
-       142.84872785684504,
-       111.65032689544059
+       126.72395112387017,
+       159.02447705019603,
+       180.26253961916132,
+       191.37168551665525,
+       196.29165142578054,
+       198.47347255435096,
+       198.8853950420682,
+       199.17361724511167,
+       198.92062441486425,
+       198.87485972373094,
+       196.0374538844457,
+       191.4598674678926,
+       182.29244686376163,
+       166.66796357734833,
+       143.1327942526632,
+       112.72461544627771
       ],
       [
-       106.74073885235936,
-       136.4142701681854,
-       158.190556137384,
-       170.78883558657031,
-       177.26518498127277,
-       179.73600425524563,
-       181.9081670450901,
-       182.0849144383363,
-       182.20426989817517,
-       181.77057619435712,
-       180.40863402943202,
-       177.25261107516334,
-       170.7434301497438,
-       158.07098255123358,
-       136.76065511559727,
-       107.1562569036691
+       111.22487441061023,
+       140.62437096510413,
+       161.9214485735086,
+       174.95587760237942,
+       182.11287777705607,
+       185.23931277677144,
+       187.8868528107787,
+       188.5685826885339,
+       188.19702360819014,
+       187.75799209514165,
+       186.06676069970783,
+       182.3825754059173,
+       175.24486749252543,
+       162.10110379485616,
+       140.69805348203704,
+       111.34206975470423
       ],
       [
-       110.88444017233559,
-       141.5360280186058,
-       164.2938099197568,
-       178.36685136415082,
-       185.86642075673757,
-       189.236294883355,
-       190.84698865397814,
-       191.28053323417276,
-       191.28271364460917,
-       190.55592802723575,
-       190.2621006013767,
-       188.3977868012066,
-       183.72654418012027,
-       172.71942029123664,
-       151.6497158406551,
-       119.89479113291819
+       110.3216432582445,
+       139.18069180822576,
+       161.0768630400746,
+       175.3051670434508,
+       183.0220912265327,
+       187.16036453105966,
+       189.30064503241587,
+       189.89792684656337,
+       190.47325428009776,
+       190.83684035535467,
+       191.01762384052773,
+       189.39999148899076,
+       185.11154651162562,
+       174.8450731592724,
+       154.95404725779085,
+       124.53287359793569
       ],
       [
-       124.16737345712437,
-       157.85020579992533,
-       182.8730731718671,
-       197.52606567433162,
-       205.90091184191618,
-       209.34242176160942,
-       211.18647711794048,
-       211.4023475866643,
-       211.4138134985653,
-       211.34892419623262,
-       211.32562881566312,
-       211.15792047997235,
-       207.80651013257142,
-       198.0109593169646,
-       176.1281741242083,
-       140.5656079309899
+       117.50110365182378,
+       147.29194522305627,
+       171.45705619110123,
+       186.15811481347293,
+       195.5690857596734,
+       199.63679583480294,
+       202.17710631487796,
+       203.1075170862945,
+       204.3051245112049,
+       205.19795425501565,
+       205.87856418923516,
+       205.8478873419642,
+       204.14832571767536,
+       196.2580110700501,
+       176.22991853507412,
+       143.17218145091925
       ],
       [
-       129.461490282457,
-       164.75155672358684,
-       192.62444722911712,
-       208.74303255658683,
-       217.56250050301844,
-       221.01853601420353,
-       222.82164320147115,
-       222.98276931314942,
-       223.04379517887102,
-       223.13164677652242,
-       224.16541814615422,
-       224.35132951218577,
-       222.45016634389043,
-       213.2602857944321,
-       190.39739177751977,
-       152.3756962599551
+       120.77271911616083,
+       153.47157486511358,
+       178.42967770564744,
+       194.31122067418585,
+       203.05898474304846,
+       207.99567858133236,
+       209.49108406401646,
+       210.8726624679273,
+       211.33903412333171,
+       212.03706569585037,
+       213.07349521487575,
+       214.38602423963172,
+       213.78270750052437,
+       206.3274552515833,
+       186.68906962843292,
+       152.2580422757818
       ],
       [
-       124.95531198120234,
-       158.93687115870605,
-       184.25058826272493,
-       199.8807576765047,
-       207.73865016650524,
-       211.30935445170428,
-       213.37633095231055,
-       213.71029694515872,
-       213.07410769648092,
-       213.1376760972969,
-       213.48725468908802,
-       213.0829540775936,
-       209.8875147173677,
-       199.80860220477226,
-       177.64788946189395,
-       141.84135450581888
+       119.84231145539046,
+       150.42969892286615,
+       173.85060166703622,
+       189.16817811167698,
+       197.51833459087828,
+       202.33238221832423,
+       204.49155953924273,
+       205.4882438951275,
+       206.33253453785082,
+       206.13258274696872,
+       207.17921110012207,
+       207.11441621242494,
+       204.95565911065194,
+       196.60710857309329,
+       176.99408254177072,
+       144.03244329296353
       ],
       [
-       112.18579318411008,
-       143.175199822968,
-       166.2563297142116,
-       180.61366139451394,
-       188.34250749055764,
-       191.83063197153155,
-       192.72532566358493,
-       193.84541178260858,
-       194.0300270960532,
-       193.754159889857,
-       193.28801534072343,
-       191.13988845826077,
-       186.15498592100204,
-       174.85132718311561,
-       153.49708765414331,
-       121.46697166939802
+       113.87303294530638,
+       143.42960809949244,
+       165.9269750336635,
+       180.60053412612916,
+       189.11144789088104,
+       193.32249980621458,
+       196.0469588564492,
+       196.77554988146443,
+       196.2871852887465,
+       197.18859929088958,
+       196.63449973426233,
+       194.5509052040761,
+       189.69145263558343,
+       178.85136625811194,
+       158.44868761758062,
+       127.54640272480866
       ],
       [
-       107.86950932781737,
-       137.59721866998592,
-       158.9680291207008,
-       171.69272254812327,
-       178.25276341197483,
-       181.49975635809133,
-       182.98308115731015,
-       183.5430735433612,
-       183.57892040405133,
-       183.5175501156004,
-       181.3347127901897,
-       178.8328482231695,
-       172.21503679000185,
-       159.4939160844832,
-       138.17605657446438,
-       108.52087118941043
+       114.04994856517699,
+       143.67469867720266,
+       164.8188305055072,
+       177.79255312385627,
+       184.87465336442193,
+       188.56116648783743,
+       189.1475319188018,
+       189.81514238008967,
+       190.49007857606534,
+       190.08073338123233,
+       188.27635757897988,
+       184.4022425848351,
+       177.0828338476232,
+       163.92169430203697,
+       142.72088922272823,
+       113.63988311570729
       ],
       [
-       121.28031368963345,
-       153.23470416151198,
-       174.4891160128271,
-       185.6393530585888,
-       190.37786885799903,
-       192.2389028622268,
-       191.6975449868459,
-       192.45555737907202,
-       192.5713603719007,
-       192.31475445865004,
-       190.829778717919,
-       187.4659137206168,
-       179.8464665464716,
-       165.62469548162002,
-       142.7576771747126,
-       112.0206214946646
+       125.8687218185787,
+       156.24699595267273,
+       176.19184507292707,
+       186.63703286756237,
+       191.14901005555853,
+       192.97259356226195,
+       192.97579116278243,
+       194.0804435663173,
+       193.994981210493,
+       192.4009826707766,
+       190.32918214257927,
+       186.55417350185837,
+       178.0171708405581,
+       163.41422957451437,
+       141.30436531273276,
+       112.47637885013916
       ],
       [
-       141.60448534155785,
-       177.2633976389891,
-       199.23275068561037,
-       209.0486362042121,
-       211.8479476780972,
-       211.7586305879556,
-       211.51826277429686,
-       210.59416570476253,
-       210.65667825797522,
-       210.64648308010294,
-       209.4396835939665,
-       206.1105784001564,
-       197.68933203706604,
-       183.05518383698146,
-       158.09787440194555,
-       124.52463566682711
+       141.175226494257,
+       173.16461657445043,
+       192.0411017692048,
+       199.856609273992,
+       201.57796545989777,
+       201.25282473783474,
+       200.63487071386987,
+       200.27984580155493,
+       200.089559630707,
+       199.2339475822968,
+       197.12652554466868,
+       193.02333889101683,
+       184.69810255762516,
+       169.61221611070988,
+       146.85661147477725,
+       117.42309041195028
       ],
       [
-       148.4650994570258,
-       185.19783764296807,
-       207.03620056327043,
-       215.42804805938215,
-       216.9058479960625,
-       216.7225927809815,
-       216.01364118438514,
-       215.6538307303781,
-       215.68500022194786,
-       215.861499804236,
-       214.17313566773927,
-       211.25741579041795,
-       203.8391166757076,
-       187.49026293842905,
-       161.9100759457562,
-       127.0000298073861
+       145.0868423205833,
+       176.90261127652533,
+       194.61124280515696,
+       200.77223261192972,
+       200.52159073460982,
+       198.82501337692028,
+       198.09082550357326,
+       197.45984656069456,
+       197.29379068683951,
+       195.9701200536328,
+       195.09531601326162,
+       191.4850170430449,
+       182.96349043785762,
+       168.89871507658512,
+       145.94868360152947,
+       116.96720495216493
       ]
      ],
      "effective_pulse_count": [
       [
-       11.0,
-       13.0,
+       12.0,
        15.0,
        17.0,
-       18.0,
        19.0,
-       19.0,
-       19.0,
-       20.0,
+       21.0,
+       22.0,
+       22.0,
+       22.0,
+       22.0,
+       21.0,
        20.0,
        18.0,
        17.0,
-       16.0,
-       14.0,
-       13.0,
-       10.0
-      ],
-      [
-       12.0,
-       14.0,
-       16.0,
-       18.0,
-       20.0,
-       21.0,
-       21.0,
-       21.0,
-       21.0,
-       22.0,
-       20.0,
-       19.0,
-       18.0,
-       16.0,
+       15.0,
        14.0,
        12.0
       ],
       [
        13.0,
        15.0,
-       17.0,
-       19.0,
-       21.0,
-       23.0,
-       23.0,
-       23.0,
+       18.0,
+       20.0,
+       22.0,
+       24.0,
+       24.0,
+       24.0,
+       24.0,
        23.0,
        22.0,
-       21.0,
        20.0,
-       18.0,
-       16.0,
+       19.0,
+       17.0,
        15.0,
        13.0
       ],
       [
-       13.0,
-       15.0,
+       14.0,
+       16.0,
+       18.0,
+       20.0,
+       22.0,
+       24.0,
+       24.0,
+       24.0,
+       24.0,
+       25.0,
+       23.0,
+       22.0,
+       20.0,
+       18.0,
+       16.0,
+       14.0
+      ],
+      [
+       14.0,
+       16.0,
        18.0,
        20.0,
        22.0,
        23.0,
        25.0,
-       24.0,
+       25.0,
        24.0,
        24.0,
        23.0,
@@ -8031,403 +8096,403 @@
        13.0
       ],
       [
+       14.0,
+       16.0,
+       18.0,
+       20.0,
+       21.0,
+       22.0,
+       23.0,
+       23.0,
+       24.0,
+       24.0,
+       24.0,
+       22.0,
+       20.0,
+       18.0,
+       16.0,
+       14.0
+      ],
+      [
+       13.0,
+       15.0,
+       20.0,
+       22.0,
+       25.0,
+       26.0,
+       28.0,
+       29.0,
+       30.0,
+       31.0,
+       30.0,
+       27.0,
+       25.0,
+       23.0,
+       19.0,
+       16.0
+      ],
+      [
+       12.0,
+       17.0,
+       21.0,
+       23.0,
+       25.0,
+       27.0,
+       27.0,
+       29.0,
+       29.0,
+       29.0,
+       28.0,
+       27.0,
+       25.0,
+       22.0,
+       19.0,
+       16.0
+      ],
+      [
+       13.0,
+       15.0,
+       17.0,
+       19.0,
+       20.0,
+       22.0,
+       23.0,
+       24.0,
+       25.0,
+       24.0,
+       24.0,
+       22.0,
+       20.0,
+       18.0,
+       16.0,
+       14.0
+      ],
+      [
+       14.0,
+       16.0,
+       18.0,
+       20.0,
+       22.0,
+       23.0,
+       25.0,
+       25.0,
+       24.0,
+       26.0,
+       25.0,
+       23.0,
+       21.0,
+       19.0,
+       17.0,
+       15.0
+      ],
+      [
+       14.0,
+       17.0,
+       19.0,
+       21.0,
+       23.0,
+       25.0,
+       24.0,
+       24.0,
+       25.0,
+       25.0,
+       24.0,
+       22.0,
+       20.0,
+       18.0,
+       16.0,
+       14.0
+      ],
+      [
+       14.0,
+       16.0,
+       18.0,
+       20.0,
+       22.0,
+       24.0,
+       24.0,
+       26.0,
+       26.0,
+       24.0,
+       23.0,
+       23.0,
+       21.0,
+       19.0,
+       17.0,
+       15.0
+      ],
+      [
        13.0,
        15.0,
        17.0,
        19.0,
        21.0,
-       22.0,
        23.0,
-       23.0,
+       24.0,
+       24.0,
+       24.0,
        23.0,
        22.0,
-       22.0,
+       21.0,
        20.0,
        18.0,
        16.0,
-       14.0,
-       12.0
+       14.0
       ],
       [
        12.0,
        14.0,
        16.0,
-       17.0,
+       18.0,
        19.0,
        20.0,
        22.0,
        22.0,
        22.0,
-       22.0,
-       21.0,
        20.0,
+       20.0,
+       19.0,
        17.0,
-       15.0,
+       16.0,
        13.0,
        11.0
-      ],
-      [
-       10.0,
-       13.0,
-       17.0,
-       19.0,
-       21.0,
-       22.0,
-       24.0,
-       24.0,
-       24.0,
-       24.0,
-       24.0,
-       23.0,
-       22.0,
-       20.0,
-       17.0,
-       14.0
-      ],
-      [
-       12.0,
-       14.0,
-       16.0,
-       18.0,
-       19.0,
-       20.0,
-       22.0,
-       22.0,
-       21.0,
-       21.0,
-       21.0,
-       20.0,
-       18.0,
-       16.0,
-       14.0,
-       12.0
-      ],
-      [
-       13.0,
-       15.0,
-       17.0,
-       19.0,
-       21.0,
-       22.0,
-       22.0,
-       23.0,
-       23.0,
-       23.0,
-       23.0,
-       21.0,
-       19.0,
-       17.0,
-       15.0,
-       13.0
-      ],
-      [
-       13.0,
-       15.0,
-       17.0,
-       19.0,
-       21.0,
-       23.0,
-       24.0,
-       24.0,
-       24.0,
-       25.0,
-       23.0,
-       22.0,
-       20.0,
-       18.0,
-       16.0,
-       14.0
-      ],
-      [
-       13.0,
-       15.0,
-       17.0,
-       19.0,
-       21.0,
-       23.0,
-       22.0,
-       23.0,
-       23.0,
-       23.0,
-       22.0,
-       21.0,
-       19.0,
-       17.0,
-       15.0,
-       13.0
-      ],
-      [
-       12.0,
-       14.0,
-       16.0,
-       18.0,
-       20.0,
-       21.0,
-       22.0,
-       21.0,
-       21.0,
-       21.0,
-       20.0,
-       19.0,
-       17.0,
-       16.0,
-       14.0,
-       12.0
-      ],
-      [
-       10.0,
-       12.0,
-       14.0,
-       15.0,
-       16.0,
-       18.0,
-       19.0,
-       19.0,
-       19.0,
-       19.0,
-       17.0,
-       16.0,
-       15.0,
-       12.0,
-       10.0,
-       7.0
       ]
      ],
      "grid_spacing_um": 2.0,
      "height_field_um": [
       [
-       -10.405460233941277,
-       -12.840279706219244,
-       -14.991085263219407,
-       -16.66978045095493,
-       -17.90244970151601,
-       -18.681939645841087,
-       -18.752131216271565,
-       -18.815480518877003,
-       -19.138573359535776,
-       -19.129106360162552,
-       -18.565097460862667,
-       -17.48379133760818,
-       -15.904044608347714,
-       -13.992140386999205,
-       -11.796882704183192,
-       -9.44562854072549
+       -11.3856697153646,
+       -14.063197380190656,
+       -16.41077858135519,
+       -18.307019924140224,
+       -19.59531638987673,
+       -20.4336744823672,
+       -20.569358556173345,
+       -20.608809954479607,
+       -20.94456904978187,
+       -20.819256570456176,
+       -20.040451296064195,
+       -18.694181792611833,
+       -16.99759160125615,
+       -14.878742629258465,
+       -12.58873899613893,
+       -10.049040980320223
       ],
       [
-       -12.206535040576062,
-       -15.06969375260194,
-       -17.643466303048108,
-       -19.741393543371647,
-       -21.187132912085545,
-       -21.909842067272002,
-       -22.022677683662014,
-       -22.068729959755892,
-       -22.050163881311374,
-       -22.291620104781096,
-       -21.628954217191566,
-       -20.551381235563117,
-       -18.981758769603896,
-       -16.897973605420358,
-       -14.364088193688785,
-       -11.530159554933519
+       -13.222865856287477,
+       -16.17612076328632,
+       -18.91131020761182,
+       -21.146855709908536,
+       -22.770904896507552,
+       -23.636809619124957,
+       -23.77178382158207,
+       -23.794456775009934,
+       -24.084091997157365,
+       -23.94536952075874,
+       -23.15014972286531,
+       -21.777602258856597,
+       -20.080286715289297,
+       -17.859043182517837,
+       -15.222676444048554,
+       -12.308095812608816
       ],
       [
-       -13.375933584837837,
-       -16.492639612262913,
-       -19.316986129711392,
-       -21.663378291087856,
-       -23.35605600114212,
-       -24.233999190633142,
-       -24.343513859918154,
-       -24.39885155819199,
-       -24.35070465465147,
-       -24.15150994108996,
-       -23.7019671798511,
-       -22.70088048732663,
-       -20.997412256488694,
-       -18.663311195052618,
-       -16.14071352850677,
-       -13.050665523265057
+       -14.31831719214795,
+       -17.47155700748353,
+       -20.33950609182448,
+       -22.750814333542426,
+       -24.555643958446247,
+       -25.573966657553722,
+       -25.69219578466066,
+       -25.81333603363769,
+       -25.803857197963737,
+       -25.973925866262984,
+       -25.238080208825973,
+       -24.126480253270202,
+       -22.2792051139147,
+       -19.856173131113753,
+       -17.008382430925646,
+       -13.870496508258618
       ],
       [
-       -13.544553052222076,
-       -16.724609905513745,
-       -19.67872124017201,
-       -22.101821038868415,
-       -23.884321607613035,
-       -24.551798325458023,
-       -25.048981018884376,
-       -25.08980452122882,
-       -25.139291235572184,
-       -25.074770343963007,
-       -24.80621643197257,
-       -23.833141086942195,
-       -22.0494568513754,
-       -19.629978230187334,
-       -16.740067717241917,
-       -13.56090743901352
+       -14.471441319433136,
+       -17.66802169522032,
+       -20.584086560960895,
+       -23.047033339449282,
+       -24.906771654409866,
+       -25.728276567692735,
+       -26.47904758539211,
+       -26.554007224302147,
+       -26.455264736798128,
+       -26.38718466048413,
+       -25.888447887214326,
+       -24.73924455071097,
+       -22.853986690857493,
+       -20.394285376617763,
+       -17.49292581504543,
+       -14.312889086076222
       ],
       [
-       -12.958798649586576,
-       -16.038816854672994,
-       -18.8181061017892,
-       -21.13121385912095,
-       -22.807208171715303,
-       -23.77431949113736,
-       -24.19095183709357,
-       -24.196554027134745,
-       -24.118357130395907,
-       -23.966927676103705,
-       -23.86353164837055,
-       -22.997255105490055,
-       -21.321265573757653,
-       -19.000834419789605,
-       -16.215588643810268,
-       -13.142766948542523
+       -13.669414690629097,
+       -16.74870112339703,
+       -19.527210658892113,
+       -21.872313016636447,
+       -23.540244501011255,
+       -24.664257591582665,
+       -25.282060812329313,
+       -25.3233530207048,
+       -25.266846623187575,
+       -25.4018733635657,
+       -25.335705278874045,
+       -24.289054113991085,
+       -22.51682862098578,
+       -20.150303870330394,
+       -17.33324153227178,
+       -14.227147339244379
       ],
       [
-       -11.395195560718399,
-       -14.186448574796607,
-       -16.68054811256446,
-       -18.47033206154413,
-       -20.25014929055199,
-       -21.324786415302935,
-       -21.85935984194252,
-       -21.86224181845007,
-       -21.790758672281438,
-       -21.623523725684265,
-       -21.43449998264055,
-       -20.725319888938106,
-       -19.30806371648929,
-       -17.261328438307775,
-       -14.751500908380343,
-       -11.95633375501007
+       -12.038658075142617,
+       -14.848051518400657,
+       -17.577415915483492,
+       -19.698565551068473,
+       -21.886190016362594,
+       -23.143391815628867,
+       -24.138146931072153,
+       -24.375785036297124,
+       -24.740951218646206,
+       -24.632362611093207,
+       -24.35662780686659,
+       -23.46467224589207,
+       -21.79561685196123,
+       -19.48531529810604,
+       -16.66332785861602,
+       -13.524843647375016
       ],
       [
-       -9.53245210945281,
-       -11.891800933622527,
-       -14.946951462702723,
-       -17.045365058432974,
-       -19.075182361048398,
-       -20.264831818995564,
-       -20.934730020071633,
-       -20.981030677315296,
-       -20.940566168100897,
-       -20.793080075397164,
-       -20.858445197644954,
-       -20.043167105797924,
-       -18.76340205566802,
-       -17.02157070953442,
-       -14.521916356704953,
-       -11.629618720652687
+       -10.348465285869345,
+       -13.757793562775579,
+       -16.855276469376594,
+       -19.541925743515517,
+       -21.41849844102568,
+       -23.192562077271987,
+       -24.010323101571245,
+       -24.37442437548437,
+       -24.440623202960534,
+       -24.331334383490507,
+       -24.020560906603507,
+       -23.158158119531038,
+       -21.781506014368397,
+       -19.527733201376282,
+       -16.69094206508103,
+       -13.473236952341844
       ],
       [
-       -11.636298993872014,
-       -14.471732919052483,
-       -17.01792540579642,
-       -19.10361401453824,
-       -20.67885787332957,
-       -21.762139037653945,
-       -22.43462328027401,
-       -22.49653403891477,
-       -22.21576490813115,
-       -22.179596868719266,
-       -22.082249290679414,
-       -21.320825652058698,
-       -19.854198681348134,
-       -17.74950493489088,
-       -15.179004617354702,
-       -12.32928630466133
+       -12.614533697389227,
+       -15.531872356191219,
+       -18.17452157313501,
+       -20.39337038676752,
+       -22.049816551808608,
+       -23.4418888262654,
+       -24.270209412217657,
+       -24.458233645359854,
+       -24.561561779157124,
+       -24.2514180871545,
+       -24.169256620714666,
+       -23.230167173300323,
+       -21.578176339787376,
+       -19.336216146179154,
+       -16.66161317402113,
+       -13.715556121066175
       ],
       [
-       -13.185818371461254,
-       -16.291083951557294,
-       -19.10156166108594,
-       -21.444461045040914,
-       -23.16106237458556,
-       -24.134199928183346,
-       -24.259813085839173,
-       -24.495580029400852,
-       -24.579292172933496,
-       -24.548761353926224,
-       -24.437450863724457,
-       -23.533572679216167,
-       -21.822583510673166,
-       -19.47154465623534,
-       -16.651052128188276,
-       -13.534483540954653
+       -14.231415199342518,
+       -17.371581465200684,
+       -20.2232185106097,
+       -22.627424744895695,
+       -24.47230035018128,
+       -25.593334601529783,
+       -26.386905140447862,
+       -26.526116435684056,
+       -26.220535331633986,
+       -26.303457575464865,
+       -26.15507123300364,
+       -25.060487275935326,
+       -23.228704337722572,
+       -20.80080923970985,
+       -17.93269262660868,
+       -14.769211412545577
       ],
       [
-       -13.688307167630015,
-       -16.88594123959976,
-       -19.785528070608336,
-       -22.213907606834884,
-       -23.98987557105132,
-       -24.971249377774942,
-       -25.26917645698073,
-       -25.355017460329968,
-       -25.363117248354353,
-       -25.335922022921597,
-       -24.809150005819937,
-       -24.144571371548395,
-       -22.35350412967048,
-       -19.92259632221345,
-       -17.019882334163164,
-       -13.817241800724247
+       -14.933218684116799,
+       -18.14286938545952,
+       -21.046135080629043,
+       -23.521049373937913,
+       -25.42241483640703,
+       -26.568067988675917,
+       -26.755322423737322,
+       -26.90722697402814,
+       -27.119577437060908,
+       -27.097208813619478,
+       -26.569970733860423,
+       -25.40395095577552,
+       -23.49805814525095,
+       -21.018885420069378,
+       -18.106412086907458,
+       -14.908505387228214
       ],
       [
-       -13.526778166951166,
-       -16.638985973005116,
-       -19.451519648835873,
-       -21.79127408434224,
-       -23.47861760876807,
-       -24.37240853788175,
-       -24.188272064928185,
-       -24.37865586797891,
-       -24.487075776466614,
-       -24.49654533347038,
-       -24.082808314350324,
-       -23.11124705830086,
-       -21.412934317863925,
-       -19.080804716923787,
-       -16.283004617580975,
-       -13.191995545282053
+       -14.610762255842033,
+       -17.742428586744253,
+       -20.56662044920499,
+       -22.9658094378759,
+       -24.791584484115436,
+       -25.890700597856267,
+       -26.02815323854267,
+       -26.37766238303968,
+       -26.425040934390402,
+       -26.047795438436825,
+       -25.421413809210062,
+       -24.39458274131134,
+       -22.602076156457386,
+       -20.20930893102669,
+       -17.376917735131354,
+       -14.25182347752385
       ],
       [
-       -12.308442667419456,
-       -15.157917017263374,
-       -17.71130951353052,
-       -19.794245416806966,
-       -21.227590678946473,
-       -21.959391961468402,
-       -22.189578213297672,
-       -22.056608892157723,
-       -22.16518759903394,
-       -22.17492106080178,
-       -21.665795260221362,
-       -20.60104397149487,
-       -18.78919067021224,
-       -16.986594860434785,
-       -14.46264854278095,
-       -11.636326049529782
+       -13.430220061870452,
+       -16.339312954687493,
+       -18.94552525603426,
+       -21.13144332085207,
+       -22.747169242988882,
+       -23.63686176079752,
+       -23.98546027220575,
+       -24.203915066868248,
+       -24.255074154844557,
+       -24.00452765099543,
+       -23.110187307604654,
+       -21.979354894649585,
+       -20.35447349842452,
+       -18.179837433424282,
+       -15.576401598838752,
+       -12.691179751898995
       ],
       [
-       -10.410482191652532,
-       -12.794991986236004,
-       -14.9057919098049,
-       -16.475540119311372,
-       -17.68603863203401,
-       -18.557639829312887,
-       -18.793280284368016,
-       -18.959913714788993,
-       -19.065065108359555,
-       -19.094145552900383,
-       -18.315502554639234,
-       -17.32998149642397,
-       -15.889360776522011,
-       -13.759133012471462,
-       -11.528149084085872,
-       -9.182024047625157
+       -11.673131917759074,
+       -14.208299550013908,
+       -16.460266996041153,
+       -18.295268468708187,
+       -19.54975672910383,
+       -20.360253934918596,
+       -20.788003131289276,
+       -20.98845097819438,
+       -21.044350103607787,
+       -20.549614712699448,
+       -19.99308600614132,
+       -18.86691157205842,
+       -17.050797093781544,
+       -15.178879996942408,
+       -12.714797151445774,
+       -10.23374381507613
       ]
      ],
      "thermal_memory_proxy": [
@@ -8909,7 +8974,7 @@
    }
   },
   "PhysicalModelState": {
-   "id": "PhysicalModelState-fc5093b4ed32be57",
+   "id": "PhysicalModelState-0437a472807fe4ac",
    "type": "PhysicalModelState",
    "schema_version": "physics-to-planning-v1",
    "content": {
@@ -8917,36 +8982,31 @@
      "POWER_LAW_INCUBATION"
     ],
     "assumptions": [
-     "F_th_eff source=target_calibration",
-     "incubation_S source=target_calibration",
-     "delta_eff source=target_calibration",
-     "alpha_defocus source=explicit_computational_default",
-     "thermal_memory_eff source=explicit_computational_default",
-     "provisional defaults are computation hypotheses, not material constants"
+     "critical parameters are bound from calibration or priors; unresolved optional mechanisms are INACTIVE, never defaulted"
     ],
     "calibrated_parameter_refs": [
      {
-      "id": "CalibrationResult-9c4b7c9d6a3ae486",
+      "id": "CalibrationResult-fb185cbb0069ce3a",
       "type": "CalibrationResult"
      }
     ],
     "canonical_physics_status": "PARTIAL",
     "input_refs": [
      {
-      "id": "CalibrationResult-9c4b7c9d6a3ae486",
+      "id": "CalibrationResult-fb185cbb0069ce3a",
       "type": "CalibrationResult"
      },
      {
-      "id": "PriorObjectSet-4e2e51a35401702d",
+      "id": "PriorObjectSet-37919f107c2927c1",
       "type": "PriorObjectSet"
      },
      {
-      "id": "LocalRemovalModel-a74a3e540b03e3ff",
+      "id": "LocalRemovalModel-b4d3417212cd76fc",
       "type": "LocalRemovalModel"
      }
     ],
     "local_removal_model_ref": {
-     "id": "LocalRemovalModel-a74a3e540b03e3ff",
+     "id": "LocalRemovalModel-b4d3417212cd76fc",
      "type": "LocalRemovalModel"
     },
     "provenance": [
@@ -8958,12 +9018,12 @@
     ],
     "schema_version": "physics-to-planning-v1",
     "simulator_fidelity": "F2_DEFOCUS_RECURSION",
-    "state_id": "physical-state-ba10dd283e52c2aa",
+    "state_id": "physical-state-38e2ec01e6d47c03",
     "uncertainty_status": "PARTIAL"
    }
   },
   "ProcessCorrectionInterface": {
-   "id": "ProcessCorrectionInterface-6f1f5804e02a34e6",
+   "id": "ProcessCorrectionInterface-bfb191b0c1792d15",
    "type": "ProcessCorrectionInterface",
    "schema_version": "physics-to-planning-v1",
    "content": {
@@ -8972,17 +9032,17 @@
     ],
     "input_refs": [
      {
-      "id": "ModelTrainingResult-2c32940c8a98474b",
+      "id": "ModelTrainingResult-ccd173389c815438",
       "type": "ModelTrainingResult"
      },
      {
-      "id": "MorphologySimulationResult-5a5a6471e10b66f1",
+      "id": "MorphologySimulationResult-5d71f667803703ef",
       "type": "MorphologySimulationResult"
      }
     ],
-    "interface_id": "process-correction-8d45c856afde6cfb",
+    "interface_id": "process-correction-4d2d9fe0c0822334",
     "physics_prediction_ref": {
-     "id": "MorphologySimulationResult-5a5a6471e10b66f1",
+     "id": "MorphologySimulationResult-5d71f667803703ef",
      "type": "MorphologySimulationResult"
     },
     "provenance": [
@@ -8993,7 +9053,7 @@
      }
     ],
     "raw_baseline_ref": {
-     "id": "ModelTrainingResult-2c32940c8a98474b",
+     "id": "ModelTrainingResult-ccd173389c815438",
      "type": "ModelTrainingResult"
     },
     "residual_model_ref": null,
@@ -9007,123 +9067,123 @@
    }
   },
   "ToolpathPlan": {
-   "id": "ToolpathPlan-3119d9a53aabfb3e",
+   "id": "ToolpathPlan-c5abcdd7666a5ec5",
    "type": "ToolpathPlan",
    "schema_version": "physics-to-planning-v1",
    "content": {
     "candidate_summary": [
      {
       "machining_time_s": 0.00094,
-      "morphology_rmse_um": 4.234240008099217,
-      "objective_value": 4.2332494080992165,
+      "morphology_rmse_um": 4.432416715104883,
+      "objective_value": 4.431426115104882,
       "path_family": "CROSS_HATCH",
-      "plan_id": "toolpath-plan-16f5c0ed4967a392",
-      "simulation_ref": "morphology-simulation-2b4857cc4ab469b1"
+      "plan_id": "toolpath-plan-dd426b13a3844b3c",
+      "simulation_ref": "morphology-simulation-7c6551b200a8c098"
      },
      {
       "machining_time_s": 0.00094,
-      "morphology_rmse_um": 4.234240008099217,
-      "objective_value": 4.234249408099217,
+      "morphology_rmse_um": 4.432416715104883,
+      "objective_value": 4.4324261151048825,
       "path_family": "RASTER",
-      "plan_id": "toolpath-plan-86230ae625805f13",
-      "simulation_ref": "morphology-simulation-2b4857cc4ab469b1"
+      "plan_id": "toolpath-plan-cb85a51f15903683",
+      "simulation_ref": "morphology-simulation-7c6551b200a8c098"
      },
      {
       "machining_time_s": 0.00126,
-      "morphology_rmse_um": 12.82525252556571,
-      "objective_value": 12.824265125565711,
+      "morphology_rmse_um": 15.590848599372757,
+      "objective_value": 15.589861199372757,
       "path_family": "CROSS_HATCH",
-      "plan_id": "toolpath-plan-d054e2d8087b76dc",
-      "simulation_ref": "morphology-simulation-78d2d74e114e4758"
+      "plan_id": "toolpath-plan-fc868d84034f0562",
+      "simulation_ref": "morphology-simulation-9d87e857b7d87929"
      },
      {
       "machining_time_s": 0.00126,
-      "morphology_rmse_um": 12.82525252556571,
-      "objective_value": 12.82526512556571,
+      "morphology_rmse_um": 15.590848599372757,
+      "objective_value": 15.590861199372757,
       "path_family": "RASTER",
-      "plan_id": "toolpath-plan-734dbdc6dcabff6e",
-      "simulation_ref": "morphology-simulation-78d2d74e114e4758"
-     },
-     {
-      "machining_time_s": 0.00158,
-      "morphology_rmse_um": 25.344905417718216,
-      "objective_value": 25.343921217718215,
-      "path_family": "CROSS_HATCH",
-      "plan_id": "toolpath-plan-c9f7804d366e0bdc",
-      "simulation_ref": "morphology-simulation-28de02d5624c365e"
-     },
-     {
-      "machining_time_s": 0.00158,
-      "morphology_rmse_um": 25.344905417718216,
-      "objective_value": 25.344921217718216,
-      "path_family": "RASTER",
-      "plan_id": "toolpath-plan-8b2c14b8e561b423",
-      "simulation_ref": "morphology-simulation-28de02d5624c365e"
+      "plan_id": "toolpath-plan-f963a2728a51193c",
+      "simulation_ref": "morphology-simulation-9d87e857b7d87929"
      },
      {
       "machining_time_s": 0.00172,
-      "morphology_rmse_um": 25.758975636657347,
-      "objective_value": 25.757992836657344,
+      "morphology_rmse_um": 29.70028378774189,
+      "objective_value": 29.699300987741886,
       "path_family": "CROSS_HATCH",
-      "plan_id": "toolpath-plan-1ec1b28bcbda438e",
-      "simulation_ref": "morphology-simulation-c5f8885dcba099a8"
+      "plan_id": "toolpath-plan-aa3c22728a928901",
+      "simulation_ref": "morphology-simulation-9df4fdbc44e7259e"
+     },
+     {
+      "machining_time_s": 0.00158,
+      "morphology_rmse_um": 29.859698790272965,
+      "objective_value": 29.858714590272964,
+      "path_family": "CROSS_HATCH",
+      "plan_id": "toolpath-plan-fffb393eeb1794b3",
+      "simulation_ref": "morphology-simulation-62d8fe819480a785"
+     },
+     {
+      "machining_time_s": 0.00158,
+      "morphology_rmse_um": 29.859698790272965,
+      "objective_value": 29.859714590272965,
+      "path_family": "RASTER",
+      "plan_id": "toolpath-plan-2dd9fd103c237b7b",
+      "simulation_ref": "morphology-simulation-62d8fe819480a785"
      },
      {
       "machining_time_s": 0.0019,
-      "morphology_rmse_um": 28.98704707867913,
-      "objective_value": 28.98706607867913,
+      "morphology_rmse_um": 33.90172701697452,
+      "objective_value": 33.90174601697452,
       "path_family": "RASTER",
-      "plan_id": "toolpath-plan-1c449bd6992cd5ab",
-      "simulation_ref": "morphology-simulation-9d18f27504c10a70"
+      "plan_id": "toolpath-plan-f371197436cb245e",
+      "simulation_ref": "morphology-simulation-ebdb81758a2f0420"
      },
      {
       "machining_time_s": 0.00256,
-      "morphology_rmse_um": 52.41044141715321,
-      "objective_value": 52.40946701715321,
+      "morphology_rmse_um": 56.901035627586545,
+      "objective_value": 56.90006122758655,
       "path_family": "CROSS_HATCH",
-      "plan_id": "toolpath-plan-3d559bc6381e2cb8",
-      "simulation_ref": "morphology-simulation-c93b692484b52deb"
+      "plan_id": "toolpath-plan-c5ed6d6f9c4165e7",
+      "simulation_ref": "morphology-simulation-75d124d0fe63b0f1"
      },
      {
       "machining_time_s": 0.00254,
-      "morphology_rmse_um": 58.79408241812447,
-      "objective_value": 58.794107818124466,
+      "morphology_rmse_um": 64.43648112537068,
+      "objective_value": 64.43650652537067,
       "path_family": "RASTER",
-      "plan_id": "toolpath-plan-47c12472f30243f0",
-      "simulation_ref": "morphology-simulation-7472157994e2cbba"
+      "plan_id": "toolpath-plan-2c5f09c9e403d8f0",
+      "simulation_ref": "morphology-simulation-12a747520f213780"
      },
      {
       "machining_time_s": 0.00314,
-      "morphology_rmse_um": 87.1839886088586,
-      "objective_value": 87.18302000885859,
+      "morphology_rmse_um": 91.63589870758518,
+      "objective_value": 91.63493010758518,
       "path_family": "CROSS_HATCH",
-      "plan_id": "toolpath-plan-7860ce4ddfd98722",
-      "simulation_ref": "morphology-simulation-8f07f4acbfaee664"
+      "plan_id": "toolpath-plan-ff04be0f7c094274",
+      "simulation_ref": "morphology-simulation-3e2d53617a7b85a2"
      },
      {
       "machining_time_s": 0.00318,
-      "morphology_rmse_um": 89.00440207923602,
-      "objective_value": 89.00443387923602,
+      "morphology_rmse_um": 93.4686901046037,
+      "objective_value": 93.4687219046037,
       "path_family": "RASTER",
-      "plan_id": "toolpath-plan-eb471c68cdbed442",
-      "simulation_ref": "morphology-simulation-435a4d2f07544ae8"
+      "plan_id": "toolpath-plan-5bd812c47618590f",
+      "simulation_ref": "morphology-simulation-d3aa4bb71db3903c"
      }
     ],
     "input_refs": [
      {
-      "id": "MorphologySimulationResult-5a5a6471e10b66f1",
+      "id": "MorphologySimulationResult-5d71f667803703ef",
       "type": "MorphologySimulationResult"
      },
      {
-      "id": "LocalRemovalModel-a74a3e540b03e3ff",
+      "id": "LocalRemovalModel-b4d3417212cd76fc",
       "type": "LocalRemovalModel"
      },
      {
-      "id": "CanonicalPhysicsState-a536dbcd5e16c4e5",
+      "id": "CanonicalPhysicsState-0a73f495a49e74e3",
       "type": "CanonicalPhysicsState"
      },
      {
-      "id": "PriorObjectSet-4e2e51a35401702d",
+      "id": "PriorObjectSet-37919f107c2927c1",
       "type": "PriorObjectSet"
      }
     ],
@@ -9164,7 +9224,7 @@
       "upper": 400.0
      }
     ],
-    "objective_value": 4.2332494080992165,
+    "objective_value": 4.431426115104882,
     "path_family": "CROSS_HATCH",
     "path_parameters": {
      "angle_change_per_pass_deg": 90.0,
@@ -9174,7 +9234,7 @@
      "pulse_position_count": 48,
      "pulse_spacing_um": 2.0
     },
-    "plan_id": "toolpath-plan-16f5c0ed4967a392",
+    "plan_id": "toolpath-plan-dd426b13a3844b3c",
     "planning_prior_refs": [
      {
       "id": "planning-prior-a7f7303a3ced5927",
@@ -9199,10 +9259,10 @@
     ],
     "predicted_metrics": {
      "machining_time_s": 0.00094,
-     "max_depth_um": 25.363117248354353,
-     "mean_depth_um": 19.227978989245234,
-     "morphology_rmse_um": 4.234240008099217,
-     "removed_volume_um3": 15997.678519052035
+     "max_depth_um": 27.119577437060908,
+     "mean_depth_um": 20.725535116929393,
+     "morphology_rmse_um": 4.432416715104883,
+     "removed_volume_um3": 17243.645217285255
     },
     "provenance": [
      {
@@ -9213,10 +9273,10 @@
     ],
     "schema_version": "physics-to-planning-v1",
     "simulation_ref": {
-     "id": "MorphologySimulationResult-5a5a6471e10b66f1",
+     "id": "MorphologySimulationResult-5d71f667803703ef",
      "type": "MorphologySimulationResult"
     },
-    "status": "RECOMMENDED"
+    "status": "DEMO_CANDIDATE"
    }
   }
  }

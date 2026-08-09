@@ -75,69 +75,146 @@ class GateResult:
 
 
 def resource_gate(
-    snapshot: dict[str, Any] | None,
+    machine_snapshot: dict[str, Any] | None,
+    data_state: dict[str, Any] | None,
+    target_geometry: dict[str, Any] | None,
     *,
     execution_mode: str,
 ) -> GateResult:
-    """Gate A: canonical MachineProfileSnapshot resolved (fail closed)."""
+    """Gate A (阶段二 T1): MachineProfileSnapshot + usable DataState +
+    valid TargetGeometry — all three required (fail closed).
+
+    DataState is a typed resource state, never a bare boolean:
+      {status: READY|PARTIAL|INVALID, reason, n_samples, n_unique_designs}
+    TargetGeometry is mandatory in RESEARCH / DEMO_FIXTURE; SANDBOX may use
+    an explicit synthetic target (provisional).
+    """
     if execution_mode == "SANDBOX":
-        return GateResult("A", "READY", ["SANDBOX: computational defaults allowed (provisional)"])
-    if not snapshot:
-        return GateResult(
-            "A",
-            "BLOCKED",
-            ["MachineProfileSnapshot 未生成"],
-            [{"type": "COMPLETE_EQUIPMENT_PROFILE", "missing": ["*"]}],
+        provisional = (
+            ["SANDBOX: computational defaults allowed (provisional)"]
+            if target_geometry is None
+            else ["SANDBOX: gates bypassed (provisional)"]
         )
-    status = str(snapshot.get("resource_status") or "BLOCKED")
-    missing = [str(name) for name in snapshot.get("missing_required") or []]
-    if status == "READY":
-        return GateResult("A", "READY")
-    if missing:
-        return GateResult(
-            "A",
-            "BLOCKED",
-            [f"设备档案缺失必需字段: {', '.join(missing)}"],
-            [
+        return GateResult("A", "READY", provisional)
+
+    reasons: list[str] = []
+    actions: list[dict[str, Any]] = []
+
+    if not machine_snapshot:
+        reasons.append("MachineProfileSnapshot 未生成")
+        actions.append({"type": "COMPLETE_EQUIPMENT_PROFILE", "missing": ["*"]})
+    else:
+        snapshot_status = str(machine_snapshot.get("resource_status") or "BLOCKED")
+        missing = [str(name) for name in machine_snapshot.get("missing_required") or []]
+        if snapshot_status != "READY":
+            reasons.append(f"设备档案缺失必需字段: {', '.join(missing) or snapshot_status}")
+            actions.append(
                 {
                     "type": "COMPLETE_EQUIPMENT_PROFILE",
                     "missing": missing,
-                    "source_quality": snapshot.get("source_quality"),
+                    "source_quality": machine_snapshot.get("source_quality"),
                 }
-            ],
+            )
+
+    data_status = str((data_state or {}).get("status") or "INVALID")
+    if data_status != "READY":
+        reasons.append(
+            f"数据集不可用: {data_status}"
+            + (f"（{(data_state or {}).get('reason')}）" if (data_state or {}).get("reason") else "")
         )
-    return GateResult(
-        "A", "BLOCKED", [f"设备档案不可用（{status}）"],
-        [{"type": "COMPLETE_EQUIPMENT_PROFILE", "missing": ["*"]}],
-    )
+        actions.append({"type": "IMPORT_DATASET"})
+
+    geometry_issues = _geometry_issues(target_geometry)
+    if geometry_issues:
+        reasons.append(f"TargetGeometry 缺失或无效: {'; '.join(geometry_issues)}")
+        actions.append({"type": "SPECIFY_TARGET_GEOMETRY", "missing": geometry_issues})
+
+    if reasons:
+        return GateResult("A", "BLOCKED", reasons, actions)
+    return GateResult("A", "READY")
+
+
+def _geometry_issues(target_geometry: dict[str, Any] | None) -> list[str]:
+    """Per-geometry-type conditional requirements for TargetGeometry."""
+    if not target_geometry:
+        return ["geometry_type", "width_um", "height_um", "target_depth_um"]
+    issues: list[str] = []
+    geometry_type = str(target_geometry.get("geometry_type") or "")
+    if not geometry_type:
+        issues.append("geometry_type")
+    for field_name in ("width_um", "height_um", "target_depth_um"):
+        value = target_geometry.get(field_name)
+        if value is None or float(value) <= 0:
+            issues.append(field_name)
+    return issues
 
 
 def knowledge_gate(
     *,
+    parameter_priors: set[str],
+    mechanism_model_priors: set[str],
+    observation_capabilities: set[str],
     mechanism_required: list[dict[str, Any]],
-    machine_fields: set[str],
-    prior_parameters: set[str],
-    has_observations: bool,
+    machine_fields: set[str] | None = None,
     execution_mode: str,
 ) -> GateResult:
-    """Gate B: active-mechanism parameters are prior/measured/fittable."""
+    """Gate B (阶段二 T5): active-mechanism model structure AND parameters.
+
+    Consumes the PriorObjectSet (never re-interprets EvidenceIRSet):
+    - parameter_priors        : parameters covered by ParameterPrior.
+    - mechanism_model_priors  : model families covered by MechanismModelPrior.
+    - observation_capabilities: parameters identifiable from independent
+                                calibration observations (macro dataset rows
+                                do NOT count).
+    - machine_fields          : resource parameters resolved by Gate A
+                                (e.g. beam_radius_um from the equipment
+                                snapshot).
+    - mechanism_required      : registry specs for the active mechanisms.
+
+    Model structure and model parameters are checked separately:
+    incubation requires a MechanismModelPrior (structure) AND incubation_S
+    (parameter).  A dataset with pulse_count >= 2 never substitutes for the
+    missing model structure.
+    """
     if execution_mode == "SANDBOX":
         return GateResult("B", "READY", ["SANDBOX: gates bypassed (provisional)"])
+    machine_fields = machine_fields or set()
     blocked: list[str] = []
     partial: list[str] = []
+
+    # model structure: every structure-requiring active mechanism needs a
+    # MechanismModelPrior (the mechanism registry decides which models
+    # require structure via their parameter fallback semantics)
+    for spec in mechanism_required:
+        source_model = str(spec.get("source_model") or "")
+        if source_model in _STRUCTURE_REQUIRED_MODELS:
+            structure_ok = any(
+                model_family in _STRUCTURE_ALIASES.get(source_model, {source_model})
+                for model_family in mechanism_model_priors
+            )
+            if not structure_ok:
+                blocked.append(
+                    f"{source_model}: 模型结构未解决（需要 MechanismModelPrior，"
+                    f"当前机制先验 ∈ {sorted(mechanism_model_priors) or '∅'}）"
+                )
+
+    # parameters: prior OR identifiable independent observation OR resource.
+    # Optional mechanisms (DEFOCUS/THERMAL) without support stay INACTIVE —
+    # that is the designed C-方案 behavior (阶段二), expressed by the model's
+    # inactive_mechanisms, not a PARTIAL gate warning.
     for spec in mechanism_required:
         name = str(spec.get("parameter") or "")
-        covered = (
-            name in machine_fields
-            or name in prior_parameters
-            or (bool(spec.get("calibration_supported")) and has_observations)
-        )
-        if covered:
+        source_model = str(spec.get("source_model") or "")
+        if name in machine_fields:
             continue
-        if spec.get("calibration_supported"):
-            blocked.append(f"{name}: 无先验且无可用观测")
-        else:
-            partial.append(f"{name}: 无文献先验（显式计算默认并标注）")
+        if source_model in _OPTIONAL_MECHANISMS:
+            continue
+        covered = (
+            name in parameter_priors
+            or name in observation_capabilities
+        )
+        if not covered:
+            blocked.append(f"{name}（{source_model}）: 无 ParameterPrior 且无独立观测")
     if blocked:
         return GateResult(
             "B",
@@ -160,22 +237,65 @@ def knowledge_gate(
     return GateResult("B", "READY")
 
 
+# mechanism models whose structure must be resolved by a MechanismModelPrior
+_STRUCTURE_REQUIRED_MODELS = {"POWER_LAW_INCUBATION", "SATURATION_INCUBATION"}
+
+# model family aliases per registry model id (registry-compatible families)
+_STRUCTURE_ALIASES: dict[str, set[str]] = {
+    "POWER_LAW_INCUBATION": {"POWER_LAW_INCUBATION"},
+    "SATURATION_INCUBATION": {"SATURATION_INCUBATION"},
+}
+
+# mechanisms that may stay INACTIVE when unsupported (C 方案, 阶段二)
+_OPTIONAL_MECHANISMS = {"DEFOCUS_RECURSION", "THERMAL_MEMORY_PROXY"}
+
+
+CRITICAL_BOUND_PARAMETERS = ("F_th_eff", "incubation_S", "delta_eff", "beam_radius_um")
+
+_UNRESOLVED_SOURCES = {"COMPUTATIONAL_DEFAULT", "UNRESOLVED"}
+
+
 def physical_model_gate(
     calibration_result: dict[str, Any] | None,
+    local_removal_model: dict[str, Any] | None,
     *,
     execution_mode: str,
 ) -> GateResult:
-    """Gate C: calibration produced real parameter estimates (not empty)."""
+    """Gate C (阶段二 T3/T2): LocalRemovalModel exists AND critical parameters
+    are bound from real sources — never COMPUTATIONAL_DEFAULT/UNRESOLVED.
+
+    Reads the structured `parameter_bindings` field; assumption strings are
+    never parsed.
+    """
     if execution_mode == "SANDBOX":
         return GateResult("C", "READY", ["SANDBOX: gates bypassed (provisional)"])
+    reasons: list[str] = []
+    actions: list[dict[str, Any]] = []
     parameters = list((calibration_result or {}).get("parameters") or [])
     if not parameters:
-        return GateResult(
-            "C",
-            "BLOCKED",
-            ["CalibrationResult 未产生任何参数估计"],
-            [{"type": "REVIEW_CALIBRATION_INPUTS"}],
-        )
+        reasons.append("CalibrationResult 未产生任何参数估计")
+        actions.append({"type": "REVIEW_CALIBRATION_INPUTS"})
+    if not local_removal_model:
+        reasons.append("LocalRemovalModel 未建立")
+        actions.append({"type": "ESTABLISH_PROCESS_MODEL"})
+    else:
+        bindings = {
+            str(binding.get("parameter")): str(binding.get("source_type") or "UNRESOLVED")
+            for binding in (local_removal_model.get("parameter_bindings") or [])
+            if isinstance(binding, dict)
+        }
+        unexplained = [
+            name
+            for name in CRITICAL_BOUND_PARAMETERS
+            if bindings.get(name) in _UNRESOLVED_SOURCES
+        ]
+        if unexplained:
+            reasons.append(
+                f"关键参数来源为 unexplained default: {', '.join(sorted(unexplained))}"
+            )
+            actions.append({"type": "REVIEW_MODEL_PARAMETER_BINDINGS"})
+    if reasons:
+        return GateResult("C", "BLOCKED", reasons, actions)
     return GateResult("C", "READY")
 
 

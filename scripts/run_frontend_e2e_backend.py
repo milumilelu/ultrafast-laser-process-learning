@@ -105,12 +105,12 @@ def prepare_fixtures(root: Path) -> dict[str, str]:
     # 1. golden scenario scope (used by the backend e2e)
     prep_and_seed(GOLDEN_TASK, "e2e-fixture-prep")
     # 2. UI-equivalent scope: the workbench draft sends no task_context_id /
-    #    task_context_version / target_geometry, which changes the cache key
+    #    task_context_version / execution_equipment_ref, but DOES send
+    #    target_geometry (Gate A requires it in DEMO_FIXTURE, 阶段二 T1)
     ui_task = {key: value for key, value in GOLDEN_TASK.items() if key not in (
         "task_context_id",
         "task_context_version",
         "execution_equipment_ref",
-        "target_geometry",
     )}
     seeded = prep_and_seed(ui_task, "e2e-fixture-prep-ui")
     print(

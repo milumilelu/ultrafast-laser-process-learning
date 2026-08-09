@@ -224,7 +224,7 @@ describe('frontend runsApi over the real backend (M6 golden e2e)', () => {
           status?: string
           candidate_summary?: Array<{ path_family?: string }>
         }
-        expect(plan.status).toBe('RECOMMENDED')
+        expect(plan.status).toBe('DEMO_CANDIDATE')
         const families = new Set((plan.candidate_summary ?? []).map((c) => c.path_family))
         expect(families).toEqual(new Set(['RASTER', 'CROSS_HATCH']))
 

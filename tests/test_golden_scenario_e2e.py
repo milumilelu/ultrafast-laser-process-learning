@@ -247,7 +247,7 @@ def test_golden_vertical_slice(golden_app: Topic2ApplicationService) -> None:
 
     # ---- planning: two path families, recommended plan, full lineage ----
     plan = artifact_content("ToolpathPlan")
-    assert plan["status"] == "RECOMMENDED"
+    assert plan["status"] == "DEMO_CANDIDATE"
     assert {item["path_family"] for item in plan["candidate_summary"]} == {
         "RASTER",
         "CROSS_HATCH",

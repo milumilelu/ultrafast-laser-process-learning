@@ -3,7 +3,7 @@
 
 import { useMemo } from 'react'
 import type { ArtifactSnapshot } from '../../domain/artifact'
-import { buildPlanView, PATH_FAMILY_LABEL } from '../../domain/planning'
+import { buildPlanView, PATH_FAMILY_LABEL, PLAN_STATUS_LABEL } from '../../domain/planning'
 import { Card, EmptyState } from '../../components/ui/Card'
 import { StatusBadge } from '../../components/ui/StatusBadge'
 
@@ -38,8 +38,14 @@ export function PlanningSection({
       <div className="section-head">
         <h1>Planning 规划</h1>
         <StatusBadge
-          tone={view.status === 'RECOMMENDED' ? 'ok' : 'neutral'}
-          label={view.status === 'RECOMMENDED' ? '已推荐' : view.status}
+          tone={
+            view.status === 'BLOCKED'
+              ? 'err'
+              : view.status === 'PROVISIONAL_SIMULATION_ONLY'
+                ? 'warn'
+                : 'ok'
+          }
+          label={PLAN_STATUS_LABEL[view.status] ?? view.status}
         />
       </div>
 

@@ -12,12 +12,10 @@ import pytest
 REPO = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(REPO))
 
-from apps.topic2_backend.application.service import (  # noqa: E402
-    ALL_STAGES,
-    DEMO_SCENARIO_01,
+from apps.topic2_backend.application.service import (
     Topic2ApplicationService,
 )
-from apps.topic2_backend.service import Topic2Service  # noqa: E402
+from apps.topic2_backend.service import Topic2Service
 
 TASK_SPEC = {
     "task_context_id": "T2-TEST-001",
@@ -27,8 +25,21 @@ TASK_SPEC = {
     "equipment_profile_id": "EQ-TEST-FS",
     "geometry_type": "rectangular_groove",
     "objective_metric": "depth_um",
+    "target_geometry": {
+        "width_um": 30.0,
+        "height_um": 24.0,
+        "target_depth_um": 12.0,
+        "grid_spacing_um": 2.0,
+    },
     "random_seed": 42,
 }
+
+
+def _sandbox_task() -> dict:
+    """Mechanism/structural tests run in SANDBOX (computational defaults
+    allowed, gates bypassed).  Scientific-semantics tests use RESEARCH and
+    assert the fail-closed behavior instead."""
+    return {**TASK_SPEC, "execution_mode": "SANDBOX"}
 
 
 @pytest.fixture()
@@ -53,7 +64,7 @@ def app_service(tmp_path: Path) -> Topic2ApplicationService:
 
 def test_research_run_completes_all_stages(app_service) -> None:
     summary = app_service.create_application_run(
-        mode="research", task_spec=TASK_SPEC, random_seed=42
+        mode="research", task_spec=_sandbox_task(), random_seed=42
     )
     assert summary["status"] == "completed"
     assert summary["mode"] == "research"
@@ -74,7 +85,7 @@ def test_research_run_completes_all_stages(app_service) -> None:
 
 def test_research_run_events_and_artifacts(app_service) -> None:
     summary = app_service.create_application_run(
-        mode="research", task_spec=TASK_SPEC, random_seed=42
+        mode="research", task_spec=_sandbox_task(), random_seed=42
     )
     run_id = summary["application_run_id"]
     events = app_service.events(run_id)
@@ -116,9 +127,6 @@ def test_client_request_id_idempotency(app_service) -> None:
 
 
 def test_compare_optimization_vanilla_without_prior(app_service) -> None:
-    summary = app_service.create_application_run(
-        mode="research", task_spec=TASK_SPEC, random_seed=42
-    )
     comparison = app_service.compare_optimization(
         scope=TASK_SPEC,
         machine_bounds={
@@ -181,7 +189,7 @@ def test_demo_replay_scientific_payload_identical(app_service) -> None:
 
 def test_replay_rejected_for_research(app_service) -> None:
     summary = app_service.create_application_run(
-        mode="research", task_spec=TASK_SPEC, random_seed=42
+        mode="research", task_spec=_sandbox_task(), random_seed=42
     )
     with pytest.raises(ValueError):
         app_service.replay(summary["application_run_id"])
@@ -189,7 +197,7 @@ def test_replay_rejected_for_research(app_service) -> None:
 
 def test_ndjson_events_after_sequence(app_service) -> None:
     summary = app_service.create_application_run(
-        mode="research", task_spec=TASK_SPEC, random_seed=42
+        mode="research", task_spec=_sandbox_task(), random_seed=42
     )
     all_events = app_service.events(summary["application_run_id"])
     tail = app_service.events(summary["application_run_id"], after_sequence=3)
@@ -198,39 +206,43 @@ def test_ndjson_events_after_sequence(app_service) -> None:
     assert [e["sequence"] for e in tail] == sorted(e["sequence"] for e in tail)
 
 
-def test_knowledge_state_unresolved_without_literature(app_service) -> None:
-    """V0 main chain: no literature -> requirements generated from real
-    diagnostics, all UNSATISFIED, run still completes with Vanilla BO."""
+def test_knowledge_gate_blocks_without_literature(app_service) -> None:
+    """RESEARCH + no literature + no independent observations must BLOCK at
+    Gate B (阶段二 T5 / 手册 §13): incubation model structure and F_th_eff
+    are unresolved; macro dataset rows never substitute for them."""
     summary = app_service.create_application_run(
         mode="research", task_spec=TASK_SPEC, random_seed=42
     )
-    result = app_service.get_result(summary["application_run_id"])
-    ks = result["knowledgeState"]
-    assert ks["requirements"], "gap analysis must produce requirements"
-    assert ks["assessment_version"]
-    satisfactions = ks["satisfactions"]
-    assert len(satisfactions) == len(ks["requirements"])
-    for satisfaction in satisfactions:
-        assert satisfaction["assessment_method"] == "DETERMINISTIC_PROVISIONAL"
-        assert satisfaction["status"] in {
-            "SATISFIED",
-            "PARTIALLY_SATISFIED",
-            "SATISFIED_WITH_CONFLICT",
-            "UNSATISFIED",
-        }
-        assert satisfaction["requirement_id"]
-    assert ks["missing_topics"], "no literature => requirements unresolved"
-    # run completes with vanilla BO even with unresolved knowledge
-    assert result["optimization"]["vanilla"]["run_id"]
-    assert result["optimization"]["priorAppliedEvidence"]["assisted_search_prior_applied"] is False
+    assert summary["status"] == "blocked", summary
+    run = app_service.get_run(summary["application_run_id"])
+    control = run["result"]["runControlState"]
+    reasons = "\n".join(control["blocking_reasons"])
+    assert "POWER_LAW_INCUBATION" in reasons, "incubation model structure unresolved"
+    assert "F_th_eff" in reasons, "F_th_eff unresolved without prior/observation"
+    assert control["gates"]["B"]["status"] == "BLOCKED"
+    # stage_status must reflect reality: knowledge stages ran, calibration did not
+    assert "prepare_knowledge" in control["completed_stages"]
+    assert "calibrate_physics" not in control["completed_stages"]
+    assert "calibrate_physics" not in run["stage_status"]
 
 
 def test_gap_requirements_carry_diagnostics_triggers(app_service) -> None:
+    """GAP segment only: requirements come from real diagnostics (Gate B is
+    evaluated later, at calibrate_physics)."""
     summary = app_service.create_application_run(
-        mode="research", task_spec=TASK_SPEC, random_seed=42
+        mode="research",
+        task_spec=TASK_SPEC,
+        stages=list(Topic2ApplicationService.GAP_STAGES),
+        random_seed=42,
     )
-    result = app_service.get_result(summary["application_run_id"])
-    requirements = result["knowledgeState"]["requirements"]
+    assert summary["status"] == "completed", summary
+    run_id = summary["application_run_id"]
+    artifact_id = next(
+        artifact["artifact_id"]
+        for artifact in app_service.artifacts(run_id)
+        if artifact["artifact_type"] == "KnowledgeRequirementSet"
+    )
+    requirements = app_service.artifact(artifact_id)["content"]["content"]["requirements"]
     types = {requirement["type"] for requirement in requirements}
     assert "parameter_effect" in types
     assert "reported_optimum" in types
@@ -241,7 +253,7 @@ def test_gap_requirements_carry_diagnostics_triggers(app_service) -> None:
 
 def test_checkpoint_resume_gap_then_knowledge(app_service) -> None:
     """两段式入口：运行到知识缺口（1-4）→ 检查 Requirement → 续跑知识准备（5-8）。
-    同一 run，已完成阶段不重复执行。"""
+    同一 run，已完成阶段不重复执行。RESEARCH 无文献时续跑停在 Gate B（fail closed）。"""
     summary = app_service.create_application_run(
         mode="research",
         task_spec=TASK_SPEC,
@@ -252,26 +264,33 @@ def test_checkpoint_resume_gap_then_knowledge(app_service) -> None:
     run = app_service.get_run(summary["application_run_id"])
     assert set(run["stage_status"]) == set(Topic2ApplicationService.GAP_STAGES)
     assert run["task_spec"] is not None
-    partial = run["result"]
-    assert partial["knowledgeState"]["requirements"], "gap run must expose requirements"
-    assert partial["optimization"]["vanilla"] is None  # BO 尚未执行
+    artifact_id = next(
+        artifact["artifact_id"]
+        for artifact in app_service.artifacts(summary["application_run_id"])
+        if artifact["artifact_type"] == "KnowledgeRequirementSet"
+    )
+    requirements = app_service.artifact(artifact_id)["content"]["content"]["requirements"]
+    assert requirements, "gap run must expose requirements"
 
-    # 续跑剩余阶段（同一 run_id）
+    # 续跑剩余阶段（同一 run_id）：无文献 → Gate B BLOCKED（不再假装完成）
     resumed = app_service.continue_application_run(
         summary["application_run_id"],
         stages=list(Topic2ApplicationService.KNOWLEDGE_STAGES),
         random_seed=42,
     )
     assert resumed["application_run_id"] == summary["application_run_id"]
-    assert resumed["status"] == "completed"
+    assert resumed["status"] == "blocked", resumed
     full = app_service.get_run(summary["application_run_id"])
-    assert set(full["stage_status"]) == set(ALL_STAGES)
-    assert full["result"]["optimization"]["vanilla"]["run_id"]
+    control = full["result"]["runControlState"]
+    assert control["gates"]["B"]["status"] == "BLOCKED"
+    assert "calibrate_physics" not in full["stage_status"]
+    assert "prepare_knowledge" in full["stage_status"]
     # 事件序号单调递增（续跑不冲突）
     events = app_service.events(summary["application_run_id"])
     sequences = [event["sequence"] for event in events]
     assert sequences == sorted(sequences)
     assert len(set(sequences)) == len(sequences)
+    assert any(event["type"] == "RUN_BLOCKED" for event in events)
 
 
 def test_continue_refuses_repeat_stage(app_service) -> None:
@@ -291,7 +310,12 @@ def test_continue_refuses_repeat_stage(app_service) -> None:
 def test_requirement_specific_coverage(app_service) -> None:
     """一条 range_preference evidence 只能满足 range 类需求，不能误满足
     process_mechanism（functional_shape）需求；data_quality 恒不被文献满足。"""
-    from packages.process_contracts.schemas import Evidence, EvidenceClaimType, EvidenceProvenance, EvidenceScope
+    from packages.process_contracts.schemas import (
+        Evidence,
+        EvidenceClaimType,
+        EvidenceProvenance,
+        EvidenceScope,
+    )
 
     evidence = Evidence(
         evidence_id="E-COV-001",
@@ -312,7 +336,7 @@ def test_requirement_specific_coverage(app_service) -> None:
         )
 
     summary = app_service.create_application_run(
-        mode="research", task_spec=TASK_SPEC, random_seed=42
+        mode="research", task_spec=_sandbox_task(), random_seed=42
     )
     result = app_service.get_result(summary["application_run_id"])
     satisfactions = {

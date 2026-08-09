@@ -65,7 +65,7 @@ describe('PlanningSection (M6)', () => {
       />,
     )
     expect(screen.getByText('Planning 规划')).toBeInTheDocument()
-    expect(screen.getByText('已推荐')).toBeInTheDocument()
+    expect(screen.getByText('演示候选')).toBeInTheDocument()
     expect(screen.getAllByText(/Cross Hatch（交叉）/).length).toBeGreaterThan(0)
     expect(screen.getAllByText(/Raster（单向）/).length).toBeGreaterThan(0)
     expect(screen.getByText('推荐依据（可追溯）')).toBeInTheDocument()

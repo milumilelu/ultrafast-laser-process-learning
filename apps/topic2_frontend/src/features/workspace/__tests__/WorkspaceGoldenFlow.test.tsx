@@ -106,6 +106,7 @@ describe('WorkspacePage golden flow (M6)', () => {
       objectiveMetric: 'depth_um',
       equipmentProfileId: 'DEMO-FS-LASER-01',
       executionMode: 'DEMO_FIXTURE' as const,
+  targetGeometry: { geometry_type: 'rectangular_groove', width_um: 30, height_um: 24, target_depth_um: 12, grid_spacing_um: 2 },
   taskContextRef: null,
       runId: 'RUN-GOLDEN-FIXTURE',
       version: 1,

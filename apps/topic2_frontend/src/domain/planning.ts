@@ -61,6 +61,13 @@ export const PATH_FAMILY_LABEL: Record<string, string> = {
   SPIRAL: 'Spiral',
 }
 
+export const PLAN_STATUS_LABEL: Record<string, string> = {
+  RESEARCH_CANDIDATE: '研究候选',
+  DEMO_CANDIDATE: '演示候选',
+  PROVISIONAL_SIMULATION_ONLY: '仅仿真推算',
+  BLOCKED: '受阻',
+}
+
 export function buildPlanView(content: PlanContent | null | undefined): PlanView {
   const raw = content ?? {}
   const predicted = raw.predicted_metrics ?? {}

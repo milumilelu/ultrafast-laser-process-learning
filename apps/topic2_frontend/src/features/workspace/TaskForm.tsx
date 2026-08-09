@@ -19,6 +19,10 @@ export function TaskForm({ taskId, onSaved }: { taskId: string; onSaved: () => v
     geometryType: initial?.geometryType || 'rectangular_groove',
     objectiveMetric: initial?.objectiveMetric || 'depth_um',
     equipmentProfileId: initial?.equipmentProfileId || '',
+    targetWidthUm: initial?.targetGeometry?.width_um ?? 30,
+    targetHeightUm: initial?.targetGeometry?.height_um ?? 24,
+    targetDepthUm: initial?.targetGeometry?.target_depth_um ?? 20,
+    gridSpacingUm: initial?.targetGeometry?.grid_spacing_um ?? 2,
   })
   const [error, setError] = useState<string | null>(null)
 
@@ -56,6 +60,13 @@ export function TaskForm({ taskId, onSaved }: { taskId: string; onSaved: () => v
       geometryType: form.geometryType,
       objectiveMetric: form.objectiveMetric as 'depth_um' | 'roughness_um',
       equipmentProfileId: form.equipmentProfileId,
+      targetGeometry: {
+        geometry_type: form.geometryType,
+        width_um: Number(form.targetWidthUm),
+        height_um: Number(form.targetHeightUm),
+        target_depth_um: Number(form.targetDepthUm),
+        grid_spacing_um: Number(form.gridSpacingUm),
+      },
     })
     setError(null)
     onSaved()
@@ -114,6 +125,22 @@ export function TaskForm({ taskId, onSaved }: { taskId: string; onSaved: () => v
               </option>
             ))}
           </select>
+        </label>
+        <label className="field">
+          <span>目标宽度 (μm)</span>
+          <input type="number" min={1} value={form.targetWidthUm} onChange={(e) => set('targetWidthUm', Number(e.target.value))} />
+        </label>
+        <label className="field">
+          <span>目标高度 (μm)</span>
+          <input type="number" min={1} value={form.targetHeightUm} onChange={(e) => set('targetHeightUm', Number(e.target.value))} />
+        </label>
+        <label className="field">
+          <span>目标深度 (μm)</span>
+          <input type="number" min={1} value={form.targetDepthUm} onChange={(e) => set('targetDepthUm', Number(e.target.value))} />
+        </label>
+        <label className="field">
+          <span>网格间距 (μm)</span>
+          <input type="number" min={1} value={form.gridSpacingUm} onChange={(e) => set('gridSpacingUm', Number(e.target.value))} />
         </label>
       </div>
       <div className="form-actions">

@@ -139,7 +139,7 @@ describe('M6 view models over the golden scenario fixture', () => {
 
   it('planning: recommended plan with both path families compared', () => {
     const plan = buildPlanView(contentOf(artifacts.ToolpathPlan).content)
-    expect(plan.status).toBe('RECOMMENDED')
+    expect(plan.status).toBe('DEMO_CANDIDATE')
     const families = new Set(plan.candidates.map((candidate) => candidate.pathFamily))
     expect(families).toEqual(new Set(['RASTER', 'CROSS_HATCH']))
     expect(plan.pathFamily).toBe('CROSS_HATCH')

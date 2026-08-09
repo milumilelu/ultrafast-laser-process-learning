@@ -43,6 +43,26 @@ class ParameterSemantics(StrEnum):
     PROVISIONAL = "PROVISIONAL"
 
 
+class ParameterSourceType(StrEnum):
+    """Structured origin of a bound parameter value (阶段二 T2).
+
+    MEASURED / DERIVED            : equipment snapshot fields.
+    TARGET_CALIBRATION            : fitted from calibration observations.
+    LITERATURE_PRIOR              : prior compiled from literature evidence.
+    DEMO_FIXTURE                  : explicit fixture-provided value (no hardcode).
+    COMPUTATIONAL_DEFAULT         : SANDBOX-only fallback (provisional).
+    UNRESOLVED                    : no binding (mechanism must stay inactive).
+    """
+
+    MEASURED = "MEASURED"
+    DERIVED = "DERIVED"
+    TARGET_CALIBRATION = "TARGET_CALIBRATION"
+    LITERATURE_PRIOR = "LITERATURE_PRIOR"
+    DEMO_FIXTURE = "DEMO_FIXTURE"
+    COMPUTATIONAL_DEFAULT = "COMPUTATIONAL_DEFAULT"
+    UNRESOLVED = "UNRESOLVED"
+
+
 class CalibrationStatus(StrEnum):
     CALIBRATED = "CALIBRATED"
     NOT_YET_CALIBRATED = "NOT_YET_CALIBRATED"
@@ -86,9 +106,20 @@ class PathFamily(StrEnum):
 
 
 class PlanStatus(StrEnum):
-    RECOMMENDED = "RECOMMENDED"
-    CANDIDATE = "CANDIDATE"
-    NOT_EXECUTABLE = "NOT_EXECUTABLE"
+    """Honest plan states (阶段二 T6).
+
+    RESEARCH_CANDIDATE       : research-mode candidate (literature priors carry
+                               scientific uncertainty, not provisional status).
+    DEMO_CANDIDATE           : demo-fixture candidate (fixture + literature).
+    PROVISIONAL_SIMULATION_ONLY : SANDBOX / computational-default inputs; never
+                               executable advice.
+    BLOCKED                  : a canonical gate rejected the plan.
+    """
+
+    RESEARCH_CANDIDATE = "RESEARCH_CANDIDATE"
+    DEMO_CANDIDATE = "DEMO_CANDIDATE"
+    PROVISIONAL_SIMULATION_ONLY = "PROVISIONAL_SIMULATION_ONLY"
+    BLOCKED = "BLOCKED"
 
 
 class LearningMode(StrEnum):
@@ -275,6 +306,21 @@ class RemovalKernel(StrictModel):
     origin: EvidenceOrigin
 
 
+class ParameterBinding(StrictModel):
+    """Structured value origin for one bound model parameter (阶段二 T2).
+
+    Gate C consumes this instead of parsing assumption strings; the frontend
+    Calibration page renders it directly.
+    """
+
+    parameter: str = Field(min_length=1)
+    value: float
+    unit: str = ""
+    source_type: ParameterSourceType
+    source_ref: str = ""
+    semantics: ParameterSemantics = ParameterSemantics.PROVISIONAL
+
+
 class LocalRemovalModel(StrictModel):
     schema_version: str = SCHEMA_VERSION
     model_id: str = Field(min_length=1)
@@ -287,6 +333,8 @@ class LocalRemovalModel(StrictModel):
     alpha_defocus_per_um: float = Field(ge=0)
     thermal_memory_eff: float = Field(default=0, ge=0)
     parameter_semantics: dict[str, ParameterSemantics]
+    parameter_bindings: list[ParameterBinding] = Field(default_factory=list)
+    inactive_mechanisms: list[dict[str, str]] = Field(default_factory=list)
     status: ScientificStatus
     assumptions: list[str] = Field(default_factory=list)
     provenance: list[ProvenanceRecord] = Field(default_factory=list)

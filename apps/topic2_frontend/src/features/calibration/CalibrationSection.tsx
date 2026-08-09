@@ -278,6 +278,54 @@ function FitView({
             <dt>status</dt>
             <dd>{String(model.content.status ?? '—')}</dd>
           </div>
+          <div className="card-hint" style={{ marginTop: 8 }}>
+            参数来源（ParameterBinding，阶段二 T2）:
+          </div>
+          <table className="data-table">
+            <thead>
+              <tr>
+                <th>参数</th>
+                <th>值</th>
+                <th>来源</th>
+              </tr>
+            </thead>
+            <tbody>
+              {((model.content.parameter_bindings ?? []) as Array<Record<string, unknown>>).map(
+                (binding) => (
+                  <tr key={String(binding.parameter)}>
+                    <td>{String(binding.parameter)}</td>
+                    <td>{String(binding.value)}</td>
+                    <td>
+                      <StatusBadge
+                        tone={
+                          binding.source_type === 'COMPUTATIONAL_DEFAULT' ||
+                          binding.source_type === 'UNRESOLVED'
+                            ? 'warn'
+                            : 'ok'
+                        }
+                        label={String(binding.source_type)}
+                      />
+                    </td>
+                  </tr>
+                ),
+              )}
+            </tbody>
+          </table>
+          {((model.content.inactive_mechanisms ?? []) as Array<Record<string, unknown>>).length >
+            0 && (
+            <div className="card-hint" style={{ marginTop: 8 }}>
+              未激活机制（阶段二 C 方案）:
+              <ul className="gate-reasons">
+                {(
+                  (model.content.inactive_mechanisms ?? []) as Array<Record<string, unknown>>
+                ).map((mechanism, index) => (
+                  <li key={index}>
+                    {String(mechanism.mechanism)} — {String(mechanism.reason)}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
           <SnapshotMeta snapshot={model} />
         </Card>
       )}

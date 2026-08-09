@@ -383,7 +383,7 @@ class TestGate5SimulationToPlanning:
             deterministic_seed=42,
         )
         assert plan.path_family.value == "CROSS_HATCH" or plan.path_family.value == "RASTER"
-        assert plan.status.value == "RECOMMENDED"
+        assert plan.status.value == "DEMO_CANDIDATE"
         assert plan.simulation_ref.id == simulation.simulation_id
         families = {item["path_family"] for item in plan.candidate_summary}
         assert {"RASTER", "CROSS_HATCH"} <= families

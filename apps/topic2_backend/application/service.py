@@ -624,8 +624,10 @@ class Topic2ApplicationService:
         completed: list[str] = []
         gate_results: list[GateResult] = self._previous_gate_results(bus)
         for stage in stages:
-            gate = self._gate_before_stage(stage, scope, bus, execution_mode)
-            if gate is not None:
+            gates = self._gates_before_stage(
+                stage, scope, bus, execution_mode, task_spec=task_spec
+            )
+            for gate in gates:
                 gate_results.append(gate)
                 if gate.status == "BLOCKED":
                     control = run_control_state(
@@ -690,19 +692,26 @@ class Topic2ApplicationService:
             if isinstance(item, dict)
         ]
 
-    def _gate_before_stage(
+    def _gates_before_stage(
         self,
         stage: str,
         scope: TaskScope,
         bus: WorkflowEventBus,
         execution_mode: str,
-    ) -> GateResult | None:
-        """Evaluate the canonical gate that guards `stage` (fail closed)."""
+        task_spec: dict[str, Any] | None = None,
+    ) -> list[GateResult]:
+        """Canonical gates that guard `stage` (fail closed)."""
         try:
             if stage == "assess_capability":
-                return resource_gate(
-                    self._machine_snapshot(bus), execution_mode=execution_mode
-                )
+                data_state = self._data_state(scope)
+                return [
+                    resource_gate(
+                        self._machine_snapshot(bus),
+                        data_state,
+                        self._target_geometry_from_task(task_spec, scope, bus),
+                        execution_mode=execution_mode,
+                    )
+                ]
             if stage == "calibrate_physics":
                 capability = (
                     self._latest_artifact_content(bus, "ScientificCapabilityReport")
@@ -713,43 +722,124 @@ class Topic2ApplicationService:
                         capability.get("mechanism_parameter_requirements") or []
                     )
                 )
-                prior_params = self._evidence_prior_parameters(bus)
-                try:
-                    rows = self.topic2._rows_for_scope(scope)
-                    has_observations = bool(rows) or bool(
-                        self._calibration_fixture_observations()
+                prior_set = self._latest_artifact_content(bus, "PriorObjectSet") or {}
+                return [
+                    knowledge_gate(
+                        mechanism_required=required,
+                        parameter_priors={
+                            str(item.get("parameter"))
+                            for item in (prior_set.get("priors") or [])
+                            if item.get("prior_type") == "ParameterPrior"
+                            and item.get("parameter") is not None
+                        },
+                        mechanism_model_priors={
+                            str(item.get("model_family"))
+                            for item in (prior_set.get("priors") or [])
+                            if item.get("prior_type") == "MechanismModelPrior"
+                            and item.get("model_family") is not None
+                        },
+                        observation_capabilities=self._observation_capabilities(
+                            scope, task_spec, bus
+                        ),
+                        machine_fields=set(self._machine_fields(bus)),
+                        execution_mode=execution_mode,
                     )
-                except Exception:  # noqa: BLE001 - no rows for scope -> observation source unknown
-                    has_observations = bool(self._calibration_fixture_observations())
-                return knowledge_gate(
-                    mechanism_required=required,
-                    machine_fields=set(self._machine_fields(bus)),
-                    prior_parameters=prior_params,
-                    has_observations=has_observations,
-                    execution_mode=execution_mode,
-                )
-            if stage == "establish_process_model":
-                return physical_model_gate(
-                    self._latest_artifact_content(bus, "CalibrationResult"),
-                    execution_mode=execution_mode,
-                )
+                ]
             if stage == "plan_process":
-                model_available = bool(
-                    self._latest_artifact_content(bus, "LocalRemovalModel")
-                )
+                model_payload = self._latest_artifact_content(bus, "LocalRemovalModel")
                 bounds = (
                     self._machine_snapshot(bus) or {}
                 ).get("machine_bounds") or {}
-                return planning_gate(
-                    model_available=model_available,
+                gate_c = physical_model_gate(
+                    self._latest_artifact_content(bus, "CalibrationResult"),
+                    model_payload,
+                    execution_mode=execution_mode,
+                )
+                gate_d = planning_gate(
+                    model_available=bool(model_payload),
                     machine_bounds=bounds,
                     execution_mode=execution_mode,
                 )
+                return [gate_c, gate_d]
         except Exception as exc:  # noqa: BLE001 - gate evaluation must fail closed
-            return GateResult(
-                stage, "BLOCKED", [f"gate evaluation failed: {exc}"]
-            )
-        return None
+            return [GateResult(stage, "BLOCKED", [f"gate evaluation failed: {exc}"])]
+        return []
+
+    def _data_state(self, scope: TaskScope) -> dict[str, Any]:
+        """Typed DataState for Gate A (阶段二 T1)."""
+        try:
+            rows = self.topic2._rows_for_scope(scope)
+        except Exception as exc:  # noqa: BLE001 - no comparable rows
+            return {
+                "status": "INVALID",
+                "reason": str(exc),
+                "n_samples": 0,
+                "n_unique_designs": 0,
+            }
+        profile = build_data_profile(rows)
+        if profile.n_samples == 0 or profile.n_unique_designs == 0:
+            return {
+                "status": "INVALID",
+                "reason": "scope 内无有效样本",
+                "n_samples": profile.n_samples,
+                "n_unique_designs": profile.n_unique_designs,
+            }
+        return {
+            "status": "READY",
+            "reason": None,
+            "n_samples": profile.n_samples,
+            "n_unique_designs": profile.n_unique_designs,
+        }
+
+    def _target_geometry_from_task(
+        self,
+        task_spec: dict[str, Any] | None,
+        scope: TaskScope,
+        bus: WorkflowEventBus,
+    ) -> dict[str, Any] | None:
+        """TaskSpec target_geometry with geometry_type filled from the scope."""
+        task_spec = task_spec or {}
+        geometry = dict(task_spec.get("target_geometry") or {})
+        if not geometry:
+            return None
+        geometry.setdefault("geometry_type", scope.geometry_type)
+        return geometry
+
+    def _observation_capabilities(
+        self,
+        scope: TaskScope,
+        task_spec: dict[str, Any] | None,
+        bus: WorkflowEventBus,
+    ) -> set[str]:
+        """Parameters identifiable from INDEPENDENT calibration observations.
+
+        Macro dataset rows do NOT count (阶段二 T5): only explicit
+        single/multi-pulse observations with absolute fluence qualify.
+        """
+        task_spec = task_spec or {}
+        observations = list(task_spec.get("calibration_observations") or [])
+        if not observations and effective_execution_mode("research", task_spec) in (
+            "DEMO_FIXTURE",
+            "SANDBOX",
+        ):
+            observations = self._calibration_fixture_observations()
+        if not observations:
+            return set()
+        has_absolute_fluence = any(
+            item.get("peak_fluence_J_cm2") is not None for item in observations
+        )
+        pulse_counts = {
+            int(item["pulse_count"])
+            for item in observations
+            if item.get("pulse_count") is not None
+        }
+        capabilities: set[str] = set()
+        if has_absolute_fluence:
+            capabilities.add("F_th_eff")
+            capabilities.add("delta_eff")
+        if len(pulse_counts) >= 2:
+            capabilities.add("incubation_S")
+        return capabilities
 
     def _evidence_prior_parameters(self, bus: WorkflowEventBus) -> set[str]:
         """Parameters with numeric ranges in the current EvidenceIRSet."""
@@ -1895,11 +1985,46 @@ class Topic2ApplicationService:
             ],
             counts={"evidence": len(evidence_ir)},
         )
+        # typed PriorObjectSet compiled here (阶段二 T5): Gate B consumes it
+        # before calibrate_physics, so priors must exist by the end of
+        # prepare_knowledge — not inside calibrate_physics.
+        trace.operation_started(
+            "compile-typed-priors",
+            "EvidenceIR 编译为 typed PriorObject",
+            input_refs=[{"type": "EvidenceIRSet", "id": evidence_ir_artifact}],
+        )
+        prior_set = compile_typed_priors(evidence_ir)
+        prior_set = self._merge_demo_fixture_priors(
+            prior_set,
+            execution_mode=execution_mode,
+        )
+        prior_set_artifact = self._persist_artifact(
+            bus.run_id,
+            "PriorObjectSet",
+            prior_set.model_dump(mode="json"),
+            input_refs=[{"type": "EvidenceIRSet", "id": evidence_ir_artifact}],
+            schema_version=prior_set.schema_version,
+        )
+        trace.operation_completed(
+            "compile-typed-priors",
+            f"typed Prior 编译完成（{prior_set_artifact}）",
+            output_refs=[{"type": "PriorObjectSet", "id": prior_set_artifact}],
+            counts={
+                "priors": len(prior_set.priors),
+                "conflicts": len(prior_set.conflicts),
+            },
+        )
+        trace.artifact_created(
+            "PriorObjectSet",
+            prior_set_artifact,
+            input_refs=[{"type": "EvidenceIRSet", "id": evidence_ir_artifact}],
+        )
         return {
             "meta": {
                 "artifact_id": artifact_id,
                 "query_plan_artifact_id": query_plan_artifact,
                 "evidence_ir_artifact_id": evidence_ir_artifact,
+                "prior_set_artifact_id": prior_set_artifact,
                 "evidence_count": accepted_count,
             },
             "content": {
@@ -2147,6 +2272,73 @@ class Topic2ApplicationService:
             and state.get("status") in ("VERIFIED", "DERIVED")
         }
 
+    def _merge_demo_fixture_priors(
+        self,
+        prior_set: PriorObjectSet,
+        *,
+        execution_mode: str,
+    ) -> PriorObjectSet:
+        """DEMO_FIXTURE only: merge explicit fixture priors (阶段二 T4).
+
+        Fixture priors carry a DemoFixturePrior provenance ref so downstream
+        bindings can distinguish DEMO_FIXTURE from LITERATURE_PRIOR.  Never
+        merged in RESEARCH mode - missing priors stay missing.
+        """
+        if execution_mode != "DEMO_FIXTURE":
+            return prior_set
+        fixture_path = self.settings.prior_fixture_path
+        if fixture_path is None or not Path(fixture_path).exists():
+            return prior_set
+        try:
+            payload = json.loads(Path(fixture_path).read_text(encoding="utf-8"))
+        except (json.JSONDecodeError, OSError):
+            return prior_set
+        existing = {
+            str(item.parameter)
+            for item in prior_set.priors
+            if isinstance(item, ParameterPrior)
+        }
+        added: list[ParameterPrior] = []
+        for item in payload.get("priors") or []:
+            parameter = str(item.get("parameter") or "")
+            if not parameter or parameter in existing:
+                continue
+            from packages.e2p.domain.prior_objects import (
+                PriorRef,
+                PriorStatus,
+                PriorUncertainty,
+            )
+
+            prior_ref = PriorRef(
+                type="DemoFixturePrior",
+                id=str(item.get("prior_id") or f"demo-fixture-{parameter}"),
+            )
+            added.append(
+                ParameterPrior(
+                    prior_id=f"demo-fixture-prior-{parameter}",
+                    parameter=parameter,
+                    lower=float(item["lower"]),
+                    upper=float(item["upper"]),
+                    unit=str(item.get("unit") or ""),
+                    parameter_semantics=str(
+                        item.get("parameter_semantics") or "PROVISIONAL"
+                    ),
+                    assumptions=[
+                        "DEMO_FIXTURE fixture prior - explicit, not hardcoded"
+                    ],
+                    input_refs=[prior_ref],
+                    evidence_refs=[prior_ref],
+                    provenance=[prior_ref],
+                    uncertainty=PriorUncertainty.LOW,
+                    status=PriorStatus.EXTERNAL_PRIOR,
+                )
+            )
+        if not added:
+            return prior_set
+        return prior_set.model_copy(
+            update={"priors": [*prior_set.priors, *added]}
+        )
+
     def _calibration_fixture_observations(self) -> list[dict[str, Any]]:
         """DEMO_FIXTURE calibration observations (pre-installed fixture file)."""
         fixture_path = self.settings.calibration_fixture_path
@@ -2306,7 +2498,8 @@ class Topic2ApplicationService:
     def _stage_calibrate_physics(
         self, task_spec: dict[str, Any], scope: TaskScope, bus: WorkflowEventBus, random_seed: int
     ) -> dict[str, Any]:
-        """E2P typed Prior compilation followed by independent parameter ID."""
+        """Independent parameter ID over the typed Priors compiled in
+        prepare_knowledge (PriorObjectSet artifact)."""
         trace = ScientificTrace(bus, "calibrate_physics")
         rows = self.topic2._rows_for_scope(scope)
         machine = self._machine_fields(bus)
@@ -2369,34 +2562,9 @@ class Topic2ApplicationService:
                 "missing": len(canonical.missing_inputs),
             },
         )
-        evidence_ir_id = self._latest_artifact_id(bus, "EvidenceIRSet")
-        evidence_payload = self._latest_artifact_content(bus, "EvidenceIRSet") or {}
-        evidence_items = list(evidence_payload.get("items") or [])
-        trace.operation_started(
-            "compile-typed-priors",
-            "EvidenceIR 编译为 typed PriorObject",
-            input_refs=[{"type": "EvidenceIRSet", "id": evidence_ir_id}],
-        )
-        prior_set = compile_typed_priors(evidence_items)
-        prior_set_artifact = self._persist_artifact(
-            bus.run_id,
-            "PriorObjectSet",
-            prior_set.model_dump(mode="json"),
-            input_refs=[{"type": "EvidenceIRSet", "id": evidence_ir_id}],
-            schema_version=prior_set.schema_version,
-        )
-        trace.operation_completed(
-            "compile-typed-priors",
-            f"typed Prior 编译完成（{prior_set_artifact}）",
-            output_refs=[{"type": "PriorObjectSet", "id": prior_set_artifact}],
-            counts={"priors": len(prior_set.priors), "conflicts": len(prior_set.conflicts)},
-            reason_codes=["conflicts_preserved_separately"] if prior_set.conflicts else [],
-        )
-        trace.artifact_created(
-            "PriorObjectSet",
-            prior_set_artifact,
-            input_refs=[{"type": "EvidenceIRSet", "id": evidence_ir_id}],
-        )
+        prior_set_artifact = self._latest_artifact_id(bus, "PriorObjectSet")
+        prior_payload = self._latest_artifact_content(bus, "PriorObjectSet") or {}
+        prior_set = PriorObjectSet.model_validate(prior_payload)
 
         parameter_priors = [item for item in prior_set.priors if isinstance(item, ParameterPrior)]
         data_profile_id = self._latest_artifact_id(bus, "DataProfile")
@@ -2570,6 +2738,9 @@ class Topic2ApplicationService:
                 mechanism_priors=mechanism_priors,
                 beam_radius_um=machine.get("beam_radius_um"),
                 grid_spacing_um=float((task_spec.get("target_geometry") or {}).get("grid_spacing_um") or 2.0),
+                allow_computational_defaults=(
+                    effective_execution_mode("research", task_spec) == "SANDBOX"
+                ),
                 input_refs=refs,
             )
         model_artifact = self._persist_artifact(
@@ -2578,6 +2749,15 @@ class Topic2ApplicationService:
             model.model_dump(mode="json"),
             input_refs=[item.model_dump(mode="json") for item in refs],
             schema_version=model.schema_version,
+        )
+        inactive = {
+            str(item.get("mechanism"))
+            for item in model.inactive_mechanisms
+        }
+        runnable_fidelity = (
+            SimulationFidelity.F1_INCUBATION
+            if "DEFOCUS_RECURSION" in inactive
+            else SimulationFidelity.F2_DEFOCUS_RECURSION
         )
         physical_state = PhysicalModelState(
             state_id=f"physical-state-{canonical_hash({'run': bus.run_id, 'model': model_artifact})[:16]}",
@@ -2588,9 +2768,17 @@ class Topic2ApplicationService:
             ] or ["POWER_LAW_INCUBATION_PROVISIONAL"],
             calibrated_parameter_refs=[ArtifactRef(type="CalibrationResult", id=calibration_artifact)],
             local_removal_model_ref=ArtifactRef(type="LocalRemovalModel", id=model_artifact),
-            simulator_fidelity=SimulationFidelity.F2_DEFOCUS_RECURSION,
+            simulator_fidelity=runnable_fidelity,
             uncertainty_status=ScientificStatus.PARTIAL,
-            assumptions=list(model.assumptions),
+            assumptions=[
+                *list(model.assumptions),
+                *(
+                    f"fidelity downgraded to {runnable_fidelity.value}: "
+                    f"DEFOCUS_RECURSION inactive ({item.get('reason')})"
+                    for item in model.inactive_mechanisms
+                    if item.get("mechanism") == "DEFOCUS_RECURSION"
+                ),
+            ],
             provenance=[
                 ProvenanceRecord(
                     source_type="DETERMINISTIC_COMPUTATION",
@@ -2656,29 +2844,58 @@ class Topic2ApplicationService:
         rows = self.topic2._rows_for_scope(scope)
         observed_depths = [float(row["depth_um"]) for row in rows if row.get("depth_um") is not None]
         geometry_payload = dict(task_spec.get("target_geometry") or {})
+        sandbox = effective_execution_mode("research", task_spec) == "SANDBOX"
+        target_depth = geometry_payload.get("target_depth_um") or task_spec.get(
+            "target_depth_um"
+        )
+        if target_depth is None:
+            if not sandbox:
+                raise ValueError(
+                    "target_depth_um is required in TargetGeometry "
+                    "(Gate A enforces TargetGeometry in RESEARCH/DEMO_FIXTURE)"
+                )
+            target_depth = (
+                sorted(observed_depths)[len(observed_depths) // 2]
+                if observed_depths
+                else 5.0
+            )
+        width = geometry_payload.get("width_um") or (40.0 if sandbox else None)
+        height = (
+            geometry_payload.get("height_um")
+            or geometry_payload.get("length_um")
+            or (40.0 if sandbox else None)
+        )
+        if not sandbox and (width is None or height is None):
+            raise ValueError(
+                "width_um / height_um are required in TargetGeometry "
+                "(Gate A enforces TargetGeometry in RESEARCH/DEMO_FIXTURE)"
+            )
         geometry = TargetGeometry(
             geometry_type="RECTANGULAR_POCKET",
-            width_um=float(geometry_payload.get("width_um") or 40.0),
-            height_um=float(geometry_payload.get("height_um") or geometry_payload.get("length_um") or 40.0),
-            target_depth_um=float(
-                geometry_payload.get("target_depth_um")
-                or task_spec.get("target_depth_um")
-                or (sorted(observed_depths)[len(observed_depths) // 2] if observed_depths else 5.0)
-            ),
+            width_um=float(width),
+            height_um=float(height),
+            target_depth_um=float(target_depth),
             grid_spacing_um=float(geometry_payload.get("grid_spacing_um") or model.kernel.grid_spacing_um),
         )
         def median(name: str, default: float) -> float:
             values = sorted(float(row[name]) for row in rows if row.get(name) is not None)
             return values[len(values) // 2] if values else default
 
+        peak_fluence = (
+            (task_spec.get("laser_parameters") or {}).get("peak_fluence_J_cm2")
+            or canonical_peak_fluence
+        )
+        if peak_fluence is None:
+            if not sandbox:
+                raise ValueError(
+                    "peak_fluence_J_cm2 unresolved: explicit value or canonical "
+                    "peak fluence is required (no threshold*2 fallback outside SANDBOX)"
+                )
+            peak_fluence = model.threshold_J_cm2 * 2.0
         laser = {
             "frequency_kHz": float((task_spec.get("laser_parameters") or {}).get("frequency_kHz") or median("frequency_kHz", 100.0)),
             "scan_speed_mm_s": float((task_spec.get("laser_parameters") or {}).get("scan_speed_mm_s") or median("scan_speed_mm_s", 100.0)),
-            "peak_fluence_J_cm2": float(
-                (task_spec.get("laser_parameters") or {}).get("peak_fluence_J_cm2")
-                or canonical_peak_fluence
-                or model.threshold_J_cm2 * 2.0
-            ),
+            "peak_fluence_J_cm2": float(peak_fluence),
         }
         units = {
             "pulse_width_ps": "ps",
@@ -2708,6 +2925,15 @@ class Topic2ApplicationService:
             ],
         )
         planner = ToolpathPlanner()
+        inactive_mechanisms = {
+            str(item.get("mechanism"))
+            for item in model.inactive_mechanisms
+        }
+        runnable_fidelity = (
+            SimulationFidelity.F1_INCUBATION
+            if "DEFOCUS_RECURSION" in inactive_mechanisms
+            else SimulationFidelity.F2_DEFOCUS_RECURSION
+        )
         plan, simulation = planner.plan(
             target=geometry,
             model=model,
@@ -2715,7 +2941,7 @@ class Topic2ApplicationService:
             machine_constraints=machine_constraints,
             planning_priors=planning_priors,
             path_families=(PathFamily.RASTER, PathFamily.CROSS_HATCH),
-            fidelity=SimulationFidelity.F2_DEFOCUS_RECURSION,
+            fidelity=runnable_fidelity,
             deterministic_seed=random_seed,
             input_refs=[
                 ArtifactRef(type="LocalRemovalModel", id=model_artifact),
@@ -2734,6 +2960,10 @@ class Topic2ApplicationService:
         )
         plan = plan.model_copy(
             update={
+                "status": self._plan_status_for(
+                    model.model_dump(mode="json"),
+                    execution_mode=effective_execution_mode("research", task_spec),
+                ),
                 "simulation_ref": ArtifactRef(
                     type="MorphologySimulationResult", id=simulation_artifact
                 ),
@@ -3233,6 +3463,34 @@ class Topic2ApplicationService:
         }
 
     # ------------------------------------------------------------ aggregation
+
+    def _plan_status_for(
+        self,
+        model_payload: dict[str, Any],
+        *,
+        execution_mode: str,
+    ) -> str:
+        """ToolpathPlan status semantics (阶段二 T6).
+
+        COMPUTATIONAL_DEFAULT bindings (or SANDBOX) -> PROVISIONAL_SIMULATION_ONLY;
+        otherwise DEMO_FIXTURE -> DEMO_CANDIDATE, RESEARCH -> RESEARCH_CANDIDATE.
+        """
+        from packages.scientific_computation.contracts import PlanStatus
+
+        if execution_mode == "SANDBOX":
+            return PlanStatus.PROVISIONAL_SIMULATION_ONLY
+        has_computational_default = any(
+            str(binding.get("source_type")) == "COMPUTATIONAL_DEFAULT"
+            for binding in (model_payload.get("parameter_bindings") or [])
+            if isinstance(binding, dict)
+        )
+        if has_computational_default:
+            return PlanStatus.PROVISIONAL_SIMULATION_ONLY
+        return (
+            PlanStatus.DEMO_CANDIDATE
+            if execution_mode == "DEMO_FIXTURE"
+            else PlanStatus.RESEARCH_CANDIDATE
+        )
 
     def _research_summary(
         self,

@@ -12,6 +12,14 @@ export interface TaskDraft {
   geometryType: string
   objectiveMetric: 'depth_um' | 'roughness_um' | ''
   equipmentProfileId: string
+  /** TargetGeometry is mandatory in RESEARCH/DEMO_FIXTURE (Gate A, 阶段二 T1). */
+  targetGeometry: {
+    geometry_type: string
+    width_um: number
+    height_um: number
+    target_depth_um: number
+    grid_spacing_um: number
+  } | null
   /** Backend execution mode: RESEARCH (fail closed, real LLM) or
    * DEMO_FIXTURE (pre-installed fixtures + recorded analysis cache).
    * The workbench defaults to DEMO_FIXTURE. */
@@ -39,6 +47,7 @@ export function emptyTaskDraft(): TaskDraft {
     geometryType: '',
     objectiveMetric: '',
     equipmentProfileId: '',
+    targetGeometry: null,
     executionMode: 'DEMO_FIXTURE',
     taskContextRef: null,
     runId: null,
@@ -80,6 +89,7 @@ export function draftToTaskSpec(draft: TaskDraft): Record<string, unknown> {
     objective_metric: draft.objectiveMetric,
     equipment_profile_id: draft.equipmentProfileId,
     execution_mode: draft.executionMode || undefined,
+    target_geometry: draft.targetGeometry ?? undefined,
     task_context_id: draft.taskContextRef ?? undefined,
     task_context_version: draft.taskContextRef ? draft.version : undefined,
   }
@@ -91,6 +101,8 @@ export function isTaskDraftComplete(draft: TaskDraft): boolean {
       draft.laserType &&
       draft.geometryType &&
       draft.objectiveMetric &&
-      draft.equipmentProfileId,
+      draft.equipmentProfileId &&
+      draft.targetGeometry &&
+      draft.targetGeometry.target_depth_um > 0,
   )
 }

@@ -539,7 +539,7 @@ def test_toolpath_simulator_loop() -> None:
         path_families=(PathFamily.RASTER, PathFamily.CROSS_HATCH),
     )
     assert plan.path_family in {PathFamily.RASTER, PathFamily.CROSS_HATCH}
-    assert plan.status.value == "RECOMMENDED"
+    assert plan.status.value == "DEMO_CANDIDATE"
     assert len(plan.candidate_summary) >= 2
     assert plan.simulation_ref.id == simulation.simulation_id
     assert plan.predicted_metrics.morphology_rmse_um is not None
@@ -586,7 +586,7 @@ def test_full_physics_to_planning_run(physics_app: Topic2ApplicationService) -> 
         by_type["PriorObjectSet"],
     }
     result = run["result"]["physicsToPlanning"]
-    assert result["toolpathPlan"]["status"] == "RECOMMENDED"
+    assert result["toolpathPlan"]["status"] == "PROVISIONAL_SIMULATION_ONLY"
     assert result["morphologySimulation"]["fidelity"] == "F2_DEFOCUS_RECURSION"
     assert result["morphologySimulation"]["target_depth_field_um"] is not None
     assert result["morphologySimulation"]["predicted_depth_field_um"]

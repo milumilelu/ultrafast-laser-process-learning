@@ -176,7 +176,7 @@ class ToolpathPlanner:
                             type="MorphologySimulationResult", id=simulation.simulation_id
                         ),
                         planning_prior_refs=prior_refs,
-                        status=PlanStatus.CANDIDATE,
+                        status=PlanStatus.DEMO_CANDIDATE,
                         objective_value=objective,
                         candidate_summary=[],
                         provenance=[
@@ -204,7 +204,7 @@ class ToolpathPlanner:
         ]
         best_plan = best_plan.model_copy(
             update={
-                "status": PlanStatus.RECOMMENDED,
+                "status": PlanStatus.DEMO_CANDIDATE,
                 "objective_value": best_objective,
                 "candidate_summary": summary,
             }

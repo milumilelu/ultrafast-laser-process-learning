@@ -82,12 +82,19 @@ export function OverviewSection({
   const stageCount = CANONICAL_STAGES.filter((stage) => run?.stage_status?.[stage]?.status === 'completed').length
 
   const draftComplete = Boolean(
-    draft && draft.material && draft.laserType && draft.geometryType && draft.objectiveMetric && draft.equipmentProfileId,
+    draft &&
+      draft.material &&
+      draft.laserType &&
+      draft.geometryType &&
+      draft.objectiveMetric &&
+      draft.equipmentProfileId &&
+      draft.targetGeometry &&
+      draft.targetGeometry.target_depth_um > 0,
   )
   const handleStart = () => {
     if (!draftComplete) {
       setEditing(true)
-      setHint('请先完成材料 / 激光 / 几何 / 目标 / 设备的选择。')
+      setHint('请先完成材料 / 激光 / 几何 / 目标 / 设备的选择，并填写目标几何（Gate A 必填）。')
       return
     }
     setHint(null)

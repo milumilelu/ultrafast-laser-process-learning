@@ -15,7 +15,9 @@ from packages.scientific_computation.contracts import (
     EvidenceOrigin,
     IdentifiabilityStatus,
     LocalRemovalModel,
+    ParameterBinding,
     ParameterSemantics,
+    ParameterSourceType,
     ProvenanceRecord,
     RemovalKernel,
     RemovalModelMode,
@@ -104,8 +106,20 @@ class LocalRemovalModelFactory:
         mechanism_priors: Iterable[MechanismModelPrior | dict[str, Any]] = (),
         beam_radius_um: float | None = None,
         grid_spacing_um: float = 2.0,
+        allow_computational_defaults: bool = False,
         input_refs: list[ArtifactRef] | None = None,
     ) -> LocalRemovalModel:
+        """RECONSTRUCTED model with structured parameter bindings.
+
+        Mechanism semantics (阶段二 T3/T4):
+        - critical parameters (F_th_eff / incubation_S / delta_eff / beam
+          radius): unresolved -> raise (fail closed).
+        - optional mechanisms (DEFOCUS_RECURSION -> alpha_defocus,
+          THERMAL_MEMORY -> thermal_memory_eff): unresolved -> mechanism
+          INACTIVE, never a hardcoded default.
+        - COMPUTATIONAL_DEFAULT bindings exist only in SANDBOX
+          (allow_computational_defaults=True).
+        """
         result = (
             calibration
             if isinstance(calibration, CalibrationResult)
@@ -128,16 +142,12 @@ class LocalRemovalModelFactory:
             and item.identifiability != IdentifiabilityStatus.NOT_IDENTIFIABLE
         }
 
-        def parameter_value(name: str, default: float) -> tuple[float, ParameterSemantics, str]:
-            if name in estimates:
-                estimate = estimates[name]
-                assert estimate.estimate is not None
-                return float(estimate.estimate), estimate.parameter_semantics, "target_calibration"
+        def _prior_for(name: str) -> ParameterPrior | None:
             aliases = {
                 "F_th_eff": {"F_th_eff", "F_th", "ablation_threshold"},
                 "delta_eff": {"delta_eff", "delta"},
             }
-            prior = next(
+            return next(
                 (
                     item
                     for item in ppriors
@@ -146,19 +156,73 @@ class LocalRemovalModelFactory:
                 ),
                 None,
             )
+
+        def _resolve(name: str) -> tuple[float, ParameterSemantics, ParameterSourceType, str] | None:
+            """None = UNRESOLVED (mechanism stays inactive)."""
+            estimate = estimates.get(name)
+            if estimate is not None:
+                assert estimate.estimate is not None
+                return (
+                    float(estimate.estimate),
+                    estimate.parameter_semantics,
+                    ParameterSourceType.TARGET_CALIBRATION,
+                    f"calibration:{result.calibration_id}",
+                )
+            prior = _prior_for(name)
             if prior is not None:
+                fixture_based = any(
+                    str(ref.type) == "DemoFixturePrior" for ref in prior.provenance
+                )
                 return (
                     (prior.lower + prior.upper) / 2.0,
                     ParameterSemantics.PROVISIONAL,
-                    "literature_prior_midpoint",
+                    ParameterSourceType.DEMO_FIXTURE
+                    if fixture_based
+                    else ParameterSourceType.LITERATURE_PRIOR,
+                    prior.prior_id,
                 )
-            return default, ParameterSemantics.PROVISIONAL, "explicit_computational_default"
+            return None
 
-        threshold, threshold_semantics, threshold_source = parameter_value("F_th_eff", 1.0)
-        incubation, incubation_semantics, incubation_source = parameter_value("incubation_S", 1.0)
-        delta, delta_semantics, delta_source = parameter_value("delta_eff", 1.0)
-        alpha, alpha_semantics, alpha_source = parameter_value("alpha_defocus", 0.02)
-        thermal, thermal_semantics, thermal_source = parameter_value("thermal_memory_eff", 0.0)
+        def _critical(name: str, default: float) -> tuple[float, ParameterSemantics, ParameterSourceType, str]:
+            resolved = _resolve(name)
+            if resolved is not None:
+                return resolved
+            if allow_computational_defaults:
+                return (
+                    default,
+                    ParameterSemantics.PROVISIONAL,
+                    ParameterSourceType.COMPUTATIONAL_DEFAULT,
+                    "sandbox-default",
+                )
+            raise ValueError(
+                f"{name} is unresolved (no prior, no calibration estimate) "
+                "and computational defaults are not allowed in this execution mode"
+            )
+
+        def _optional(
+            name: str, default: float
+        ) -> tuple[float, ParameterSemantics, ParameterSourceType, str] | None:
+            resolved = _resolve(name)
+            if resolved is not None:
+                return resolved
+            if allow_computational_defaults:
+                return (
+                    default,
+                    ParameterSemantics.PROVISIONAL,
+                    ParameterSourceType.COMPUTATIONAL_DEFAULT,
+                    "sandbox-default",
+                )
+            return None
+
+        threshold, threshold_semantics, threshold_source, threshold_ref = _critical(
+            "F_th_eff", 1.0
+        )
+        incubation, incubation_semantics, incubation_source, incubation_ref = _critical(
+            "incubation_S", 1.0
+        )
+        delta, delta_semantics, delta_source, delta_ref = _critical("delta_eff", 1.0)
+        alpha_binding = _optional("alpha_defocus", 0.02)
+        thermal_binding = _optional("thermal_memory_eff", 0.0)
         if beam_radius_um is None:
             raise ValueError(
                 "beam_radius_um is required for RECONSTRUCTED LocalRemovalModel "
@@ -176,30 +240,106 @@ class LocalRemovalModelFactory:
         refs.append(ArtifactRef(type="CalibrationResult", id=result.calibration_id))
         refs.extend(ArtifactRef(type="ParameterPrior", id=item.prior_id) for item in ppriors)
         refs.extend(ArtifactRef(type="MechanismModelPrior", id=item.prior_id) for item in mpriors)
+
+        bindings: list[ParameterBinding] = [
+            ParameterBinding(
+                parameter="F_th_eff",
+                value=threshold,
+                unit="J/cm2",
+                source_type=threshold_source,
+                source_ref=threshold_ref,
+                semantics=threshold_semantics,
+            ),
+            ParameterBinding(
+                parameter="incubation_S",
+                value=incubation,
+                unit="dimensionless",
+                source_type=incubation_source,
+                source_ref=incubation_ref,
+                semantics=incubation_semantics,
+            ),
+            ParameterBinding(
+                parameter="delta_eff",
+                value=delta,
+                unit="um",
+                source_type=delta_source,
+                source_ref=delta_ref,
+                semantics=delta_semantics,
+            ),
+            ParameterBinding(
+                parameter="beam_radius_um",
+                value=radius,
+                unit="um",
+                source_type=ParameterSourceType.DERIVED,
+                source_ref="machine-profile-snapshot",
+                semantics=ParameterSemantics.PHYSICAL,
+            ),
+        ]
+        if alpha_binding is not None:
+            bindings.append(
+                ParameterBinding(
+                    parameter="alpha_defocus",
+                    value=alpha_binding[0],
+                    unit="1/um",
+                    source_type=alpha_binding[2],
+                    source_ref=alpha_binding[3],
+                    semantics=alpha_binding[1],
+                )
+            )
+        if thermal_binding is not None:
+            bindings.append(
+                ParameterBinding(
+                    parameter="thermal_memory_eff",
+                    value=thermal_binding[0],
+                    unit="dimensionless",
+                    source_type=thermal_binding[2],
+                    source_ref=thermal_binding[3],
+                    semantics=thermal_binding[1],
+                )
+            )
+        inactive_mechanisms: list[dict[str, str]] = []
+        if alpha_binding is None:
+            inactive_mechanisms.append(
+                {
+                    "mechanism": "DEFOCUS_RECURSION",
+                    "status": "INACTIVE",
+                    "reason": "no supporting alpha_defocus prior or calibration evidence",
+                }
+            )
+        if thermal_binding is None:
+            inactive_mechanisms.append(
+                {
+                    "mechanism": "THERMAL_MEMORY",
+                    "status": "INACTIVE",
+                    "reason": "no supporting thermal prior or calibration evidence",
+                }
+            )
         return self._build(
             mode=RemovalModelMode.RECONSTRUCTED,
             kernel=kernel,
             threshold=threshold,
             incubation=incubation,
             delta=max(delta, 1e-6),
-            alpha=max(alpha, 0.0),
-            thermal=max(thermal, 0.0),
+            alpha=alpha_binding[0] if alpha_binding else 0.0,
+            thermal=thermal_binding[0] if thermal_binding else 0.0,
             semantics={
                 "F_th_eff": threshold_semantics,
                 "incubation_S": incubation_semantics,
                 "delta_eff": delta_semantics,
-                "alpha_defocus": alpha_semantics,
-                "thermal_memory_eff": thermal_semantics,
+                "alpha_defocus": alpha_binding[1] if alpha_binding else ParameterSemantics.PROVISIONAL,
+                "thermal_memory_eff": (
+                    thermal_binding[1] if thermal_binding else ParameterSemantics.PROVISIONAL
+                ),
             },
+            bindings=bindings,
+            inactive_mechanisms=inactive_mechanisms,
             status=ScientificStatus.PARTIAL,
             refs=refs,
             assumptions=[
-                f"F_th_eff source={threshold_source}",
-                f"incubation_S source={incubation_source}",
-                f"delta_eff source={delta_source}",
-                f"alpha_defocus source={alpha_source}",
-                f"thermal_memory_eff source={thermal_source}",
-                "provisional defaults are computation hypotheses, not material constants",
+                (
+                    "critical parameters are bound from calibration or priors; "
+                    "unresolved optional mechanisms are INACTIVE, never defaulted"
+                ),
             ],
             origin_role="reconstructed_model_initialization",
         )
@@ -223,6 +363,7 @@ class LocalRemovalModelFactory:
             parameter_priors=parameter_priors,
             mechanism_priors=mechanism_priors,
             beam_radius_um=float(kernel.radius_um),
+            allow_computational_defaults=False,
             input_refs=input_refs,
         )
         return self._build(
@@ -234,6 +375,8 @@ class LocalRemovalModelFactory:
             alpha=reconstructed.alpha_defocus_per_um,
             thermal=reconstructed.thermal_memory_eff,
             semantics=reconstructed.parameter_semantics,
+            bindings=reconstructed.parameter_bindings,
+            inactive_mechanisms=reconstructed.inactive_mechanisms,
             status=ScientificStatus.PARTIAL,
             refs=reconstructed.input_refs,
             assumptions=[
@@ -258,6 +401,8 @@ class LocalRemovalModelFactory:
         assumptions: list[str],
         origin_role: str,
         thermal: float = 0.0,
+        bindings: list[ParameterBinding] | None = None,
+        inactive_mechanisms: list[dict[str, str]] | None = None,
     ) -> LocalRemovalModel:
         payload = {
             "mode": mode.value,
@@ -279,6 +424,8 @@ class LocalRemovalModelFactory:
             alpha_defocus_per_um=alpha,
             thermal_memory_eff=thermal,
             parameter_semantics=semantics,
+            parameter_bindings=list(bindings or []),
+            inactive_mechanisms=list(inactive_mechanisms or []),
             status=status,
             assumptions=assumptions,
             provenance=[
