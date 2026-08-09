@@ -5,13 +5,16 @@
 import { useMemo } from 'react'
 import type { ArtifactSnapshot } from '../../domain/artifact'
 import {
+  ANALYSIS_METHOD_LABEL,
+  buildResolutionView,
+} from '../../domain/resolution'
+import {
   buildNeedsView,
   NEED_TONE,
   NEED_TYPE_LABEL,
   RESOLUTION_TARGET_LABEL,
   type ScientificNeedType,
 } from '../../domain/needs'
-import { buildResolutionView } from '../../domain/resolution'
 import { Card, EmptyState } from '../../components/ui/Card'
 import { StatusBadge } from '../../components/ui/StatusBadge'
 
@@ -59,23 +62,95 @@ export function NeedsPanel({ artifact }: { artifact?: ArtifactSnapshot }) {
   )
 }
 
-export function ReadingPanel({ artifact }: { artifact?: ArtifactSnapshot }) {
+export const RESOLUTION_PHASES = [
+  { id: 'retrieving', label: '检索' },
+  { id: 'selecting', label: '选文' },
+  { id: 'reading', label: 'LLM 精读' },
+  { id: 'validating', label: '确定性验证' },
+  { id: 'compiling_ledger', label: '候选账本' },
+  { id: 'compiling_conditions', label: '条件编译' },
+  { id: 'assessing_reconstructibility', label: '可重建性' },
+  { id: 'assessing_applicability', label: '适用性' },
+  { id: 'compiling_prior', label: '先验编译' },
+] as const
+
+export function ReadingPanel({
+  artifact,
+  events,
+}: {
+  artifact?: ArtifactSnapshot
+  /** Workflow events drive the live phase progress (阶段三 T3). */
+  events?: Array<{ details?: Record<string, unknown> }>
+}) {
   const view = useMemo(
     () => buildResolutionView(artifact?.content as Record<string, unknown>),
     [artifact],
   )
-  if (!artifact || view.sources.length === 0) return null
+  const progress = useMemo(() => {
+    const byPhase = new Map<string, { current?: number; total?: number }>()
+    for (const event of events ?? []) {
+      const phase = String(event.details?.phase ?? '')
+      if (phase) {
+        byPhase.set(phase, {
+          current: event.details?.current as number | undefined,
+          total: event.details?.total as number | undefined,
+        })
+      }
+    }
+    return byPhase
+  }, [events])
 
-  const cacheLabel =
-    view.mapping.fromCache > 0
-      ? `${view.mapping.fromCache}/${view.mapping.sources} 来自预录缓存`
-      : `${view.mapping.completed} 篇精读完成`
+  if (!artifact && view.sources.length === 0) return null
+
+  const latestPhaseIndex = RESOLUTION_PHASES.reduce(
+    (latest, phase, index) =>
+      progress.has(phase.id) ? Math.max(latest, index) : latest,
+    -1,
+  )
 
   return (
     <Card
       title={`文献精读（${view.sources.length} 篇论文）`}
-      actions={<StatusBadge tone="ok" label={cacheLabel} />}
+      actions={
+        <StatusBadge
+          tone={
+            view.analysisMethod === 'LLM_LIVE' || view.analysisMethod === 'LLM_CACHED'
+              ? 'ok'
+              : view.analysisMethod === 'PENDING_LLM'
+                ? 'warn'
+                : 'neutral'
+          }
+          label={ANALYSIS_METHOD_LABEL[view.analysisMethod] ?? view.analysisMethod}
+        />
+      }
     >
+      {events && events.length > 0 && (
+        <ol className="phase-list">
+          {RESOLUTION_PHASES.map((phase, index) => {
+            const state = progress.has(phase.id)
+              ? index < latestPhaseIndex || (phase.id !== 'reading' && progress.has(phase.id))
+                ? 'done'
+                : 'active'
+              : index <= latestPhaseIndex
+                ? 'done'
+                : 'pending'
+            const reading = progress.get('reading')
+            return (
+              <li key={phase.id} className={`phase-item phase-${state}`}>
+                <span className="phase-mark">
+                  {state === 'done' ? '✓' : state === 'active' ? '●' : '○'}
+                </span>
+                <span className="phase-label">{phase.label}</span>
+                {phase.id === 'reading' && reading && reading.total ? (
+                  <span className="phase-progress">
+                    {reading.current ?? 0} / {reading.total}
+                  </span>
+                ) : null}
+              </li>
+            )
+          })}
+        </ol>
+      )}
       <div className="reading-stats">
         <div className="reading-stat">
           <span className="reading-stat-value">{view.mapping.sources}</span>

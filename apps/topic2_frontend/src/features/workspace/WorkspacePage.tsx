@@ -5,8 +5,8 @@
 import { useCallback, useMemo, useState } from 'react'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { Link, Navigate, NavLink, useParams } from 'react-router-dom'
-import { CANONICAL_STAGES, CHECKPOINT_STAGES, WORKSPACE_SECTIONS } from '../../domain/stages'
-import { executionLabel, executionStatusFrom, executionTone } from '../../domain/status'
+import { WORKSPACE_SECTIONS } from '../../domain/stages'
+import { buildRunControl } from '../../domain/control'
 import { getTaskDraft, listTaskDrafts, saveTaskDraft, emptyTaskDraft } from '../../stores/taskDrafts'
 import { useUiStore } from '../../stores/ui'
 import { StatusBadge } from '../../components/ui/StatusBadge'
@@ -65,24 +65,17 @@ function WorkspaceInner({ taskId, section }: { taskId: string; section: string }
     mutationFn: (stages?: string[]) => createOrContinue(stages),
   })
 
-  const stageRows = useMemo(() => {
-    const status = run.data?.stage_status ?? {}
-    return CANONICAL_STAGES.map((stage, index) => {
-      const raw = status[stage]?.status
-      const exec = executionStatusFrom(raw)
-      return { stage, index, exec }
-    })
-  }, [run.data?.stage_status])
-
-  const nextCheckpoint = useMemo(() => {
-    const completed = new Set(
-      CANONICAL_STAGES.filter((stage) => {
-        const raw = run.data?.stage_status?.[stage]?.status
-        return raw === 'completed' || raw === 'COMPLETED'
-      }),
-    )
-    return CHECKPOINT_STAGES.find((stage) => !completed.has(stage)) ?? null
-  }, [run.data?.stage_status])
+  // 阶段三 T1: frontend performs zero workflow transition logic.
+  // Section status comes verbatim from the backend's RunControlState.phases;
+  // stage_status is display-only (Inspector).
+  const runControl = useMemo(
+    () =>
+      buildRunControl(
+        (run.data?.result as { runControlState?: Record<string, unknown> | null })
+          ?.runControlState ?? null,
+      ),
+    [run.data?.result],
+  )
 
   const runStatus = run.data?.status ?? null
 
@@ -104,9 +97,28 @@ function WorkspaceInner({ taskId, section }: { taskId: string; section: string }
         <div className="workflow-rail-title">Scientific Workflow</div>
         <ol className="workflow-list">
           {WORKSPACE_SECTIONS.map((ws) => {
-            const exec = ws.unlockStage
-              ? stageRows.find((row) => row.stage === ws.unlockStage)?.exec ?? 'NOT_RUN'
-              : 'READY'
+            const phase = ws.phase ? runControl.phases[ws.phase] : null
+            const status = phase?.status ?? 'NOT_RUN'
+            const tone =
+              status === 'BLOCKED'
+                ? 'warn'
+                : status === 'PARTIAL'
+                  ? 'warn'
+                  : status === 'COMPLETED'
+                    ? 'ok'
+                    : status === 'READY'
+                      ? 'ok'
+                      : 'neutral'
+            const label =
+              status === 'COMPLETED'
+                ? '完成'
+                : status === 'BLOCKED'
+                  ? '受阻'
+                  : status === 'PARTIAL'
+                    ? '部分'
+                    : status === 'READY'
+                      ? '就绪'
+                      : '未运行'
             const to = ws.id === 'overview' ? `/workspace/${taskId}` : `/workspace/${taskId}/${ws.id}`
             return (
               <li key={ws.id}>
@@ -116,7 +128,7 @@ function WorkspaceInner({ taskId, section }: { taskId: string; section: string }
                     `workflow-item ${isActive ? 'workflow-item-active' : ''}`
                   }
                 >
-                  <StatusBadge tone={executionTone(exec)} label={executionLabel(exec)} />
+                  <StatusBadge tone={tone} label={label} />
                   <span className="workflow-label">{ws.label}</span>
                 </NavLink>
               </li>
@@ -136,7 +148,6 @@ function WorkspaceInner({ taskId, section }: { taskId: string; section: string }
             events={eventsQuery.data?.items ?? []}
             busy={busy || continueMutation.isPending}
             onContinue={(stages) => createOrContinue(stages)}
-            nextCheckpoint={nextCheckpoint}
           />
         )}
         {section === 'capability' && (
@@ -145,7 +156,10 @@ function WorkspaceInner({ taskId, section }: { taskId: string; section: string }
         {section === 'knowledge' && (
           <>
             <NeedsPanel artifact={artifacts.data?.get('ScientificNeedSet')} />
-            <ReadingPanel artifact={artifacts.data?.get('ScientificCorpusPack')} />
+            <ReadingPanel
+              artifact={artifacts.data?.get('ScientificCorpusPack')}
+              events={eventsQuery.data?.items ?? []}
+            />
             <ConditionTracePanel
               ledger={artifacts.data?.get('CandidateLedger')}
               conditions={artifacts.data?.get('SourceConditionSet')}

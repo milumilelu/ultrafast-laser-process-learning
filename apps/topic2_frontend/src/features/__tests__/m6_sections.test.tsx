@@ -91,7 +91,7 @@ describe('NeedsPanel + ReadingPanel (M6)', () => {
   it('renders the reading chain: papers + cache mapping', () => {
     renderWithProviders(<ReadingPanel artifact={snapshotOf('ScientificCorpusPack')} />)
     expect(screen.getByText(/文献精读/)).toBeInTheDocument()
-    expect(screen.getByText(/来自预录缓存/)).toBeInTheDocument()
+    expect(screen.getByText(/预录 LLM 精读缓存/)).toBeInTheDocument()
     expect(screen.getAllByText(/sic-/).length).toBeGreaterThan(0)
   })
 

@@ -59,6 +59,36 @@
     "execution_mode": "DEMO_FIXTURE",
     "current_phase": "PLANNING",
     "phase_status": "COMPLETED",
+    "phases": {
+     "CAPABILITY": {
+      "status": "READY",
+      "blocking_reasons": []
+     },
+     "KNOWLEDGE": {
+      "status": "READY",
+      "blocking_reasons": []
+     },
+     "CALIBRATION": {
+      "status": "COMPLETED",
+      "blocking_reasons": []
+     },
+     "MODEL": {
+      "status": "COMPLETED",
+      "blocking_reasons": []
+     },
+     "SIMULATION": {
+      "status": "COMPLETED",
+      "blocking_reasons": []
+     },
+     "PLANNING": {
+      "status": "COMPLETED",
+      "blocking_reasons": []
+     },
+     "OBSERVATION": {
+      "status": "READY",
+      "blocking_reasons": []
+     }
+    },
     "gates": {
      "A": {
       "gate": "A",
@@ -100,7 +130,7 @@
  },
  "artifacts": {
   "DataProfile": {
-   "id": "DataProfile-6e34193c98f1d0d1",
+   "id": "DataProfile-9838df8692a1b851",
    "type": "DataProfile",
    "schema_version": "v1",
    "content": {
@@ -111,11 +141,11 @@
    }
   },
   "MachineProfileSnapshot": {
-   "id": "MachineProfileSnapshot-a5deaa4ff743c02f",
+   "id": "MachineProfileSnapshot-1a4b19c9e58467c9",
    "type": "MachineProfileSnapshot",
    "schema_version": "machine-profile-snapshot-v1",
    "content": {
-    "created_at": "2026-08-09T05:11:58.703672+00:00",
+    "created_at": "2026-08-09T06:36:27.195699+00:00",
     "equipment_profile_id": "DEMO-FS-LASER-01",
     "fields": {
      "actual_power_W": {
@@ -241,7 +271,7 @@
    }
   },
   "ScientificCapabilityReport": {
-   "id": "ScientificCapabilityReport-d41779fcf97a9943",
+   "id": "ScientificCapabilityReport-eadcf12748f51ed4",
    "type": "ScientificCapabilityReport",
    "schema_version": "physics-to-planning-v1",
    "content": {
@@ -399,11 +429,11 @@
     ],
     "input_refs": [
      {
-      "id": "TaskState-7c9d7c1370748dd2",
+      "id": "TaskState-43740dcfee5014d7",
       "type": "TaskState"
      },
      {
-      "id": "MachineProfileSnapshot-a5deaa4ff743c02f",
+      "id": "MachineProfileSnapshot-1a4b19c9e58467c9",
       "type": "MachineProfileSnapshot"
      }
     ],
@@ -498,11 +528,11 @@
       "priority": "high",
       "provenance": [
        {
-        "id": "TaskState-7c9d7c1370748dd2",
+        "id": "TaskState-43740dcfee5014d7",
         "type": "TaskState"
        },
        {
-        "id": "MachineProfileSnapshot-a5deaa4ff743c02f",
+        "id": "MachineProfileSnapshot-1a4b19c9e58467c9",
         "type": "MachineProfileSnapshot"
        }
       ],
@@ -526,11 +556,11 @@
       "priority": "high",
       "provenance": [
        {
-        "id": "TaskState-7c9d7c1370748dd2",
+        "id": "TaskState-43740dcfee5014d7",
         "type": "TaskState"
        },
        {
-        "id": "MachineProfileSnapshot-a5deaa4ff743c02f",
+        "id": "MachineProfileSnapshot-1a4b19c9e58467c9",
         "type": "MachineProfileSnapshot"
        }
       ],
@@ -555,11 +585,11 @@
       "priority": "low",
       "provenance": [
        {
-        "id": "TaskState-7c9d7c1370748dd2",
+        "id": "TaskState-43740dcfee5014d7",
         "type": "TaskState"
        },
        {
-        "id": "MachineProfileSnapshot-a5deaa4ff743c02f",
+        "id": "MachineProfileSnapshot-1a4b19c9e58467c9",
         "type": "MachineProfileSnapshot"
        }
       ],
@@ -588,13 +618,13 @@
      "F2_DEFOCUS_RECURSION"
     ],
     "task_ref": {
-     "id": "TaskState-7c9d7c1370748dd2",
+     "id": "TaskState-43740dcfee5014d7",
      "type": "TaskState"
     }
    }
   },
   "TargetPhysicsReadiness": {
-   "id": "TargetPhysicsReadiness-ae7eb019b0c4c44a",
+   "id": "TargetPhysicsReadiness-606d152ab6b9520c",
    "type": "TargetPhysicsReadiness",
    "schema_version": "v1",
    "content": {
@@ -859,7 +889,7 @@
       {
        "field_name": "pulse_width_ps",
        "input_name": "pulse_width_s",
-       "provenance": "dataset:tmpa6my3c62.csv",
+       "provenance": "dataset:tmp7ep6574t.csv",
        "source": "DATASET",
        "unit": "ps",
        "value": 0.3,
@@ -868,7 +898,7 @@
       {
        "field_name": "frequency_kHz",
        "input_name": "frequency_Hz",
-       "provenance": "dataset:tmpa6my3c62.csv",
+       "provenance": "dataset:tmp7ep6574t.csv",
        "source": "DATASET",
        "unit": "kHz",
        "value": 200.0,
@@ -877,7 +907,7 @@
       {
        "field_name": "scan_speed_mm_s",
        "input_name": "scan_speed_m_s",
-       "provenance": "dataset:tmpa6my3c62.csv",
+       "provenance": "dataset:tmp7ep6574t.csv",
        "source": "DATASET",
        "unit": "mm/s",
        "value": 100.0,
@@ -886,7 +916,7 @@
       {
        "field_name": "hatch_spacing_um",
        "input_name": "hatch_spacing_m",
-       "provenance": "dataset:tmpa6my3c62.csv",
+       "provenance": "dataset:tmp7ep6574t.csv",
        "source": "DATASET",
        "unit": "um",
        "value": 10.0,
@@ -895,7 +925,7 @@
       {
        "field_name": "passes",
        "input_name": "passes",
-       "provenance": "dataset:tmpa6my3c62.csv",
+       "provenance": "dataset:tmp7ep6574t.csv",
        "source": "DATASET",
        "unit": "",
        "value": 2.0,
@@ -913,7 +943,7 @@
    }
   },
   "TaskState": {
-   "id": "TaskState-7c9d7c1370748dd2",
+   "id": "TaskState-43740dcfee5014d7",
    "type": "TaskState",
    "schema_version": "task-state-v1",
    "content": {
@@ -950,7 +980,7 @@
     },
     "execution_mode": "DEMO_FIXTURE",
     "machine_profile_snapshot": {
-     "created_at": "2026-08-09T05:11:58.703672+00:00",
+     "created_at": "2026-08-09T06:36:27.195699+00:00",
      "equipment_profile_id": "DEMO-FS-LASER-01",
      "fields": {
       "actual_power_W": {
@@ -1099,7 +1129,7 @@
    }
   },
   "ProcessLearningResult": {
-   "id": "ProcessLearningResult-551112e2f636c8df",
+   "id": "ProcessLearningResult-e556f23b5fc11ce1",
    "type": "ProcessLearningResult",
    "schema_version": "v1",
    "content": {
@@ -1201,12 +1231,12 @@
       "rank": 5
      }
     ],
-    "run_id": "pi-96de515cbd344baab43461d065cb45d8",
+    "run_id": "pi-d512d47c15834a998838074741edad07",
     "target": "depth_um"
    }
   },
   "KnowledgeRequirementSet": {
-   "id": "KnowledgeRequirementSet-21fd6bef6ce51079",
+   "id": "KnowledgeRequirementSet-33d12f3a8b9eb6b9",
    "type": "KnowledgeRequirementSet",
    "schema_version": "knowledge-requirement-set-v1",
    "content": {
@@ -1222,11 +1252,11 @@
       "priority": "high",
       "provenance": [
        {
-        "id": "TaskState-7c9d7c1370748dd2",
+        "id": "TaskState-43740dcfee5014d7",
         "type": "TaskState"
        },
        {
-        "id": "MachineProfileSnapshot-a5deaa4ff743c02f",
+        "id": "MachineProfileSnapshot-1a4b19c9e58467c9",
         "type": "MachineProfileSnapshot"
        }
       ],
@@ -1251,11 +1281,11 @@
       "priority": "high",
       "provenance": [
        {
-        "id": "TaskState-7c9d7c1370748dd2",
+        "id": "TaskState-43740dcfee5014d7",
         "type": "TaskState"
        },
        {
-        "id": "MachineProfileSnapshot-a5deaa4ff743c02f",
+        "id": "MachineProfileSnapshot-1a4b19c9e58467c9",
         "type": "MachineProfileSnapshot"
        }
       ],
@@ -1281,11 +1311,11 @@
       "priority": "low",
       "provenance": [
        {
-        "id": "TaskState-7c9d7c1370748dd2",
+        "id": "TaskState-43740dcfee5014d7",
         "type": "TaskState"
        },
        {
-        "id": "MachineProfileSnapshot-a5deaa4ff743c02f",
+        "id": "MachineProfileSnapshot-1a4b19c9e58467c9",
         "type": "MachineProfileSnapshot"
        }
       ],
@@ -1309,7 +1339,7 @@
       "priority": "medium",
       "provenance": [
        {
-        "id": "ScientificCapabilityReport-d41779fcf97a9943",
+        "id": "ScientificCapabilityReport-eadcf12748f51ed4",
         "type": "ScientificCapabilityReport"
        }
       ],
@@ -1332,7 +1362,7 @@
       "priority": "medium",
       "provenance": [
        {
-        "id": "ScientificCapabilityReport-d41779fcf97a9943",
+        "id": "ScientificCapabilityReport-eadcf12748f51ed4",
         "type": "ScientificCapabilityReport"
        }
       ],
@@ -1354,7 +1384,7 @@
       "priority": "low",
       "provenance": [
        {
-        "id": "ScientificCapabilityReport-d41779fcf97a9943",
+        "id": "ScientificCapabilityReport-eadcf12748f51ed4",
         "type": "ScientificCapabilityReport"
        }
       ],
@@ -1376,7 +1406,7 @@
    }
   },
   "KnowledgeRequirements": {
-   "id": "KnowledgeRequirements-d816d1f6667f6fb0",
+   "id": "KnowledgeRequirements-c6d3c03334cbbd54",
    "type": "KnowledgeRequirements",
    "schema_version": "knowledge-requirement-set-v1-compat",
    "content": {
@@ -1392,11 +1422,11 @@
       "priority": "high",
       "provenance": [
        {
-        "id": "TaskState-7c9d7c1370748dd2",
+        "id": "TaskState-43740dcfee5014d7",
         "type": "TaskState"
        },
        {
-        "id": "MachineProfileSnapshot-a5deaa4ff743c02f",
+        "id": "MachineProfileSnapshot-1a4b19c9e58467c9",
         "type": "MachineProfileSnapshot"
        }
       ],
@@ -1421,11 +1451,11 @@
       "priority": "high",
       "provenance": [
        {
-        "id": "TaskState-7c9d7c1370748dd2",
+        "id": "TaskState-43740dcfee5014d7",
         "type": "TaskState"
        },
        {
-        "id": "MachineProfileSnapshot-a5deaa4ff743c02f",
+        "id": "MachineProfileSnapshot-1a4b19c9e58467c9",
         "type": "MachineProfileSnapshot"
        }
       ],
@@ -1451,11 +1481,11 @@
       "priority": "low",
       "provenance": [
        {
-        "id": "TaskState-7c9d7c1370748dd2",
+        "id": "TaskState-43740dcfee5014d7",
         "type": "TaskState"
        },
        {
-        "id": "MachineProfileSnapshot-a5deaa4ff743c02f",
+        "id": "MachineProfileSnapshot-1a4b19c9e58467c9",
         "type": "MachineProfileSnapshot"
        }
       ],
@@ -1479,7 +1509,7 @@
       "priority": "medium",
       "provenance": [
        {
-        "id": "ScientificCapabilityReport-d41779fcf97a9943",
+        "id": "ScientificCapabilityReport-eadcf12748f51ed4",
         "type": "ScientificCapabilityReport"
        }
       ],
@@ -1502,7 +1532,7 @@
       "priority": "medium",
       "provenance": [
        {
-        "id": "ScientificCapabilityReport-d41779fcf97a9943",
+        "id": "ScientificCapabilityReport-eadcf12748f51ed4",
         "type": "ScientificCapabilityReport"
        }
       ],
@@ -1524,7 +1554,7 @@
       "priority": "low",
       "provenance": [
        {
-        "id": "ScientificCapabilityReport-d41779fcf97a9943",
+        "id": "ScientificCapabilityReport-eadcf12748f51ed4",
         "type": "ScientificCapabilityReport"
        }
       ],
@@ -1546,7 +1576,7 @@
    }
   },
   "ModelTrainingResult": {
-   "id": "ModelTrainingResult-ccd173389c815438",
+   "id": "ModelTrainingResult-83fdfe92ca70a4c3",
    "type": "ModelTrainingResult",
    "schema_version": "v1",
    "content": {
@@ -1578,7 +1608,7 @@
     "dataset_version": "topic2-fixture-v1",
     "model_id": "model-1aeccea1d38b813e",
     "model_version": "topic2-model-core-v1-6afe4d857a",
-    "run_id": "train-2f934e0d3142413d893ac22e05d7115f",
+    "run_id": "train-f2848ad9dc8e4cd888c256dbaa530df6",
     "selected_model": "GPR",
     "validation_metrics": {
      "GPR": {
@@ -1621,21 +1651,21 @@
    }
   },
   "ScientificNeedSet": {
-   "id": "ScientificNeedSet-d672baefad7d6782",
+   "id": "ScientificNeedSet-e9aaa7c0467fe941",
    "type": "ScientificNeedSet",
    "schema_version": "scientific-need-set-v1",
    "content": {
     "input_refs": [
      {
-      "id": "ScientificCapabilityReport-d41779fcf97a9943",
+      "id": "ScientificCapabilityReport-eadcf12748f51ed4",
       "type": "ScientificCapabilityReport"
      },
      {
-      "id": "MachineProfileSnapshot-a5deaa4ff743c02f",
+      "id": "MachineProfileSnapshot-1a4b19c9e58467c9",
       "type": "MachineProfileSnapshot"
      }
     ],
-    "need_set_id": "NEED-2441fab24d59c279",
+    "need_set_id": "NEED-977bac89c2612fac",
     "needs": [
      {
       "need_id": "NEED-4848f7485a12f71c",
@@ -1643,11 +1673,11 @@
       "priority": "high",
       "provenance": [
        {
-        "id": "TaskState-7c9d7c1370748dd2",
+        "id": "TaskState-43740dcfee5014d7",
         "type": "TaskState"
        },
        {
-        "id": "MachineProfileSnapshot-a5deaa4ff743c02f",
+        "id": "MachineProfileSnapshot-1a4b19c9e58467c9",
         "type": "MachineProfileSnapshot"
        }
       ],
@@ -1668,11 +1698,11 @@
       "priority": "high",
       "provenance": [
        {
-        "id": "TaskState-7c9d7c1370748dd2",
+        "id": "TaskState-43740dcfee5014d7",
         "type": "TaskState"
        },
        {
-        "id": "MachineProfileSnapshot-a5deaa4ff743c02f",
+        "id": "MachineProfileSnapshot-1a4b19c9e58467c9",
         "type": "MachineProfileSnapshot"
        }
       ],
@@ -1693,11 +1723,11 @@
       "priority": "low",
       "provenance": [
        {
-        "id": "TaskState-7c9d7c1370748dd2",
+        "id": "TaskState-43740dcfee5014d7",
         "type": "TaskState"
        },
        {
-        "id": "MachineProfileSnapshot-a5deaa4ff743c02f",
+        "id": "MachineProfileSnapshot-1a4b19c9e58467c9",
         "type": "MachineProfileSnapshot"
        }
       ],
@@ -1718,7 +1748,7 @@
       "priority": "medium",
       "provenance": [
        {
-        "id": "ScientificCapabilityReport-d41779fcf97a9943",
+        "id": "ScientificCapabilityReport-eadcf12748f51ed4",
         "type": "ScientificCapabilityReport"
        }
       ],
@@ -1737,7 +1767,7 @@
       "priority": "medium",
       "provenance": [
        {
-        "id": "ScientificCapabilityReport-d41779fcf97a9943",
+        "id": "ScientificCapabilityReport-eadcf12748f51ed4",
         "type": "ScientificCapabilityReport"
        }
       ],
@@ -1756,7 +1786,7 @@
       "priority": "low",
       "provenance": [
        {
-        "id": "ScientificCapabilityReport-d41779fcf97a9943",
+        "id": "ScientificCapabilityReport-eadcf12748f51ed4",
         "type": "ScientificCapabilityReport"
        }
       ],
@@ -1775,11 +1805,11 @@
       "priority": "high",
       "provenance": [
        {
-        "id": "ScientificCapabilityReport-d41779fcf97a9943",
+        "id": "ScientificCapabilityReport-eadcf12748f51ed4",
         "type": "ScientificCapabilityReport"
        },
        {
-        "id": "MachineProfileSnapshot-a5deaa4ff743c02f",
+        "id": "MachineProfileSnapshot-1a4b19c9e58467c9",
         "type": "MachineProfileSnapshot"
        }
       ],
@@ -1800,11 +1830,11 @@
       "priority": "high",
       "provenance": [
        {
-        "id": "ScientificCapabilityReport-d41779fcf97a9943",
+        "id": "ScientificCapabilityReport-eadcf12748f51ed4",
         "type": "ScientificCapabilityReport"
        },
        {
-        "id": "MachineProfileSnapshot-a5deaa4ff743c02f",
+        "id": "MachineProfileSnapshot-1a4b19c9e58467c9",
         "type": "MachineProfileSnapshot"
        }
       ],
@@ -1825,11 +1855,11 @@
       "priority": "high",
       "provenance": [
        {
-        "id": "ScientificCapabilityReport-d41779fcf97a9943",
+        "id": "ScientificCapabilityReport-eadcf12748f51ed4",
         "type": "ScientificCapabilityReport"
        },
        {
-        "id": "MachineProfileSnapshot-a5deaa4ff743c02f",
+        "id": "MachineProfileSnapshot-1a4b19c9e58467c9",
         "type": "MachineProfileSnapshot"
        }
       ],
@@ -1850,11 +1880,11 @@
       "priority": "high",
       "provenance": [
        {
-        "id": "ScientificCapabilityReport-d41779fcf97a9943",
+        "id": "ScientificCapabilityReport-eadcf12748f51ed4",
         "type": "ScientificCapabilityReport"
        },
        {
-        "id": "MachineProfileSnapshot-a5deaa4ff743c02f",
+        "id": "MachineProfileSnapshot-1a4b19c9e58467c9",
         "type": "MachineProfileSnapshot"
        }
       ],
@@ -1874,7 +1904,7 @@
    }
   },
   "ApplicabilityReportSet": {
-   "id": "ApplicabilityReportSet-a3907e2d0f64b240",
+   "id": "ApplicabilityReportSet-9f7516bbf2b65716",
    "type": "ApplicabilityReportSet",
    "schema_version": "v1",
    "content": {
@@ -2004,7 +2034,7 @@
    }
   },
   "CandidateLedger": {
-   "id": "CandidateLedger-014be8035efec67c",
+   "id": "CandidateLedger-b7731f845207193a",
    "type": "CandidateLedger",
    "schema_version": "candidate-ledger-v0.1",
    "content": {
@@ -2785,8 +2815,68 @@
     "schema_version": "candidate-ledger-v0.1"
    }
   },
+  "CanonicalPhysicsState": {
+   "id": "CanonicalPhysicsState-c5661c68ee8b9c0a",
+   "type": "CanonicalPhysicsState",
+   "schema_version": "physics-to-planning-v1",
+   "content": {
+    "input_refs": [
+     {
+      "id": "ScientificCapabilityReport-eadcf12748f51ed4",
+      "type": "ScientificCapabilityReport"
+     },
+     {
+      "id": "DataProfile-9838df8692a1b851",
+      "type": "DataProfile"
+     }
+    ],
+    "missing_inputs": [],
+    "provenance": [
+     {
+      "role": "shared_source_target_transform",
+      "source_ref": "PhysicsCanonicalizer:v1",
+      "source_type": "DETERMINISTIC_COMPUTATION"
+     }
+    ],
+    "quantities": {
+     "accumulated_fluence_proxy": {
+      "status": "AVAILABLE",
+      "unit": "J/cm2",
+      "value": 3183.098861837907
+     },
+     "effective_pulses": {
+      "status": "AVAILABLE",
+      "unit": "count",
+      "value": 64.0
+     },
+     "peak_fluence": {
+      "status": "AVAILABLE",
+      "unit": "J/cm2",
+      "value": 49.735919716217296
+     },
+     "pulse_energy": {
+      "status": "AVAILABLE",
+      "unit": "uJ",
+      "value": 50.0
+     },
+     "pulse_overlap": {
+      "status": "AVAILABLE",
+      "unit": "fraction",
+      "value": 0.96875
+     },
+     "pulse_spacing": {
+      "status": "AVAILABLE",
+      "unit": "um",
+      "value": 0.5
+     }
+    },
+    "schema_version": "physics-to-planning-v1",
+    "state_id": "canonical-physics-eb11489d39d20e99",
+    "status": "KNOWN"
+   }
+  },
   "EvidenceCompileResult": {
-   "id": "EvidenceCompileResult-c28d054e2c8d612b",
+   "id": "EvidenceCompileResult-ac55023504b5ca84",
    "type": "EvidenceCompileResult",
    "schema_version": "v1",
    "content": {
@@ -2798,11 +2888,11 @@
    }
   },
   "EvidenceIRSet": {
-   "id": "EvidenceIRSet-abe1166b2580c7d7",
+   "id": "EvidenceIRSet-bd79143e199a239f",
    "type": "EvidenceIRSet",
    "schema_version": "evidence-ir-set-v1",
    "content": {
-    "condition_set_ref": "SourceConditionSet-ef7e0ba73033c85c",
+    "condition_set_ref": "SourceConditionSet-49a3090ebefcef0d",
     "items": [
      {
       "applicability_status": "WEAK",
@@ -3651,14 +3741,14 @@
       "target": null
      }
     ],
-    "ledger_ref": "CandidateLedger-014be8035efec67c",
-    "query_plan_ref": "RequirementRetrievalPlan-aa4e7be2fd56952e",
-    "reconstructibility_set_ref": "ReconstructibilityReportSet-ddd346d04f4020f9",
+    "ledger_ref": "CandidateLedger-b7731f845207193a",
+    "query_plan_ref": "RequirementRetrievalPlan-48e7021e43842961",
+    "reconstructibility_set_ref": "ReconstructibilityReportSet-c0f1a5f01e76225f",
     "schema_version": "evidence-ir-set-v1"
    }
   },
   "KnowledgeState": {
-   "id": "KnowledgeState-76633d5041aa435e",
+   "id": "KnowledgeState-5f3532b9df7ecc8e",
    "type": "KnowledgeState",
    "schema_version": "v1",
    "content": {
@@ -3683,11 +3773,11 @@
       "priority": "high",
       "provenance": [
        {
-        "id": "TaskState-7c9d7c1370748dd2",
+        "id": "TaskState-43740dcfee5014d7",
         "type": "TaskState"
        },
        {
-        "id": "MachineProfileSnapshot-a5deaa4ff743c02f",
+        "id": "MachineProfileSnapshot-1a4b19c9e58467c9",
         "type": "MachineProfileSnapshot"
        }
       ],
@@ -3712,11 +3802,11 @@
       "priority": "high",
       "provenance": [
        {
-        "id": "TaskState-7c9d7c1370748dd2",
+        "id": "TaskState-43740dcfee5014d7",
         "type": "TaskState"
        },
        {
-        "id": "MachineProfileSnapshot-a5deaa4ff743c02f",
+        "id": "MachineProfileSnapshot-1a4b19c9e58467c9",
         "type": "MachineProfileSnapshot"
        }
       ],
@@ -3742,11 +3832,11 @@
       "priority": "low",
       "provenance": [
        {
-        "id": "TaskState-7c9d7c1370748dd2",
+        "id": "TaskState-43740dcfee5014d7",
         "type": "TaskState"
        },
        {
-        "id": "MachineProfileSnapshot-a5deaa4ff743c02f",
+        "id": "MachineProfileSnapshot-1a4b19c9e58467c9",
         "type": "MachineProfileSnapshot"
        }
       ],
@@ -3770,7 +3860,7 @@
       "priority": "medium",
       "provenance": [
        {
-        "id": "ScientificCapabilityReport-d41779fcf97a9943",
+        "id": "ScientificCapabilityReport-eadcf12748f51ed4",
         "type": "ScientificCapabilityReport"
        }
       ],
@@ -3793,7 +3883,7 @@
       "priority": "medium",
       "provenance": [
        {
-        "id": "ScientificCapabilityReport-d41779fcf97a9943",
+        "id": "ScientificCapabilityReport-eadcf12748f51ed4",
         "type": "ScientificCapabilityReport"
        }
       ],
@@ -3815,7 +3905,7 @@
       "priority": "low",
       "provenance": [
        {
-        "id": "ScientificCapabilityReport-d41779fcf97a9943",
+        "id": "ScientificCapabilityReport-eadcf12748f51ed4",
         "type": "ScientificCapabilityReport"
        }
       ],
@@ -3899,7 +3989,7 @@
    }
   },
   "PriorObjectSet": {
-   "id": "PriorObjectSet-37919f107c2927c1",
+   "id": "PriorObjectSet-ef98fd2903387012",
    "type": "PriorObjectSet",
    "schema_version": "e2p-prior-object-v1",
    "content": {
@@ -4349,7 +4439,7 @@
    }
   },
   "ReconstructibilityReportSet": {
-   "id": "ReconstructibilityReportSet-ddd346d04f4020f9",
+   "id": "ReconstructibilityReportSet-c0f1a5f01e76225f",
    "type": "ReconstructibilityReportSet",
    "schema_version": "v1",
    "content": {
@@ -5646,7 +5736,7 @@
    }
   },
   "RequirementRetrievalPlan": {
-   "id": "RequirementRetrievalPlan-aa4e7be2fd56952e",
+   "id": "RequirementRetrievalPlan-48e7021e43842961",
    "type": "RequirementRetrievalPlan",
    "schema_version": "requirement-retrieval-v1",
    "content": {
@@ -5662,7 +5752,7 @@
         "fs"
        ]
       },
-      "query_plan_id": "query-plan-de428e9c4d38435b",
+      "query_plan_id": "query-plan-cc411be236d012ba",
       "query_terms": [
        "SiC",
        "ablation threshold",
@@ -5699,7 +5789,7 @@
         "fs"
        ]
       },
-      "query_plan_id": "query-plan-e39cc13df29565c1",
+      "query_plan_id": "query-plan-730d8ba6df2a41a7",
       "query_terms": [
        "SiC",
        "incubation model",
@@ -5736,7 +5826,7 @@
         "fs"
        ]
       },
-      "query_plan_id": "query-plan-2f02f038983f053b",
+      "query_plan_id": "query-plan-d2512ba1f182392d",
       "query_terms": [
        "SiC",
        "toolpath",
@@ -5774,7 +5864,7 @@
         "fs"
        ]
       },
-      "query_plan_id": "query-plan-214037720e90fb46",
+      "query_plan_id": "query-plan-41bb5a94b7d36a7e",
       "query_terms": [
        "SiC"
       ],
@@ -5808,7 +5898,7 @@
         "fs"
        ]
       },
-      "query_plan_id": "query-plan-fe16fca710a32f62",
+      "query_plan_id": "query-plan-ad109f8f674e352a",
       "query_terms": [
        "SiC"
       ],
@@ -5842,7 +5932,7 @@
         "fs"
        ]
       },
-      "query_plan_id": "query-plan-a56cfd9f77a1713a",
+      "query_plan_id": "query-plan-4146a6964fc19bbd",
       "query_terms": [
        "SiC",
        "ablation mechanism",
@@ -5874,7 +5964,7 @@
    }
   },
   "ScientificCorpusPack": {
-   "id": "ScientificCorpusPack-536974a21c6ae588",
+   "id": "ScientificCorpusPack-4d85c24e55ca42da",
    "type": "ScientificCorpusPack",
    "schema_version": "v1",
    "content": {
@@ -5885,10 +5975,11 @@
      "partial": 0,
      "sources": 6
     },
+    "analysis_method": "LLM_CACHED",
     "analysis_model": "scientific-reading-v1",
     "corpus_pack": {
      "corpus_pack_id": "corpus_pack_791509894f5af107",
-     "created_at": "2026-08-09T05:12:03.483143Z",
+     "created_at": "2026-08-09T06:36:31.426467Z",
      "retrieval_intents": [
       "threshold",
       "material_property",
@@ -5925,7 +6016,7 @@
        "threshold": "SiC femtosecond rectangular_groove depth_um ablation threshold fluence incubation coefficient single pulse"
       },
       "raw_hit_count": 108,
-      "retrieval_run_id": "corpus_45aa3e0735f23c2d",
+      "retrieval_run_id": "corpus_c270008a3548b146",
       "source_count": 6,
       "warnings": []
      },
@@ -6127,7 +6218,7 @@
    }
   },
   "SourceConditionSet": {
-   "id": "SourceConditionSet-ef7e0ba73033c85c",
+   "id": "SourceConditionSet-49a3090ebefcef0d",
    "type": "SourceConditionSet",
    "schema_version": "v1",
    "content": {
@@ -6461,7 +6552,7 @@
    }
   },
   "CalibrationResult": {
-   "id": "CalibrationResult-fb185cbb0069ce3a",
+   "id": "CalibrationResult-0466233c53b8eb6e",
    "type": "CalibrationResult",
    "schema_version": "physics-to-planning-v1",
    "content": {
@@ -6479,19 +6570,19 @@
     },
     "input_refs": [
      {
-      "id": "IdentifiabilityReport-7063751e53ba2dd0",
+      "id": "IdentifiabilityReport-913d9b6d1f427816",
       "type": "IdentifiabilityReport"
      },
      {
-      "id": "PriorObjectSet-37919f107c2927c1",
+      "id": "PriorObjectSet-ef98fd2903387012",
       "type": "PriorObjectSet"
      },
      {
-      "id": "DataProfile-6e34193c98f1d0d1",
+      "id": "DataProfile-9838df8692a1b851",
       "type": "DataProfile"
      },
      {
-      "id": "CanonicalPhysicsState-0a73f495a49e74e3",
+      "id": "CanonicalPhysicsState-c5661c68ee8b9c0a",
       "type": "CanonicalPhysicsState"
      }
     ],
@@ -6899,82 +6990,22 @@
     "validation_data_refs": []
    }
   },
-  "CanonicalPhysicsState": {
-   "id": "CanonicalPhysicsState-0a73f495a49e74e3",
-   "type": "CanonicalPhysicsState",
-   "schema_version": "physics-to-planning-v1",
-   "content": {
-    "input_refs": [
-     {
-      "id": "ScientificCapabilityReport-d41779fcf97a9943",
-      "type": "ScientificCapabilityReport"
-     },
-     {
-      "id": "DataProfile-6e34193c98f1d0d1",
-      "type": "DataProfile"
-     }
-    ],
-    "missing_inputs": [],
-    "provenance": [
-     {
-      "role": "shared_source_target_transform",
-      "source_ref": "PhysicsCanonicalizer:v1",
-      "source_type": "DETERMINISTIC_COMPUTATION"
-     }
-    ],
-    "quantities": {
-     "accumulated_fluence_proxy": {
-      "status": "AVAILABLE",
-      "unit": "J/cm2",
-      "value": 3183.098861837907
-     },
-     "effective_pulses": {
-      "status": "AVAILABLE",
-      "unit": "count",
-      "value": 64.0
-     },
-     "peak_fluence": {
-      "status": "AVAILABLE",
-      "unit": "J/cm2",
-      "value": 49.735919716217296
-     },
-     "pulse_energy": {
-      "status": "AVAILABLE",
-      "unit": "uJ",
-      "value": 50.0
-     },
-     "pulse_overlap": {
-      "status": "AVAILABLE",
-      "unit": "fraction",
-      "value": 0.96875
-     },
-     "pulse_spacing": {
-      "status": "AVAILABLE",
-      "unit": "um",
-      "value": 0.5
-     }
-    },
-    "schema_version": "physics-to-planning-v1",
-    "state_id": "canonical-physics-eb11489d39d20e99",
-    "status": "KNOWN"
-   }
-  },
   "IdentifiabilityReport": {
-   "id": "IdentifiabilityReport-7063751e53ba2dd0",
+   "id": "IdentifiabilityReport-913d9b6d1f427816",
    "type": "IdentifiabilityReport",
    "schema_version": "physics-to-planning-v1",
    "content": {
     "input_refs": [
      {
-      "id": "DataProfile-6e34193c98f1d0d1",
+      "id": "DataProfile-9838df8692a1b851",
       "type": "DataProfile"
      },
      {
-      "id": "PriorObjectSet-37919f107c2927c1",
+      "id": "PriorObjectSet-ef98fd2903387012",
       "type": "PriorObjectSet"
      },
      {
-      "id": "CanonicalPhysicsState-0a73f495a49e74e3",
+      "id": "CanonicalPhysicsState-c5661c68ee8b9c0a",
       "type": "CanonicalPhysicsState"
      }
     ],
@@ -7028,7 +7059,7 @@
    }
   },
   "LocalRemovalModel": {
-   "id": "LocalRemovalModel-b4d3417212cd76fc",
+   "id": "LocalRemovalModel-939831874c90180a",
    "type": "LocalRemovalModel",
    "schema_version": "physics-to-planning-v1",
    "content": {
@@ -7047,11 +7078,11 @@
     "incubation_S": 0.7799967581203117,
     "input_refs": [
      {
-      "id": "CalibrationResult-fb185cbb0069ce3a",
+      "id": "CalibrationResult-0466233c53b8eb6e",
       "type": "CalibrationResult"
      },
      {
-      "id": "PriorObjectSet-37919f107c2927c1",
+      "id": "PriorObjectSet-ef98fd2903387012",
       "type": "PriorObjectSet"
      },
      {
@@ -7184,7 +7215,7 @@
      ]
     },
     "mode": "RECONSTRUCTED",
-    "model_id": "local-removal-79b4b9b91c42599d",
+    "model_id": "local-removal-467d2f14fa1af019",
     "parameter_bindings": [
      {
       "parameter": "F_th_eff",
@@ -7248,7 +7279,7 @@
    }
   },
   "MorphologySimulationResult": {
-   "id": "MorphologySimulationResult-5d71f667803703ef",
+   "id": "MorphologySimulationResult-a4d93e034f8dc795",
    "type": "MorphologySimulationResult",
    "schema_version": "physics-to-planning-v1",
    "content": {
@@ -7492,15 +7523,15 @@
     "fidelity": "F2_DEFOCUS_RECURSION",
     "input_refs": [
      {
-      "id": "LocalRemovalModel-b4d3417212cd76fc",
+      "id": "LocalRemovalModel-939831874c90180a",
       "type": "LocalRemovalModel"
      },
      {
-      "id": "CanonicalPhysicsState-0a73f495a49e74e3",
+      "id": "CanonicalPhysicsState-c5661c68ee8b9c0a",
       "type": "CanonicalPhysicsState"
      },
      {
-      "id": "local-removal-79b4b9b91c42599d",
+      "id": "local-removal-467d2f14fa1af019",
       "type": "LocalRemovalModel"
      },
      {
@@ -7524,12 +7555,12 @@
       "type": "PlanningPreferencePrior"
      },
      {
-      "id": "local-removal-79b4b9b91c42599d",
+      "id": "local-removal-467d2f14fa1af019",
       "type": "LocalRemovalModel"
      }
     ],
     "local_removal_model_ref": {
-     "id": "local-removal-79b4b9b91c42599d",
+     "id": "local-removal-467d2f14fa1af019",
      "type": "LocalRemovalModel"
     },
     "metrics": {
@@ -7784,7 +7815,7 @@
     ],
     "pulse_count": 48,
     "schema_version": "physics-to-planning-v1",
-    "simulation_id": "morphology-simulation-7c6551b200a8c098",
+    "simulation_id": "morphology-simulation-f14b2fe02f0145a1",
     "state": {
      "accumulated_fluence_J_cm2": [
       [
@@ -8974,7 +9005,7 @@
    }
   },
   "PhysicalModelState": {
-   "id": "PhysicalModelState-0437a472807fe4ac",
+   "id": "PhysicalModelState-e76a131426bc9ea3",
    "type": "PhysicalModelState",
    "schema_version": "physics-to-planning-v1",
    "content": {
@@ -8986,27 +9017,27 @@
     ],
     "calibrated_parameter_refs": [
      {
-      "id": "CalibrationResult-fb185cbb0069ce3a",
+      "id": "CalibrationResult-0466233c53b8eb6e",
       "type": "CalibrationResult"
      }
     ],
     "canonical_physics_status": "PARTIAL",
     "input_refs": [
      {
-      "id": "CalibrationResult-fb185cbb0069ce3a",
+      "id": "CalibrationResult-0466233c53b8eb6e",
       "type": "CalibrationResult"
      },
      {
-      "id": "PriorObjectSet-37919f107c2927c1",
+      "id": "PriorObjectSet-ef98fd2903387012",
       "type": "PriorObjectSet"
      },
      {
-      "id": "LocalRemovalModel-b4d3417212cd76fc",
+      "id": "LocalRemovalModel-939831874c90180a",
       "type": "LocalRemovalModel"
      }
     ],
     "local_removal_model_ref": {
-     "id": "LocalRemovalModel-b4d3417212cd76fc",
+     "id": "LocalRemovalModel-939831874c90180a",
      "type": "LocalRemovalModel"
     },
     "provenance": [
@@ -9018,12 +9049,12 @@
     ],
     "schema_version": "physics-to-planning-v1",
     "simulator_fidelity": "F2_DEFOCUS_RECURSION",
-    "state_id": "physical-state-38e2ec01e6d47c03",
+    "state_id": "physical-state-b635b4da03b4cb65",
     "uncertainty_status": "PARTIAL"
    }
   },
   "ProcessCorrectionInterface": {
-   "id": "ProcessCorrectionInterface-bfb191b0c1792d15",
+   "id": "ProcessCorrectionInterface-2aa187185c58d5dd",
    "type": "ProcessCorrectionInterface",
    "schema_version": "physics-to-planning-v1",
    "content": {
@@ -9032,17 +9063,17 @@
     ],
     "input_refs": [
      {
-      "id": "ModelTrainingResult-ccd173389c815438",
+      "id": "ModelTrainingResult-83fdfe92ca70a4c3",
       "type": "ModelTrainingResult"
      },
      {
-      "id": "MorphologySimulationResult-5d71f667803703ef",
+      "id": "MorphologySimulationResult-a4d93e034f8dc795",
       "type": "MorphologySimulationResult"
      }
     ],
-    "interface_id": "process-correction-4d2d9fe0c0822334",
+    "interface_id": "process-correction-cfae8f45e5c29747",
     "physics_prediction_ref": {
-     "id": "MorphologySimulationResult-5d71f667803703ef",
+     "id": "MorphologySimulationResult-a4d93e034f8dc795",
      "type": "MorphologySimulationResult"
     },
     "provenance": [
@@ -9053,7 +9084,7 @@
      }
     ],
     "raw_baseline_ref": {
-     "id": "ModelTrainingResult-ccd173389c815438",
+     "id": "ModelTrainingResult-83fdfe92ca70a4c3",
      "type": "ModelTrainingResult"
     },
     "residual_model_ref": null,
@@ -9067,7 +9098,7 @@
    }
   },
   "ToolpathPlan": {
-   "id": "ToolpathPlan-c5abcdd7666a5ec5",
+   "id": "ToolpathPlan-b38504fcdfd61fd9",
    "type": "ToolpathPlan",
    "schema_version": "physics-to-planning-v1",
    "content": {
@@ -9077,113 +9108,113 @@
       "morphology_rmse_um": 4.432416715104883,
       "objective_value": 4.431426115104882,
       "path_family": "CROSS_HATCH",
-      "plan_id": "toolpath-plan-dd426b13a3844b3c",
-      "simulation_ref": "morphology-simulation-7c6551b200a8c098"
+      "plan_id": "toolpath-plan-3b71eff184262a60",
+      "simulation_ref": "morphology-simulation-f14b2fe02f0145a1"
      },
      {
       "machining_time_s": 0.00094,
       "morphology_rmse_um": 4.432416715104883,
       "objective_value": 4.4324261151048825,
       "path_family": "RASTER",
-      "plan_id": "toolpath-plan-cb85a51f15903683",
-      "simulation_ref": "morphology-simulation-7c6551b200a8c098"
+      "plan_id": "toolpath-plan-eee891eead618b8e",
+      "simulation_ref": "morphology-simulation-f14b2fe02f0145a1"
      },
      {
       "machining_time_s": 0.00126,
       "morphology_rmse_um": 15.590848599372757,
       "objective_value": 15.589861199372757,
       "path_family": "CROSS_HATCH",
-      "plan_id": "toolpath-plan-fc868d84034f0562",
-      "simulation_ref": "morphology-simulation-9d87e857b7d87929"
+      "plan_id": "toolpath-plan-9290b5d058c0dccb",
+      "simulation_ref": "morphology-simulation-cd735a6c44b2a9e1"
      },
      {
       "machining_time_s": 0.00126,
       "morphology_rmse_um": 15.590848599372757,
       "objective_value": 15.590861199372757,
       "path_family": "RASTER",
-      "plan_id": "toolpath-plan-f963a2728a51193c",
-      "simulation_ref": "morphology-simulation-9d87e857b7d87929"
+      "plan_id": "toolpath-plan-999d688247f08a55",
+      "simulation_ref": "morphology-simulation-cd735a6c44b2a9e1"
      },
      {
       "machining_time_s": 0.00172,
       "morphology_rmse_um": 29.70028378774189,
       "objective_value": 29.699300987741886,
       "path_family": "CROSS_HATCH",
-      "plan_id": "toolpath-plan-aa3c22728a928901",
-      "simulation_ref": "morphology-simulation-9df4fdbc44e7259e"
+      "plan_id": "toolpath-plan-959565dfe323ff92",
+      "simulation_ref": "morphology-simulation-441f45bba616c41e"
      },
      {
       "machining_time_s": 0.00158,
       "morphology_rmse_um": 29.859698790272965,
       "objective_value": 29.858714590272964,
       "path_family": "CROSS_HATCH",
-      "plan_id": "toolpath-plan-fffb393eeb1794b3",
-      "simulation_ref": "morphology-simulation-62d8fe819480a785"
+      "plan_id": "toolpath-plan-ac491e97c0bae9f4",
+      "simulation_ref": "morphology-simulation-e8f826c438b76f93"
      },
      {
       "machining_time_s": 0.00158,
       "morphology_rmse_um": 29.859698790272965,
       "objective_value": 29.859714590272965,
       "path_family": "RASTER",
-      "plan_id": "toolpath-plan-2dd9fd103c237b7b",
-      "simulation_ref": "morphology-simulation-62d8fe819480a785"
+      "plan_id": "toolpath-plan-5a0693921f2def1a",
+      "simulation_ref": "morphology-simulation-e8f826c438b76f93"
      },
      {
       "machining_time_s": 0.0019,
       "morphology_rmse_um": 33.90172701697452,
       "objective_value": 33.90174601697452,
       "path_family": "RASTER",
-      "plan_id": "toolpath-plan-f371197436cb245e",
-      "simulation_ref": "morphology-simulation-ebdb81758a2f0420"
+      "plan_id": "toolpath-plan-e2daa90b1a95fd8d",
+      "simulation_ref": "morphology-simulation-5e42f15194e05752"
      },
      {
       "machining_time_s": 0.00256,
       "morphology_rmse_um": 56.901035627586545,
       "objective_value": 56.90006122758655,
       "path_family": "CROSS_HATCH",
-      "plan_id": "toolpath-plan-c5ed6d6f9c4165e7",
-      "simulation_ref": "morphology-simulation-75d124d0fe63b0f1"
+      "plan_id": "toolpath-plan-c629b74c3c31df3a",
+      "simulation_ref": "morphology-simulation-efbfb4d4d7f3144a"
      },
      {
       "machining_time_s": 0.00254,
       "morphology_rmse_um": 64.43648112537068,
       "objective_value": 64.43650652537067,
       "path_family": "RASTER",
-      "plan_id": "toolpath-plan-2c5f09c9e403d8f0",
-      "simulation_ref": "morphology-simulation-12a747520f213780"
+      "plan_id": "toolpath-plan-01bd51bb1d678bb1",
+      "simulation_ref": "morphology-simulation-6a6e47791f9f426f"
      },
      {
       "machining_time_s": 0.00314,
       "morphology_rmse_um": 91.63589870758518,
       "objective_value": 91.63493010758518,
       "path_family": "CROSS_HATCH",
-      "plan_id": "toolpath-plan-ff04be0f7c094274",
-      "simulation_ref": "morphology-simulation-3e2d53617a7b85a2"
+      "plan_id": "toolpath-plan-047b597378b709fa",
+      "simulation_ref": "morphology-simulation-00214a71dab2ac8d"
      },
      {
       "machining_time_s": 0.00318,
       "morphology_rmse_um": 93.4686901046037,
       "objective_value": 93.4687219046037,
       "path_family": "RASTER",
-      "plan_id": "toolpath-plan-5bd812c47618590f",
-      "simulation_ref": "morphology-simulation-d3aa4bb71db3903c"
+      "plan_id": "toolpath-plan-422514bf229fb81b",
+      "simulation_ref": "morphology-simulation-8437be52f72f6a3a"
      }
     ],
     "input_refs": [
      {
-      "id": "MorphologySimulationResult-5d71f667803703ef",
+      "id": "MorphologySimulationResult-a4d93e034f8dc795",
       "type": "MorphologySimulationResult"
      },
      {
-      "id": "LocalRemovalModel-b4d3417212cd76fc",
+      "id": "LocalRemovalModel-939831874c90180a",
       "type": "LocalRemovalModel"
      },
      {
-      "id": "CanonicalPhysicsState-0a73f495a49e74e3",
+      "id": "CanonicalPhysicsState-c5661c68ee8b9c0a",
       "type": "CanonicalPhysicsState"
      },
      {
-      "id": "PriorObjectSet-37919f107c2927c1",
+      "id": "PriorObjectSet-ef98fd2903387012",
       "type": "PriorObjectSet"
      }
     ],
@@ -9234,7 +9265,7 @@
      "pulse_position_count": 48,
      "pulse_spacing_um": 2.0
     },
-    "plan_id": "toolpath-plan-dd426b13a3844b3c",
+    "plan_id": "toolpath-plan-3b71eff184262a60",
     "planning_prior_refs": [
      {
       "id": "planning-prior-a7f7303a3ced5927",
@@ -9273,7 +9304,7 @@
     ],
     "schema_version": "physics-to-planning-v1",
     "simulation_ref": {
-     "id": "MorphologySimulationResult-5d71f667803703ef",
+     "id": "MorphologySimulationResult-a4d93e034f8dc795",
      "type": "MorphologySimulationResult"
     },
     "status": "DEMO_CANDIDATE"

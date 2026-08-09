@@ -27,7 +27,6 @@ interface OverviewSectionProps {
   events: WorkflowEvent[]
   busy: boolean
   onContinue: (stages?: string[]) => void
-  nextCheckpoint: string | null
 }
 
 export function OverviewSection({
@@ -38,7 +37,6 @@ export function OverviewSection({
   events,
   busy,
   onContinue,
-  nextCheckpoint,
 }: OverviewSectionProps) {
   const draft = getTaskDraft(taskId)
   const [editing, setEditing] = useState(false)
@@ -121,7 +119,7 @@ export function OverviewSection({
           {!draft.runId && <Button onClick={handleStart}>开始运行</Button>}
           {draft.runId && (
             <Button busy={busy} onClick={() => onContinue()}>
-              {nextCheckpoint ? '继续' : '重新推进'}
+              继续
             </Button>
           )}
         </div>

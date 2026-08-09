@@ -242,9 +242,9 @@ function formatRange(value: number | null): string {
 
 const INSPECTOR_TABS = [
   { id: 'evidence', label: 'Evidence' },
+  { id: 'trace', label: '溯源链' },
   { id: 'source', label: 'Source' },
   { id: 'applicability', label: 'Applicability' },
-  { id: 'reconstructibility', label: 'Reconstructibility' },
   { id: 'provenance', label: 'Provenance' },
 ]
 
@@ -255,15 +255,63 @@ function EvidenceInspector({ item, developerMode }: { item: EvidenceItemView; de
     evidence: pickKeys(item, ['role', 'claim', 'statement', 'confidence', 'evidence_level', 'status']),
     source: pickKeys(item, ['paper_id', 'paper_title', 'source', 'block_id', 'page', 'quote', 'candidate_id']),
     applicability: pickKeys(item, ['material', 'laser_type', 'pulse_width', 'frequency', 'scan_speed', 'hatch', 'geometry', 'applicability', 'match']),
-    reconstructibility: pickKeys(item, ['reconstructibility', 'source_condition', 'condition', 'canonical', 'states']),
     provenance: pickKeys(item, ['provenance', 'ledger_version_id', 'revision', 'source_ref', 'review_status']),
+  }
+
+  const traceRefs = (key: string) => {
+    const value = item[key]
+    return Array.isArray(value) ? value : value ? [value] : []
   }
 
   return (
     <div>
       <Tabs tabs={INSPECTOR_TABS} active={tab} onChange={setTab} />
       <div className="inspector-body">
-        {sections[tab].length === 0 ? (
+        {tab === 'trace' ? (
+          <dl className="kv-list">
+            {item.ledger_ref ? (
+              <div className="kv-row">
+                <dt>ledger</dt>
+                <dd>
+                  <code>{String((item.ledger_ref as Record<string, unknown>).id ?? item.ledger_ref)}</code>
+                </dd>
+              </div>
+            ) : null}
+            {traceRefs('condition_refs').map((ref, index) => (
+              <div key={`c-${index}`} className="kv-row">
+                <dt>condition {index + 1}</dt>
+                <dd>
+                  <code>{String((ref as Record<string, unknown>).id ?? ref)}</code>
+                  {item.conditions ? (
+                    <span className="card-hint"> {JSON.stringify(item.conditions)}</span>
+                  ) : null}
+                </dd>
+              </div>
+            ))}
+            {traceRefs('reconstructibility_refs').map((ref, index) => (
+              <div key={`r-${index}`} className="kv-row">
+                <dt>reconstructibility {index + 1}</dt>
+                <dd>
+                  <code>{String((ref as Record<string, unknown>).id ?? ref)}</code>
+                </dd>
+              </div>
+            ))}
+            {traceRefs('source_refs').map((ref, index) => (
+              <div key={`s-${index}`} className="kv-row">
+                <dt>source {index + 1}</dt>
+                <dd>
+                  <code>{String((ref as Record<string, unknown>).id ?? ref)}</code>
+                </dd>
+              </div>
+            ))}
+            {!item.ledger_ref && traceRefs('condition_refs').length === 0 && (
+              <EmptyState
+                message="无结构化溯源引用"
+                hint="该 Evidence 来自持久化证据表（无 ledger/condition 链）。"
+              />
+            )}
+          </dl>
+        ) : sections[tab].length === 0 ? (
           <EmptyState message="该 Evidence 无此维度信息" hint="展示后端 EvidenceIR item 的原始字段，不做推断。" />
         ) : (
           <dl className="kv-list">

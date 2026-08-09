@@ -28,29 +28,23 @@ export const STAGE_LABEL: Record<CanonicalStage, string> = {
   plan_process: '路径规划',
 }
 
-/** Workspace sections map to the checkpoint they unlock (spec §三). */
+/** Workspace sections are pure display: each maps to a backend-computed
+ * RunControlState.phases entry (阶段三 T1).  The frontend performs zero
+ * workflow transition logic - it only renders the phase status verbatim. */
 export interface WorkspaceSection {
   id: 'overview' | 'capability' | 'knowledge' | 'calibration' | 'simulation' | 'planning'
   label: string
-  /** Backend stage whose completion makes this section meaningful. */
-  unlockStage?: CanonicalStage
+  /** RunControlState.phases key whose status this section displays. */
+  phase?: string
 }
 
 export const WORKSPACE_SECTIONS: WorkspaceSection[] = [
   { id: 'overview', label: '总览' },
-  { id: 'capability', label: '能力', unlockStage: 'assess_capability' },
-  { id: 'knowledge', label: '知识', unlockStage: 'satisfy_requirements' },
-  { id: 'calibration', label: '标定', unlockStage: 'calibrate_physics' },
-  { id: 'simulation', label: '仿真', unlockStage: 'establish_process_model' },
-  { id: 'planning', label: '规划', unlockStage: 'plan_process' },
-]
-
-/** Continue-to checkpoints for the "继续" control (spec §三十二). */
-export const CHECKPOINT_STAGES: CanonicalStage[] = [
-  'assess_capability',
-  'satisfy_requirements',
-  'calibrate_physics',
-  'plan_process',
+  { id: 'capability', label: '能力', phase: 'CAPABILITY' },
+  { id: 'knowledge', label: '知识', phase: 'KNOWLEDGE' },
+  { id: 'calibration', label: '标定', phase: 'CALIBRATION' },
+  { id: 'simulation', label: '仿真', phase: 'SIMULATION' },
+  { id: 'planning', label: '规划', phase: 'PLANNING' },
 ]
 
 export function stageIndex(stage: CanonicalStage): number {

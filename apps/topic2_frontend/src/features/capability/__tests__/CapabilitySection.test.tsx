@@ -96,7 +96,7 @@ describe('OverviewSection (spec §六)', () => {
         events={[]}
         busy={false}
         onContinue={() => undefined}
-        nextCheckpoint="assess_capability"
+        
       />,
     )
     expect(screen.getByText('Scientific Capability')).toBeInTheDocument()
@@ -129,7 +129,7 @@ describe('OverviewSection (spec §六)', () => {
         events={[]}
         busy={false}
         onContinue={onContinue}
-        nextCheckpoint={null}
+        
       />,
     )
     fireEvent.click(screen.getByRole('button', { name: '开始运行' }))
@@ -165,7 +165,7 @@ describe('OverviewSection (spec §六)', () => {
         events={[]}
         busy={false}
         onContinue={onContinue}
-        nextCheckpoint={null}
+        
       />,
     )
     fireEvent.click(screen.getByRole('button', { name: '开始运行' }))

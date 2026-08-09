@@ -20,6 +20,8 @@ export interface ResolutionView {
   mapping: ResolutionMappingView
   candidates: number
   corpusPackId: string
+  /** LLM_LIVE / LLM_CACHED / PENDING_LLM / NO_CORPUS (阶段三 T4). */
+  analysisMethod: string
 }
 
 export interface CorpusPackContent {
@@ -40,6 +42,14 @@ export interface CorpusPackContent {
     failed?: number
     from_cache?: number
   }
+  analysis_method?: string
+}
+
+export const ANALYSIS_METHOD_LABEL: Record<string, string> = {
+  LLM_LIVE: '实时 LLM 精读',
+  LLM_CACHED: '预录 LLM 精读缓存',
+  PENDING_LLM: '待 LLM 精读',
+  NO_CORPUS: '无语料',
 }
 
 export function buildResolutionView(content: CorpusPackContent | null | undefined): ResolutionView {
@@ -64,5 +74,6 @@ export function buildResolutionView(content: CorpusPackContent | null | undefine
     },
     candidates: 0,
     corpusPackId: String(corpus.corpus_pack_id ?? ''),
+    analysisMethod: String(raw.analysis_method ?? 'NO_CORPUS'),
   }
 }

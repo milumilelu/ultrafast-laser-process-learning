@@ -18,11 +18,19 @@ export interface NextActionView {
   sourceQuality?: string
 }
 
+export interface PhaseView {
+  status: 'READY' | 'PARTIAL' | 'BLOCKED' | 'COMPLETED' | 'NOT_RUN'
+  blockingReasons: string[]
+}
+
 export interface RunControlView {
   schemaVersion: string
   executionMode: string
   currentPhase: string
   phaseStatus: 'READY' | 'PARTIAL' | 'BLOCKED' | 'COMPLETED' | 'NOT_RUN'
+  /** Backend-computed per-phase status (阶段三 T1): the frontend renders
+   * these verbatim and performs zero gate-to-phase interpretation. */
+  phases: Record<string, PhaseView>
   gates: Record<string, GateView>
   blockingReasons: string[]
   nextActions: NextActionView[]
@@ -35,6 +43,7 @@ export interface RunControlContent {
   execution_mode?: string
   current_phase?: string
   phase_status?: string
+  phases?: Record<string, { status?: string; blocking_reasons?: string[] }>
   gates?: Record<string, unknown>
   blocking_reasons?: string[]
   next_actions?: Array<Record<string, unknown>>
@@ -67,12 +76,24 @@ export function buildRunControl(content: RunControlContent | null | undefined): 
         : [],
     }
   }
+  const phasesRaw = (raw.phases ?? {}) as Record<string, Record<string, unknown>>
+  const phases: Record<string, PhaseView> = {}
+  for (const [name, phase] of Object.entries(phasesRaw)) {
+    const phaseStatus = normalizePhase(String(phase.status ?? 'NOT_RUN'))
+    phases[name] = {
+      status: phaseStatus,
+      blockingReasons: Array.isArray(phase.blocking_reasons)
+        ? phase.blocking_reasons.map(String)
+        : [],
+    }
+  }
   const phase = normalizePhase(String(raw.phase_status ?? 'NOT_RUN'))
   return {
     schemaVersion: String(raw.schema_version ?? ''),
     executionMode: String(raw.execution_mode ?? ''),
     currentPhase: String(raw.current_phase ?? ''),
     phaseStatus: phase,
+    phases,
     gates,
     blockingReasons: Array.isArray(raw.blocking_reasons)
       ? raw.blocking_reasons.map(String)
