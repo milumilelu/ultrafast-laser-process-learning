@@ -1,5 +1,5 @@
-version: topic2-backend-v1.0-test
-auto_seed_fixture: true
+version: topic2-backend-v1.1-research
+auto_seed_fixture: false
 random_seed: 42
 
 paths:

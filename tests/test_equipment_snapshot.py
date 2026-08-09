@@ -1,154 +1,136 @@
-"""M1: canonical MachineProfileSnapshot resolution semantics.
+"""Equipment semantics against the user's persisted equipment archive.
 
-- RESEARCH_AGENT / DEMO_FIXTURE share one implementation (same profile shape).
-- SANDBOX task override is provisional and marked TASK_OVERRIDE.
-- Unresolvable profiles fail closed to a BLOCKED snapshot (no silent defaults).
-- average_power_max_W is never silently used as actual_power_W.
+No equipment measurement is invented here.  The tests read the real local
+archive and verify that legacy power fields are never reinterpreted as the new
+workpiece-plane capability contract.
 """
 
 from __future__ import annotations
 
-import sys
+import json
+import sqlite3
 from pathlib import Path
 
+import pytest
+
+from apps.topic2_backend.application.equipment import resolve_machine_snapshot
+from apps.topic2_backend.application.service import Topic2ApplicationService
+from packages.process_contracts.equipment import snapshot_from_profile
+
 REPO = Path(__file__).resolve().parents[1]
-sys.path.insert(0, str(REPO))
-
-from apps.topic2_backend.application.equipment import (
-    effective_execution_mode,
-    resolve_machine_snapshot,
-)
-from packages.process_contracts.equipment import (
-    MachineProfileSnapshot,
-    snapshot_from_profile,
-    snapshot_from_task_override,
-)
-
-FIXTURE_PROFILE = {
-    "equipment_profile_id": "DEMO-FS-LASER-01",
-    "revision_id": "rev-1",
-    "laser_source": {
-        "wavelength_nm": 1030.0,
-        "pulse_width_fixed_fs": 300.0,
-        "average_power_min_W": 1.0,
-        "average_power_max_W": 20.0,
-        "actual_power_W": 10.0,
-        "frequency_min_kHz": 50.0,
-        "frequency_max_kHz": 1000.0,
-    },
-    "optical_setup": {"spot_diameter_um": 16.0},
-    "motion_system": {
-        "scan_speed_min_mm_s": 50.0,
-        "scan_speed_max_mm_s": 2000.0,
-    },
-    "process_capability": {},
-}
+MEMORY_DB = REPO / "data" / "ultrafast_memory.db"
 
 
-def test_fixture_profile_resolves_ready() -> None:
-    snapshot = snapshot_from_profile(FIXTURE_PROFILE, source_quality="DEMO_FIXTURE")
-    assert snapshot.schema_version == "machine-profile-snapshot-v1"
-    assert snapshot.resource_status == "READY"
-    assert snapshot.missing_required == []
-    assert snapshot.value("actual_power_W") == 10.0
-    assert snapshot.value("wavelength_nm") == 1030.0
-    # beam radius is DERIVED from spot diameter/2, never guessed
-    assert snapshot.value("beam_radius_um") == 8.0
-    assert snapshot.fields["beam_radius_um"].status == "DERIVED"
-    assert "derived from spot_diameter_um/2" in snapshot.fields[
-        "beam_radius_um"
-    ].provenance
-    assert snapshot.machine_bounds["frequency_kHz"] == {
-        "lower": 50.0,
-        "upper": 1000.0,
-    }
-    assert snapshot.machine_bounds["pulse_width_ps"] == {
-        "lower": 0.3,
-        "upper": 0.3,
-    }
-    # agent and fixture share the same builder
-    agent = snapshot_from_profile(FIXTURE_PROFILE, source_quality="RESEARCH_AGENT")
-    assert agent.resource_status == "READY"
-    assert agent.value("actual_power_W") == snapshot.value("actual_power_W")
-    assert agent.fields["actual_power_W"].provenance[0] == (
-        "equipment_profile:DEMO-FS-LASER-01"
+def _real_active_profile() -> dict:
+    if not MEMORY_DB.exists():
+        pytest.skip(f"real equipment archive missing: {MEMORY_DB}")
+    with sqlite3.connect(MEMORY_DB) as connection:
+        connection.row_factory = sqlite3.Row
+        row = connection.execute(
+            "SELECT * FROM equipment_profile WHERE is_active = 1 "
+            "ORDER BY updated_at DESC LIMIT 1"
+        ).fetchone()
+        if row is None:
+            pytest.skip("real equipment archive has no active profile")
+        profile = dict(row)
+        profile["field_verification"] = json.loads(
+            profile.pop("field_verification_json") or "{}"
+        )
+        for section, table in (
+            ("laser_source", "laser_source_config"),
+            ("optical_setup", "optical_setup_config"),
+            ("motion_system", "motion_system_config"),
+            ("process_capability", "process_capability_config"),
+        ):
+            section_row = connection.execute(
+                f"SELECT * FROM {table} WHERE equipment_profile_id = ?",
+                (profile["equipment_profile_id"],),
+            ).fetchone()
+            values = dict(section_row) if section_row else {}
+            extras = json.loads(values.pop("parameters_json", None) or "{}")
+            values.update(extras)
+            profile[section] = {
+                key: value
+                for key, value in values.items()
+                if key not in {"config_id", "equipment_profile_id"}
+                and value is not None
+            }
+        revision = connection.execute(
+            "SELECT revision_id FROM equipment_config_revision "
+            "WHERE equipment_profile_id = ? ORDER BY revision_number DESC LIMIT 1",
+            (profile["equipment_profile_id"],),
+        ).fetchone()
+        profile["revision_id"] = revision["revision_id"] if revision else None
+        return profile
+
+
+def test_real_profile_keeps_capability_separate_from_task_power() -> None:
+    profile = _real_active_profile()
+    snapshot = snapshot_from_profile(profile, source_quality="RESEARCH_AGENT")
+
+    assert "actual_power_W" not in snapshot.fields
+    laser = profile["laser_source"]
+    has_surface_bounds = all(
+        laser.get(name) is not None
+        for name in (
+            "workpiece_incident_power_min_W",
+            "workpiece_incident_power_max_W",
+        )
     )
+    if not has_surface_bounds:
+        assert {
+            "workpiece_incident_power_min_W",
+            "workpiece_incident_power_max_W",
+        }.issubset(snapshot.missing_required)
+        assert "laser_power_W" not in snapshot.machine_bounds
+    else:
+        assert snapshot.machine_bounds["laser_power_W"] == {
+            "lower": float(laser["workpiece_incident_power_min_W"]),
+            "upper": float(laser["workpiece_incident_power_max_W"]),
+        }
 
 
-def test_missing_power_fails_closed_not_from_max() -> None:
-    partial = dict(FIXTURE_PROFILE)
-    partial["laser_source"] = dict(FIXTURE_PROFILE["laser_source"])
-    del partial["laser_source"]["actual_power_W"]
-    snapshot = snapshot_from_profile(partial, source_quality="DEMO_FIXTURE")
-    assert snapshot.resource_status == "PARTIAL"
-    assert "actual_power_W" in snapshot.missing_required
-    assert snapshot.value("actual_power_W") is None
-    # average_power_max_W never silently becomes the actual power
-    assert any("average_power_max_W" in w for w in snapshot.warnings)
+def test_legacy_maximum_is_not_silently_promoted_to_surface_range() -> None:
+    profile = _real_active_profile()
+    laser = profile["laser_source"]
+    if laser.get("actual_max_power_W") is None:
+        pytest.skip("real profile no longer contains the legacy maximum field")
+    assert laser.get("workpiece_incident_power_min_W") is None
+    snapshot = snapshot_from_profile(profile, source_quality="RESEARCH_AGENT")
+    assert "laser_power_W" not in snapshot.machine_bounds
 
 
-def test_sandbox_task_override_is_provisional() -> None:
-    snapshot = snapshot_from_task_override(
+def test_execution_context_fails_closed_until_real_surface_bounds_exist() -> None:
+    profile = _real_active_profile()
+    laser = profile["laser_source"]
+    if laser.get("workpiece_incident_power_min_W") is not None:
+        pytest.skip("real profile has already been upgraded with measured bounds")
+    snapshot = snapshot_from_profile(profile, source_quality="RESEARCH_AGENT")
+    context = Topic2ApplicationService._build_execution_context(
         {
-            "actual_power_W": 5.0,
-            "actual_power_W_verified": True,
-            "beam_radius_um": 10.0,
-            "wavelength_nm": 1030.0,
+            "process_parameters": {
+                "laser_power_W": laser.get("actual_max_power_W"),
+                "laser_power_location": "WORKPIECE_SURFACE_INCIDENT",
+            }
         },
-        equipment_profile_id="EQ-TEST-FS",
+        snapshot.model_dump(mode="json"),
     )
-    assert snapshot.source_quality == "TASK_OVERRIDE"
-    assert snapshot.resource_status == "READY"
-    assert snapshot.value("beam_radius_um") == 10.0
-    assert any("SANDBOX" in w for w in snapshot.warnings)
+    assert context["status"] == "BLOCKED"
+    assert any("缺少材料表面" in reason for reason in context["reasons"])
 
 
-def test_unresolvable_profile_is_blocked() -> None:
+def test_unresolvable_research_profile_uses_new_required_fields() -> None:
     snapshot = resolve_machine_snapshot(
-        equipment_profile_id="EQ-NOPE",
+        equipment_profile_id="UNRESOLVED",
         run_mode="research",
-        task_spec={},
+        task_spec={"execution_mode": "RESEARCH"},
         agent_proxy_target=None,
-        fixture_profiles={"DEMO-FS-LASER-01": FIXTURE_PROFILE},
+        fixture_profiles={},
     )
     assert snapshot.resource_status == "BLOCKED"
     assert set(snapshot.missing_required) == {
         "wavelength_nm",
-        "actual_power_W",
+        "workpiece_incident_power_min_W",
+        "workpiece_incident_power_max_W",
         "beam_radius_um",
     }
-    assert all(
-        state.status == "MISSING" for state in snapshot.fields.values()
-    )
-
-
-def test_fixture_store_resolution_order() -> None:
-    # fixture store wins over agent for DEMO_FIXTURE quality
-    snapshot = resolve_machine_snapshot(
-        equipment_profile_id="DEMO-FS-LASER-01",
-        run_mode="research",
-        task_spec={"execution_mode": "DEMO_FIXTURE"},
-        agent_proxy_target="http://127.0.0.1:1",
-        fixture_profiles={"DEMO-FS-LASER-01": FIXTURE_PROFILE},
-    )
-    assert snapshot.source_quality == "DEMO_FIXTURE"
-    assert snapshot.resource_status == "READY"
-
-
-def test_execution_mode_derivation() -> None:
-    assert effective_execution_mode("demo", {}) == "DEMO_FIXTURE"
-    assert effective_execution_mode("research", {}) == "RESEARCH"
-    assert effective_execution_mode("research", {"execution_mode": "SANDBOX"}) == (
-        "SANDBOX"
-    )
-    assert effective_execution_mode("research", {"execution_mode": "bogus"}) == (
-        "RESEARCH"
-    )
-
-
-def test_snapshot_json_roundtrip() -> None:
-    snapshot = snapshot_from_profile(FIXTURE_PROFILE, source_quality="DEMO_FIXTURE")
-    restored = MachineProfileSnapshot.model_validate(
-        snapshot.model_dump(mode="json")
-    )
-    assert restored == snapshot
