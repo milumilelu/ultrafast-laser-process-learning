@@ -75,6 +75,12 @@ class RequirementEvidencePipeline:
             ]
             mapped = self._map_papers(requirement, candidates, windows_by_paper)
             run.paper_evidence[requirement.requirement_id] = mapped
+            run.warnings.extend(
+                f"{requirement.requirement_id}:{item.paper_id}:"
+                f"mechanical_validation_rejected={','.join(item.evidence.validation_errors)}"
+                for item in mapped
+                if not item.evidence.valid
+            )
             self._ingest_valid_findings(requirement, mapped)
 
             knowledge = self.repository.structured_knowledge(requirement)

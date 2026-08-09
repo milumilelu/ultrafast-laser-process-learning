@@ -110,6 +110,7 @@ class TwoLevelEvidenceRetriever:
         context_blocks: int,
     ) -> list[EvidenceWindow]:
         blocks = self.store.blocks(document_version_id=document_version_id)
+        paper_title, paper_metadata = self.store.paper_context(document_version_id)
         by_id = {item.block_id: item for item in blocks}
         order = {item.block_id: index for index, item in enumerate(blocks)}
         windows: list[EvidenceWindow] = []
@@ -142,6 +143,8 @@ class TwoLevelEvidenceRetriever:
                     center_block_id=center.block_id,
                     blocks=members,
                     score=score,
+                    paper_title=paper_title,
+                    paper_metadata=paper_metadata,
                     matched_terms=[],
                 )
             )

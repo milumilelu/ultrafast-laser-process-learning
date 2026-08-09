@@ -248,6 +248,17 @@ class ScientificIndexStore:
             ).fetchall()
         return [self._block_from_row(dict(row)) for row in rows]
 
+    def paper_context(self, document_version_id: str) -> tuple[str, dict[str, Any]]:
+        with self.connection() as conn:
+            row = conn.execute(
+                "SELECT title,metadata_json FROM scientific_document_store "
+                "WHERE document_version_id=?",
+                (document_version_id,),
+            ).fetchone()
+        if row is None:
+            raise KeyError(f"unknown scientific document version: {document_version_id}")
+        return str(row["title"] or ""), json.loads(row["metadata_json"] or "{}")
+
     @staticmethod
     def _block_from_row(row: dict[str, Any]) -> SemanticBlock:
         return SemanticBlock(

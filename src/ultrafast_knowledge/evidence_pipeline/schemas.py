@@ -91,6 +91,8 @@ class EvidenceWindow(BaseModel):
     center_block_id: str
     blocks: list[SemanticBlock]
     score: float
+    paper_title: str = ""
+    paper_metadata: dict[str, Any] = Field(default_factory=dict)
     matched_terms: list[str] = Field(default_factory=list)
 
     @property
@@ -98,11 +100,18 @@ class EvidenceWindow(BaseModel):
         return [item.block_id for item in self.blocks]
 
     def render(self) -> str:
-        return "\n".join(
+        metadata = ", ".join(
+            f"{key}={value}" for key, value in sorted(self.paper_metadata.items())
+        )
+        context = (
+            f"PAPER_CONTEXT title={self.paper_title}; metadata={metadata or 'unknown'}"
+        )
+        blocks = "\n".join(
             f"[{item.block_id} | page {item.page} | {item.block_type.value} | "
             f"section={item.section_type or 'unknown'}] {item.text}"
             for item in self.blocks
         )
+        return f"{context}\n{blocks}"
 
 
 class ExtractionStatus(StrEnum):

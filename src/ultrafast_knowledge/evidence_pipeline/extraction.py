@@ -20,6 +20,9 @@ PROMPT_VERSION = "requirement-extraction-v2"
 
 REQUIREMENT_EXTRACTION_PROMPT = """你是严谨的科学证据抽取器。本次只回答一个 Requirement。
 不得抽取无关参数，不得用常识补全，不得换算原文单位，不得把引用文献列表当作实验结果。
+必须先核对 PAPER_CONTEXT 与 Requirement.conditions：论文材料、激光类型或其他必要条件
+不一致时返回 NOT_FOUND。FOUND 的 conditions 必须逐项包含 Requirement.conditions 且值一致。
+PAPER_CONTEXT 只用于条件判定；evidence_quote 仍必须逐字来自带 block_id 的原文块。
 
 状态只能是：
 - FOUND：证据窗口直接报告该量；
@@ -62,6 +65,12 @@ def _json_object(text: str) -> dict[str, Any]:
     return data
 
 
+def _condition_value(value: Any) -> Any:
+    if isinstance(value, str):
+        return " ".join(value.casefold().split())
+    return value
+
+
 class RequirementEvidenceValidator:
     """Rules validate numbers, units and provenance; they do not assign semantics."""
 
@@ -89,6 +98,7 @@ class RequirementEvidenceValidator:
                 errors.append("found_without_evidence_quote")
             if requirement.expected_unit and not result.unit:
                 errors.append("found_without_unit")
+            errors.extend(self._validate_required_conditions(requirement, result, windows))
         if result.status == ExtractionStatus.CONFLICT:
             if len(result.conflict_values) < 2:
                 errors.append("conflict_without_two_values")
@@ -134,6 +144,23 @@ class RequirementEvidenceValidator:
                 "validation_state": "rejected" if unique_errors else "validated",
             }
         )
+
+    @staticmethod
+    def _validate_required_conditions(
+        requirement: Requirement,
+        result: RequirementEvidence,
+        windows: list[EvidenceWindow],
+    ) -> list[str]:
+        errors: list[str] = []
+        metadata = windows[0].paper_metadata if windows else {}
+        for key, expected in requirement.conditions.items():
+            if key not in result.conditions:
+                errors.append(f"found_missing_required_condition:{key}")
+            elif _condition_value(result.conditions[key]) != _condition_value(expected):
+                errors.append(f"found_condition_mismatch:{key}")
+            if key in metadata and _condition_value(metadata[key]) != _condition_value(expected):
+                errors.append(f"paper_context_condition_mismatch:{key}")
+        return errors
 
     def _validate_conflict_values(
         self,
