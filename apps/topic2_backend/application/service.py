@@ -1698,14 +1698,29 @@ class Topic2ApplicationService:
                 trace.warning(f"需求解析失败：{exc}")
             if resolution:
                 # 阶段一 · 手册 §9: 五个独立冻结 artifact，Artifact → Service → Artifact
+                corpus_mapping = resolution.get("mapping_report") or {}
+                corpus_from_cache = int(corpus_mapping.get("from_cache") or 0)
+                corpus_completed = int(corpus_mapping.get("completed") or 0)
+                corpus_sources = len(
+                    (resolution.get("corpus_pack") or {}).get("sources") or []
+                )
+                if corpus_sources == 0:
+                    analysis_method = "NO_CORPUS"
+                elif corpus_completed == 0 and corpus_from_cache == 0:
+                    analysis_method = "PENDING_LLM"
+                elif corpus_completed == corpus_from_cache:
+                    analysis_method = "LLM_CACHED"
+                else:
+                    analysis_method = "LLM_LIVE"
                 corpus_pack_artifact = self._persist_artifact(
                     bus.run_id,
                     "ScientificCorpusPack",
                     {
                         "schema_version": "evidence-corpus-pack-v1",
                         "corpus_pack": resolution.get("corpus_pack") or {},
-                        "analysis_mapping": resolution.get("mapping_report") or {},
+                        "analysis_mapping": corpus_mapping,
                         "analysis_model": self.resolution_model,
+                        "analysis_method": analysis_method,
                     },
                     input_refs=[
                         {
@@ -1993,6 +2008,12 @@ class Topic2ApplicationService:
             "EvidenceIR 编译为 typed PriorObject",
             input_refs=[{"type": "EvidenceIRSet", "id": evidence_ir_artifact}],
         )
+        bus.emit(
+            VALIDATION,
+            f"先验编译: {len(evidence_ir)} 条证据",
+            stage="prepare_knowledge",
+            details={"phase": "compiling_prior", "evidence": len(evidence_ir)},
+        )
         prior_set = compile_typed_priors(evidence_ir)
         prior_set = self._merge_demo_fixture_priors(
             prior_set,
@@ -2040,28 +2061,78 @@ class Topic2ApplicationService:
     def _resolution_progress(
         self, bus: WorkflowEventBus
     ) -> Callable[[str, dict[str, Any]], None]:
-        """Map ScientificKnowledgeService progress events to workflow events."""
+        """Map resolution chain progress to requirement-scoped workflow events
+        (阶段三 T3): retrieving / selecting / reading / validating /
+        compiling_ledger / compiling_conditions / assessing_reconstructibility /
+        assessing_applicability — every event carries requirement_ids."""
+
+        def emit_phase(stage: str, label: str, detail: dict[str, Any]) -> None:
+            bus.emit(
+                VALIDATION,
+                label,
+                stage="prepare_knowledge",
+                details={"phase": stage, **detail},
+            )
 
         def on_progress(stage: str, detail: dict[str, Any]) -> None:
-            if stage == "mapping":
+            requirement_ids = [
+                str(item) for item in (detail.get("requirement_ids") or [])
+            ]
+            if stage == "retrieving":
+                emit_phase(
+                    stage,
+                    f"检索: {detail.get('hits', 0)} 命中 / {detail.get('papers', 0)} 篇候选",
+                    {"requirement_ids": requirement_ids, **detail},
+                )
+            elif stage == "selecting":
+                emit_phase(
+                    stage,
+                    f"选文: {detail.get('sources', 0)} 篇进入语料包",
+                    {"requirement_ids": requirement_ids, **detail},
+                )
+            elif stage == "mapping":
                 current = detail.get("current") or 0
                 total = detail.get("total") or 0
                 cached = bool(detail.get("cached"))
-                bus.emit(
-                    VALIDATION,
-                    (
-                        f"LLM 精读 {current}/{total}"
-                        + ("（预录缓存）" if cached else "")
-                    ),
-                    stage="prepare_knowledge",
-                    details={"phase": "llm_reading", "current": current, "total": total},
+                emit_phase(
+                    stage,
+                    f"LLM 精读 {current}/{total}" + ("（预录缓存）" if cached else ""),
+                    {
+                        "requirement_ids": requirement_ids,
+                        "current": current,
+                        "total": total,
+                        "cached": cached,
+                    },
                 )
             elif stage == "validating":
-                bus.emit(
-                    VALIDATION,
+                emit_phase(
+                    stage,
                     f"确定性验证：{detail.get('validated', 0)} 通过 / {detail.get('rejected', 0)} 拒绝",
-                    stage="prepare_knowledge",
-                    details={"phase": "validation", **detail},
+                    {"requirement_ids": requirement_ids, **detail},
+                )
+            elif stage == "compiling_ledger":
+                emit_phase(
+                    stage,
+                    f"候选账本: {detail.get('candidates', 0)} 条",
+                    {"requirement_ids": requirement_ids, **detail},
+                )
+            elif stage == "compiling_conditions":
+                emit_phase(
+                    stage,
+                    f"条件编译: {detail.get('candidates', 0)} 条候选",
+                    {"requirement_ids": requirement_ids, **detail},
+                )
+            elif stage == "assessing_reconstructibility":
+                emit_phase(
+                    stage,
+                    f"可重建性评估: {detail.get('conditions', 0)} 组条件",
+                    {"requirement_ids": requirement_ids, **detail},
+                )
+            elif stage == "assessing_applicability":
+                emit_phase(
+                    stage,
+                    f"适用性评估: {detail.get('evidence', 0)} 条证据",
+                    {"requirement_ids": requirement_ids, **detail},
                 )
 
         return on_progress
@@ -2080,6 +2151,12 @@ class Topic2ApplicationService:
         """
         requirements = self._latest_requirements(bus)
         evidence = self._evidence_for_scope(scope)
+        bus.emit(
+            VALIDATION,
+            f"需求满足评估: {len(requirements)} 条需求",
+            stage="satisfy_requirements",
+            details={"phase": "evaluating_satisfaction", "requirements": len(requirements)},
+        )
         bundle = self.topic2.compile_evidence(
             EvidenceCompileRequest(scope=scope, evidence=evidence)
         )

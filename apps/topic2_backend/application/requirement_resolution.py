@@ -363,6 +363,15 @@ def resolve_requirement_chain(
     """
     if not requirements:
         return ResolutionResult()
+    requirement_ids = [
+        str(requirement.get("requirement_id") or "requirement")
+        for requirement in requirements
+    ]
+
+    def emit(stage: str, detail: dict[str, Any]) -> None:
+        if progress_callback is not None:
+            progress_callback(stage, {**detail, "requirement_ids": requirement_ids})
+
     query_plans = [
         plan_retrieval(requirement, task_scope).model_dump(mode="json")
         for requirement in requirements
@@ -375,8 +384,26 @@ def resolve_requirement_chain(
     corpus_pack = adapter.build_corpus(
         task_scope, intents=intents_for_requirements(requirements)
     )
+    emit(
+        "retrieving",
+        {
+            "papers": len(corpus_pack.get("sources") or []),
+            "hits": (
+                (corpus_pack.get("retrieval_trace") or {}).get("raw_hit_count") or 0
+            ),
+            "sources": len(corpus_pack.get("sources") or []),
+        },
+    )
+    emit("selecting", {"sources": len(corpus_pack.get("sources") or [])})
     knowledge_pack = adapter.analyze(corpus_pack, progress_callback=progress_callback)
     validation = adapter.validate(knowledge_pack)
+    emit(
+        "validating",
+        {
+            "validated": len(validation.get("validated_candidates") or []),
+            "rejected": len(validation.get("rejected_candidates") or []),
+        },
+    )
     rejected = set(validation.get("rejected_candidates") or [])
     evidence_ir: list[dict[str, Any]] = []
     applicability: list[dict[str, Any]] = []
@@ -410,13 +437,23 @@ def resolve_requirement_chain(
     )
 
     corpus_pack_id = corpus_pack.get("corpus_pack_id") or "corpus"
+    emit("compiling_ledger", {"candidates": len(validated_candidates)})
     ledger = build_candidate_ledger(
         validated_candidates, corpus_pack_id=corpus_pack_id, model=model
     )
+    emit("compiling_conditions", {"candidates": len(validated_candidates)})
     conditions = compile_source_conditions(
         validated_candidates, corpus_pack_id=corpus_pack_id
     )
+    emit(
+        "assessing_reconstructibility",
+        {"conditions": len(conditions)},
+    )
     reports = build_reconstructibility_reports(conditions)
+    emit(
+        "assessing_applicability",
+        {"evidence": len(evidence_ir)},
+    )
     evidence_ir = project_evidence_ir(
         evidence_ir,
         ledger=ledger,

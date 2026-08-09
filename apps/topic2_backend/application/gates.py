@@ -35,6 +35,28 @@ STAGE_PHASES: dict[str, str] = {
     "evaluate_observation": "OBSERVATION",
 }
 
+# ordered phases the workbench displays (backend-computed statuses)
+PHASE_ORDER = (
+    "CAPABILITY",
+    "KNOWLEDGE",
+    "CALIBRATION",
+    "MODEL",
+    "SIMULATION",
+    "PLANNING",
+    "OBSERVATION",
+)
+
+# phase -> guarding gate (BLOCKED gate blocks its phase)
+PHASE_GATE: dict[str, str] = {
+    "CAPABILITY": "A",
+    "KNOWLEDGE": "B",
+    "CALIBRATION": "B",
+    "MODEL": "C",
+    "SIMULATION": "C",
+    "PLANNING": "D",
+    "OBSERVATION": "D",
+}
+
 GATE_NAMES = ("A", "B", "C", "D")
 
 
@@ -179,8 +201,9 @@ def knowledge_gate(
     if execution_mode == "SANDBOX":
         return GateResult("B", "READY", ["SANDBOX: gates bypassed (provisional)"])
     machine_fields = machine_fields or set()
-    blocked: list[str] = []
     partial: list[str] = []
+    structure_blocked: list[str] = []
+    parameter_blocked: list[str] = []
 
     # model structure: every structure-requiring active mechanism needs a
     # MechanismModelPrior (the mechanism registry decides which models
@@ -193,10 +216,7 @@ def knowledge_gate(
                 for model_family in mechanism_model_priors
             )
             if not structure_ok:
-                blocked.append(
-                    f"{source_model}: 模型结构未解决（需要 MechanismModelPrior，"
-                    f"当前机制先验 ∈ {sorted(mechanism_model_priors) or '∅'}）"
-                )
+                structure_blocked.append(source_model)
 
     # parameters: prior OR identifiable independent observation OR resource.
     # Optional mechanisms (DEFOCUS/THERMAL) without support stay INACTIVE —
@@ -214,19 +234,47 @@ def knowledge_gate(
             or name in observation_capabilities
         )
         if not covered:
-            blocked.append(f"{name}（{source_model}）: 无 ParameterPrior 且无独立观测")
+            parameter_blocked.append(name)
+    blocked = [
+        *(
+            f"{model}: 模型结构未解决（需要 MechanismModelPrior）"
+            for model in structure_blocked
+        ),
+        *(
+            f"{name}: 无 ParameterPrior 且无独立观测"
+            for name in sorted(set(parameter_blocked))
+        ),
+    ]
     if blocked:
-        return GateResult(
-            "B",
-            "BLOCKED",
-            blocked,
-            [
+        actions: list[dict[str, Any]] = []
+        if structure_blocked:
+            actions.append(
                 {
-                    "type": "RESOLVE_LITERATURE_OR_ADD_OBSERVATIONS",
-                    "parameters": blocked,
+                    "type": "RESOLVE_LITERATURE",
+                    "mechanism_models": sorted(set(structure_blocked)),
                 }
-            ],
-        )
+            )
+        if parameter_blocked:
+            actions.append(
+                {
+                    "type": "RESOLVE_LITERATURE",
+                    "parameters": sorted(set(parameter_blocked)),
+                }
+            )
+            actions.append(
+                {
+                    "type": "ADD_CALIBRATION_OBSERVATION",
+                    "observation_types": sorted(
+                        {
+                            "ABSOLUTE_FLUENCE"
+                            if name in ("F_th_eff", "delta_eff")
+                            else "MULTI_PULSE_CRATER"
+                            for name in set(parameter_blocked)
+                        }
+                    ),
+                }
+            )
+        return GateResult("B", "BLOCKED", blocked, actions)
     if partial:
         return GateResult(
             "B",
@@ -277,7 +325,9 @@ def physical_model_gate(
         actions.append({"type": "REVIEW_CALIBRATION_INPUTS"})
     if not local_removal_model:
         reasons.append("LocalRemovalModel 未建立")
-        actions.append({"type": "ESTABLISH_PROCESS_MODEL"})
+        actions.append(
+            {"type": "RESUME_RUN", "target_phase": "MODEL", "resume_stage": "establish_process_model"}
+        )
     else:
         bindings = {
             str(binding.get("parameter")): str(binding.get("source_type") or "UNRESOLVED")
@@ -312,7 +362,9 @@ def planning_gate(
     actions: list[dict[str, Any]] = []
     if not model_available:
         reasons.append("LocalRemovalModel 未建立")
-        actions.append({"type": "ESTABLISH_PROCESS_MODEL"})
+        actions.append(
+            {"type": "RESUME_RUN", "target_phase": "MODEL", "resume_stage": "establish_process_model"}
+        )
     if not machine_bounds:
         reasons.append("机器边界（MachineBounds）不可用")
         actions.append({"type": "COMPLETE_EQUIPMENT_PROFILE", "missing": ["motion/laser ranges"]})
@@ -329,8 +381,13 @@ def run_control_state(
     phase_status: str,
     completed_stages: list[str],
 ) -> dict[str, Any]:
-    """Canonical RunControlState artifact (frontend renders, never derives)."""
+    """Canonical RunControlState (frontend renders, never derives).
+
+    `phases` gives every phase a backend-computed status - the frontend
+    performs zero gate-to-phase interpretation (阶段三 T1).
+    """
     gate_dicts = {result.name: result.to_dict() for result in gates}
+    gate_by_name = {result.name: result for result in gates}
     blocking = [
         reason
         for result in gates
@@ -347,11 +404,41 @@ def run_control_state(
         if any(result.status == "PARTIAL" for result in gates)
         else phase_status
     )
+
+    completed = set(completed_stages)
+    phases: dict[str, dict[str, Any]] = {}
+    for phase in PHASE_ORDER:
+        phase_stages = [
+            stage for stage, owner in STAGE_PHASES.items() if owner == phase
+        ]
+        stage_done = all(stage in completed for stage in phase_stages)
+        gate = gate_by_name.get(PHASE_GATE[phase])
+        if stage_done:
+            phase_status_value = "COMPLETED"
+            reasons: list[str] = []
+        elif gate is not None and gate.status == "BLOCKED":
+            phase_status_value = "BLOCKED"
+            reasons = list(gate.reasons)
+        elif gate is not None and gate.status == "PARTIAL":
+            phase_status_value = "PARTIAL"
+            reasons = list(gate.reasons)
+        elif gate is not None and gate.status == "READY":
+            phase_status_value = "READY"
+            reasons = []
+        else:
+            phase_status_value = "NOT_RUN"
+            reasons = []
+        phases[phase] = {
+            "status": phase_status_value,
+            "blocking_reasons": reasons,
+        }
+
     return {
         "schema_version": RUN_CONTROL_SCHEMA_VERSION,
         "execution_mode": execution_mode,
         "current_phase": current_phase,
         "phase_status": status,
+        "phases": phases,
         "gates": gate_dicts,
         "blocking_reasons": blocking,
         "next_actions": next_actions,
