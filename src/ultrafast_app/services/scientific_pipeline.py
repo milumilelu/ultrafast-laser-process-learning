@@ -5,9 +5,10 @@ from __future__ import annotations
 from typing import Any
 
 from ultrafast_knowledge.evidence_pipeline import (
-    DatabaseScientificPaperRepository,
+    PersistentScientificPaperRepository,
     RequirementEvidenceExtractor,
     RequirementEvidencePipeline,
+    ScientificIndexStore,
 )
 from ultrafast_memory.llm.factory import create_llm_client
 from ultrafast_memory.llm.mock import MockLLMClient
@@ -38,7 +39,8 @@ class ScientificAnalysisService:
         if isinstance(self.client, MockLLMClient):
             raise LLMNotConfiguredError("科学证据抽取不允许 mock 降级。")
         self.compiler = RequirementCompiler()
-        repository = DatabaseScientificPaperRepository(connection=connection)
+        store = ScientificIndexStore(connection=connection)
+        repository = PersistentScientificPaperRepository(store)
         extractor = RequirementEvidenceExtractor(
             self.client,
             model=str(getattr(self.client, "model", "unknown")),
@@ -46,19 +48,20 @@ class ScientificAnalysisService:
         self.pipeline = RequirementEvidencePipeline(
             extractor,
             repository=repository,
+            store=store,
         )
 
     def compile_requirements(
         self,
         task_spec: dict[str, Any],
-        available_quantities: dict[str, Any] | None = None,
+        available_quantities: dict[str, Any] | list[dict[str, Any]] | None = None,
     ) -> RequirementSet:
         return self.compiler.compile(task_spec, available_quantities)
 
     def analyze(
         self,
         task_spec: dict[str, Any],
-        available_quantities: dict[str, Any] | None = None,
+        available_quantities: dict[str, Any] | list[dict[str, Any]] | None = None,
     ) -> dict[str, Any]:
         requirements = self.compile_requirements(task_spec, available_quantities)
         evidence = self.pipeline.analyze(requirements)

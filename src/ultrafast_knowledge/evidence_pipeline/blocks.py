@@ -65,14 +65,73 @@ class SemanticBlockBuilder:
         abstract = "\n".join(
             block.text for block in semantic if block.section_type == "abstract"
         )
+        paper_metadata = dict(metadata or {})
+        section_titles = list(
+            dict.fromkeys(
+                item.section_title for item in semantic if item.section_title
+            )
+        )
+        paper_retrieval_text = self._paper_retrieval_text(
+            inferred_title, abstract, paper_metadata, section_titles
+        )
+        for block in semantic:
+            block.retrieval_text = self._block_retrieval_text(
+                inferred_title, paper_metadata, block
+            )
         return StructuredScientificPaper(
             paper_id=document.paper_id,
             document_version_id=document.document_version_id,
             title=inferred_title,
             abstract=abstract,
-            metadata=dict(metadata or {}),
+            retrieval_text=paper_retrieval_text,
+            metadata=paper_metadata,
             blocks=semantic,
             pdf_path=document.pdf_path,
+        )
+
+    @staticmethod
+    def _paper_retrieval_text(
+        title: str,
+        abstract: str,
+        metadata: dict[str, Any],
+        section_titles: list[str],
+    ) -> str:
+        context = " ".join(
+            f"{key}: {value}" for key, value in metadata.items() if value not in (None, "")
+        )
+        return "\n".join(
+            item
+            for item in (
+                f"Paper: {title}",
+                f"Metadata: {context}" if context else "",
+                f"Sections: {' > '.join(section_titles)}" if section_titles else "",
+                f"Abstract: {abstract}" if abstract else "",
+            )
+            if item
+        )
+
+    @staticmethod
+    def _block_retrieval_text(
+        title: str,
+        metadata: dict[str, Any],
+        block: SemanticBlock,
+    ) -> str:
+        scoped = " ".join(
+            f"{key}: {value}"
+            for key, value in metadata.items()
+            if key in {"material", "material_grade", "laser_type", "wavelength_nm", "process_type"}
+            and value not in (None, "")
+        )
+        return "\n".join(
+            item
+            for item in (
+                f"Paper: {title}",
+                f"Section: {block.section_path or ''} {block.section_title or ''}".strip(),
+                f"Context: {scoped}" if scoped else "",
+                f"Block type: {block.block_type.value}",
+                f"Block: {block.text}",
+            )
+            if item
         )
 
     @staticmethod

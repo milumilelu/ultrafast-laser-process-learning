@@ -16,12 +16,36 @@ from pydantic import BaseModel, Field
 class RequirementSource(StrEnum):
     TASK = "task"
     EQUIPMENT = "equipment"
+    STRUCTURED_KNOWLEDGE = "structured_knowledge"
     LITERATURE = "literature"
     CALIBRATION = "calibration"
     EXPERIMENT = "experiment"
     DATASET = "dataset"
     PRIOR = "prior"
     DERIVED = "derived"
+    UNRESOLVED = "unresolved"
+
+
+class VerificationStatus(StrEnum):
+    VERIFIED = "verified"
+    UNVERIFIED = "unverified"
+    REJECTED = "rejected"
+
+
+class VariableSemantic(StrEnum):
+    DECISION_VARIABLE = "DECISION_VARIABLE"
+    MODEL_PARAMETER = "MODEL_PARAMETER"
+    RESOURCE_INPUT = "RESOURCE_INPUT"
+    DERIVED_QUANTITY = "DERIVED_QUANTITY"
+    TARGET_OUTPUT = "TARGET_OUTPUT"
+    CONSTRAINT = "CONSTRAINT"
+
+
+class ResolutionStatus(StrEnum):
+    PENDING = "pending"
+    RESOLVED = "resolved"
+    FAILED = "failed"
+    SKIPPED = "skipped"
 
 
 class RequirementStatus(StrEnum):
@@ -49,6 +73,52 @@ class DependencySpec(BaseModel):
     conditions: dict[str, Any] = Field(default_factory=dict)
     resolution_policy: str = "require_observed_or_governed_value"
     query_terms: list[str] = Field(default_factory=list)
+    variable_semantic: VariableSemantic = VariableSemantic.RESOURCE_INPUT
+    optimizable: bool = False
+
+
+class QuantityValue(BaseModel):
+    """Verified, unit-bearing input; naked numeric aliases are forbidden."""
+
+    quantity: str
+    value: float
+    unit: str
+    canonical_quantity: str
+    canonical_value: float
+    canonical_unit: str
+    source: RequirementSource
+    verification_status: VerificationStatus = VerificationStatus.VERIFIED
+
+
+class DecisionVariable(BaseModel):
+    quantity: str
+    minimum: float
+    maximum: float
+    resolution: float
+    unit: str
+    canonical_quantity: str
+    canonical_minimum: float
+    canonical_maximum: float
+    canonical_resolution: float
+    canonical_unit: str
+    admissible_region: list[tuple[float, float]] = Field(default_factory=list)
+    source: RequirementSource = RequirementSource.TASK
+    verification_status: VerificationStatus = VerificationStatus.VERIFIED
+
+
+class Constraint(BaseModel):
+    constraint_id: str
+    expression: str
+    quantities: list[str] = Field(default_factory=list)
+    hard: bool = True
+    source: RequirementSource = RequirementSource.TASK
+
+
+class ResolutionStep(BaseModel):
+    order: int
+    source: RequirementSource
+    status: ResolutionStatus = ResolutionStatus.PENDING
+    failure_reason: str | None = None
 
 
 class ModelCapability(BaseModel):
@@ -77,6 +147,9 @@ class Requirement(BaseModel):
     derivation_capability_id: str | None = None
     query_terms: list[str] = Field(default_factory=list)
     supplied_value: Any | None = None
+    variable_semantic: VariableSemantic = VariableSemantic.RESOURCE_INPUT
+    resolution_chain: list[ResolutionStep] = Field(default_factory=list)
+    current_resolution_step: int | None = None
 
 
 class ResourceRequirement(Requirement):
@@ -109,8 +182,11 @@ class RequirementSet(BaseModel):
     root_quantities: list[str]
     selected_capabilities: list[str] = Field(default_factory=list)
     requirements: list[Requirement] = Field(default_factory=list)
-    graph_version: str = "scientific-dependency-graph-v1"
-    compiler_version: str = "requirement-compiler-v1"
+    quantity_values: list[QuantityValue] = Field(default_factory=list)
+    decision_variables: list[DecisionVariable] = Field(default_factory=list)
+    constraints: list[Constraint] = Field(default_factory=list)
+    graph_version: str = "scientific-dependency-graph-v2"
+    compiler_version: str = "requirement-compiler-v2"
 
     def by_category(self, category: RequirementCategory) -> list[Requirement]:
         return [item for item in self.requirements if item.category == category]

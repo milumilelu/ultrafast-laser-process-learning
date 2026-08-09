@@ -86,7 +86,7 @@ src/
 ├── ultrafast_cfa/            # M9 Uncalibrated CFA（五 facet，无概率）
 ├── ultrafast_e2p/            # 证据适用性/编译 → GovernedPriorArtifact
 ├── ultrafast_bo/             # 治理化 GP-UCB（vanilla / evidence-assisted）
-├── ultrafast_knowledge/      # 两级论文/语义块检索 + 单 Requirement EvidenceIR 抽取
+├── ultrafast_knowledge/      # 持久化双索引 + 逐论文抽取 + 结构化科学知识入库与聚合
 ├── ultrafast_memory/         # 迁移自旧仓库（db/ids/config）
 └── ultrafast_integrations/   # 存储/集成
 demo/t2_slice/                # 垂直切片编排 + 文献资源解析（RF-2）

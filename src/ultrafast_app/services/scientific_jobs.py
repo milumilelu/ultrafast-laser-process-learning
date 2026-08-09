@@ -8,6 +8,7 @@ Job 状态持久化到 SQLite（scientific_analysis_job 表）：
 from __future__ import annotations
 
 import json
+import queue
 import threading
 import uuid
 from dataclasses import dataclass, field
@@ -30,6 +31,10 @@ STAGES = (
 )
 
 _INTERRUPTED_ERROR = "服务重启导致分析任务中断，请重新运行工艺任务分析"
+
+
+class AnalysisQueueFullError(RuntimeError):
+    pass
 
 
 @dataclass(slots=True)
@@ -69,10 +74,24 @@ class AnalysisJob:
 class ScientificAnalysisJobService:
     """Job 执行器（单 worker 串行，避免并发 LLM 风暴）+ SQLite 状态持久化。"""
 
-    def __init__(self, *, max_history: int = 20):
+    def __init__(self, *, max_history: int = 20, max_queue_size: int = 20):
         self._jobs: dict[str, AnalysisJob] = {}
         self._lock = threading.Lock()
         self._max_history = max_history
+        self._queue: queue.Queue[
+            tuple[
+                str,
+                dict[str, Any],
+                dict[str, Any] | list[dict[str, Any]],
+                threading.Event,
+            ]
+        ] = queue.Queue(maxsize=max_queue_size)
+        self._worker = threading.Thread(
+            target=self._worker_loop,
+            name="scientific-analysis-worker",
+            daemon=True,
+        )
+        self._worker.start()
 
     # ------------------------------------------------------------ persistence
     def _persist(self, job: AnalysisJob) -> None:
@@ -144,7 +163,7 @@ class ScientificAnalysisJobService:
     def create_job(
         self,
         task_spec: dict[str, Any],
-        available_quantities: dict[str, Any] | None = None,
+        available_quantities: dict[str, Any] | list[dict[str, Any]] | None = None,
     ) -> AnalysisJob:
         job = AnalysisJob(
             job_id=f"sa-{uuid.uuid4().hex[:12]}",
@@ -158,13 +177,17 @@ class ScientificAnalysisJobService:
                 ]
                 for key in oldest:
                     self._jobs.pop(key, None)
+        ready = threading.Event()
+        try:
+            self._queue.put_nowait(
+                (job.job_id, task_spec, available_quantities or [], ready)
+            )
+        except queue.Full as exc:
+            with self._lock:
+                self._jobs.pop(job.job_id, None)
+            raise AnalysisQueueFullError("科学分析队列已满，请稍后重试") from exc
         self._persist(job)
-        worker = threading.Thread(
-            target=self._run,
-            args=(job.job_id, task_spec, available_quantities or {}),
-            daemon=True,
-        )
-        worker.start()
+        ready.set()
         return job
 
     def get_job(self, job_id: str) -> AnalysisJob | None:
@@ -175,11 +198,20 @@ class ScientificAnalysisJobService:
         return self._restore_job(job_id)
 
     # ------------------------------------------------------------ internals
+    def _worker_loop(self) -> None:
+        while True:
+            job_id, task_spec, available, ready = self._queue.get()
+            try:
+                ready.wait()
+                self._run(job_id, task_spec, available)
+            finally:
+                self._queue.task_done()
+
     def _run(
         self,
         job_id: str,
         task_spec: dict[str, Any],
-        available_quantities: dict[str, Any],
+        available_quantities: dict[str, Any] | list[dict[str, Any]],
     ) -> None:
         job = self.get_job(job_id)
         if job is None:

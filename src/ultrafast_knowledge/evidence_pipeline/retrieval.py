@@ -1,154 +1,152 @@
-"""Two-level retrieval: papers first, semantic evidence blocks second."""
+"""Dual-index retrieval with global-block recall fallback and in-paper windows."""
 
 from __future__ import annotations
 
 import hashlib
-import math
-from collections import Counter
+from collections import defaultdict
 
-from ultrafast_knowledge.evidence_pipeline.query import RequirementQueryCompiler, tokenize
+from ultrafast_knowledge.evidence_pipeline.hybrid_index import HybridScientificIndex
+from ultrafast_knowledge.evidence_pipeline.query import RequirementQueryCompiler
 from ultrafast_knowledge.evidence_pipeline.schemas import (
     EvidenceWindow,
+    HybridIndexHit,
     PaperCandidate,
-    RequirementQuery,
-    SemanticBlock,
-    StructuredScientificPaper,
 )
+from ultrafast_knowledge.evidence_pipeline.store import ScientificIndexStore
 from ultrafast_requirements.schemas import Requirement
 
 
 class TwoLevelEvidenceRetriever:
-    def __init__(self, query_compiler: RequirementQueryCompiler | None = None) -> None:
+    """Paper Index + Global Block Index → candidates → in-paper Block Index."""
+
+    def __init__(
+        self,
+        store: ScientificIndexStore,
+        *,
+        index: HybridScientificIndex | None = None,
+        query_compiler: RequirementQueryCompiler | None = None,
+    ) -> None:
+        self.store = store
+        self.index = index or HybridScientificIndex(store)
         self.query_compiler = query_compiler or RequirementQueryCompiler()
 
     def retrieve(
         self,
         requirement: Requirement,
-        papers: list[StructuredScientificPaper],
         *,
         paper_top_k: int = 5,
-        window_top_k: int = 8,
+        global_block_top_k: int = 40,
+        windows_per_paper: int = 8,
         context_blocks: int = 1,
-    ) -> tuple[list[PaperCandidate], list[EvidenceWindow]]:
+    ) -> tuple[list[PaperCandidate], dict[str, list[EvidenceWindow]]]:
         query = self.query_compiler.compile(requirement)
-        candidates = self.retrieve_papers(query, papers, top_k=paper_top_k)
-        selected_ids = {item.paper_id for item in candidates}
-        windows: list[EvidenceWindow] = []
-        for paper in papers:
-            if paper.paper_id not in selected_ids:
-                continue
-            windows.extend(
-                self.retrieve_in_paper(
-                    requirement,
-                    query,
-                    paper,
-                    top_k=window_top_k,
-                    context_blocks=context_blocks,
-                )
+        paper_hits = self.index.query(
+            "paper", query.query_text, top_k=max(paper_top_k * 3, paper_top_k)
+        )
+        global_blocks = self.index.query(
+            "block", query.query_text, top_k=max(global_block_top_k, paper_top_k)
+        )
+        candidates = self._candidate_union(paper_hits, global_blocks, paper_top_k)
+        windows: dict[str, list[EvidenceWindow]] = {}
+        for candidate in candidates:
+            hits = self.index.query(
+                "block",
+                query.query_text,
+                top_k=windows_per_paper,
+                document_version_ids={candidate.document_version_id},
             )
-        windows.sort(key=lambda item: item.score, reverse=True)
-        return candidates, windows[:window_top_k]
+            windows[self._candidate_key(candidate)] = self._windows_for_paper(
+                requirement,
+                candidate.paper_id,
+                candidate.document_version_id,
+                hits,
+                context_blocks=context_blocks,
+            )
+        return candidates, windows
 
-    def retrieve_papers(
-        self,
-        query: RequirementQuery,
-        papers: list[StructuredScientificPaper],
-        *,
-        top_k: int = 5,
+    @staticmethod
+    def _candidate_union(
+        paper_hits: list[HybridIndexHit],
+        block_hits: list[HybridIndexHit],
+        top_k: int,
     ) -> list[PaperCandidate]:
-        ranked: list[PaperCandidate] = []
-        for paper in papers:
-            metadata_text = " ".join(
-                str(value) for value in paper.metadata.values() if value is not None
+        scores: defaultdict[tuple[str, str], float] = defaultdict(float)
+        paper_scores: defaultdict[tuple[str, str], float] = defaultdict(float)
+        block_scores: defaultdict[tuple[str, str], float] = defaultdict(float)
+        routes: defaultdict[tuple[str, str], list[str]] = defaultdict(list)
+        for rank, hit in enumerate(paper_hits, 1):
+            key = (hit.paper_id, hit.document_version_id)
+            scores[key] += 1.0 / (60 + rank)
+            paper_scores[key] = max(paper_scores[key], hit.rerank_score)
+            routes[key].append("paper_index")
+        seen_block_papers: set[tuple[str, str]] = set()
+        for rank, hit in enumerate(block_hits, 1):
+            key = (hit.paper_id, hit.document_version_id)
+            if key not in seen_block_papers:
+                scores[key] += 1.0 / (60 + rank)
+                seen_block_papers.add(key)
+            block_scores[key] = max(block_scores[key], hit.rerank_score)
+            routes[key].append("global_block_index")
+        output = [
+            PaperCandidate(
+                paper_id=key[0],
+                document_version_id=key[1],
+                score=score,
+                paper_index_score=paper_scores[key],
+                global_block_score=block_scores[key],
+                retrieval_routes=list(dict.fromkeys(routes[key])),
             )
-            tokens = tokenize(f"{paper.title} {paper.abstract} {metadata_text}")
-            score, matched = self._score_tokens(query, tokens, metadata=True)
-            # A one-paper explicit corpus is still a valid candidate even if its
-            # metadata is incomplete; stage two must decide whether evidence exists.
-            if score > 0 or len(papers) == 1:
-                ranked.append(PaperCandidate(paper_id=paper.paper_id, score=score, matched_terms=matched))
-        return sorted(ranked, key=lambda item: item.score, reverse=True)[:top_k]
+            for key, score in scores.items()
+        ]
+        return sorted(output, key=lambda item: item.score, reverse=True)[:top_k]
 
-    def retrieve_in_paper(
+    def _windows_for_paper(
         self,
         requirement: Requirement,
-        query: RequirementQuery,
-        paper: StructuredScientificPaper,
+        paper_id: str,
+        document_version_id: str,
+        hits: list[HybridIndexHit],
         *,
-        top_k: int = 8,
-        context_blocks: int = 1,
+        context_blocks: int,
     ) -> list[EvidenceWindow]:
-        del requirement
-        scored: list[tuple[float, list[str], int, SemanticBlock]] = []
-        document_frequency: Counter[str] = Counter()
-        block_tokens: list[list[str]] = []
-        for block in paper.blocks:
-            tokens = tokenize(block.text)
-            block_tokens.append(tokens)
-            document_frequency.update(set(tokens))
-        count = max(1, len(paper.blocks))
-        for index, (block, tokens) in enumerate(zip(paper.blocks, block_tokens, strict=True)):
-            score, matched = self._score_tokens(query, tokens, metadata=False)
-            for term in matched:
-                score += math.log((count + 1) / (document_frequency[term] + 1)) * 0.2
-            if block.section_type == "references":
-                score *= 0.15
-            if score > 0:
-                scored.append((score, matched, index, block))
-        scored.sort(key=lambda item: item[0], reverse=True)
+        blocks = self.store.blocks(document_version_id=document_version_id)
+        by_id = {item.block_id: item for item in blocks}
+        order = {item.block_id: index for index, item in enumerate(blocks)}
         windows: list[EvidenceWindow] = []
-        used_centers: set[str] = set()
-        for score, matched, index, block in scored:
-            if block.block_id in used_centers:
+        for hit in hits:
+            if not hit.block_id or hit.block_id not in by_id:
                 continue
-            start = max(0, index - max(0, context_blocks))
-            end = min(len(paper.blocks), index + max(0, context_blocks) + 1)
-            members = list(paper.blocks[start:end])
-            related_ids = set(block.related_block_ids)
-            for candidate in paper.blocks:
-                if candidate.block_id in related_ids and candidate not in members:
-                    members.append(candidate)
-            reading_order = {item.block_id: position for position, item in enumerate(paper.blocks)}
-            members.sort(key=lambda item: reading_order[item.block_id])
+            center = by_id[hit.block_id]
+            index = order[center.block_id]
+            members = list(
+                blocks[
+                    max(0, index - context_blocks) : min(
+                        len(blocks), index + context_blocks + 1
+                    )
+                ]
+            )
+            for related_id in center.related_block_ids:
+                related = by_id.get(related_id)
+                if related is not None and related not in members:
+                    members.append(related)
+            members.sort(key=lambda item: order[item.block_id])
+            score = hit.rerank_score * (0.15 if center.section_type == "references" else 1.0)
             digest = hashlib.sha256(
-                f"{query.requirement_id}\n{paper.paper_id}\n{block.block_id}".encode()
+                f"{requirement.requirement_id}\n{paper_id}\n{center.block_id}".encode()
             ).hexdigest()[:16]
             windows.append(
                 EvidenceWindow(
                     window_id=f"window-{digest}",
-                    requirement_id=query.requirement_id,
-                    paper_id=paper.paper_id,
-                    center_block_id=block.block_id,
+                    requirement_id=requirement.requirement_id,
+                    paper_id=paper_id,
+                    center_block_id=center.block_id,
                     blocks=members,
-                    score=round(score, 6),
-                    matched_terms=matched,
+                    score=score,
+                    matched_terms=[],
                 )
             )
-            used_centers.add(block.block_id)
-            if len(windows) >= top_k:
-                break
-        return windows
+        return sorted(windows, key=lambda item: item.score, reverse=True)
 
     @staticmethod
-    def _score_tokens(
-        query: RequirementQuery,
-        tokens: list[str],
-        *,
-        metadata: bool,
-    ) -> tuple[float, list[str]]:
-        counts = Counter(tokens)
-        matched: list[str] = []
-        score = 0.0
-        for term in query.core_terms:
-            if counts[term]:
-                matched.append(term)
-                score += (2.2 if metadata else 3.0) * min(2, counts[term])
-        for term in query.condition_terms:
-            if counts[term]:
-                matched.append(term)
-                score += 1.8 * min(2, counts[term])
-        for term in query.unit_terms:
-            if counts[term]:
-                matched.append(term)
-                score += 0.7
-        return score, list(dict.fromkeys(matched))
+    def _candidate_key(candidate: PaperCandidate) -> str:
+        return f"{candidate.paper_id}::{candidate.document_version_id}"

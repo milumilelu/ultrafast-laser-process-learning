@@ -32,6 +32,7 @@ class SemanticBlock(BaseModel):
     section_title: str | None = None
     table_id: str | None = None
     text: str
+    retrieval_text: str = ""
     bbox: tuple[float, float, float, float] | None = None
     previous_block_id: str | None = None
     next_block_id: str | None = None
@@ -44,6 +45,7 @@ class StructuredScientificPaper(BaseModel):
     document_version_id: str
     title: str = ""
     abstract: str = ""
+    retrieval_text: str = ""
     metadata: dict[str, Any] = Field(default_factory=dict)
     blocks: list[SemanticBlock] = Field(default_factory=list)
     pdf_path: str | None = None
@@ -62,8 +64,24 @@ class RequirementQuery(BaseModel):
 
 class PaperCandidate(BaseModel):
     paper_id: str
+    document_version_id: str
     score: float
     matched_terms: list[str] = Field(default_factory=list)
+    paper_index_score: float = 0.0
+    global_block_score: float = 0.0
+    retrieval_routes: list[str] = Field(default_factory=list)
+
+
+class HybridIndexHit(BaseModel):
+    item_id: str
+    paper_id: str
+    document_version_id: str
+    score: float
+    bm25_score: float = 0.0
+    dense_score: float = 0.0
+    rerank_score: float = 0.0
+    rank_routes: list[str] = Field(default_factory=list)
+    block_id: str | None = None
 
 
 class EvidenceWindow(BaseModel):
@@ -91,6 +109,7 @@ class ExtractionStatus(StrEnum):
     FOUND = "FOUND"
     NOT_FOUND = "NOT_FOUND"
     CONFLICT = "CONFLICT"
+    INSUFFICIENT = "INSUFFICIENT"
 
 
 class RequirementEvidence(BaseModel):
@@ -109,7 +128,8 @@ class RequirementEvidence(BaseModel):
     evidence_quote: str | None = None
     validation_errors: list[str] = Field(default_factory=list)
     validation_state: str = "pending"
-    prompt_version: str = "requirement-extraction-v1"
+    governance_status: str = "unreviewed"
+    prompt_version: str = "requirement-extraction-v2"
 
     @property
     def valid(self) -> bool:
@@ -121,11 +141,24 @@ class RequirementEvidence(BaseModel):
 EvidenceIR = RequirementEvidence
 
 
+class PaperEvidence(BaseModel):
+    """One requirement evaluated against exactly one paper version."""
+
+    paper_id: str
+    document_version_id: str
+    evidence: RequirementEvidence
+    route: str = "literature_extraction"
+    knowledge_id: str | None = None
+
+
 class RequirementEvidenceRun(BaseModel):
     run_id: str
     requirement_set_id: str
     results: list[RequirementEvidence] = Field(default_factory=list)
+    paper_evidence: dict[str, list[PaperEvidence]] = Field(default_factory=dict)
     paper_candidates: dict[str, list[PaperCandidate]] = Field(default_factory=dict)
     evidence_windows: dict[str, list[EvidenceWindow]] = Field(default_factory=dict)
     warnings: list[str] = Field(default_factory=list)
-    version: str = "requirement-evidence-run-v1"
+    governance_warnings: list[str] = Field(default_factory=list)
+    fallback_requirements: list[dict[str, Any]] = Field(default_factory=list)
+    version: str = "requirement-evidence-run-v2"

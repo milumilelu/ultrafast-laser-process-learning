@@ -2,7 +2,12 @@
 
 from __future__ import annotations
 
-from ultrafast_requirements.schemas import DependencySpec, ModelCapability, RequirementSource
+from ultrafast_requirements.schemas import (
+    DependencySpec,
+    ModelCapability,
+    RequirementSource,
+    VariableSemantic,
+)
 
 
 class ScientificDependencyGraph:
@@ -54,6 +59,8 @@ def _dep(
     *,
     policy: str = "require_observed_or_governed_value",
     query_terms: tuple[str, ...] = (),
+    semantic: VariableSemantic = VariableSemantic.RESOURCE_INPUT,
+    optimizable: bool = False,
 ) -> DependencySpec:
     return DependencySpec(
         quantity=quantity,
@@ -62,6 +69,8 @@ def _dep(
         expected_unit=unit,
         resolution_policy=policy,
         query_terms=list(query_terms),
+        variable_semantic=semantic,
+        optimizable=optimizable,
     )
 
 
@@ -73,9 +82,11 @@ def default_dependency_graph() -> ScientificDependencyGraph:
     """
 
     equipment = (RequirementSource.EQUIPMENT,)
-    literature_or_calibration = (
+    knowledge_literature_calibration = (
+        RequirementSource.STRUCTURED_KNOWLEDGE,
         RequirementSource.LITERATURE,
         RequirementSource.CALIBRATION,
+        RequirementSource.UNRESOLVED,
     )
     capabilities = [
         ModelCapability(
@@ -84,11 +95,14 @@ def default_dependency_graph() -> ScientificDependencyGraph:
             model_family="ablation_process_model",
             description="Incubation-aware logarithmic ultrafast ablation depth model.",
             inputs=[
-                _dep("ablation_threshold_J_m2", "material_threshold", literature_or_calibration, "J/m2", query_terms=("ablation threshold", "threshold fluence")),
-                _dep("incubation_coefficient", "multi_pulse_material_response", literature_or_calibration, "", query_terms=("incubation coefficient", "incubation factor")),
-                _dep("optical_penetration_depth_m", "energy_deposition_length", literature_or_calibration, "m", query_terms=("optical penetration depth", "effective penetration depth")),
-                _dep("peak_fluence_J_m2", "driving_fluence", (RequirementSource.DERIVED,), "J/m2"),
-                _dep("pulse_overlap", "multi_pulse_exposure", (RequirementSource.DERIVED,), ""),
+                _dep("ablation_threshold_J_m2", "material_threshold", knowledge_literature_calibration, "J/m2", query_terms=("ablation threshold", "threshold fluence"), semantic=VariableSemantic.MODEL_PARAMETER),
+                _dep("incubation_coefficient", "multi_pulse_material_response", knowledge_literature_calibration, "", query_terms=("incubation coefficient", "incubation factor"), semantic=VariableSemantic.MODEL_PARAMETER),
+                _dep("optical_penetration_depth_m", "energy_deposition_length", knowledge_literature_calibration, "m", query_terms=("optical penetration depth", "effective penetration depth"), semantic=VariableSemantic.MODEL_PARAMETER),
+                _dep("peak_fluence_J_m2", "driving_fluence", (RequirementSource.DERIVED,), "J/m2", semantic=VariableSemantic.DERIVED_QUANTITY),
+                _dep("pulse_overlap", "multi_pulse_exposure", (RequirementSource.DERIVED,), "", semantic=VariableSemantic.DERIVED_QUANTITY),
+                _dep("pulse_width_s", "pulse_duration", equipment, "s", policy="decision_bounds_or_equipment_value_required", optimizable=True),
+                _dep("hatch_spacing_m", "cross_scan_spacing", equipment, "m", policy="decision_bounds_or_equipment_value_required", optimizable=True),
+                _dep("passes", "pass_count", equipment, "", policy="decision_bounds_or_equipment_value_required", optimizable=True),
             ],
             assumptions=["model applicability must be checked for material and pulse regime"],
         ),
@@ -97,7 +111,7 @@ def default_dependency_graph() -> ScientificDependencyGraph:
             predicts=["peak_fluence_J_m2"],
             model_family="deterministic_formula",
             inputs=[
-                _dep("pulse_energy_J", "pulse_energy", (RequirementSource.DERIVED,), "J"),
+                _dep("pulse_energy_J", "pulse_energy", (RequirementSource.DERIVED,), "J", semantic=VariableSemantic.DERIVED_QUANTITY),
                 _dep("beam_radius_m", "gaussian_1e2_radius", equipment, "m", policy="equipment_measurement_required"),
             ],
             assumptions=["gaussian spatial profile", "beam radius is the 1/e^2 intensity radius"],
@@ -107,8 +121,8 @@ def default_dependency_graph() -> ScientificDependencyGraph:
             predicts=["pulse_energy_J"],
             model_family="deterministic_formula",
             inputs=[
-                _dep("laser_power_W", "average_power", equipment, "W", policy="equipment_snapshot_required"),
-                _dep("frequency_Hz", "pulse_repetition_rate", equipment, "Hz", policy="equipment_snapshot_required"),
+                _dep("laser_power_W", "average_power", equipment, "W", policy="decision_bounds_or_equipment_value_required", optimizable=True),
+                _dep("frequency_Hz", "pulse_repetition_rate", equipment, "Hz", policy="decision_bounds_or_equipment_value_required", optimizable=True),
             ],
         ),
         ModelCapability(
@@ -116,8 +130,8 @@ def default_dependency_graph() -> ScientificDependencyGraph:
             predicts=["pulse_overlap"],
             model_family="deterministic_formula",
             inputs=[
-                _dep("pulse_spacing_m", "along_scan_spacing", (RequirementSource.DERIVED,), "m"),
-                _dep("spot_diameter_m", "beam_spot_diameter", (RequirementSource.DERIVED,), "m"),
+                _dep("pulse_spacing_m", "along_scan_spacing", (RequirementSource.DERIVED,), "m", semantic=VariableSemantic.DERIVED_QUANTITY),
+                _dep("spot_diameter_m", "beam_spot_diameter", (RequirementSource.DERIVED,), "m", semantic=VariableSemantic.DERIVED_QUANTITY),
             ],
         ),
         ModelCapability(
@@ -125,8 +139,8 @@ def default_dependency_graph() -> ScientificDependencyGraph:
             predicts=["pulse_spacing_m"],
             model_family="deterministic_formula",
             inputs=[
-                _dep("scan_speed_m_s", "scan_speed", equipment, "m/s", policy="task_or_equipment_setpoint_required"),
-                _dep("frequency_Hz", "pulse_repetition_rate", equipment, "Hz", policy="equipment_snapshot_required"),
+                _dep("scan_speed_m_s", "scan_speed", equipment, "m/s", policy="decision_bounds_or_equipment_value_required", optimizable=True),
+                _dep("frequency_Hz", "pulse_repetition_rate", equipment, "Hz", policy="decision_bounds_or_equipment_value_required", optimizable=True),
             ],
         ),
         ModelCapability(

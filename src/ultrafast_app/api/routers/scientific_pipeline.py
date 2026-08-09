@@ -14,19 +14,19 @@ router = APIRouter(prefix="/api/v1", tags=["scientific-pipeline"])
 
 class CompileRequirementsRequest(BaseModel):
     task_spec: dict[str, Any]
-    available_quantities: dict[str, Any] = Field(default_factory=dict)
+    available_quantities: dict[str, Any] | list[dict[str, Any]] = Field(default_factory=list)
 
 
 class AnalyzeRequest(BaseModel):
     task_spec: dict[str, Any]
-    available_quantities: dict[str, Any] = Field(default_factory=dict)
+    available_quantities: dict[str, Any] | list[dict[str, Any]] = Field(default_factory=list)
 
 
 class AnalyzeJobRequest(BaseModel):
     """Dependency compilation → paper retrieval → evidence extraction."""
 
     task_spec: dict[str, Any]
-    available_quantities: dict[str, Any] = Field(default_factory=dict)
+    available_quantities: dict[str, Any] | list[dict[str, Any]] = Field(default_factory=list)
 
 
 class IdentificationV2Request(BaseModel):
@@ -49,7 +49,7 @@ def compile_requirements(request: CompileRequirementsRequest) -> dict[str, Any]:
         result = RequirementCompiler().compile(
             request.task_spec, request.available_quantities
         )
-    except ValueError as exc:
+    except (TypeError, ValueError) as exc:
         raise HTTPException(
             400, detail={"code": "requirement_compile_failed", "message": str(exc)}
         ) from exc
@@ -62,6 +62,7 @@ def analyze_evidence(request: AnalyzeRequest) -> dict[str, Any]:
         LLMNotConfiguredError,
         ScientificAnalysisService,
     )
+    from ultrafast_knowledge.evidence_pipeline import ScientificIndexNotReady
 
     try:
         service = ScientificAnalysisService()
@@ -76,7 +77,16 @@ def analyze_evidence(request: AnalyzeRequest) -> dict[str, Any]:
         ) from exc
     try:
         result = service.analyze(request.task_spec, request.available_quantities)
-    except ValueError as exc:
+    except ScientificIndexNotReady as exc:
+        raise HTTPException(
+            409,
+            detail={
+                "code": "scientific_index_not_ready",
+                "message": str(exc),
+                "hint": "先运行 scripts/build_scientific_indexes.py 离线导入文献并建索引",
+            },
+        ) from exc
+    except (TypeError, ValueError) as exc:
         raise HTTPException(
             400, detail={"code": "analysis_failed", "message": str(exc)}
         ) from exc
@@ -86,13 +96,19 @@ def analyze_evidence(request: AnalyzeRequest) -> dict[str, Any]:
 @router.post("/scientific-analysis/jobs")
 def create_analysis_job(request: AnalyzeJobRequest) -> dict[str, Any]:
     """异步科学分析 Job：立即返回 run_id；进度经 GET /jobs/{id} 轮询。"""
-    from ultrafast_app.services.scientific_jobs import get_job_service
+    from ultrafast_app.services.scientific_jobs import (
+        AnalysisQueueFullError,
+        get_job_service,
+    )
 
     service = get_job_service()
-    job = service.create_job(
-        request.task_spec,
-        request.available_quantities,
-    )
+    try:
+        job = service.create_job(request.task_spec, request.available_quantities)
+    except AnalysisQueueFullError as exc:
+        raise HTTPException(
+            429,
+            detail={"code": "scientific_analysis_queue_full", "message": str(exc)},
+        ) from exc
     return {"analysis_run_id": job.job_id, "status": job.status, "stage": job.stage}
 
 

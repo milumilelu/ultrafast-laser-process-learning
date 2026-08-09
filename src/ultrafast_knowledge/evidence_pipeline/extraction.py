@@ -16,7 +16,7 @@ from ultrafast_knowledge.evidence_pipeline.schemas import (
 from ultrafast_requirements.schemas import Requirement
 from ultrafast_shared.units import normalize_unit
 
-PROMPT_VERSION = "requirement-extraction-v1"
+PROMPT_VERSION = "requirement-extraction-v2"
 
 REQUIREMENT_EXTRACTION_PROMPT = """你是严谨的科学证据抽取器。本次只回答一个 Requirement。
 不得抽取无关参数，不得用常识补全，不得换算原文单位，不得把引用文献列表当作实验结果。
@@ -39,7 +39,10 @@ conditions 只填写原文明确支持的条件。confidence 是 0 到 1。
   "semantic_role": null,
   "source_block_refs": [],
   "confidence": 0.0,
-  "conflict_values": [],
+  "conflict_values": [{
+    "value": null, "lower": null, "upper": null, "unit": null,
+    "conditions": {}, "source_block_refs": []
+  }],
   "evidence_quote": null
 }
 """
@@ -84,12 +87,24 @@ class RequirementEvidenceValidator:
                 errors.append("found_without_value_or_range")
             if not result.evidence_quote:
                 errors.append("found_without_evidence_quote")
-        if result.status == ExtractionStatus.CONFLICT and len(result.conflict_values) < 2:
-            errors.append("conflict_without_two_values")
+            if requirement.expected_unit and not result.unit:
+                errors.append("found_without_unit")
+        if result.status == ExtractionStatus.CONFLICT:
+            if len(result.conflict_values) < 2:
+                errors.append("conflict_without_two_values")
+            errors.extend(
+                self._validate_conflict_values(
+                    requirement,
+                    result.conflict_values,
+                    available_blocks,
+                )
+            )
         if result.status == ExtractionStatus.NOT_FOUND and (
             result.value is not None or result.lower is not None or result.upper is not None
         ):
             errors.append("not_found_contains_value")
+        if result.status == ExtractionStatus.INSUFFICIENT:
+            errors.append("insufficient_is_reserved_for_cross_paper_reduce")
 
         cited_text = "\n".join(
             available_blocks[ref].text
@@ -119,6 +134,41 @@ class RequirementEvidenceValidator:
                 "validation_state": "rejected" if unique_errors else "validated",
             }
         )
+
+    def _validate_conflict_values(
+        self,
+        requirement: Requirement,
+        conflicts: list[dict[str, Any]],
+        available_blocks: dict[str, Any],
+    ) -> list[str]:
+        errors: list[str] = []
+        for index, conflict in enumerate(conflicts):
+            refs = conflict.get("source_block_refs")
+            if not isinstance(refs, list) or not refs:
+                errors.append(f"conflict_{index}_without_source_block_refs")
+                continue
+            unknown = [str(ref) for ref in refs if str(ref) not in available_blocks]
+            if unknown:
+                errors.append(f"conflict_{index}_unknown_refs:{','.join(unknown)}")
+                continue
+            cited = "\n".join(available_blocks[str(ref)].text for ref in refs)
+            values = [conflict.get(name) for name in ("value", "lower", "upper")]
+            if all(value is None for value in values):
+                errors.append(f"conflict_{index}_without_value_or_range")
+            for value in values:
+                if value is not None and not self._number_present(float(value), cited):
+                    errors.append(f"conflict_{index}_numeric_value_not_cited:{value}")
+            unit = conflict.get("unit")
+            if requirement.expected_unit and not unit:
+                errors.append(f"conflict_{index}_without_unit")
+            elif unit:
+                actual, _ = normalize_unit(self._canonical_unit(str(unit)))
+                expected, _ = normalize_unit(self._canonical_unit(requirement.expected_unit))
+                if actual is None or (expected is not None and actual != expected):
+                    errors.append(f"conflict_{index}_unit_mismatch:{unit}")
+                if not self._unit_present(str(unit), cited):
+                    errors.append(f"conflict_{index}_unit_not_cited:{unit}")
+        return errors
 
     @staticmethod
     def _numbers(text: str) -> list[float]:
