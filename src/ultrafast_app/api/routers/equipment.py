@@ -24,7 +24,11 @@ def equipment_active() -> dict:
 
     init_database()
     profile = get_active_equipment_profile()
-    return {"active": True, **profile} if profile else {"active": False, "message": "no active equipment profile"}
+    return (
+        {"active": True, **profile}
+        if profile
+        else {"active": False, "message": "no active equipment profile"}
+    )
 
 
 @router.get("/profiles")
@@ -62,12 +66,8 @@ def equipment_profile_revisions(equipment_profile_id: str) -> dict:
         raise HTTPException(status_code=404, detail=str(exc)) from exc
 
 
-@router.get(
-    "/profiles/{equipment_profile_id}/revisions/{revision_id}"
-)
-def equipment_profile_revision_detail(
-    equipment_profile_id: str, revision_id: str
-) -> dict:
+@router.get("/profiles/{equipment_profile_id}/revisions/{revision_id}")
+def equipment_profile_revision_detail(equipment_profile_id: str, revision_id: str) -> dict:
     from ultrafast_memory.db.init_db import init_database
     from ultrafast_memory.equipment.service import get_equipment_profile_revision
 
@@ -110,7 +110,11 @@ def equipment_active_machine_bounds() -> dict:
     init_database()
     result = build_machine_bounds()
     if not result.get("active"):
-        return {"active": False, "machine_bounds": {}, "missing_equipment_fields": result.get("missing_equipment_fields", [])}
+        return {
+            "active": False,
+            "machine_bounds": {},
+            "missing_equipment_fields": result.get("missing_equipment_fields", []),
+        }
     return result
 
 
@@ -130,18 +134,25 @@ def equipment_profile_machine_bounds(equipment_profile_id: str) -> dict:
 @router.get("/schema")
 def equipment_schema() -> dict:
     return {
-        "schema_version": 3,
+        "schema_version": 4,
         "required_setup_fields": [
-            "wavelength_nm",
             "pulse_width_fixed_fs_or_min_max",
-            "workpiece_incident_power_min_W",
-            "workpiece_incident_power_max_W",
+            "rated_max_power_W",
             "frequency_min_kHz",
             "frequency_max_kHz",
             "scan_speed_min_mm_s",
             "scan_speed_max_mm_s",
-            "spot_diameter_um",
         ],
+        "optional_applicability_fields": [
+            "wavelength_nm",
+            "spot_diameter_um",
+            "measured_max_power_W",
+            "power_transmission_ratio",
+        ],
+        "effective_max_power_rule": (
+            "measured_max_power_W else rated_max_power_W * "
+            "power_transmission_ratio else rated_max_power_W"
+        ),
         "verification_statuses": [
             "MEASURED",
             "MANUFACTURER_SPEC",

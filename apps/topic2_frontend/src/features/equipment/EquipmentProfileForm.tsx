@@ -11,20 +11,20 @@ import { Button } from '../../components/ui/Button'
 import { ErrorBanner } from '../../components/ui/Card'
 
 const REQUIRED_PHYSICAL_FIELDS = [
-  { key: 'wavelength_nm', section: 'laser_source', label: '激光波长', unit: 'nm' },
   { key: 'pulse_width_min_fs', section: 'laser_source', label: '可调脉宽下限', unit: 'fs' },
   { key: 'pulse_width_max_fs', section: 'laser_source', label: '可调脉宽上限', unit: 'fs' },
-  { key: 'workpiece_incident_power_min_W', section: 'laser_source', label: '材料表面入射平均功率下限', unit: 'W' },
-  { key: 'workpiece_incident_power_max_W', section: 'laser_source', label: '材料表面入射平均功率上限', unit: 'W' },
+  { key: 'rated_max_power_W', section: 'laser_source', label: '激光器额定最大平均功率', unit: 'W' },
   { key: 'frequency_min_kHz', section: 'laser_source', label: '重复频率下限', unit: 'kHz' },
   { key: 'frequency_max_kHz', section: 'laser_source', label: '重复频率上限', unit: 'kHz' },
-  { key: 'spot_diameter_um', section: 'optical_setup', label: '焦点光斑直径', unit: 'μm' },
   { key: 'scan_speed_min_mm_s', section: 'motion_system', label: '扫描速度下限', unit: 'mm/s' },
   { key: 'scan_speed_max_mm_s', section: 'motion_system', label: '扫描速度上限', unit: 'mm/s' },
 ] as const
 
 const OPTIONAL_PHYSICAL_FIELDS = [
-  { key: 'rated_max_power_W', section: 'laser_source', label: '激光器额定最大平均功率（铭牌）', unit: 'W' },
+  { key: 'measured_max_power_W', section: 'laser_source', label: '材料表面实测最大平均功率', unit: 'W' },
+  { key: 'power_transmission_ratio', section: 'laser_source', label: '光路功率传输比', unit: '0–1' },
+  { key: 'wavelength_nm', section: 'laser_source', label: '激光波长', unit: 'nm' },
+  { key: 'spot_diameter_um', section: 'optical_setup', label: '焦点光斑直径', unit: 'μm' },
 ] as const
 
 const PHYSICAL_FIELDS = [...REQUIRED_PHYSICAL_FIELDS, ...OPTIONAL_PHYSICAL_FIELDS] as const
@@ -59,7 +59,12 @@ function initialVerification(
   return Object.fromEntries(
     PHYSICAL_FIELDS.map((field) => [
       field.key,
-      profile?.field_verification?.[field.key] ?? '',
+      profile?.field_verification?.[field.key] ??
+        (field.key === 'rated_max_power_W'
+          ? 'MANUFACTURER_SPEC'
+          : field.key === 'measured_max_power_W'
+            ? 'MEASURED'
+            : ''),
     ]),
   ) as Record<PhysicalFieldKey, VerificationInput>
 }
@@ -122,7 +127,7 @@ export function EquipmentProfileForm({
   return (
     <div className="equipment-profile-form">
       <p className="card-hint">
-        设备档案只记录能力边界，不记录本次任务设定值。材料表面入射功率必须是在当前光路和聚焦条件下的实测范围；额定功率仅作可选铭牌信息。
+        设备档案只记录能力边界，不记录本次任务设定值。有效最大功率按“实测值 → 额定值×传输比 → 额定值”的确定性顺序计算；波长和光斑缺失不会阻断分析，但会使对应 E2P 适用性维度为 UNKNOWN。
       </p>
       <ErrorBanner message={validationError ?? (mutation.error as Error | null)?.message ?? null} />
       {saved && (
@@ -173,6 +178,7 @@ export function EquipmentProfileForm({
                 aria-label={field.label}
                 type="number"
                 min={0}
+                max={field.key === 'power_transmission_ratio' ? 1 : undefined}
                 step="any"
                 value={values[field.key]}
                 onChange={(event) => setValues((previous) => ({ ...previous, [field.key]: event.target.value }))}
@@ -196,6 +202,10 @@ export function EquipmentProfileForm({
             </label>
           </div>
         ))}
+      </div>
+
+      <div className="equipment-derived-power">
+        有效最大功率：<strong>{effectivePower(values)}</strong>
       </div>
 
       <label className="field equipment-notes">
@@ -247,19 +257,20 @@ function buildPayload(
   if (numeric.pulse_width_min_fs > numeric.pulse_width_max_fs) {
     throw new Error('可调脉宽下限不能高于上限')
   }
-  if (numeric.workpiece_incident_power_min_W > numeric.workpiece_incident_power_max_W) {
-    throw new Error('材料表面入射平均功率下限不能高于上限')
+  if (numeric.rated_max_power_W <= 0) {
+    throw new Error('激光器额定最大平均功率必须大于 0')
   }
   if (
-    Number.isFinite(numeric.rated_max_power_W)
-    && numeric.workpiece_incident_power_max_W > numeric.rated_max_power_W
+    Number.isFinite(numeric.power_transmission_ratio)
+    && (numeric.power_transmission_ratio <= 0 || numeric.power_transmission_ratio > 1)
   ) {
-    throw new Error('材料表面入射平均功率上限不能高于激光器额定最大平均功率')
+    throw new Error('光路功率传输比必须在 0 到 1 之间')
   }
-  for (const key of ['workpiece_incident_power_min_W', 'workpiece_incident_power_max_W'] as const) {
-    if (verification[key] !== 'MEASURED') {
-      throw new Error(`${PHYSICAL_FIELDS.find((field) => field.key === key)?.label}必须选择“实测 / 机器读数”`)
-    }
+  if (
+    Number.isFinite(numeric.measured_max_power_W)
+    && verification.measured_max_power_W !== 'MEASURED'
+  ) {
+    throw new Error('材料表面实测最大平均功率必须选择“实测 / 机器读数”')
   }
   if (numeric.frequency_min_kHz > numeric.frequency_max_kHz) {
     throw new Error('重复频率下限不能高于上限')
@@ -276,19 +287,23 @@ function buildPayload(
     created_by: 'physics-to-planning-ui',
     notes: identity.notes.trim() || undefined,
     laser_source: {
-      wavelength_nm: numeric.wavelength_nm,
       pulse_width_min_fs: numeric.pulse_width_min_fs,
       pulse_width_max_fs: numeric.pulse_width_max_fs,
-      workpiece_incident_power_min_W: numeric.workpiece_incident_power_min_W,
-      workpiece_incident_power_max_W: numeric.workpiece_incident_power_max_W,
-      ...(Number.isFinite(numeric.rated_max_power_W)
-        ? { rated_max_power_W: numeric.rated_max_power_W }
+      rated_max_power_W: numeric.rated_max_power_W,
+      ...(Number.isFinite(numeric.measured_max_power_W)
+        ? { measured_max_power_W: numeric.measured_max_power_W }
         : {}),
+      ...(Number.isFinite(numeric.power_transmission_ratio)
+        ? { power_transmission_ratio: numeric.power_transmission_ratio }
+        : {}),
+      ...(Number.isFinite(numeric.wavelength_nm) ? { wavelength_nm: numeric.wavelength_nm } : {}),
       frequency_min_kHz: numeric.frequency_min_kHz,
       frequency_max_kHz: numeric.frequency_max_kHz,
     },
     optical_setup: {
-      spot_diameter_um: numeric.spot_diameter_um,
+      ...(Number.isFinite(numeric.spot_diameter_um)
+        ? { spot_diameter_um: numeric.spot_diameter_um }
+        : {}),
     },
     motion_system: {
       scan_speed_min_mm_s: numeric.scan_speed_min_mm_s,
@@ -302,4 +317,25 @@ function buildPayload(
     ) as Record<PhysicalFieldKey, EquipmentFieldVerification>,
     set_active: true,
   }
+}
+
+function effectivePower(values: Record<PhysicalFieldKey, string>): string {
+  const measured = Number(values.measured_max_power_W)
+  const rated = Number(values.rated_max_power_W)
+  const transmission = Number(values.power_transmission_ratio)
+  if (values.measured_max_power_W.trim() && Number.isFinite(measured)) {
+    return `${measured} W（MEASURED）`
+  }
+  if (
+    values.rated_max_power_W.trim()
+    && values.power_transmission_ratio.trim()
+    && Number.isFinite(rated)
+    && Number.isFinite(transmission)
+  ) {
+    return `${(rated * transmission).toPrecision(6)} W（DERIVED_FROM_ATTENUATION）`
+  }
+  if (values.rated_max_power_W.trim() && Number.isFinite(rated)) {
+    return `${rated} W（MANUFACTURER_SPEC）`
+  }
+  return '尚未填写'
 }

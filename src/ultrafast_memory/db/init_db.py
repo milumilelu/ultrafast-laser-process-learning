@@ -382,6 +382,8 @@ CREATE TABLE IF NOT EXISTS laser_source_config (
     average_power_min_W REAL,
     average_power_max_W REAL,
     rated_max_power_W REAL,
+    measured_max_power_W REAL,
+    power_transmission_ratio REAL,
     actual_max_power_W REAL,
     workpiece_incident_power_min_W REAL,
     workpiece_incident_power_max_W REAL,
@@ -659,6 +661,8 @@ TABLE_COLUMNS = {
     },
     "laser_source_config": {
         "rated_max_power_W": "REAL",
+        "measured_max_power_W": "REAL",
+        "power_transmission_ratio": "REAL",
         "actual_max_power_W": "REAL",
         "workpiece_incident_power_min_W": "REAL",
         "workpiece_incident_power_max_W": "REAL",

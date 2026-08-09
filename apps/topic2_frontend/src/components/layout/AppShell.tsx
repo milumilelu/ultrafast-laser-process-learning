@@ -1,21 +1,16 @@
-import { NavLink, useParams } from 'react-router-dom'
-import { useUiStore } from '../../stores/ui'
-import { useTaskDraft } from '../../stores/taskDrafts'
-import { useApplicationRun } from '../../features/workspace/useRunState'
+import { NavLink } from 'react-router-dom'
 
 const NAV_ITEMS = [
-  { to: '/workspace', label: '工作台', match: '/workspace' },
-  { to: '/knowledge', label: '科学知识', match: '/knowledge' },
-  { to: '/data', label: '实验数据', match: '/data' },
-  { to: '/runs', label: '运行记录', match: '/runs' },
-  { to: '/resources/equipment', label: '资源', match: '/resources' },
+  { to: '/evidence-prior', label: '证据 → 先验', match: '/evidence-prior' },
+  { to: '/resources/equipment', label: '设备档案', match: '/resources/equipment' },
+  { to: '/resources/literature', label: '文献库', match: '/resources/literature' },
   { to: '/settings', label: '系统', match: '/settings' },
 ]
 
 export function NavRail() {
   return (
     <nav className="nav-rail" aria-label="主导航">
-      <div className="nav-brand">Physics-to-Planning</div>
+      <div className="nav-brand">Ultrafast Evidence→Prior</div>
       <ul className="nav-list">
         {NAV_ITEMS.map((item) => (
           <li key={item.to}>
@@ -32,71 +27,15 @@ export function NavRail() {
   )
 }
 
-/** Global context bar: task / material / process / target / dataset / machine / run. */
 export function GlobalContextBar() {
-  const { taskId } = useParams()
-  const draft = useTaskDraft(taskId ?? '')
-  const developerMode = useUiStore((state) => state.developerMode)
-  const toggleDeveloperMode = useUiStore((state) => state.toggleDeveloperMode)
-  const run = useApplicationRun(draft?.runId ?? null)
-
   return (
     <header className="global-bar">
       <div className="global-context">
-        {draft ? (
-          <>
-            <span className="context-chip">
-              Task: <strong>{draft.taskId}</strong>
-              {draft.taskContextRef ? `:v${draft.version}` : ''}
-            </span>
-            {draft.material && (
-              <span className="context-chip">Material: <strong>{draft.material}</strong></span>
-            )}
-            {draft.laserType && (
-              <span className="context-chip">Process: <strong>{draft.laserType} laser</strong></span>
-            )}
-            {draft.objectiveMetric && (
-              <span className="context-chip">
-                Target: <strong>{draft.objectiveMetric.replace('_um', '')} ↓</strong>
-              </span>
-            )}
-            {draft.datasetRef && (
-              <span className="context-chip">
-                Dataset: <strong>{draft.datasetRef}</strong>
-              </span>
-            )}
-            {draft.equipmentProfileId && (
-              <span className="context-chip">
-                Execution profile: <strong>{draft.equipmentProfileId}</strong>
-                {draft.equipmentRevisionId ? `@${draft.equipmentRevisionId}` : ''}
-              </span>
-            )}
-            {draft.workpieceIncidentPowerW > 0 && (
-              <span className="context-chip">
-                Task power: <strong>{draft.workpieceIncidentPowerW} W</strong> @ material surface
-              </span>
-            )}
-            {draft.runId && (
-              <span className="context-chip">
-                Run: <strong>{draft.runId.slice(0, 12)}…</strong>{' '}
-                {run ? `(${run.status})` : ''}
-              </span>
-            )}
-          </>
-        ) : (
-          <span className="context-chip">未选择任务</span>
-        )}
+        <span className="context-chip"><strong>Evidence Pipeline V1</strong></span>
+        <span className="context-chip">Requirement × Paper 独立抽取</span>
       </div>
       <div className="global-modes">
-        {draft && <span className="mode-label">Research</span>}
-        <button
-          className={`mode-toggle ${developerMode ? 'mode-toggle-on' : ''}`}
-          onClick={toggleDeveloperMode}
-          role="switch"
-          aria-checked={developerMode}
-        >
-          Developer Mode
-        </button>
+        <span className="mode-label">治理非阻断 · 先验仅为软引导</span>
       </div>
     </header>
   )

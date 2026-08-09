@@ -28,6 +28,55 @@ body {
   line-height: 1.5;
 }
 
+/* ------------------------- Evidence → Prior V1 ------------------------- */
+
+.evidence-prior-page { max-width: 1680px; margin: 0 auto; }
+.evidence-prior-heading { display: flex; justify-content: space-between; gap: 20px; align-items: flex-start; }
+.evidence-prior-heading h1 { margin: 0; font-size: 22px; }
+.evidence-prior-heading p { margin: 6px 0 0; color: var(--text-dim); }
+.analysis-running { color: var(--accent); display: flex; align-items: center; gap: 8px; }
+.evidence-prior-inputs,
+.evidence-prior-outputs { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 16px; }
+.evidence-prior-inputs > .card,
+.evidence-prior-outputs > .card { min-width: 0; }
+.evidence-task-grid { grid-template-columns: 1fr 1fr; }
+.equipment-summary { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin: 12px 0; }
+.equipment-summary div { background: var(--bg-raised); border: 1px solid var(--border); padding: 8px; border-radius: 6px; }
+.equipment-summary dt { color: var(--text-dim); font-size: 11px; }
+.equipment-summary dd { margin: 3px 0 0; }
+.equipment-derived-power { margin: 10px 0; color: var(--text-dim); }
+.equipment-derived-power strong { color: var(--text); }
+.result-stats { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 12px; }
+.result-stats span { background: var(--bg-raised); border: 1px solid var(--border); border-radius: 4px; padding: 3px 8px; color: var(--text-dim); }
+.evidence-browser { display: grid; grid-template-columns: minmax(220px, 0.8fr) minmax(0, 1.2fr); gap: 12px; min-height: 430px; }
+.evidence-result-list { list-style: none; margin: 0; padding: 0; max-height: 620px; overflow: auto; }
+.evidence-result-list button { width: 100%; border: 0; border-bottom: 1px solid var(--border); background: transparent; color: var(--text); text-align: left; padding: 9px; cursor: pointer; display: flex; flex-direction: column; gap: 2px; }
+.evidence-result-list button:hover,
+.evidence-result-list .evidence-result-active { background: var(--bg-raised); border-left: 2px solid var(--accent); }
+.evidence-result-list span,
+.evidence-result-list small { color: var(--text-dim); }
+.evidence-detail { min-width: 0; }
+.evidence-detail h3 { margin: 0 0 8px; font-size: 14px; }
+.evidence-detail blockquote { margin: 8px 0 14px; padding: 10px 12px; border-left: 3px solid var(--accent); background: var(--bg-raised); color: var(--text); }
+.evidence-detail dd { overflow-wrap: anywhere; }
+.prior-list { display: flex; flex-direction: column; gap: 10px; }
+.prior-card-v1 { border: 1px solid var(--border); border-radius: 7px; padding: 11px; background: var(--bg-raised); }
+.prior-card-v1 header { display: flex; justify-content: space-between; gap: 12px; }
+.prior-card-v1 header span,
+.prior-score { color: var(--text-dim); font-size: 11px; }
+.prior-main { margin: 7px 0; }
+.prior-conflict { color: var(--warn); margin-top: 6px; }
+.prior-card-v1 details { margin: 9px 0; }
+.prior-card-v1 summary { cursor: pointer; color: var(--accent); }
+.governance-reminders { border-top: 1px solid var(--border); margin-top: 14px; padding-top: 10px; color: var(--warn); }
+.governance-reminders h3 { margin: 0; font-size: 13px; }
+.governance-reminders ul { margin: 6px 0 0; padding-left: 20px; }
+
+@media (max-width: 1100px) {
+  .evidence-prior-inputs,
+  .evidence-prior-outputs { grid-template-columns: 1fr; }
+}
+
 /* ------------------------------- shell --------------------------------- */
 
 .app-shell { display: flex; height: 100vh; overflow: hidden; }

@@ -1,0 +1,1773 @@
+{
+  "passed": true,
+  "actual_llm": true,
+  "provider": "deepseek",
+  "requested_model": "deepseek-v4-flash",
+  "connection_check": {
+    "ok": true,
+    "provider": "deepseek",
+    "model": "deepseek-v4-flash"
+  },
+  "database_scope": "temporary",
+  "paper_files": [
+    "artifacts\\b1_annotation\\papers\\04_arxiv_2502.16530.pdf",
+    "artifacts\\b1_annotation\\papers\\10_arxiv_2411.18093.pdf",
+    "artifacts\\b1_annotation\\papers\\11_arxiv_2404.09906.pdf",
+    "artifacts\\b1_annotation\\papers\\13_arxiv_2411.18868.pdf"
+  ],
+  "checks": {
+    "real_pdf_count": 4,
+    "real_llm_calls": 14,
+    "service_llm_call_count": 14,
+    "all_provider_models_match": true,
+    "validated_evidence_count": 6,
+    "rejected_evidence_count": 2,
+    "structured_knowledge_count": 6,
+    "belief_count": 6,
+    "prior_count": 5,
+    "all_beliefs_reference_validated_evidence": true,
+    "governance_non_gating_warning_present": true
+  },
+  "provider_calls": [
+    {
+      "request_id": "4644778d-ec06-4bbf-8a56-04c1af7b4d76",
+      "created": 1786295128,
+      "model": "deepseek-v4-flash",
+      "usage": {
+        "prompt_tokens": 2351,
+        "completion_tokens": 868,
+        "total_tokens": 3219,
+        "prompt_tokens_details": {
+          "cached_tokens": 2304
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 657
+        },
+        "prompt_cache_hit_tokens": 2304,
+        "prompt_cache_miss_tokens": 47
+      }
+    },
+    {
+      "request_id": "a4ee689c-4f47-4373-86b0-c0105a3b3837",
+      "created": 1786295135,
+      "model": "deepseek-v4-flash",
+      "usage": {
+        "prompt_tokens": 6178,
+        "completion_tokens": 143,
+        "total_tokens": 6321,
+        "prompt_tokens_details": {
+          "cached_tokens": 6144
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 89
+        },
+        "prompt_cache_hit_tokens": 6144,
+        "prompt_cache_miss_tokens": 34
+      }
+    },
+    {
+      "request_id": "a5d892a0-cd43-4745-a184-468ce104ab13",
+      "created": 1786295138,
+      "model": "deepseek-v4-flash",
+      "usage": {
+        "prompt_tokens": 2376,
+        "completion_tokens": 3500,
+        "total_tokens": 5876,
+        "prompt_tokens_details": {
+          "cached_tokens": 2304
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 3500
+        },
+        "prompt_cache_hit_tokens": 2304,
+        "prompt_cache_miss_tokens": 72
+      }
+    },
+    {
+      "request_id": "03e49966-fb25-4fa7-bb28-705fc1a0c021",
+      "created": 1786295171,
+      "model": "deepseek-v4-flash",
+      "usage": {
+        "prompt_tokens": 6757,
+        "completion_tokens": 389,
+        "total_tokens": 7146,
+        "prompt_tokens_details": {
+          "cached_tokens": 6656
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 327
+        },
+        "prompt_cache_hit_tokens": 6656,
+        "prompt_cache_miss_tokens": 101
+      }
+    },
+    {
+      "request_id": "c5cafc23-070e-4c5b-8fa4-22e9c14ea9bf",
+      "created": 1786295176,
+      "model": "deepseek-v4-flash",
+      "usage": {
+        "prompt_tokens": 2378,
+        "completion_tokens": 2186,
+        "total_tokens": 4564,
+        "prompt_tokens_details": {
+          "cached_tokens": 2304
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 1895
+        },
+        "prompt_cache_hit_tokens": 2304,
+        "prompt_cache_miss_tokens": 74
+      }
+    },
+    {
+      "request_id": "c9ff144a-75c6-41bd-a138-99321f77667f",
+      "created": 1786295195,
+      "model": "deepseek-v4-flash",
+      "usage": {
+        "prompt_tokens": 6320,
+        "completion_tokens": 3500,
+        "total_tokens": 9820,
+        "prompt_tokens_details": {
+          "cached_tokens": 6272
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 3500
+        },
+        "prompt_cache_hit_tokens": 6272,
+        "prompt_cache_miss_tokens": 48
+      }
+    },
+    {
+      "request_id": "da5aa7dc-b7bd-4dcc-8ff0-19b9ea95c545",
+      "created": 1786295226,
+      "model": "deepseek-v4-flash",
+      "usage": {
+        "prompt_tokens": 2476,
+        "completion_tokens": 3264,
+        "total_tokens": 5740,
+        "prompt_tokens_details": {
+          "cached_tokens": 2432
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 3024
+        },
+        "prompt_cache_hit_tokens": 2432,
+        "prompt_cache_miss_tokens": 44
+      }
+    },
+    {
+      "request_id": "05881a60-d3fa-432f-847d-a543270ddb1f",
+      "created": 1786295255,
+      "model": "deepseek-v4-flash",
+      "usage": {
+        "prompt_tokens": 6306,
+        "completion_tokens": 3018,
+        "total_tokens": 9324,
+        "prompt_tokens_details": {
+          "cached_tokens": 6272
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 2495
+        },
+        "prompt_cache_hit_tokens": 6272,
+        "prompt_cache_miss_tokens": 34
+      }
+    },
+    {
+      "request_id": "6c245d72-ae77-46f4-853c-9346094635fa",
+      "created": 1786295282,
+      "model": "deepseek-v4-flash",
+      "usage": {
+        "prompt_tokens": 6241,
+        "completion_tokens": 3500,
+        "total_tokens": 9741,
+        "prompt_tokens_details": {
+          "cached_tokens": 6144
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 3500
+        },
+        "prompt_cache_hit_tokens": 6144,
+        "prompt_cache_miss_tokens": 97
+      }
+    },
+    {
+      "request_id": "3f8a625b-8c5b-47d1-bfed-b64d1a442550",
+      "created": 1786295312,
+      "model": "deepseek-v4-flash",
+      "usage": {
+        "prompt_tokens": 2800,
+        "completion_tokens": 638,
+        "total_tokens": 3438,
+        "prompt_tokens_details": {
+          "cached_tokens": 2688
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 615
+        },
+        "prompt_cache_hit_tokens": 2688,
+        "prompt_cache_miss_tokens": 112
+      }
+    },
+    {
+      "request_id": "eb016444-c83f-4cc5-8a0f-7c2959e777db",
+      "created": 1786295320,
+      "model": "deepseek-v4-flash",
+      "usage": {
+        "prompt_tokens": 2361,
+        "completion_tokens": 686,
+        "total_tokens": 3047,
+        "prompt_tokens_details": {
+          "cached_tokens": 2304
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 225
+        },
+        "prompt_cache_hit_tokens": 2304,
+        "prompt_cache_miss_tokens": 57
+      }
+    },
+    {
+      "request_id": "dbb51931-3822-4c66-b129-69f87d30fd41",
+      "created": 1786295325,
+      "model": "deepseek-v4-flash",
+      "usage": {
+        "prompt_tokens": 5880,
+        "completion_tokens": 409,
+        "total_tokens": 6289,
+        "prompt_tokens_details": {
+          "cached_tokens": 5760
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 309
+        },
+        "prompt_cache_hit_tokens": 5760,
+        "prompt_cache_miss_tokens": 120
+      }
+    },
+    {
+      "request_id": "840104c7-d2e4-4371-9204-164cb5864482",
+      "created": 1786295331,
+      "model": "deepseek-v4-flash",
+      "usage": {
+        "prompt_tokens": 2347,
+        "completion_tokens": 1759,
+        "total_tokens": 4106,
+        "prompt_tokens_details": {
+          "cached_tokens": 2304
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 1514
+        },
+        "prompt_cache_hit_tokens": 2304,
+        "prompt_cache_miss_tokens": 43
+      }
+    },
+    {
+      "request_id": "1129a052-1645-434e-8c51-958c282624b0",
+      "created": 1786295347,
+      "model": "deepseek-v4-flash",
+      "usage": {
+        "prompt_tokens": 6337,
+        "completion_tokens": 3500,
+        "total_tokens": 9837,
+        "prompt_tokens_details": {
+          "cached_tokens": 6272
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 3500
+        },
+        "prompt_cache_hit_tokens": 6272,
+        "prompt_cache_miss_tokens": 65
+      }
+    }
+  ],
+  "analysis": {
+    "schema_version": "evidence-prior-analysis-v1",
+    "analysis_run_id": "evidence-prior-d5a86ae193394944acded0d5a3bc7f0a",
+    "task": {
+      "material": "diamond",
+      "material_grade": null,
+      "target_metric": "depth_um",
+      "equipment": {
+        "equipment_profile_id": "eq_3b9957b1d0ae5b29",
+        "equipment_revision_id": "eqrev_d014e6b1130647bd",
+        "profile_name": "Live 30 fs evidence acceptance system",
+        "wavelength_nm": 800.0,
+        "pulse_width_min_fs": 25.0,
+        "pulse_width_max_fs": 35.0,
+        "frequency_min_kHz": 1.0,
+        "frequency_max_kHz": 1000.0,
+        "scan_speed_min_mm_s": 1.0,
+        "scan_speed_max_mm_s": 2000.0,
+        "spot_diameter_um": 20.0,
+        "rated_max_power_W": 20.0,
+        "measured_max_power_W": null,
+        "power_transmission_ratio": 0.8,
+        "effective_max_power_W": 16.0,
+        "effective_max_power_source": "DERIVED_FROM_ATTENUATION",
+        "missing_fields": []
+      }
+    },
+    "requirements": [
+      {
+        "requirement_id": "kreq-5c9cd7a2ae5c1095",
+        "requirement_type": "MATERIAL_IDENTITY",
+        "scientific_question": "Does the paper directly identify the processed material as diamond? Extract only the identity stated by the paper.",
+        "target_metric": "depth_um",
+        "evidence_types": [
+          "MATERIAL_IDENTITY"
+        ],
+        "query_terms": [
+          "diamond",
+          "material",
+          "sample"
+        ],
+        "conditions": {
+          "material": "diamond",
+          "target_metric": "depth_um"
+        },
+        "expected_unit": null,
+        "priority": "HIGH",
+        "compiler_version": "knowledge-requirement-template-v1"
+      },
+      {
+        "requirement_id": "kreq-bc3f0cc8bbcc2ecb",
+        "requirement_type": "MATERIAL_PROPERTY",
+        "scientific_question": "Which directly reported numeric material or process constants for diamond are relevant to laser ablation or material-removal depth, specifically ablation threshold, incubation coefficient, optical penetration depth?",
+        "target_metric": "depth_um",
+        "evidence_types": [
+          "PARAMETER_VALUE",
+          "PARAMETER_RANGE"
+        ],
+        "query_terms": [
+          "diamond",
+          "ablation depth",
+          "material removal depth",
+          "machining depth",
+          "removal rate",
+          "ablation threshold",
+          "incubation coefficient",
+          "optical penetration depth"
+        ],
+        "conditions": {
+          "material": "diamond",
+          "target_metric": "depth_um"
+        },
+        "expected_unit": null,
+        "priority": "HIGH",
+        "compiler_version": "knowledge-requirement-template-v1"
+      },
+      {
+        "requirement_id": "kreq-6cdbc262ce8568cd",
+        "requirement_type": "PROCESS_OBSERVATION",
+        "scientific_question": "Which measured laser ablation or material-removal depth observations are directly reported for diamond, and under which explicit laser and scanning conditions?",
+        "target_metric": "depth_um",
+        "evidence_types": [
+          "PROCESS_OBSERVATION"
+        ],
+        "query_terms": [
+          "diamond",
+          "ablation depth",
+          "material removal depth",
+          "machining depth",
+          "removal rate",
+          "measured",
+          "experimental results"
+        ],
+        "conditions": {
+          "material": "diamond",
+          "target_metric": "depth_um"
+        },
+        "expected_unit": null,
+        "priority": "HIGH",
+        "compiler_version": "knowledge-requirement-template-v1"
+      },
+      {
+        "requirement_id": "kreq-72ec9c0817ac41c5",
+        "requirement_type": "PARAMETER_EFFECT",
+        "scientific_question": "What explicit direction, threshold, optimum, or non-monotonic effect do fluence, pulse energy, average power, pulse duration, repetition rate, scan speed, pulse overlap, hatch spacing, number of passes, focus offset have on laser ablation or material-removal depth for diamond?",
+        "target_metric": "depth_um",
+        "evidence_types": [
+          "PARAMETER_EFFECT"
+        ],
+        "query_terms": [
+          "diamond",
+          "ablation depth",
+          "material removal depth",
+          "machining depth",
+          "removal rate",
+          "fluence",
+          "pulse energy",
+          "average power",
+          "pulse duration",
+          "repetition rate",
+          "scan speed",
+          "pulse overlap",
+          "hatch spacing",
+          "number of passes",
+          "focus offset",
+          "effect",
+          "influence"
+        ],
+        "conditions": {
+          "material": "diamond",
+          "target_metric": "depth_um"
+        },
+        "expected_unit": null,
+        "priority": "HIGH",
+        "compiler_version": "knowledge-requirement-template-v1"
+      },
+      {
+        "requirement_id": "kreq-2cc6c7ccc61cb3f3",
+        "requirement_type": "REPORTED_OPTIMUM",
+        "scientific_question": "Which numeric parameter values or multi-parameter regions are directly reported as best, optimum, or recommended for laser ablation or material-removal depth of diamond?",
+        "target_metric": "depth_um",
+        "evidence_types": [
+          "REPORTED_OPTIMUM",
+          "PARAMETER_RANGE"
+        ],
+        "query_terms": [
+          "diamond",
+          "ablation depth",
+          "material removal depth",
+          "machining depth",
+          "removal rate",
+          "fluence",
+          "pulse energy",
+          "average power",
+          "pulse duration",
+          "repetition rate",
+          "scan speed",
+          "pulse overlap",
+          "hatch spacing",
+          "number of passes",
+          "focus offset",
+          "optimum",
+          "optimal",
+          "best",
+          "recommended"
+        ],
+        "conditions": {
+          "material": "diamond",
+          "target_metric": "depth_um"
+        },
+        "expected_unit": null,
+        "priority": "HIGH",
+        "compiler_version": "knowledge-requirement-template-v1"
+      },
+      {
+        "requirement_id": "kreq-e64beffaf78dd111",
+        "requirement_type": "MECHANISM",
+        "scientific_question": "Which mechanism does the paper explicitly propose to explain changes in laser ablation or material-removal depth for diamond?",
+        "target_metric": "depth_um",
+        "evidence_types": [
+          "MECHANISM"
+        ],
+        "query_terms": [
+          "diamond",
+          "ablation depth",
+          "material removal depth",
+          "machining depth",
+          "removal rate",
+          "mechanism",
+          "incubation",
+          "thermal accumulation",
+          "plasma"
+        ],
+        "conditions": {
+          "material": "diamond",
+          "target_metric": "depth_um"
+        },
+        "expected_unit": null,
+        "priority": "MEDIUM",
+        "compiler_version": "knowledge-requirement-template-v1"
+      },
+      {
+        "requirement_id": "kreq-f92ae9fb647f455e",
+        "requirement_type": "PROCESS_METHOD",
+        "scientific_question": "Which laser-processing method, scan strategy, and experimental configuration were used to produce the reported laser ablation or material-removal depth for diamond?",
+        "target_metric": "depth_um",
+        "evidence_types": [
+          "PROCESS_METHOD"
+        ],
+        "query_terms": [
+          "diamond",
+          "ablation depth",
+          "material removal depth",
+          "machining depth",
+          "removal rate",
+          "experimental setup",
+          "processing method",
+          "scan strategy"
+        ],
+        "conditions": {
+          "material": "diamond",
+          "target_metric": "depth_um"
+        },
+        "expected_unit": null,
+        "priority": "MEDIUM",
+        "compiler_version": "knowledge-requirement-template-v1"
+      }
+    ],
+    "evidence": {
+      "schema_version": "evidence-ir-set-v2",
+      "evidence_set_id": "evidence-set-1214bddf5ebb494e90f46b5f63165630",
+      "items": [
+        {
+          "schema_version": "evidence-ir-v2",
+          "evidence_id": "evidence-88b9db0bad77edbdbc9a",
+          "requirement_id": "kreq-5c9cd7a2ae5c1095",
+          "paper_id": "04_arxiv_2502.16530.pdf",
+          "document_version_id": "7246e0c1f441c326",
+          "paper_title": "Ultrashort 30-fs laser photoablation of diamond",
+          "paper_metadata": {
+            "laser_type": "fs",
+            "material": "diamond"
+          },
+          "content": {
+            "evidence_type": "MATERIAL_IDENTITY",
+            "material": "diamond",
+            "material_grade": "CVD diamond",
+            "statement": "The paper directly identifies the processed material as CVD diamond."
+          },
+          "conditions": {
+            "material": "diamond",
+            "material_grade": "CVD diamond"
+          },
+          "evidence_quote": "The nominal Ra of CVD diamond sample surface was ca. 30 nm as reported by the manufacturer for all samples tested.",
+          "source_block_refs": [
+            "04_arxiv_2502.16530.pdf:p3:b28",
+            "04_arxiv_2502.16530.pdf:p3:b29"
+          ],
+          "source_pages": [
+            4
+          ],
+          "extraction_confidence": 0.95,
+          "validation_state": "VALIDATED",
+          "validation_errors": [],
+          "governance_status": "unreviewed",
+          "extraction_route": "llm_extraction",
+          "extractor_model": "deepseek-v4-flash",
+          "prompt_version": "typed-evidence-extraction-v1"
+        },
+        {
+          "schema_version": "evidence-ir-v2",
+          "evidence_id": "evidence-460e287dc1005455da22",
+          "requirement_id": "kreq-6cdbc262ce8568cd",
+          "paper_id": "04_arxiv_2502.16530.pdf",
+          "document_version_id": "7246e0c1f441c326",
+          "paper_title": "Ultrashort 30-fs laser photoablation of diamond",
+          "paper_metadata": {
+            "laser_type": "fs",
+            "material": "diamond"
+          },
+          "content": {
+            "evidence_type": "PROCESS_OBSERVATION",
+            "statement": "The variation of photoablated track depth, d, in μm, was directly measured as a function of applied laser energy dose (kJ/cm2) and presented in Figure 3(b).",
+            "target_metric": "depth_um",
+            "measured_value": null,
+            "unit": "um"
+          },
+          "conditions": {
+            "material": "diamond",
+            "pulse_width_fs": 30,
+            "laser_type": "fs",
+            "process_type": "laser ablation"
+          },
+          "evidence_quote": "The variation of photoablated track width, w, and depth, d, in μm, are shown in Figure 3(a) and Figure 3(b), respectively, as a function of applied laser energy dose, kJ/cm2.",
+          "source_block_refs": [
+            "04_arxiv_2502.16530.pdf:p7:b15",
+            "04_arxiv_2502.16530.pdf:p7:b16",
+            "04_arxiv_2502.16530.pdf:p7:b17"
+          ],
+          "source_pages": [
+            8
+          ],
+          "extraction_confidence": 0.7,
+          "validation_state": "VALIDATED",
+          "validation_errors": [],
+          "governance_status": "unreviewed",
+          "extraction_route": "llm_extraction",
+          "extractor_model": "deepseek-v4-flash",
+          "prompt_version": "typed-evidence-extraction-v1"
+        },
+        {
+          "schema_version": "evidence-ir-v2",
+          "evidence_id": "evidence-32425cff5d234f2c5413",
+          "requirement_id": "kreq-72ec9c0817ac41c5",
+          "paper_id": "04_arxiv_2502.16530.pdf",
+          "document_version_id": "7246e0c1f441c326",
+          "paper_title": "Ultrashort 30-fs laser photoablation of diamond",
+          "paper_metadata": {
+            "laser_type": "fs",
+            "material": "diamond"
+          },
+          "content": {
+            "evidence_type": "PARAMETER_EFFECT",
+            "parameter": "laser energy dose",
+            "target_metric": "depth_um",
+            "direction": "THRESHOLD",
+            "statement": "For 30-fs laser ablation of diamond, energy doses in excess of 50 kJ/cm2 provide only minimal gains in ablation depth because of energy redistribution."
+          },
+          "conditions": {
+            "material": "diamond",
+            "pulse_width_fs": 30,
+            "laser_type": "fs"
+          },
+          "evidence_quote": "Consequently, 30 fs laser doses in excess of 50 kJ/cm2 provide minimal gains in ablation depth due to energy redistribution.",
+          "source_block_refs": [
+            "04_arxiv_2502.16530.pdf:p7:b27",
+            "04_arxiv_2502.16530.pdf:p7:b28"
+          ],
+          "source_pages": [
+            8
+          ],
+          "extraction_confidence": 0.95,
+          "validation_state": "VALIDATED",
+          "validation_errors": [],
+          "governance_status": "unreviewed",
+          "extraction_route": "llm_extraction",
+          "extractor_model": "deepseek-v4-flash",
+          "prompt_version": "typed-evidence-extraction-v1"
+        },
+        {
+          "schema_version": "evidence-ir-v2",
+          "evidence_id": "evidence-11d9ed0903b3cfd5b86e",
+          "requirement_id": "kreq-72ec9c0817ac41c5",
+          "paper_id": "11_arxiv_2404.09906.pdf",
+          "document_version_id": "198b422fe1d20600",
+          "paper_title": "Photoluminescence of femtosecond laser-irradiated silicon carbide",
+          "paper_metadata": {
+            "laser_type": "fs",
+            "material": "SiC"
+          },
+          "content": {
+            "evidence_type": "PARAMETER_EFFECT",
+            "parameter": "pulse_energy",
+            "target_metric": "depth_um",
+            "direction": "NON_MONOTONIC",
+            "statement": "In the lower pulse-energy pattern on 4H-SiC with a graphene layer, the crater depth increases with pulse energy up to 140 nJ and then decreases until 200 nJ."
+          },
+          "conditions": {
+            "material": "SiC",
+            "material_grade": "HPSI 4H-SiC with graphene",
+            "laser_type": "fs",
+            "wavelength_nm": 1030,
+            "pulse_width_fs": 383
+          },
+          "evidence_quote": "On the lower energy pattern, depth and width increase up to 140 nJ and decrease until 200 nJ for the depth and 230 nJ for the width.",
+          "source_block_refs": [
+            "11_arxiv_2404.09906.pdf:p1:b2"
+          ],
+          "source_pages": [
+            2
+          ],
+          "extraction_confidence": 0.9,
+          "validation_state": "REJECTED",
+          "validation_errors": [
+            "evidence_quote_not_verbatim"
+          ],
+          "governance_status": "unreviewed",
+          "extraction_route": "llm_extraction",
+          "extractor_model": "deepseek-v4-flash",
+          "prompt_version": "typed-evidence-extraction-v1"
+        },
+        {
+          "schema_version": "evidence-ir-v2",
+          "evidence_id": "evidence-9d2ad3e6529b97178318",
+          "requirement_id": "kreq-72ec9c0817ac41c5",
+          "paper_id": "11_arxiv_2404.09906.pdf",
+          "document_version_id": "198b422fe1d20600",
+          "paper_title": "Photoluminescence of femtosecond laser-irradiated silicon carbide",
+          "paper_metadata": {
+            "laser_type": "fs",
+            "material": "SiC"
+          },
+          "content": {
+            "evidence_type": "PARAMETER_EFFECT",
+            "parameter": "pulse_energy",
+            "target_metric": "depth_um",
+            "direction": "INCREASES",
+            "statement": "For pristine HPSI 4H-SiC irradiated with femtosecond laser pulses, the depth of the laser-written surface structures roughly grows with pulse energy up to 750 nJ."
+          },
+          "conditions": {
+            "material": "SiC",
+            "material_grade": "HPSI 4H-SiC",
+            "laser_type": "fs",
+            "wavelength_nm": 1030,
+            "pulse_width_fs": 383
+          },
+          "evidence_quote": "As discernible from figure 4 a) and b) this gives us similar absolute values and a similar trend: size and width of the surface structures roughly grow with pulse energies up to 750 nJ.",
+          "source_block_refs": [
+            "11_arxiv_2404.09906.pdf:p3:b7",
+            "11_arxiv_2404.09906.pdf:p5:b2"
+          ],
+          "source_pages": [
+            4,
+            6
+          ],
+          "extraction_confidence": 0.85,
+          "validation_state": "REJECTED",
+          "validation_errors": [
+            "evidence_quote_not_verbatim"
+          ],
+          "governance_status": "unreviewed",
+          "extraction_route": "llm_extraction",
+          "extractor_model": "deepseek-v4-flash",
+          "prompt_version": "typed-evidence-extraction-v1"
+        },
+        {
+          "schema_version": "evidence-ir-v2",
+          "evidence_id": "evidence-445775ac7caa5571eb77",
+          "requirement_id": "kreq-e64beffaf78dd111",
+          "paper_id": "04_arxiv_2502.16530.pdf",
+          "document_version_id": "7246e0c1f441c326",
+          "paper_title": "Ultrashort 30-fs laser photoablation of diamond",
+          "paper_metadata": {
+            "laser_type": "fs",
+            "material": "diamond"
+          },
+          "content": {
+            "evidence_type": "MECHANISM",
+            "mechanism": "plasma shielding from free electron accumulation",
+            "statement": "In the high-dose regime (>50 kJ/cm2), material removal is far less effective due to plasma shielding from free electron accumulation; free electrons reflect and absorb incident fs-laser energy, modifying local electric fields and reducing ionization efficiency."
+          },
+          "conditions": {
+            "material": "diamond",
+            "laser_type": "fs"
+          },
+          "evidence_quote": "In contrast, the high-dose regime (>50 kJ/cm2) is far less effective for material removal due to plasma shielding from free electron accumulation, as these ē reflect and absorb incident fs-laser energy, modifying local electric fields and reducing ionization efficiency.",
+          "source_block_refs": [
+            "04_arxiv_2502.16530.pdf:p11:b10",
+            "04_arxiv_2502.16530.pdf:p11:b11",
+            "04_arxiv_2502.16530.pdf:p11:b12"
+          ],
+          "source_pages": [
+            12
+          ],
+          "extraction_confidence": 0.95,
+          "validation_state": "VALIDATED",
+          "validation_errors": [],
+          "governance_status": "unreviewed",
+          "extraction_route": "llm_extraction",
+          "extractor_model": "deepseek-v4-flash",
+          "prompt_version": "typed-evidence-extraction-v1"
+        },
+        {
+          "schema_version": "evidence-ir-v2",
+          "evidence_id": "evidence-a60355a28687ecec5b5b",
+          "requirement_id": "kreq-e64beffaf78dd111",
+          "paper_id": "04_arxiv_2502.16530.pdf",
+          "document_version_id": "7246e0c1f441c326",
+          "paper_title": "Ultrashort 30-fs laser photoablation of diamond",
+          "paper_metadata": {
+            "laser_type": "fs",
+            "material": "diamond"
+          },
+          "content": {
+            "evidence_type": "MECHANISM",
+            "mechanism": "energy redistribution",
+            "statement": "For 30-fs laser doses in excess of 50 kJ/cm2, minimal gains in ablation depth occur due to energy redistribution."
+          },
+          "conditions": {
+            "material": "diamond",
+            "laser_type": "fs"
+          },
+          "evidence_quote": "Consequently, 30 fs laser doses in excess of 50 kJ/cm2 provide minimal gains in ablation depth due to energy redistribution.",
+          "source_block_refs": [
+            "04_arxiv_2502.16530.pdf:p7:b27",
+            "04_arxiv_2502.16530.pdf:p7:b28"
+          ],
+          "source_pages": [
+            8
+          ],
+          "extraction_confidence": 0.9,
+          "validation_state": "VALIDATED",
+          "validation_errors": [],
+          "governance_status": "unreviewed",
+          "extraction_route": "llm_extraction",
+          "extractor_model": "deepseek-v4-flash",
+          "prompt_version": "typed-evidence-extraction-v1"
+        },
+        {
+          "schema_version": "evidence-ir-v2",
+          "evidence_id": "evidence-7995b9bb5a28644d47ca",
+          "requirement_id": "kreq-f92ae9fb647f455e",
+          "paper_id": "04_arxiv_2502.16530.pdf",
+          "document_version_id": "7246e0c1f441c326",
+          "paper_title": "Ultrashort 30-fs laser photoablation of diamond",
+          "paper_metadata": {
+            "laser_type": "fs",
+            "material": "diamond"
+          },
+          "content": {
+            "evidence_type": "PROCESS_METHOD",
+            "method": "3D interferometric depth and width measurement with sample translational velocity adjustment",
+            "statement": "The reported material removal rate (MRR) was estimated using 3D interferometric depth and width values, adjusted for sample translational velocity."
+          },
+          "conditions": {
+            "material": "diamond",
+            "laser_type": "fs"
+          },
+          "evidence_quote": "The 3D interferometric depth, d, and width, w, values were used to estimate MRR, adjusted for sample translational velocity in accordance with the earlier reports by Ali et al. 20.",
+          "source_block_refs": [
+            "04_arxiv_2502.16530.pdf:p5:b25",
+            "04_arxiv_2502.16530.pdf:p5:b26",
+            "04_arxiv_2502.16530.pdf:p5:b27"
+          ],
+          "source_pages": [
+            6
+          ],
+          "extraction_confidence": 0.8,
+          "validation_state": "VALIDATED",
+          "validation_errors": [],
+          "governance_status": "unreviewed",
+          "extraction_route": "llm_extraction",
+          "extractor_model": "deepseek-v4-flash",
+          "prompt_version": "typed-evidence-extraction-v1"
+        }
+      ],
+      "misses": [
+        {
+          "requirement_id": "kreq-5c9cd7a2ae5c1095",
+          "paper_id": "11_arxiv_2404.09906.pdf",
+          "document_version_id": "198b422fe1d20600",
+          "status": "NOT_FOUND",
+          "reason": "No evidence window states the processed material is diamond. All provided windows refer to silicon carbide (4H-SiC, HPSI SiC), not diamond."
+        },
+        {
+          "requirement_id": "kreq-bc3f0cc8bbcc2ecb",
+          "paper_id": "04_arxiv_2502.16530.pdf",
+          "document_version_id": "7246e0c1f441c326",
+          "status": "FAILED",
+          "reason": "invalid_llm_json:LLM returned no JSON object"
+        },
+        {
+          "requirement_id": "kreq-bc3f0cc8bbcc2ecb",
+          "paper_id": "11_arxiv_2404.09906.pdf",
+          "document_version_id": "198b422fe1d20600",
+          "status": "NOT_FOUND",
+          "reason": "No supplied evidence window reports direct numeric material constants for diamond (ablation threshold, incubation coefficient, or optical penetration depth). The windows concern SiC experiments and mention ablation thresholds only qualitatively without numeric values."
+        },
+        {
+          "requirement_id": "kreq-6cdbc262ce8568cd",
+          "paper_id": "11_arxiv_2404.09906.pdf",
+          "document_version_id": "198b422fe1d20600",
+          "status": "FAILED",
+          "reason": "invalid_llm_json:LLM returned no JSON object"
+        },
+        {
+          "requirement_id": "kreq-2cc6c7ccc61cb3f3",
+          "paper_id": "11_arxiv_2404.09906.pdf",
+          "document_version_id": "198b422fe1d20600",
+          "status": "FAILED",
+          "reason": "invalid_llm_json:LLM returned no JSON object"
+        },
+        {
+          "requirement_id": "kreq-2cc6c7ccc61cb3f3",
+          "paper_id": "13_arxiv_2411.18868.pdf",
+          "document_version_id": "54ff0f11c275dff9",
+          "status": "NOT_FOUND",
+          "reason": "not_found"
+        },
+        {
+          "requirement_id": "kreq-e64beffaf78dd111",
+          "paper_id": "11_arxiv_2404.09906.pdf",
+          "document_version_id": "198b422fe1d20600",
+          "status": "NOT_FOUND",
+          "reason": "No evidence in the supplied windows explicitly proposes a mechanism for changes in laser ablation or material-removal depth for diamond. The paper concerns femtosecond laser irradiation of silicon carbide (SiC), and the cited passages discuss SiC surface modification, crater formation, defect creation, and laser ablation/redeposition, but do not directly address diamond or propose a mechanism specific to diamond ablation depth."
+        },
+        {
+          "requirement_id": "kreq-f92ae9fb647f455e",
+          "paper_id": "11_arxiv_2404.09906.pdf",
+          "document_version_id": "198b422fe1d20600",
+          "status": "FAILED",
+          "reason": "invalid_llm_json:LLM returned no JSON object"
+        }
+      ],
+      "paper_candidates": {
+        "kreq-5c9cd7a2ae5c1095": [
+          {
+            "paper_id": "04_arxiv_2502.16530.pdf",
+            "document_version_id": "7246e0c1f441c326",
+            "score": 0.03278688524590164,
+            "matched_terms": [],
+            "paper_index_score": 0.42686565516582403,
+            "global_block_score": 0.3997181715794202,
+            "retrieval_routes": [
+              "paper_index",
+              "global_block_index"
+            ]
+          },
+          {
+            "paper_id": "11_arxiv_2404.09906.pdf",
+            "document_version_id": "198b422fe1d20600",
+            "score": 0.031746031746031744,
+            "matched_terms": [],
+            "paper_index_score": 0.22552249591305207,
+            "global_block_score": 0.34193796623604333,
+            "retrieval_routes": [
+              "paper_index",
+              "global_block_index"
+            ]
+          }
+        ],
+        "kreq-bc3f0cc8bbcc2ecb": [
+          {
+            "paper_id": "04_arxiv_2502.16530.pdf",
+            "document_version_id": "7246e0c1f441c326",
+            "score": 0.03278688524590164,
+            "matched_terms": [],
+            "paper_index_score": 0.46439481463631516,
+            "global_block_score": 0.3229088108417341,
+            "retrieval_routes": [
+              "paper_index",
+              "global_block_index"
+            ]
+          },
+          {
+            "paper_id": "11_arxiv_2404.09906.pdf",
+            "document_version_id": "198b422fe1d20600",
+            "score": 0.031754032258064516,
+            "matched_terms": [],
+            "paper_index_score": 0.04503115624504753,
+            "global_block_score": 0.29786676690214775,
+            "retrieval_routes": [
+              "paper_index",
+              "global_block_index"
+            ]
+          }
+        ],
+        "kreq-6cdbc262ce8568cd": [
+          {
+            "paper_id": "04_arxiv_2502.16530.pdf",
+            "document_version_id": "7246e0c1f441c326",
+            "score": 0.03278688524590164,
+            "matched_terms": [],
+            "paper_index_score": 0.47746471343807784,
+            "global_block_score": 0.32897191398032777,
+            "retrieval_routes": [
+              "paper_index",
+              "global_block_index"
+            ]
+          },
+          {
+            "paper_id": "11_arxiv_2404.09906.pdf",
+            "document_version_id": "198b422fe1d20600",
+            "score": 0.031009615384615385,
+            "matched_terms": [],
+            "paper_index_score": 0.0513828933977066,
+            "global_block_score": 0.3021695538196199,
+            "retrieval_routes": [
+              "paper_index",
+              "global_block_index"
+            ]
+          }
+        ],
+        "kreq-72ec9c0817ac41c5": [
+          {
+            "paper_id": "04_arxiv_2502.16530.pdf",
+            "document_version_id": "7246e0c1f441c326",
+            "score": 0.032266458495966696,
+            "matched_terms": [],
+            "paper_index_score": 0.44077873383486205,
+            "global_block_score": 0.34232297687660873,
+            "retrieval_routes": [
+              "paper_index",
+              "global_block_index"
+            ]
+          },
+          {
+            "paper_id": "11_arxiv_2404.09906.pdf",
+            "document_version_id": "198b422fe1d20600",
+            "score": 0.032018442622950824,
+            "matched_terms": [],
+            "paper_index_score": 0.058654050784906375,
+            "global_block_score": 0.35122218225468654,
+            "retrieval_routes": [
+              "paper_index",
+              "global_block_index"
+            ]
+          }
+        ],
+        "kreq-2cc6c7ccc61cb3f3": [
+          {
+            "paper_id": "11_arxiv_2404.09906.pdf",
+            "document_version_id": "198b422fe1d20600",
+            "score": 0.032018442622950824,
+            "matched_terms": [],
+            "paper_index_score": 0.06229821345838939,
+            "global_block_score": 0.3511720899234666,
+            "retrieval_routes": [
+              "paper_index",
+              "global_block_index"
+            ]
+          },
+          {
+            "paper_id": "13_arxiv_2411.18868.pdf",
+            "document_version_id": "54ff0f11c275dff9",
+            "score": 0.031746031746031744,
+            "matched_terms": [],
+            "paper_index_score": 0.25071003506491774,
+            "global_block_score": 0.3390457037011319,
+            "retrieval_routes": [
+              "paper_index",
+              "global_block_index"
+            ]
+          }
+        ],
+        "kreq-e64beffaf78dd111": [
+          {
+            "paper_id": "04_arxiv_2502.16530.pdf",
+            "document_version_id": "7246e0c1f441c326",
+            "score": 0.03278688524590164,
+            "matched_terms": [],
+            "paper_index_score": 0.4697967433002741,
+            "global_block_score": 0.3214265589667373,
+            "retrieval_routes": [
+              "paper_index",
+              "global_block_index"
+            ]
+          },
+          {
+            "paper_id": "11_arxiv_2404.09906.pdf",
+            "document_version_id": "198b422fe1d20600",
+            "score": 0.031009615384615385,
+            "matched_terms": [],
+            "paper_index_score": 0.05835739214807491,
+            "global_block_score": 0.3052546003785742,
+            "retrieval_routes": [
+              "paper_index",
+              "global_block_index"
+            ]
+          }
+        ],
+        "kreq-f92ae9fb647f455e": [
+          {
+            "paper_id": "04_arxiv_2502.16530.pdf",
+            "document_version_id": "7246e0c1f441c326",
+            "score": 0.03278688524590164,
+            "matched_terms": [],
+            "paper_index_score": 0.47261936762365864,
+            "global_block_score": 0.3367870768485321,
+            "retrieval_routes": [
+              "paper_index",
+              "global_block_index"
+            ]
+          },
+          {
+            "paper_id": "11_arxiv_2404.09906.pdf",
+            "document_version_id": "198b422fe1d20600",
+            "score": 0.031754032258064516,
+            "matched_terms": [],
+            "paper_index_score": 0.04980220627592241,
+            "global_block_score": 0.33093630133221663,
+            "retrieval_routes": [
+              "paper_index",
+              "global_block_index"
+            ]
+          }
+        ]
+      },
+      "knowledge_reused_count": 0,
+      "llm_call_count": 14
+    },
+    "beliefs": {
+      "schema_version": "evidence-belief-set-v1",
+      "belief_set_id": "belief-set-aca5a2c44fa39cd82dc7",
+      "beliefs": [
+        {
+          "schema_version": "evidence-belief-v1",
+          "belief_id": "belief-f31d1b9ffba21e43e0d8",
+          "evidence_id": "evidence-88b9db0bad77edbdbc9a",
+          "evidence_type": "MATERIAL_IDENTITY",
+          "applicability_score": 0.8075,
+          "transfer_level": "STRONG",
+          "prior_weight": 0.8075,
+          "uncertainty": "HIGH",
+          "facets": [
+            {
+              "facet": "material",
+              "status": "MATCH",
+              "score": 1.0,
+              "task_value": "diamond",
+              "evidence_value": "diamond",
+              "reason": "canonical exact match"
+            },
+            {
+              "facet": "material_grade",
+              "status": "NOT_APPLICABLE",
+              "score": 1.0,
+              "task_value": null,
+              "evidence_value": "CVD diamond",
+              "reason": "task does not specify a material grade"
+            },
+            {
+              "facet": "target_metric",
+              "status": "UNKNOWN",
+              "score": 0.65,
+              "task_value": "depth_um",
+              "evidence_value": null,
+              "reason": "evidence does not report this facet"
+            },
+            {
+              "facet": "wavelength_nm",
+              "status": "UNKNOWN",
+              "score": 0.65,
+              "task_value": 800.0,
+              "evidence_value": null,
+              "reason": "evidence value is missing"
+            },
+            {
+              "facet": "pulse_width_fs",
+              "status": "UNKNOWN",
+              "score": 0.65,
+              "task_value": [
+                25.0,
+                35.0
+              ],
+              "evidence_value": null,
+              "reason": "evidence does not report pulse width"
+            },
+            {
+              "facet": "condition_completeness",
+              "status": "UNKNOWN",
+              "score": 0.5,
+              "task_value": [
+                "wavelength",
+                "pulse_width",
+                "frequency",
+                "scan_speed"
+              ],
+              "evidence_value": [],
+              "reason": "fraction of equipment-comparable conditions explicitly reported by evidence"
+            },
+            {
+              "facet": "mechanical_validation",
+              "status": "MATCH",
+              "score": 1.0,
+              "task_value": "VALIDATED",
+              "evidence_value": "VALIDATED",
+              "reason": "quote, block references, and numeric claims passed deterministic checks"
+            },
+            {
+              "facet": "extraction_confidence",
+              "status": "MATCH",
+              "score": 0.95,
+              "task_value": null,
+              "evidence_value": 0.95,
+              "reason": "extractor self-assessment; used only as one bounded factor"
+            }
+          ],
+          "support_basis": [
+            "paper-local quoted EvidenceIR",
+            "mechanically validated source block references",
+            "governance state excluded from transfer scoring"
+          ],
+          "governance_status": "unreviewed",
+          "method": "faceted-transfer-score-v1"
+        },
+        {
+          "schema_version": "evidence-belief-v1",
+          "belief_id": "belief-14c01eddffb281cf6a58",
+          "evidence_id": "evidence-460e287dc1005455da22",
+          "evidence_type": "PROCESS_OBSERVATION",
+          "applicability_score": 0.9055,
+          "transfer_level": "STRONG",
+          "prior_weight": 0.9055,
+          "uncertainty": "LOW",
+          "facets": [
+            {
+              "facet": "material",
+              "status": "MATCH",
+              "score": 1.0,
+              "task_value": "diamond",
+              "evidence_value": "diamond",
+              "reason": "canonical exact match"
+            },
+            {
+              "facet": "material_grade",
+              "status": "NOT_APPLICABLE",
+              "score": 1.0,
+              "task_value": null,
+              "evidence_value": null,
+              "reason": "task does not specify a material grade"
+            },
+            {
+              "facet": "target_metric",
+              "status": "MATCH",
+              "score": 1.0,
+              "task_value": "depth_um",
+              "evidence_value": "depth_um",
+              "reason": "canonical exact match"
+            },
+            {
+              "facet": "wavelength_nm",
+              "status": "UNKNOWN",
+              "score": 0.65,
+              "task_value": 800.0,
+              "evidence_value": null,
+              "reason": "evidence value is missing"
+            },
+            {
+              "facet": "pulse_width_fs",
+              "status": "MATCH",
+              "score": 1.0,
+              "task_value": [
+                25.0,
+                35.0
+              ],
+              "evidence_value": [
+                30.0,
+                30.0
+              ],
+              "reason": "pulse-width ranges overlap"
+            },
+            {
+              "facet": "condition_completeness",
+              "status": "PARTIAL",
+              "score": 0.625,
+              "task_value": [
+                "wavelength",
+                "pulse_width",
+                "frequency",
+                "scan_speed"
+              ],
+              "evidence_value": [
+                "pulse_width"
+              ],
+              "reason": "fraction of equipment-comparable conditions explicitly reported by evidence"
+            },
+            {
+              "facet": "mechanical_validation",
+              "status": "MATCH",
+              "score": 1.0,
+              "task_value": "VALIDATED",
+              "evidence_value": "VALIDATED",
+              "reason": "quote, block references, and numeric claims passed deterministic checks"
+            },
+            {
+              "facet": "extraction_confidence",
+              "status": "PARTIAL",
+              "score": 0.7,
+              "task_value": null,
+              "evidence_value": 0.7,
+              "reason": "extractor self-assessment; used only as one bounded factor"
+            }
+          ],
+          "support_basis": [
+            "paper-local quoted EvidenceIR",
+            "mechanically validated source block references",
+            "governance state excluded from transfer scoring"
+          ],
+          "governance_status": "unreviewed",
+          "method": "faceted-transfer-score-v1"
+        },
+        {
+          "schema_version": "evidence-belief-v1",
+          "belief_id": "belief-8fde7ae15db6076c9f9f",
+          "evidence_id": "evidence-32425cff5d234f2c5413",
+          "evidence_type": "PARAMETER_EFFECT",
+          "applicability_score": 0.918,
+          "transfer_level": "STRONG",
+          "prior_weight": 0.918,
+          "uncertainty": "LOW",
+          "facets": [
+            {
+              "facet": "material",
+              "status": "MATCH",
+              "score": 1.0,
+              "task_value": "diamond",
+              "evidence_value": "diamond",
+              "reason": "canonical exact match"
+            },
+            {
+              "facet": "material_grade",
+              "status": "NOT_APPLICABLE",
+              "score": 1.0,
+              "task_value": null,
+              "evidence_value": null,
+              "reason": "task does not specify a material grade"
+            },
+            {
+              "facet": "target_metric",
+              "status": "MATCH",
+              "score": 1.0,
+              "task_value": "depth_um",
+              "evidence_value": "depth_um",
+              "reason": "canonical exact match"
+            },
+            {
+              "facet": "wavelength_nm",
+              "status": "UNKNOWN",
+              "score": 0.65,
+              "task_value": 800.0,
+              "evidence_value": null,
+              "reason": "evidence value is missing"
+            },
+            {
+              "facet": "pulse_width_fs",
+              "status": "MATCH",
+              "score": 1.0,
+              "task_value": [
+                25.0,
+                35.0
+              ],
+              "evidence_value": [
+                30.0,
+                30.0
+              ],
+              "reason": "pulse-width ranges overlap"
+            },
+            {
+              "facet": "condition_completeness",
+              "status": "PARTIAL",
+              "score": 0.625,
+              "task_value": [
+                "wavelength",
+                "pulse_width",
+                "frequency",
+                "scan_speed"
+              ],
+              "evidence_value": [
+                "pulse_width"
+              ],
+              "reason": "fraction of equipment-comparable conditions explicitly reported by evidence"
+            },
+            {
+              "facet": "mechanical_validation",
+              "status": "MATCH",
+              "score": 1.0,
+              "task_value": "VALIDATED",
+              "evidence_value": "VALIDATED",
+              "reason": "quote, block references, and numeric claims passed deterministic checks"
+            },
+            {
+              "facet": "extraction_confidence",
+              "status": "MATCH",
+              "score": 0.95,
+              "task_value": null,
+              "evidence_value": 0.95,
+              "reason": "extractor self-assessment; used only as one bounded factor"
+            }
+          ],
+          "support_basis": [
+            "paper-local quoted EvidenceIR",
+            "mechanically validated source block references",
+            "governance state excluded from transfer scoring"
+          ],
+          "governance_status": "unreviewed",
+          "method": "faceted-transfer-score-v1"
+        },
+        {
+          "schema_version": "evidence-belief-v1",
+          "belief_id": "belief-800b396376ba6db2b3ba",
+          "evidence_id": "evidence-445775ac7caa5571eb77",
+          "evidence_type": "MECHANISM",
+          "applicability_score": 0.8075,
+          "transfer_level": "STRONG",
+          "prior_weight": 0.8075,
+          "uncertainty": "HIGH",
+          "facets": [
+            {
+              "facet": "material",
+              "status": "MATCH",
+              "score": 1.0,
+              "task_value": "diamond",
+              "evidence_value": "diamond",
+              "reason": "canonical exact match"
+            },
+            {
+              "facet": "material_grade",
+              "status": "NOT_APPLICABLE",
+              "score": 1.0,
+              "task_value": null,
+              "evidence_value": null,
+              "reason": "task does not specify a material grade"
+            },
+            {
+              "facet": "target_metric",
+              "status": "UNKNOWN",
+              "score": 0.65,
+              "task_value": "depth_um",
+              "evidence_value": null,
+              "reason": "evidence does not report this facet"
+            },
+            {
+              "facet": "wavelength_nm",
+              "status": "UNKNOWN",
+              "score": 0.65,
+              "task_value": 800.0,
+              "evidence_value": null,
+              "reason": "evidence value is missing"
+            },
+            {
+              "facet": "pulse_width_fs",
+              "status": "UNKNOWN",
+              "score": 0.65,
+              "task_value": [
+                25.0,
+                35.0
+              ],
+              "evidence_value": null,
+              "reason": "evidence does not report pulse width"
+            },
+            {
+              "facet": "condition_completeness",
+              "status": "UNKNOWN",
+              "score": 0.5,
+              "task_value": [
+                "wavelength",
+                "pulse_width",
+                "frequency",
+                "scan_speed"
+              ],
+              "evidence_value": [],
+              "reason": "fraction of equipment-comparable conditions explicitly reported by evidence"
+            },
+            {
+              "facet": "mechanical_validation",
+              "status": "MATCH",
+              "score": 1.0,
+              "task_value": "VALIDATED",
+              "evidence_value": "VALIDATED",
+              "reason": "quote, block references, and numeric claims passed deterministic checks"
+            },
+            {
+              "facet": "extraction_confidence",
+              "status": "MATCH",
+              "score": 0.95,
+              "task_value": null,
+              "evidence_value": 0.95,
+              "reason": "extractor self-assessment; used only as one bounded factor"
+            }
+          ],
+          "support_basis": [
+            "paper-local quoted EvidenceIR",
+            "mechanically validated source block references",
+            "governance state excluded from transfer scoring"
+          ],
+          "governance_status": "unreviewed",
+          "method": "faceted-transfer-score-v1"
+        },
+        {
+          "schema_version": "evidence-belief-v1",
+          "belief_id": "belief-89b6269d5d4b50cb4646",
+          "evidence_id": "evidence-a60355a28687ecec5b5b",
+          "evidence_type": "MECHANISM",
+          "applicability_score": 0.805,
+          "transfer_level": "STRONG",
+          "prior_weight": 0.805,
+          "uncertainty": "HIGH",
+          "facets": [
+            {
+              "facet": "material",
+              "status": "MATCH",
+              "score": 1.0,
+              "task_value": "diamond",
+              "evidence_value": "diamond",
+              "reason": "canonical exact match"
+            },
+            {
+              "facet": "material_grade",
+              "status": "NOT_APPLICABLE",
+              "score": 1.0,
+              "task_value": null,
+              "evidence_value": null,
+              "reason": "task does not specify a material grade"
+            },
+            {
+              "facet": "target_metric",
+              "status": "UNKNOWN",
+              "score": 0.65,
+              "task_value": "depth_um",
+              "evidence_value": null,
+              "reason": "evidence does not report this facet"
+            },
+            {
+              "facet": "wavelength_nm",
+              "status": "UNKNOWN",
+              "score": 0.65,
+              "task_value": 800.0,
+              "evidence_value": null,
+              "reason": "evidence value is missing"
+            },
+            {
+              "facet": "pulse_width_fs",
+              "status": "UNKNOWN",
+              "score": 0.65,
+              "task_value": [
+                25.0,
+                35.0
+              ],
+              "evidence_value": null,
+              "reason": "evidence does not report pulse width"
+            },
+            {
+              "facet": "condition_completeness",
+              "status": "UNKNOWN",
+              "score": 0.5,
+              "task_value": [
+                "wavelength",
+                "pulse_width",
+                "frequency",
+                "scan_speed"
+              ],
+              "evidence_value": [],
+              "reason": "fraction of equipment-comparable conditions explicitly reported by evidence"
+            },
+            {
+              "facet": "mechanical_validation",
+              "status": "MATCH",
+              "score": 1.0,
+              "task_value": "VALIDATED",
+              "evidence_value": "VALIDATED",
+              "reason": "quote, block references, and numeric claims passed deterministic checks"
+            },
+            {
+              "facet": "extraction_confidence",
+              "status": "MATCH",
+              "score": 0.9,
+              "task_value": null,
+              "evidence_value": 0.9,
+              "reason": "extractor self-assessment; used only as one bounded factor"
+            }
+          ],
+          "support_basis": [
+            "paper-local quoted EvidenceIR",
+            "mechanically validated source block references",
+            "governance state excluded from transfer scoring"
+          ],
+          "governance_status": "unreviewed",
+          "method": "faceted-transfer-score-v1"
+        },
+        {
+          "schema_version": "evidence-belief-v1",
+          "belief_id": "belief-c04dcbe3becfe1fb0bad",
+          "evidence_id": "evidence-7995b9bb5a28644d47ca",
+          "evidence_type": "PROCESS_METHOD",
+          "applicability_score": 0.8,
+          "transfer_level": "STRONG",
+          "prior_weight": 0.8,
+          "uncertainty": "HIGH",
+          "facets": [
+            {
+              "facet": "material",
+              "status": "MATCH",
+              "score": 1.0,
+              "task_value": "diamond",
+              "evidence_value": "diamond",
+              "reason": "canonical exact match"
+            },
+            {
+              "facet": "material_grade",
+              "status": "NOT_APPLICABLE",
+              "score": 1.0,
+              "task_value": null,
+              "evidence_value": null,
+              "reason": "task does not specify a material grade"
+            },
+            {
+              "facet": "target_metric",
+              "status": "UNKNOWN",
+              "score": 0.65,
+              "task_value": "depth_um",
+              "evidence_value": null,
+              "reason": "evidence does not report this facet"
+            },
+            {
+              "facet": "wavelength_nm",
+              "status": "UNKNOWN",
+              "score": 0.65,
+              "task_value": 800.0,
+              "evidence_value": null,
+              "reason": "evidence value is missing"
+            },
+            {
+              "facet": "pulse_width_fs",
+              "status": "UNKNOWN",
+              "score": 0.65,
+              "task_value": [
+                25.0,
+                35.0
+              ],
+              "evidence_value": null,
+              "reason": "evidence does not report pulse width"
+            },
+            {
+              "facet": "condition_completeness",
+              "status": "UNKNOWN",
+              "score": 0.5,
+              "task_value": [
+                "wavelength",
+                "pulse_width",
+                "frequency",
+                "scan_speed"
+              ],
+              "evidence_value": [],
+              "reason": "fraction of equipment-comparable conditions explicitly reported by evidence"
+            },
+            {
+              "facet": "mechanical_validation",
+              "status": "MATCH",
+              "score": 1.0,
+              "task_value": "VALIDATED",
+              "evidence_value": "VALIDATED",
+              "reason": "quote, block references, and numeric claims passed deterministic checks"
+            },
+            {
+              "facet": "extraction_confidence",
+              "status": "MATCH",
+              "score": 0.8,
+              "task_value": null,
+              "evidence_value": 0.8,
+              "reason": "extractor self-assessment; used only as one bounded factor"
+            }
+          ],
+          "support_basis": [
+            "paper-local quoted EvidenceIR",
+            "mechanically validated source block references",
+            "governance state excluded from transfer scoring"
+          ],
+          "governance_status": "unreviewed",
+          "method": "faceted-transfer-score-v1"
+        }
+      ]
+    },
+    "priors": {
+      "schema_version": "prior-object-set-v2",
+      "prior_set_id": "prior-set-4a18c007f4b9896024fc",
+      "priors": [
+        {
+          "schema_version": "prior-object-v2",
+          "prior_id": "preference-prior-5411acc98ff684d213c0",
+          "evidence_refs": [
+            "evidence-460e287dc1005455da22"
+          ],
+          "belief_refs": [
+            "belief-14c01eddffb281cf6a58"
+          ],
+          "applicability_score": 0.9055,
+          "weight": 0.9055,
+          "uncertainty": "LOW",
+          "status": "PROVISIONAL",
+          "conflict_group_id": null,
+          "assumptions": [
+            "soft prior only; it cannot remove equipment-feasible parameter space",
+            "weight is a deterministic transfer score, not a calibrated probability"
+          ],
+          "prior_type": "PreferencePrior",
+          "parameter": null,
+          "direction": null,
+          "statement": "The variation of photoablated track depth, d, in μm, was directly measured as a function of applied laser energy dose (kJ/cm2) and presented in Figure 3(b).",
+          "hard_constraint": false
+        },
+        {
+          "schema_version": "prior-object-v2",
+          "prior_id": "preference-prior-69efaa5d64eae91eaec3",
+          "evidence_refs": [
+            "evidence-32425cff5d234f2c5413"
+          ],
+          "belief_refs": [
+            "belief-8fde7ae15db6076c9f9f"
+          ],
+          "applicability_score": 0.918,
+          "weight": 0.918,
+          "uncertainty": "LOW",
+          "status": "PROVISIONAL",
+          "conflict_group_id": null,
+          "assumptions": [
+            "soft prior only; it cannot remove equipment-feasible parameter space",
+            "weight is a deterministic transfer score, not a calibrated probability"
+          ],
+          "prior_type": "PreferencePrior",
+          "parameter": "laser energy dose",
+          "direction": "THRESHOLD",
+          "statement": "For 30-fs laser ablation of diamond, energy doses in excess of 50 kJ/cm2 provide only minimal gains in ablation depth because of energy redistribution.",
+          "hard_constraint": false
+        },
+        {
+          "schema_version": "prior-object-v2",
+          "prior_id": "model-prior-eb7f6651b0274d792f8f",
+          "evidence_refs": [
+            "evidence-445775ac7caa5571eb77"
+          ],
+          "belief_refs": [
+            "belief-800b396376ba6db2b3ba"
+          ],
+          "applicability_score": 0.8075,
+          "weight": 0.8075,
+          "uncertainty": "HIGH",
+          "status": "PROVISIONAL",
+          "conflict_group_id": null,
+          "assumptions": [
+            "soft prior only; it cannot remove equipment-feasible parameter space",
+            "weight is a deterministic transfer score, not a calibrated probability"
+          ],
+          "prior_type": "ModelStructurePrior",
+          "mechanism": "plasma shielding from free electron accumulation",
+          "statement": "In the high-dose regime (>50 kJ/cm2), material removal is far less effective due to plasma shielding from free electron accumulation; free electrons reflect and absorb incident fs-laser energy, modifying local electric fields and reducing ionization efficiency."
+        },
+        {
+          "schema_version": "prior-object-v2",
+          "prior_id": "model-prior-de0590802d05b9147c97",
+          "evidence_refs": [
+            "evidence-a60355a28687ecec5b5b"
+          ],
+          "belief_refs": [
+            "belief-89b6269d5d4b50cb4646"
+          ],
+          "applicability_score": 0.805,
+          "weight": 0.805,
+          "uncertainty": "HIGH",
+          "status": "PROVISIONAL",
+          "conflict_group_id": null,
+          "assumptions": [
+            "soft prior only; it cannot remove equipment-feasible parameter space",
+            "weight is a deterministic transfer score, not a calibrated probability"
+          ],
+          "prior_type": "ModelStructurePrior",
+          "mechanism": "energy redistribution",
+          "statement": "For 30-fs laser doses in excess of 50 kJ/cm2, minimal gains in ablation depth occur due to energy redistribution."
+        },
+        {
+          "schema_version": "prior-object-v2",
+          "prior_id": "preference-prior-d216eed0d94897fc534e",
+          "evidence_refs": [
+            "evidence-7995b9bb5a28644d47ca"
+          ],
+          "belief_refs": [
+            "belief-c04dcbe3becfe1fb0bad"
+          ],
+          "applicability_score": 0.8,
+          "weight": 0.8,
+          "uncertainty": "HIGH",
+          "status": "PROVISIONAL",
+          "conflict_group_id": null,
+          "assumptions": [
+            "soft prior only; it cannot remove equipment-feasible parameter space",
+            "weight is a deterministic transfer score, not a calibrated probability"
+          ],
+          "prior_type": "PreferencePrior",
+          "parameter": null,
+          "direction": null,
+          "statement": "The reported material removal rate (MRR) was estimated using 3D interferometric depth and width values, adjusted for sample translational velocity.",
+          "hard_constraint": false
+        }
+      ],
+      "conflicts": [],
+      "warnings": [
+        "prior weights are deterministic transfer scores, not calibrated probabilities",
+        "all literature-derived priors are soft and never become equipment constraints"
+      ]
+    },
+    "warnings": [
+      "未获得机械校验通过的证据：MATERIAL_PROPERTY, REPORTED_OPTIMUM",
+      "2 条 LLM 抽取未通过机械校验，未进入 belief/prior。",
+      "治理提醒：结果包含 unreviewed 状态的结构化知识；治理状态未限制本次检索、抽取或 E2P。",
+      "prior weights are deterministic transfer scores, not calibrated probabilities",
+      "all literature-derived priors are soft and never become equipment constraints"
+    ]
+  }
+}

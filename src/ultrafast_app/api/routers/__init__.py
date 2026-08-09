@@ -1,6 +1,7 @@
 from ultrafast_app.api.routers.bo import router as bo_router
 from ultrafast_app.api.routers.chat import router as chat_router
 from ultrafast_app.api.routers.e2p import router as e2p_router
+from ultrafast_app.api.routers.evidence_prior import router as evidence_prior_router
 from ultrafast_app.api.routers.equipment import router as equipment_router
 from ultrafast_app.api.routers.health import router as health_router
 from ultrafast_app.api.routers.ingestion import router as ingestion_router
@@ -26,6 +27,7 @@ ROUTERS = (
     trial_router,
     bo_router,
     e2p_router,
+    evidence_prior_router,
     reports_router,
     jobs_router,
     process_recommendations_router,

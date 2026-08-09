@@ -23,7 +23,7 @@ describe('EquipmentProfileForm', () => {
     })
     fireEvent.click(screen.getByRole('button', { name: '创建设备档案' }))
 
-    expect(await screen.findByText('请填写激光波长')).toBeInTheDocument()
+    expect(await screen.findByText('请填写可调脉宽下限')).toBeInTheDocument()
     expect(create).not.toHaveBeenCalled()
   })
 

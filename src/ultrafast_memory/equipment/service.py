@@ -27,6 +27,8 @@ SECTION_COLUMNS = {
         "average_power_min_W",
         "average_power_max_W",
         "rated_max_power_W",
+        "measured_max_power_W",
+        "power_transmission_ratio",
         "actual_max_power_W",
         "workpiece_incident_power_min_W",
         "workpiece_incident_power_max_W",

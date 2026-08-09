@@ -119,9 +119,9 @@ const PROFILE_FIELD_LABELS: Array<{
   { section: 'laser_source', key: 'wavelength_nm', label: '波长', unit: 'nm' },
   { section: 'laser_source', key: 'pulse_width_min_fs', label: '可调脉宽下限', unit: 'fs' },
   { section: 'laser_source', key: 'pulse_width_max_fs', label: '可调脉宽上限', unit: 'fs' },
-  { section: 'laser_source', key: 'workpiece_incident_power_min_W', label: '材料表面入射平均功率下限', unit: 'W' },
-  { section: 'laser_source', key: 'workpiece_incident_power_max_W', label: '材料表面入射平均功率上限', unit: 'W' },
   { section: 'laser_source', key: 'rated_max_power_W', label: '激光器额定最大平均功率', unit: 'W' },
+  { section: 'laser_source', key: 'measured_max_power_W', label: '材料表面实测最大平均功率', unit: 'W' },
+  { section: 'laser_source', key: 'power_transmission_ratio', label: '光路功率传输比', unit: '' },
   { section: 'laser_source', key: 'frequency_min_kHz', label: '频率下限', unit: 'kHz' },
   { section: 'laser_source', key: 'frequency_max_kHz', label: '频率上限', unit: 'kHz' },
   { section: 'optical_setup', key: 'spot_diameter_um', label: '光斑直径', unit: 'μm' },
@@ -245,9 +245,9 @@ export function SettingsPage() {
       <div className="cards-grid">
         <Card title="运行环境">
           <ul className="plain-list">
-            <li>Frontend: Physics-to-Planning V3 workbench</li>
-            <li>API: /api/v1（ApplicationRun gateway）</li>
-            <li>Developer Mode 开关位于顶部 Global Context Bar</li>
+            <li>Frontend: Evidence-to-Prior V1</li>
+            <li>API: /api/v1/evidence-prior/analyze</li>
+            <li>真实文献索引与真实 LLM 是科学分析的必需条件</li>
           </ul>
         </Card>
         <Card title="关于">

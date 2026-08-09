@@ -3,14 +3,20 @@ from __future__ import annotations
 from typing import Any
 
 from ultrafast_memory.core.config import load_config
+from ultrafast_memory.equipment.power import resolve_effective_max_power
 from ultrafast_memory.equipment.service import (
     get_active_equipment_profile,
     get_equipment_profile,
 )
 from ultrafast_memory.equipment.validation import validate_override_within_bounds
 
-
-REQUIRED_ACTIVE_BOUNDS = ("pulse_width_fs", "laser_power_W", "frequency_kHz", "scan_speed_mm_s", "spot_diameter_um")
+REQUIRED_ACTIVE_BOUNDS = (
+    "pulse_width_fs",
+    "laser_power_W",
+    "frequency_kHz",
+    "scan_speed_mm_s",
+    "spot_diameter_um",
+)
 
 PARAMETER_UNITS = {
     "wavelength_nm": "nm",
@@ -27,7 +33,11 @@ PARAMETER_UNITS = {
 
 
 def build_machine_bounds(equipment_profile_id: str | None = None) -> dict[str, Any]:
-    profile = get_equipment_profile(equipment_profile_id) if equipment_profile_id else get_active_equipment_profile()
+    profile = (
+        get_equipment_profile(equipment_profile_id)
+        if equipment_profile_id
+        else get_active_equipment_profile()
+    )
     if not profile:
         return {
             "active": False,
@@ -67,11 +77,15 @@ def require_machine_bounds_for_bo() -> dict[str, Any]:
     return result
 
 
-def apply_task_level_override(machine_bounds: dict[str, Any], override: dict[str, Any], reason: str | None) -> dict[str, Any]:
+def apply_task_level_override(
+    machine_bounds: dict[str, Any], override: dict[str, Any], reason: str | None
+) -> dict[str, Any]:
     return validate_override_within_bounds(machine_bounds, override, reason)
 
 
-def validate_candidate_within_bounds(candidate: dict[str, float | int], machine_bounds: dict[str, list[float | int]]) -> dict[str, Any]:
+def validate_candidate_within_bounds(
+    candidate: dict[str, float | int], machine_bounds: dict[str, list[float | int]]
+) -> dict[str, Any]:
     violations = []
     for key, value in candidate.items():
         if key not in machine_bounds:
@@ -84,7 +98,9 @@ def validate_candidate_within_bounds(candidate: dict[str, float | int], machine_
             "valid": False,
             "invalid_reason": "blocked_by_machine_bounds",
             "violations": violations,
-            "audit_trace": [{"step": "blocked_by_machine_bounds", "status": "invalid", "violations": violations}],
+            "audit_trace": [
+                {"step": "blocked_by_machine_bounds", "status": "invalid", "violations": violations}
+            ],
         }
     return {"valid": True, "violations": [], "audit_trace": []}
 
@@ -119,24 +135,48 @@ def _bounds_from_profile(profile: dict[str, Any]) -> dict[str, list[float | int]
     if laser.get("pulse_width_fixed_fs") is not None:
         _add_fixed(bounds, "pulse_width_fs", laser.get("pulse_width_fixed_fs"))
     else:
-        _add_range(bounds, "pulse_width_fs", laser.get("pulse_width_min_fs"), laser.get("pulse_width_max_fs"))
+        _add_range(
+            bounds,
+            "pulse_width_fs",
+            laser.get("pulse_width_min_fs"),
+            laser.get("pulse_width_max_fs"),
+        )
+    effective_power, _source = resolve_effective_max_power(laser)
+    _add_range(
+        bounds, "laser_power_W", 0.0 if effective_power is not None else None, effective_power
+    )
+    _add_range(
+        bounds, "frequency_kHz", laser.get("frequency_min_kHz"), laser.get("frequency_max_kHz")
+    )
+    _add_fixed(bounds, "spot_diameter_um", optical.get("spot_diameter_um"))
     _add_range(
         bounds,
-        "laser_power_W",
-        laser.get("workpiece_incident_power_min_W"),
-        laser.get("workpiece_incident_power_max_W"),
+        "focus_offset_um",
+        optical.get("focus_offset_min_um"),
+        optical.get("focus_offset_max_um"),
     )
-    _add_range(bounds, "frequency_kHz", laser.get("frequency_min_kHz"), laser.get("frequency_max_kHz"))
-    _add_fixed(bounds, "spot_diameter_um", optical.get("spot_diameter_um"))
-    _add_range(bounds, "focus_offset_um", optical.get("focus_offset_min_um"), optical.get("focus_offset_max_um"))
-    _add_range(bounds, "scan_speed_mm_s", motion.get("scan_speed_min_mm_s"), motion.get("scan_speed_max_mm_s"))
-    _add_range(bounds, "hatch_spacing_um", process.get("hatch_spacing_min_um"), process.get("hatch_spacing_max_um"))
-    _add_range(bounds, "layer_step_um", process.get("layer_step_min_um"), process.get("layer_step_max_um"))
+    _add_range(
+        bounds,
+        "scan_speed_mm_s",
+        motion.get("scan_speed_min_mm_s"),
+        motion.get("scan_speed_max_mm_s"),
+    )
+    _add_range(
+        bounds,
+        "hatch_spacing_um",
+        process.get("hatch_spacing_min_um"),
+        process.get("hatch_spacing_max_um"),
+    )
+    _add_range(
+        bounds, "layer_step_um", process.get("layer_step_min_um"), process.get("layer_step_max_um")
+    )
     _add_range(bounds, "passes", process.get("passes_min"), process.get("passes_max"))
     return bounds
 
 
-def _semantic_parameters(profile: dict[str, Any]) -> tuple[dict[str, Any], dict[str, dict[str, Any]]]:
+def _semantic_parameters(
+    profile: dict[str, Any],
+) -> tuple[dict[str, Any], dict[str, dict[str, Any]]]:
     laser = profile.get("laser_source") or {}
     optical = profile.get("optical_setup") or {}
     motion = profile.get("motion_system") or {}
@@ -147,19 +187,46 @@ def _semantic_parameters(profile: dict[str, Any]) -> tuple[dict[str, Any], dict[
     if laser.get("pulse_width_fixed_fs") is not None:
         _semantic_fixed(fixed, "pulse_width_fs", laser.get("pulse_width_fixed_fs"))
     else:
-        _semantic_range(tunable, "pulse_width_fs", laser.get("pulse_width_min_fs"), laser.get("pulse_width_max_fs"))
+        _semantic_range(
+            tunable,
+            "pulse_width_fs",
+            laser.get("pulse_width_min_fs"),
+            laser.get("pulse_width_max_fs"),
+        )
+    effective_power, power_source = resolve_effective_max_power(laser)
     _semantic_range(
         tunable,
         "laser_power_W",
-        laser.get("workpiece_incident_power_min_W"),
-        laser.get("workpiece_incident_power_max_W"),
+        0.0 if effective_power is not None else None,
+        effective_power,
     )
-    _semantic_range(tunable, "frequency_kHz", laser.get("frequency_min_kHz"), laser.get("frequency_max_kHz"))
+    if "laser_power_W" in tunable:
+        tunable["laser_power_W"]["source"] = power_source
+    _semantic_range(
+        tunable, "frequency_kHz", laser.get("frequency_min_kHz"), laser.get("frequency_max_kHz")
+    )
     _semantic_fixed(fixed, "spot_diameter_um", optical.get("spot_diameter_um"))
-    _semantic_range(tunable, "focus_offset_um", optical.get("focus_offset_min_um"), optical.get("focus_offset_max_um"))
-    _semantic_range(tunable, "scan_speed_mm_s", motion.get("scan_speed_min_mm_s"), motion.get("scan_speed_max_mm_s"))
-    _semantic_range(tunable, "hatch_spacing_um", process.get("hatch_spacing_min_um"), process.get("hatch_spacing_max_um"))
-    _semantic_range(tunable, "layer_step_um", process.get("layer_step_min_um"), process.get("layer_step_max_um"))
+    _semantic_range(
+        tunable,
+        "focus_offset_um",
+        optical.get("focus_offset_min_um"),
+        optical.get("focus_offset_max_um"),
+    )
+    _semantic_range(
+        tunable,
+        "scan_speed_mm_s",
+        motion.get("scan_speed_min_mm_s"),
+        motion.get("scan_speed_max_mm_s"),
+    )
+    _semantic_range(
+        tunable,
+        "hatch_spacing_um",
+        process.get("hatch_spacing_min_um"),
+        process.get("hatch_spacing_max_um"),
+    )
+    _semantic_range(
+        tunable, "layer_step_um", process.get("layer_step_min_um"), process.get("layer_step_max_um")
+    )
     _semantic_range(tunable, "passes", process.get("passes_min"), process.get("passes_max"))
     return fixed, tunable
 
