@@ -36,6 +36,24 @@ export interface EvidenceContent {
   parameters?: Array<Record<string, unknown>>
 }
 
+export interface PaperCandidate {
+  paper_id: string
+  document_version_id: string
+  score: number
+  matched_terms: string[]
+  paper_index_score: number
+  global_block_score: number
+  retrieval_routes: string[]
+}
+
+export interface EvidenceMiss {
+  requirement_id: string
+  paper_id: string
+  document_version_id: string
+  status: string
+  reason: string
+}
+
 export interface EvidenceItem {
   evidence_id: string
   requirement_id: string
@@ -117,7 +135,8 @@ export interface EvidencePriorResult {
   evidence: {
     evidence_set_id: string
     items: EvidenceItem[]
-    misses: Array<Record<string, unknown>>
+    misses: EvidenceMiss[]
+    paper_candidates: Record<string, PaperCandidate[]>
     knowledge_reused_count: number
     llm_call_count: number
   }

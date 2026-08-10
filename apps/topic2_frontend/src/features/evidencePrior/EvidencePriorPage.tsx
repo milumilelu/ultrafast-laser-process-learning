@@ -13,6 +13,7 @@ import { datasetsApi, type EquipmentProfileEntry } from '../../api/datasets'
 import { Button } from '../../components/ui/Button'
 import { Card, EmptyState, ErrorBanner, Spinner } from '../../components/ui/Card'
 import { EquipmentProfileForm } from '../equipment/EquipmentProfileForm'
+import { LineagePanel } from './LineagePanel'
 
 export function EvidencePriorPage() {
   const profiles = useQuery({
@@ -154,6 +155,10 @@ export function EvidencePriorPage() {
             开始文献检索、抽取与 E2P
           </Button>
         </Card>
+      </div>
+
+      <div className="evidence-prior-lineage">
+        <LineagePanel result={analysis.data} />
       </div>
 
       <div className="evidence-prior-outputs">
