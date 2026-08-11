@@ -247,10 +247,11 @@ function RequirementChain({
                 <li key={belief.beliefId}>
                   <div className="lineage-v1-belief-head">
                     <span>{belief.evidenceType}</span>
-                    <span>app {belief.applicabilityScore.toFixed(3)} · {belief.transferLevel}</span>
+                    <span>Transfer score {belief.applicabilityScore.toFixed(3)} · {belief.transferLevel}</span>
                   </div>
                   <div className="lineage-meta">
-                    {belief.facetCount} 个适用性维度 · prior weight {belief.priorWeight.toFixed(3)} ·
+                    {belief.facetCount} 个适用性维度 · evidence quality {belief.evidenceQuality.toFixed(3)} ·
+                    recommended strength {belief.recommendedPriorStrength.toFixed(3)} ·
                     uncertainty {belief.uncertainty}
                   </div>
                 </li>
@@ -262,7 +263,8 @@ function RequirementChain({
                   <div className="lineage-v1-prior-head">
                     <strong>{prior.priorType}</strong>
                     <span>
-                      app {prior.applicabilityScore.toFixed(3)} · weight {prior.weight.toFixed(3)}
+                      Transfer score {prior.applicabilityScore.toFixed(3)} · recommended strength{' '}
+                      {prior.recommendedStrength.toFixed(3)}
                     </span>
                   </div>
                   <div className="lineage-meta">

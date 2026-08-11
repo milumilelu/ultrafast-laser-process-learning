@@ -1,4 +1,9 @@
-"""E2P Core: Evidence Compilation, Applicability, Prior Compilation.
+"""Legacy/compatibility E2P implementation.
+
+New task-driven EvidenceIR → Belief → soft-prior work must use
+``ultrafast_evidence_prior``.  This package remains only for the frozen Topic2
+compatibility adapters under ``packages/e2p`` and must not be integrated into
+new BO or evidence-prior workflows.
 
 独立于 Agent / RAG / BO 的科学计算边界：
 

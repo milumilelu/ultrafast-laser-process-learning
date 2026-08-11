@@ -34,7 +34,7 @@ const MINIMAL_RESULT: EvidencePriorResult = {
     llm_call_count: 0,
   },
   beliefs: { belief_set_id: 'bs', beliefs: [] },
-  priors: { prior_set_id: 'ps', priors: [], conflicts: [], warnings: [] },
+  priors: { prior_set_id: 'ps', priors: [], observations: [], conflicts: [], warnings: [] },
   warnings: [],
 }
 

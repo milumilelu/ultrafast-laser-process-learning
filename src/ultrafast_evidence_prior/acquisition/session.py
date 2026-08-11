@@ -383,7 +383,7 @@ class EvidenceAcquisitionSession:
             if key in skip_keys:
                 continue
             outcome = self.extractor.extract(requirement, candidate, windows)
-            calls += 1
+            calls += outcome.llm_call_count
             self._add_items(items, item_ids, outcome.items)
             for item in outcome.items:
                 if item.validation_state == ValidationState.VALIDATED:

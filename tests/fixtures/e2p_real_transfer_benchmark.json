@@ -1,0 +1,52 @@
+[
+  {
+    "case_id": "diamond_matching_laser_regime",
+    "paper_id": "04_arxiv_2502.16530.pdf",
+    "block_ids": ["04_arxiv_2502.16530.pdf:p0:b25"],
+    "paper_metadata": {"material": "diamond"},
+    "conditions": {"material": "diamond", "wavelength_nm": 800, "pulse_width_fs": 30, "frequency_kHz": 1},
+    "task": {"material": "diamond", "wavelength_nm": 800, "pulse_width_min_fs": 25, "pulse_width_max_fs": 35, "frequency_min_kHz": 0.5, "frequency_max_kHz": 2},
+    "expected_transfer_level": "STRONG",
+    "rationale": "Same material and overlapping wavelength, pulse-width, and repetition-rate regimes."
+  },
+  {
+    "case_id": "diamond_frequency_three_decades_away",
+    "paper_id": "04_arxiv_2502.16530.pdf",
+    "block_ids": ["04_arxiv_2502.16530.pdf:p0:b25"],
+    "paper_metadata": {"material": "diamond"},
+    "conditions": {"material": "diamond", "wavelength_nm": 800, "pulse_width_fs": 30, "frequency_kHz": 1},
+    "task": {"material": "diamond", "wavelength_nm": 800, "pulse_width_min_fs": 25, "pulse_width_max_fs": 35, "frequency_min_kHz": 1000, "frequency_max_kHz": 2000},
+    "expected_transfer_level": "MEDIUM",
+    "rationale": "Same material and pulse regime, but repetition rate is three orders of magnitude away."
+  },
+  {
+    "case_id": "sic_frequency_and_scan_match",
+    "paper_id": "10_arxiv_2411.18093.pdf",
+    "block_ids": ["10_arxiv_2411.18093.pdf:p11:b16", "10_arxiv_2411.18093.pdf:p11:b17"],
+    "paper_metadata": {"material": "4H-SiC"},
+    "conditions": {"material": "4H-SiC", "frequency_kHz": 100, "scan_speed_mm_s": 200},
+    "task": {"material": "4H-SiC", "wavelength_nm": 1045, "pulse_width_min_fs": 12000, "pulse_width_max_fs": 13000, "frequency_min_kHz": 90, "frequency_max_kHz": 110, "scan_speed_min_mm_s": 180, "scan_speed_max_mm_s": 220},
+    "expected_transfer_level": "MEDIUM",
+    "rationale": "Material, repetition rate, and scan speed match; wavelength, pulse width, and target remain unreported."
+  },
+  {
+    "case_id": "sic_scan_speed_outside_regime",
+    "paper_id": "10_arxiv_2411.18093.pdf",
+    "block_ids": ["10_arxiv_2411.18093.pdf:p11:b16", "10_arxiv_2411.18093.pdf:p11:b17"],
+    "paper_metadata": {"material": "4H-SiC"},
+    "conditions": {"material": "4H-SiC", "frequency_kHz": 100, "scan_speed_mm_s": 200},
+    "task": {"material": "4H-SiC", "wavelength_nm": 1045, "pulse_width_min_fs": 12000, "pulse_width_max_fs": 13000, "frequency_min_kHz": 90, "frequency_max_kHz": 110, "scan_speed_min_mm_s": 1, "scan_speed_max_mm_s": 10},
+    "expected_transfer_level": "WEAK",
+    "rationale": "Material and repetition rate match, but scan speed is outside the equipment regime."
+  },
+  {
+    "case_id": "cross_material_and_process_regime",
+    "paper_id": "10_arxiv_2411.18093.pdf",
+    "block_ids": ["10_arxiv_2411.18093.pdf:p11:b16", "10_arxiv_2411.18093.pdf:p11:b17"],
+    "paper_metadata": {"material": "4H-SiC"},
+    "conditions": {"material": "4H-SiC", "frequency_kHz": 100, "scan_speed_mm_s": 200},
+    "task": {"material": "diamond", "wavelength_nm": 800, "pulse_width_min_fs": 25, "pulse_width_max_fs": 35, "frequency_min_kHz": 1, "frequency_max_kHz": 10, "scan_speed_min_mm_s": 1, "scan_speed_max_mm_s": 10},
+    "expected_transfer_level": "VERY_WEAK",
+    "rationale": "Material differs and both reported process dimensions lie outside the target equipment regime."
+  }
+]

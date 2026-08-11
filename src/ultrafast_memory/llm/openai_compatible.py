@@ -38,6 +38,8 @@ class OpenAICompatibleClient(BaseLLMClient):
             payload["response_format"] = kwargs["response_format"]
         if kwargs.get("max_tokens") is not None:
             payload["max_tokens"] = kwargs["max_tokens"]
+        if self.provider == "deepseek" and kwargs.get("thinking") is not None:
+            payload["thinking"] = kwargs["thinking"]
         body = json.dumps(payload, ensure_ascii=False).encode("utf-8")
         request = urllib.request.Request(
             url,

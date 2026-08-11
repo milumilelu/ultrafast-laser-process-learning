@@ -32,6 +32,7 @@ from ultrafast_evidence_prior.schemas import (
     ReportedOptimumContent,
     ResolvedTaskV1,
     TransferLevel,
+    TransferObservation,
     UncertaintyLevel,
     ValidationState,
 )
@@ -85,41 +86,35 @@ def _belief(task: ResolvedTaskV1, evidence: EvidenceIRV2) -> EvidenceBelief:
         ),
         _wavelength_facet(task, evidence),
         _pulse_width_facet(task, evidence),
+        _frequency_facet(task, evidence),
+        _scan_speed_facet(task, evidence),
         _condition_completeness_facet(task, evidence),
-        ApplicabilityFacet(
-            facet="mechanical_validation",
-            status="MATCH",
-            score=1.0,
-            task_value="VALIDATED",
-            evidence_value=evidence.validation_state.value,
-            reason="quote, block references, and numeric claims passed deterministic checks",
-        ),
-        ApplicabilityFacet(
-            facet="extraction_confidence",
-            status=("MATCH" if evidence.extraction_confidence >= 0.8 else "PARTIAL"),
-            score=evidence.extraction_confidence,
-            task_value=None,
-            evidence_value=evidence.extraction_confidence,
-            reason="extractor self-assessment; used only as one bounded factor",
-        ),
     ]
     weights = {
-        "material": 0.25,
-        "material_grade": 0.10,
+        "material": 0.24,
+        "material_grade": 0.06,
         "target_metric": 0.15,
         "wavelength_nm": 0.12,
         "pulse_width_fs": 0.13,
+        "frequency_kHz": 0.10,
+        "scan_speed_mm_s": 0.10,
         "condition_completeness": 0.10,
-        "mechanical_validation": 0.10,
-        "extraction_confidence": 0.05,
     }
+    applicable = [facet for facet in facets if facet.status != "NOT_APPLICABLE"]
+    denominator = sum(weights[facet.facet] for facet in applicable)
     score = round(
-        sum(facet.score * weights[facet.facet] for facet in facets),
+        sum(facet.score * weights[facet.facet] for facet in applicable) / denominator,
         4,
     )
-    transfer = _transfer_level(score)
     unknown_count = sum(facet.status == "UNKNOWN" for facet in facets)
     uncertainty = _uncertainty(score, unknown_count)
+    transfer = _transfer_level(score, unknown_count)
+    evidence_quality = _evidence_quality(evidence)
+    recommended_strength = _recommended_prior_strength(
+        score,
+        evidence_quality,
+        uncertainty,
+    )
     belief_id = _stable_id(
         "belief",
         {
@@ -132,13 +127,15 @@ def _belief(task: ResolvedTaskV1, evidence: EvidenceIRV2) -> EvidenceBelief:
         evidence_id=evidence.evidence_id,
         evidence_type=evidence.evidence_type,
         applicability_score=score,
+        evidence_quality=evidence_quality,
         transfer_level=transfer,
-        prior_weight=score,
+        recommended_prior_strength=recommended_strength,
         uncertainty=uncertainty,
         facets=facets,
         support_basis=[
             "paper-local quoted EvidenceIR",
             "mechanically validated source block references",
+            "evidence quality is separate from task applicability",
             "governance state excluded from transfer scoring",
         ],
         governance_status=evidence.governance_status,
@@ -151,6 +148,7 @@ def compile_priors(
 ) -> PriorObjectSetV2:
     evidence_by_id = {item.evidence_id: item for item in evidence_set.items}
     priors: list[Any] = []
+    observations: list[TransferObservation] = []
     for belief in belief_set.beliefs:
         evidence = evidence_by_id[belief.evidence_id]
         content = evidence.content
@@ -158,7 +156,8 @@ def compile_priors(
             "evidence_refs": [evidence.evidence_id],
             "belief_refs": [belief.belief_id],
             "applicability_score": belief.applicability_score,
-            "weight": belief.prior_weight,
+            "evidence_quality": belief.evidence_quality,
+            "recommended_strength": belief.recommended_prior_strength,
             "uncertainty": belief.uncertainty,
             "status": (
                 "GOVERNED"
@@ -167,7 +166,7 @@ def compile_priors(
             ),
             "assumptions": [
                 "soft prior only; it cannot remove equipment-feasible parameter space",
-                "weight is a deterministic transfer score, not a calibrated probability",
+                "recommended strength is deterministic guidance, not a calibrated probability",
             ],
         }
         if isinstance(content, ParameterValueContent):
@@ -207,6 +206,10 @@ def compile_priors(
                     prior_id=_stable_id("preference-prior", evidence.evidence_id),
                     parameter=content.parameter,
                     direction=content.direction,
+                    threshold_value=content.threshold_value,
+                    lower=content.lower,
+                    upper=content.upper,
+                    unit=content.unit,
                     statement=content.statement,
                     **common,
                 )
@@ -220,12 +223,23 @@ def compile_priors(
                     **common,
                 )
             )
-        elif isinstance(content, (ProcessMethodContent, ProcessObservationContent)):
-            statement = content.statement
+        elif isinstance(content, ProcessMethodContent):
             priors.append(
                 PreferencePrior(
                     prior_id=_stable_id("preference-prior", evidence.evidence_id),
-                    statement=statement,
+                    statement=content.statement,
+                    **common,
+                )
+            )
+        elif isinstance(content, ProcessObservationContent):
+            observations.append(
+                TransferObservation(
+                    observation_id=_stable_id("transfer-observation", evidence.evidence_id),
+                    target_metric=content.target_metric,
+                    measured_value=content.measured_value,
+                    unit=content.unit,
+                    conditions=evidence.validated_conditions,
+                    statement=content.statement,
                     **common,
                 )
             )
@@ -245,7 +259,7 @@ def compile_priors(
 
     priors, conflicts = _mark_conflicts(priors)
     warnings = [
-        "prior weights are deterministic transfer scores, not calibrated probabilities",
+        "applicability, evidence quality, and recommended strength are separate deterministic indicators, not calibrated probabilities",
         "all literature-derived priors are soft and never become equipment constraints",
     ]
     if conflicts:
@@ -253,8 +267,15 @@ def compile_priors(
             "disjoint numeric priors were preserved separately; no averaging was applied"
         )
     return PriorObjectSetV2(
-        prior_set_id=_stable_id("prior-set", [item.model_dump(mode="json") for item in priors]),
+        prior_set_id=_stable_id(
+            "prior-set",
+            {
+                "priors": [item.model_dump(mode="json") for item in priors],
+                "observations": [item.model_dump(mode="json") for item in observations],
+            },
+        ),
         priors=priors,
+        observations=observations,
         conflicts=conflicts,
         warnings=warnings,
     )
@@ -350,7 +371,7 @@ def _string_facet(
         return ApplicabilityFacet(
             facet=name,
             status="UNKNOWN",
-            score=0.65,
+            score=0.35,
             task_value=task_value,
             evidence_value=None,
             reason="evidence does not report this facet",
@@ -382,7 +403,7 @@ def _grade_facet(task_grade: Any, evidence_grade: Any) -> ApplicabilityFacet:
         return ApplicabilityFacet(
             facet="material_grade",
             status="UNKNOWN",
-            score=0.65,
+            score=0.35,
             task_value=task_grade,
             evidence_value=None,
             reason="paper does not identify a material grade",
@@ -424,17 +445,17 @@ def _pulse_width_facet(task: ResolvedTaskV1, evidence: EvidenceIRV2) -> Applicab
     if task_range is None:
         return ApplicabilityFacet(
             facet="pulse_width_fs",
-            status="UNKNOWN",
-            score=0.7,
+            status="NOT_APPLICABLE",
+            score=1.0,
             task_value=None,
             evidence_value=evidence_range,
-            reason="equipment pulse-width range is missing",
+            reason="equipment profile does not constrain pulse width",
         )
     if evidence_range is None:
         return ApplicabilityFacet(
             facet="pulse_width_fs",
             status="UNKNOWN",
-            score=0.65,
+            score=0.35,
             task_value=list(task_range),
             evidence_value=None,
             reason="evidence does not report pulse width",
@@ -465,6 +486,81 @@ def _pulse_width_facet(task: ResolvedTaskV1, evidence: EvidenceIRV2) -> Applicab
     )
 
 
+def _frequency_facet(task: ResolvedTaskV1, evidence: EvidenceIRV2) -> ApplicabilityFacet:
+    return _range_compatibility_facet(
+        "frequency_kHz",
+        _range(task.equipment.frequency_min_kHz, task.equipment.frequency_max_kHz),
+        _evidence_range(
+            evidence.validated_conditions,
+            scalar_keys=("frequency_kHz", "repetition_rate_kHz"),
+            lower_keys=("frequency_min_kHz", "repetition_rate_min_kHz"),
+            upper_keys=("frequency_max_kHz", "repetition_rate_max_kHz"),
+        ),
+    )
+
+
+def _scan_speed_facet(task: ResolvedTaskV1, evidence: EvidenceIRV2) -> ApplicabilityFacet:
+    return _range_compatibility_facet(
+        "scan_speed_mm_s",
+        _range(task.equipment.scan_speed_min_mm_s, task.equipment.scan_speed_max_mm_s),
+        _evidence_range(
+            evidence.validated_conditions,
+            scalar_keys=("scan_speed_mm_s",),
+            lower_keys=("scan_speed_min_mm_s",),
+            upper_keys=("scan_speed_max_mm_s",),
+        ),
+    )
+
+
+def _range_compatibility_facet(
+    name: str,
+    task_range: tuple[float, float] | None,
+    evidence_range: tuple[float, float] | None,
+) -> ApplicabilityFacet:
+    if task_range is None:
+        return ApplicabilityFacet(
+            facet=name,
+            status="NOT_APPLICABLE",
+            score=1.0,
+            task_value=None,
+            evidence_value=list(evidence_range) if evidence_range is not None else None,
+            reason=f"equipment profile does not constrain {name}",
+        )
+    if evidence_range is None:
+        return ApplicabilityFacet(
+            facet=name,
+            status="UNKNOWN",
+            score=0.35,
+            task_value=list(task_range),
+            evidence_value=None,
+            reason=f"evidence does not report {name}",
+        )
+    if _overlap(task_range, evidence_range):
+        return ApplicabilityFacet(
+            facet=name,
+            status="MATCH",
+            score=1.0,
+            task_value=list(task_range),
+            evidence_value=list(evidence_range),
+            reason=f"{name} ranges overlap",
+        )
+    task_nearest = task_range[0] if evidence_range[1] < task_range[0] else task_range[1]
+    evidence_nearest = evidence_range[1] if evidence_range[1] < task_range[0] else evidence_range[0]
+    if task_nearest <= 0 or evidence_nearest <= 0:
+        score = 0.1
+    else:
+        decades = abs(math.log10(task_nearest / evidence_nearest))
+        score = max(0.05, math.exp(-1.5 * decades))
+    return ApplicabilityFacet(
+        facet=name,
+        status="PARTIAL" if score >= 0.5 else "MISMATCH",
+        score=round(score, 4),
+        task_value=list(task_range),
+        evidence_value=list(evidence_range),
+        reason=f"non-overlapping ranges scored by logarithmic {name} distance",
+    )
+
+
 def _condition_completeness_facet(
     task: ResolvedTaskV1,
     evidence: EvidenceIRV2,
@@ -485,8 +581,8 @@ def _condition_completeness_facet(
     if not relevant:
         return ApplicabilityFacet(
             facet="condition_completeness",
-            status="UNKNOWN",
-            score=0.6,
+            status="NOT_APPLICABLE",
+            score=1.0,
             task_value=[],
             evidence_value=[],
             reason="equipment profile has no comparable process-condition dimensions",
@@ -497,7 +593,7 @@ def _condition_completeness_facet(
         if any(_first(evidence.validated_conditions, key) is not None for key in keys)
     ]
     fraction = len(present) / len(relevant)
-    score = 0.5 + 0.5 * fraction
+    score = 0.3 + 0.7 * fraction
     return ApplicabilityFacet(
         facet="condition_completeness",
         status="MATCH" if fraction >= 0.75 else ("PARTIAL" if present else "UNKNOWN"),
@@ -518,17 +614,17 @@ def _numeric_distance_facet(
     if task_value is None:
         return ApplicabilityFacet(
             facet=name,
-            status="UNKNOWN",
-            score=0.7,
+            status="NOT_APPLICABLE",
+            score=1.0,
             task_value=None,
             evidence_value=evidence_value,
-            reason="equipment value is missing",
+            reason="equipment profile does not constrain this facet",
         )
     if evidence_value is None:
         return ApplicabilityFacet(
             facet=name,
             status="UNKNOWN",
-            score=0.65,
+            score=0.35,
             task_value=task_value,
             evidence_value=None,
             reason="evidence value is missing",
@@ -546,7 +642,11 @@ def _numeric_distance_facet(
     )
 
 
-def _transfer_level(score: float) -> TransferLevel:
+def _transfer_level(score: float, unknown_count: int) -> TransferLevel:
+    if unknown_count >= 5:
+        return TransferLevel.WEAK if score >= 0.35 else TransferLevel.VERY_WEAK
+    if unknown_count >= 3 and score >= 0.6:
+        return TransferLevel.MEDIUM
     if score >= 0.8:
         return TransferLevel.STRONG
     if score >= 0.6:
@@ -562,6 +662,26 @@ def _uncertainty(score: float, unknown_count: int) -> UncertaintyLevel:
     if score >= 0.6 and unknown_count <= 3:
         return UncertaintyLevel.MEDIUM
     return UncertaintyLevel.HIGH
+
+
+def _evidence_quality(evidence: EvidenceIRV2) -> float:
+    """Deterministic evidence-quality indicator; not a probability."""
+
+    return round(0.7 + 0.3 * evidence.extraction_confidence, 4)
+
+
+def _recommended_prior_strength(
+    applicability_score: float,
+    evidence_quality: float,
+    uncertainty: UncertaintyLevel,
+) -> float:
+    uncertainty_factor = {
+        UncertaintyLevel.LOW: 1.0,
+        UncertaintyLevel.MEDIUM: 0.75,
+        UncertaintyLevel.HIGH: 0.4,
+        UncertaintyLevel.UNKNOWN: 0.25,
+    }[uncertainty]
+    return round(applicability_score * evidence_quality * uncertainty_factor, 4)
 
 
 def _first(values: dict[str, Any], *keys: str) -> Any:

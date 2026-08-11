@@ -11,7 +11,7 @@ from __future__ import annotations
 from enum import StrEnum
 from typing import Annotated, Any, Literal
 
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, ConfigDict, Field, model_validator
 
 
 class StrictModel(BaseModel):
@@ -154,13 +154,35 @@ class ProcessObservationContent(StrictModel):
     measured_value: float | None = None
     unit: str | None = None
 
+    @model_validator(mode="after")
+    def require_value_unit_pair(self) -> ProcessObservationContent:
+        if (self.measured_value is None) != (self.unit is None):
+            raise ValueError("measured_value and unit must be provided together")
+        return self
+
 
 class ParameterEffectContent(StrictModel):
     evidence_type: Literal[EvidenceType.PARAMETER_EFFECT]
     parameter: str = Field(min_length=1)
     target_metric: str = Field(min_length=1)
     direction: EvidenceDirection
+    threshold_value: float | None = None
+    lower: float | None = None
+    upper: float | None = None
+    unit: str | None = None
     statement: str = Field(min_length=1)
+
+    @model_validator(mode="after")
+    def validate_numeric_effect(self) -> ParameterEffectContent:
+        has_numeric = any(
+            value is not None
+            for value in (self.threshold_value, self.lower, self.upper)
+        )
+        if has_numeric and self.unit is None:
+            raise ValueError("numeric parameter effects require a unit")
+        if self.lower is not None and self.upper is not None and self.lower > self.upper:
+            raise ValueError("parameter-effect lower bound exceeds upper bound")
+        return self
 
 
 class MechanismContent(StrictModel):
@@ -384,33 +406,35 @@ class UncertaintyLevel(StrEnum):
 
 
 class EvidenceBelief(StrictModel):
-    schema_version: str = "evidence-belief-v1"
+    schema_version: str = "evidence-belief-v2"
     belief_id: str
     evidence_id: str
     evidence_type: EvidenceType
     applicability_score: float = Field(ge=0.0, le=1.0)
+    evidence_quality: float = Field(ge=0.0, le=1.0)
     transfer_level: TransferLevel
-    prior_weight: float = Field(ge=0.0, le=1.0)
+    recommended_prior_strength: float = Field(ge=0.0, le=1.0)
     uncertainty: UncertaintyLevel
     facets: list[ApplicabilityFacet] = Field(default_factory=list)
     support_basis: list[str] = Field(default_factory=list)
     governance_status: str = "unreviewed"
-    method: str = "faceted-transfer-score-v1"
+    method: str = "faceted-transfer-score-v2"
 
 
 class EvidenceBeliefSet(StrictModel):
-    schema_version: str = "evidence-belief-set-v1"
+    schema_version: str = "evidence-belief-set-v2"
     belief_set_id: str
     beliefs: list[EvidenceBelief] = Field(default_factory=list)
 
 
 class PriorBase(StrictModel):
-    schema_version: str = "prior-object-v2"
+    schema_version: str = "prior-object-v3"
     prior_id: str
     evidence_refs: list[str] = Field(min_length=1)
     belief_refs: list[str] = Field(min_length=1)
     applicability_score: float = Field(ge=0.0, le=1.0)
-    weight: float = Field(ge=0.0, le=1.0)
+    evidence_quality: float = Field(ge=0.0, le=1.0)
+    recommended_strength: float = Field(ge=0.0, le=1.0)
     uncertainty: UncertaintyLevel
     status: Literal["PROVISIONAL", "GOVERNED"] = "PROVISIONAL"
     conflict_group_id: str | None = None
@@ -437,6 +461,10 @@ class PreferencePrior(PriorBase):
     prior_type: Literal["PreferencePrior"] = "PreferencePrior"
     parameter: str | None = None
     direction: EvidenceDirection | None = None
+    threshold_value: float | None = None
+    lower: float | None = None
+    upper: float | None = None
+    unit: str | None = None
     statement: str
     hard_constraint: Literal[False] = False
 
@@ -453,6 +481,24 @@ PriorObjectV2 = Annotated[
 ]
 
 
+class TransferObservation(StrictModel):
+    schema_version: str = "transfer-observation-v1"
+    observation_id: str
+    evidence_refs: list[str] = Field(min_length=1)
+    belief_refs: list[str] = Field(min_length=1)
+    applicability_score: float = Field(ge=0.0, le=1.0)
+    evidence_quality: float = Field(ge=0.0, le=1.0)
+    recommended_strength: float = Field(ge=0.0, le=1.0)
+    uncertainty: UncertaintyLevel
+    status: Literal["PROVISIONAL", "GOVERNED"] = "PROVISIONAL"
+    target_metric: str | None = None
+    measured_value: float | None = None
+    unit: str | None = None
+    conditions: dict[str, Any] = Field(default_factory=dict)
+    statement: str
+    assumptions: list[str] = Field(default_factory=list)
+
+
 class PriorConflict(StrictModel):
     conflict_id: str
     parameter: str
@@ -462,9 +508,10 @@ class PriorConflict(StrictModel):
 
 
 class PriorObjectSetV2(StrictModel):
-    schema_version: str = "prior-object-set-v2"
+    schema_version: str = "prior-object-set-v3"
     prior_set_id: str
     priors: list[PriorObjectV2] = Field(default_factory=list)
+    observations: list[TransferObservation] = Field(default_factory=list)
     conflicts: list[PriorConflict] = Field(default_factory=list)
     warnings: list[str] = Field(default_factory=list)
 

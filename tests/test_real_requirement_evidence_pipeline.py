@@ -10,6 +10,25 @@ from pathlib import Path
 
 import pytest
 
+from ultrafast_evidence_prior.e2p import compile_beliefs, compile_priors
+from ultrafast_evidence_prior.extraction import TypedEvidenceExtractor
+from ultrafast_evidence_prior.schemas import (
+    ConditionValidationState,
+    EquipmentContext,
+    EvidenceIRSetV2,
+    ResolvedTaskV1,
+    TargetMetric,
+    ValidationState,
+)
+from ultrafast_evidence_prior.schemas import (
+    EvidenceType as TypedEvidenceType,
+)
+from ultrafast_evidence_prior.schemas import (
+    KnowledgeRequirementType as TypedRequirementType,
+)
+from ultrafast_evidence_prior.schemas import (
+    KnowledgeRequirementV1 as TypedKnowledgeRequirement,
+)
 from ultrafast_ingestion import PyMuPDFDocumentParser
 from ultrafast_knowledge.evidence_pipeline import (
     PersistentScientificPaperRepository,
@@ -22,6 +41,7 @@ from ultrafast_knowledge.evidence_pipeline import (
     TwoLevelEvidenceRetriever,
     evaluate_evidence_run,
 )
+from ultrafast_knowledge.evidence_pipeline.schemas import EvidenceWindow, PaperCandidate
 from ultrafast_requirements import RequirementCompiler
 
 pytestmark = [pytest.mark.integration, pytest.mark.pilot]
@@ -72,6 +92,25 @@ def _threshold_requirement_set():
         if item.quantity == "ablation_threshold_J_m2"
     )
     return compiled.model_copy(update={"requirements": [threshold]})
+
+
+def _typed_task() -> ResolvedTaskV1:
+    return ResolvedTaskV1(
+        material="diamond",
+        target_metric=TargetMetric.DEPTH_UM,
+        equipment=EquipmentContext(
+            equipment_profile_id="real-paper-benchmark",
+            equipment_revision_id="v1",
+            profile_name="30 fs, 800 nm system",
+            wavelength_nm=800,
+            pulse_width_min_fs=25,
+            pulse_width_max_fs=35,
+            frequency_min_kHz=1,
+            frequency_max_kHz=100,
+            scan_speed_min_mm_s=1,
+            scan_speed_max_mm_s=1000,
+        ),
+    )
 
 
 @pytest.fixture()
@@ -217,6 +256,266 @@ class _AlwaysNotFoundClient:
                 {"status": "NOT_FOUND", "confidence": 0.99, "source_block_refs": []}
             )
         }
+
+
+class _RecordedTypedClaimClient:
+    """Deterministic claim projection over a verbatim block from the original PDF."""
+
+    model = "recorded-real-paper-typed-claim"
+
+    def __init__(
+        self,
+        *,
+        block_ids: list[str],
+        quote: str,
+        content: dict[str, object],
+        conditions: dict[str, object] | None = None,
+    ) -> None:
+        self.block_ids = block_ids
+        self.quote = quote
+        self.content = content
+        self.conditions = conditions or {}
+
+    def chat(self, _messages, **_kwargs):
+        return {
+            "content": json.dumps(
+                {
+                    "status": "FOUND",
+                    "items": [
+                        {
+                            "content": self.content,
+                            "conditions": self.conditions,
+                            "evidence_quote": self.quote,
+                            "source_block_refs": self.block_ids,
+                            "extraction_confidence": 0.95,
+                        }
+                    ],
+                }
+            )
+        }
+
+
+def _typed_evidence_from_real_block(
+    block,
+    *,
+    content: dict[str, object],
+    conditions: dict[str, object] | None = None,
+):
+    return _typed_evidence_from_real_blocks(
+        [block],
+        content=content,
+        conditions=conditions,
+    )
+
+
+def _typed_evidence_from_real_blocks(
+    blocks,
+    *,
+    content: dict[str, object],
+    conditions: dict[str, object] | None = None,
+    paper_metadata: dict[str, object] | None = None,
+):
+    first_block = blocks[0]
+    evidence_type = TypedEvidenceType(str(content["evidence_type"]))
+    requirement = TypedKnowledgeRequirement(
+        requirement_id="kreq-real-paper-numeric",
+        requirement_type=TypedRequirementType.MATERIAL_PROPERTY,
+        scientific_question="Which numeric parameter is directly reported?",
+        target_metric=TargetMetric.DEPTH_UM,
+        evidence_types=[evidence_type],
+        query_terms=["reported parameter"],
+    )
+    candidate = PaperCandidate(
+        paper_id=first_block.paper_id,
+        document_version_id=first_block.document_version_id,
+        score=1,
+    )
+    window = EvidenceWindow(
+        window_id=f"window::{first_block.block_id}",
+        requirement_id=requirement.requirement_id,
+        paper_id=first_block.paper_id,
+        center_block_id=first_block.block_id,
+        blocks=blocks,
+        score=1,
+        paper_metadata=paper_metadata or {},
+    )
+    client = _RecordedTypedClaimClient(
+        block_ids=[block.block_id for block in blocks],
+        quote=first_block.text,
+        content=content,
+        conditions=conditions,
+    )
+    return TypedEvidenceExtractor(client, model=client.model).extract(
+        requirement,
+        candidate,
+        [window],
+    ).items[0]
+
+
+def test_typed_evidence_accepts_real_pdf_numeric_unit_expression(
+    indexed_real_corpus,
+) -> None:
+    store, _repository = indexed_real_corpus
+    block = next(
+        item
+        for item in store.blocks(paper_ids=["04_arxiv_2502.16530.pdf"])
+        if "ablation threshold of diamond (3.0 J/cm2)" in item.text
+    )
+
+    evidence = _typed_evidence_from_real_block(
+        block,
+        content={
+            "evidence_type": "PARAMETER_VALUE",
+            "parameter": "ablation_threshold",
+            "value": 3,
+            "unit": "J/cm2",
+            "statement": "The diamond ablation threshold is 3 J/cm2.",
+        },
+    )
+
+    assert evidence.validation_state == ValidationState.VALIDATED
+    assert evidence.validation_errors == []
+
+
+def test_typed_evidence_rejects_unit_substring_false_positive_in_real_pdf(
+    indexed_real_corpus,
+) -> None:
+    store, _repository = indexed_real_corpus
+    block = next(
+        item
+        for item in store.blocks(paper_ids=["04_arxiv_2502.16530.pdf"])
+        if "only by ~20" in item.text and "500 kJ/cm" in item.text
+    )
+
+    evidence = _typed_evidence_from_real_block(
+        block,
+        content={
+            "evidence_type": "PARAMETER_VALUE",
+            "parameter": "average_power",
+            "value": 20,
+            "unit": "W",
+            "statement": "The average power is 20 W.",
+        },
+    )
+
+    assert evidence.validation_state == ValidationState.REJECTED
+    assert evidence.validation_errors == [
+        "numeric_unit_not_co_located_or_compatible:20.0:W"
+    ]
+
+
+def test_real_process_observation_compiles_to_transfer_observation(
+    indexed_real_corpus,
+) -> None:
+    store, _repository = indexed_real_corpus
+    block = next(
+        item
+        for item in store.blocks(paper_ids=["10_arxiv_2411.18093.pdf"])
+        if "laser focal depth is set to 500" in item.text
+    )
+    evidence = _typed_evidence_from_real_block(
+        block,
+        content={
+            "evidence_type": "PROCESS_OBSERVATION",
+            "target_metric": "focal_depth_um",
+            "measured_value": 500,
+            "unit": "um",
+            "statement": "The laser focal depth is set to 500 um below the wafer surface.",
+        },
+    )
+    evidence_set = EvidenceIRSetV2(evidence_set_id="real-observation", items=[evidence])
+    beliefs = compile_beliefs(_typed_task(), evidence_set)
+    artifacts = compile_priors(evidence_set, beliefs)
+
+    assert evidence.validation_state == ValidationState.VALIDATED
+    assert artifacts.priors == []
+    assert len(artifacts.observations) == 1
+    assert artifacts.observations[0].measured_value == 500
+    assert artifacts.observations[0].unit == "um"
+
+
+def test_real_parameter_effect_preserves_threshold_value(indexed_real_corpus) -> None:
+    store, _repository = indexed_real_corpus
+    block = next(
+        item
+        for item in store.blocks(paper_ids=["04_arxiv_2502.16530.pdf"])
+        if "doses in excess of 50 kJ/cm2 provide minimal gains" in item.text
+    )
+    evidence = _typed_evidence_from_real_block(
+        block,
+        content={
+            "evidence_type": "PARAMETER_EFFECT",
+            "parameter": "laser_energy_dose",
+            "target_metric": "depth_um",
+            "direction": "THRESHOLD",
+            "threshold_value": 50,
+            "lower": None,
+            "upper": None,
+            "unit": "kJ/cm2",
+            "statement": "Doses above 50 kJ/cm2 provide minimal gains in ablation depth.",
+        },
+    )
+    evidence_set = EvidenceIRSetV2(evidence_set_id="real-effect", items=[evidence])
+    beliefs = compile_beliefs(_typed_task(), evidence_set)
+    artifacts = compile_priors(evidence_set, beliefs)
+
+    assert evidence.validation_state == ValidationState.VALIDATED
+    assert len(artifacts.priors) == 1
+    assert artifacts.priors[0].threshold_value == 50
+    assert artifacts.priors[0].unit == "kJ/cm2"
+
+
+def test_real_paper_transfer_benchmark_matches_manual_levels(
+    indexed_real_corpus,
+) -> None:
+    store, _repository = indexed_real_corpus
+    benchmark_path = REPO_ROOT / "tests" / "fixtures" / "e2p_real_transfer_benchmark.json"
+    cases = json.loads(benchmark_path.read_text(encoding="utf-8"))
+
+    for case in cases:
+        blocks_by_id = {
+            block.block_id: block
+            for block in store.blocks(paper_ids=[case["paper_id"]])
+        }
+        blocks = [blocks_by_id[block_id] for block_id in case["block_ids"]]
+        evidence = _typed_evidence_from_real_blocks(
+            blocks,
+            content={
+                "evidence_type": "PROCESS_METHOD",
+                "method": "reported laser processing regime",
+                "statement": blocks[0].text,
+            },
+            conditions=case["conditions"],
+            paper_metadata=case["paper_metadata"],
+        )
+        task_data = dict(case["task"])
+        material = task_data.pop("material")
+        task = ResolvedTaskV1(
+            material=material,
+            target_metric=TargetMetric.DEPTH_UM,
+            equipment=EquipmentContext(
+                equipment_profile_id=f"benchmark::{case['case_id']}",
+                equipment_revision_id="manual-v1",
+                profile_name=case["case_id"],
+                **task_data,
+            ),
+        )
+        belief = compile_beliefs(
+            task,
+            EvidenceIRSetV2(evidence_set_id=case["case_id"], items=[evidence]),
+        ).beliefs[0]
+
+        assert evidence.validation_state == ValidationState.VALIDATED, case["case_id"]
+        assert all(
+            provenance.validation_state == ConditionValidationState.VALIDATED
+            for provenance in evidence.condition_provenance.values()
+        ), case["case_id"]
+        assert belief.transfer_level.value == case["expected_transfer_level"], (
+            case["case_id"],
+            case["rationale"],
+            belief.model_dump(mode="json"),
+        )
+        assert belief.recommended_prior_strength <= belief.applicability_score
 
 
 def test_requirement_specific_extraction_is_grounded_in_the_real_pdf(

@@ -263,7 +263,7 @@ function EvidenceDetail({ evidence }: { evidence: EvidenceItem }) {
         <Kv label="conditions" value={evidence.conditions} />
         <Kv label="blocks" value={evidence.source_block_refs} />
         <Kv label="extractor" value={`${evidence.extractor_model} · ${evidence.extraction_route}`} />
-        <Kv label="confidence" value={evidence.extraction_confidence} />
+        <Kv label="抽取器自评（非概率）" value={evidence.extraction_confidence} />
         {evidence.validation_errors.length > 0 && <Kv label="validation errors" value={evidence.validation_errors} />}
       </dl>
     </div>
@@ -280,11 +280,25 @@ function PriorPanel({ result }: { result?: EvidencePriorResult }) {
           <div className="result-stats">
             <span>{result.beliefs.beliefs.length} 个 EvidenceBelief</span>
             <span>{result.priors.priors.length} 个 PriorObject</span>
+            <span>{result.priors.observations.length} 个 TransferObservation</span>
             <span>{result.priors.conflicts.length} 个冲突组</span>
           </div>
           <div className="prior-list">
             {result.priors.priors.map((prior) => (
               <PriorCard key={prior.prior_id} prior={prior} belief={beliefs.get(prior.belief_refs[0])} />
+            ))}
+          </div>
+          <div className="prior-list">
+            {result.priors.observations.map((observation) => (
+              <article className="prior-card-v1" key={observation.observation_id}>
+                <header><strong>TransferObservation</strong><span>{observation.status}</span></header>
+                <div className="prior-main">{observation.statement}</div>
+                <div className="prior-score">
+                  Transfer score {observation.applicability_score.toFixed(3)} · evidence quality{' '}
+                  {observation.evidence_quality.toFixed(3)} · recommended strength{' '}
+                  {observation.recommended_strength.toFixed(3)}
+                </div>
+              </article>
             ))}
           </div>
           {result.priors.priors.length === 0 && <EmptyState message="没有形成软先验" />}
@@ -308,7 +322,11 @@ function PriorCard({ prior, belief }: { prior: PriorObject; belief?: EvidenceBel
         <span>{prior.status} · uncertainty {prior.uncertainty}</span>
       </header>
       <div className="prior-main">{priorSummary(prior)}</div>
-      <div className="prior-score">applicability {prior.applicability_score.toFixed(3)} · weight {prior.weight.toFixed(3)}</div>
+      <div className="prior-score">
+        Transfer score {prior.applicability_score.toFixed(3)} · evidence quality{' '}
+        {prior.evidence_quality.toFixed(3)} · recommended soft-prior strength{' '}
+        {prior.recommended_strength.toFixed(3)}
+      </div>
       {prior.conflict_group_id && <div className="prior-conflict">冲突组：{prior.conflict_group_id}</div>}
       {belief && (
         <details>

@@ -12,7 +12,7 @@
 | 旧数值 RequirementEvidence | 不足 | 由多类型 EvidenceIR v2 取代 |
 | CrossPaperAggregator | 仅适合直接匹配汇总 | 不作为 E2P 前置 gate |
 | 旧 EvidenceClaim / E2P applicability | 不可直接用 | 由 EvidenceBelief 和逐维 transfer score 取代 |
-| typed prior 的证据引用、冲突保留思想 | 可用 | 重建为 Parameter/Region/Preference/ModelStructure 四类软先验 |
+| typed prior 的证据引用、冲突保留思想 | 可用 | 重建为 Parameter/Region/Preference/ModelStructure 四类软先验；ProcessObservation 独立为 TransferObservation |
 | React、TanStack Query、基础 UI | 可用 | 保留技术底座，重写业务页面 |
 
 核心断点是新文献管线与旧 E2P 没有正式契约，现有科学分析接口在
@@ -26,14 +26,27 @@
    匹配的证据进入 E2P，禁止跨论文拼接。
 3. 对引文、block 引用、数字、单位做机械校验；仅校验通过的正证据写入
    `structured_scientific_knowledge_v2`。
-4. 对材料、牌号、目标、波长、脉宽、条件完整度、机械校验和抽取可信度做
-   可解释的逐维适用性评分。评分是确定性 transfer weight，不宣称为校准概率。
+4. 对材料、牌号、目标、波长、脉宽、频率、扫描速度和条件完整度做
+   可解释的逐维适用性评分；机械校验与抽取器自评进入独立 evidence quality，
+   不再混入 applicability。所有分数均为确定性指标，不宣称为校准概率。
 5. 逐条 evidence 生成 belief 和软 prior；互斥数值区间分别保留，禁止平均。
 6. 提供单一 `POST /api/v1/evidence-prior/analyze`，并将前端收敛为设备、任务、
    文献证据、E2P 先验四个区块。
 7. 治理状态不限制检索、抽取、知识入库或 E2P，只在最终结果 warnings 中提醒。
 8. 以仓库真实 PDF 和真实 `deepseek-v4-flash` 完成端到端验收；mock 仅用于
    快速单元测试，不构成验收通过依据。
+
+## 当前 E2P 边界
+
+- `ultrafast_evidence_prior` 是新任务驱动链路的唯一 canonical 实现。
+- `ultrafast_e2p` 仅保留给旧 Topic2 compatibility adapters；禁止新 BO 或新
+  evidence-prior 工作流依赖它。
+- `applicability_score` 是任务条件迁移分数；`evidence_quality` 是证据质量指标；
+  `recommended_prior_strength`/`recommended_strength` 是受不确定性折减后的软先验建议强度。
+  三者都不是概率。
+- `ProcessObservation` 编译为独立 `TransferObservation`，保留实验条件与测量结果；
+  不再生成缺少方向语义的 `PreferencePrior`。
+- `ParameterEffect` 保留 `threshold_value/lower/upper/unit`，禁止把数值重新埋回文本。
 
 ## 验收条件
 

@@ -84,7 +84,8 @@ src/
 ├── ultrafast_reconstructibility/  # M6 Source 侧依赖重建（五类未知区分）
 ├── ultrafast_interaction/    # M8 CanonicalInteractionState / Target readiness
 ├── ultrafast_cfa/            # M9 Uncalibrated CFA（五 facet，无概率）
-├── ultrafast_e2p/            # 证据适用性/编译 → GovernedPriorArtifact
+├── ultrafast_evidence_prior/ # canonical：任务驱动 EvidenceIR → Belief → 软先验
+├── ultrafast_e2p/            # legacy compatibility：仅供旧 Topic2 适配层使用
 ├── ultrafast_bo/             # 治理化 GP-UCB（vanilla / evidence-assisted）
 ├── ultrafast_knowledge/      # 持久化双索引 + 逐论文抽取 + 结构化科学知识入库与聚合
 ├── ultrafast_memory/         # 迁移自旧仓库（db/ids/config）

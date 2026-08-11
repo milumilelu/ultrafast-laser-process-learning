@@ -68,6 +68,7 @@ class AuditedClient:
         if not os.environ.get("DEEPSEEK_API_KEY"):
             raise RuntimeError("DEEPSEEK_API_KEY is unavailable after encrypted-store restore")
         self._client = create_llm_client(configured)
+        self.provider = "deepseek"
         self.model = MODEL
         self.calls: list[dict[str, Any]] = []
 
@@ -206,6 +207,25 @@ def run_acceptance(
             knowledge_count = connection.execute(
                 "SELECT COUNT(*) FROM structured_scientific_knowledge_v2"
             ).fetchone()[0]
+        requirement_types = {
+            item.requirement_id: item.requirement_type.value for item in result.requirements
+        }
+        coverage_by_type = {
+            requirement_types[requirement_id]: (
+                trace.rounds[-1].coverage.operationally_sufficient if trace.rounds else False
+            )
+            for requirement_id, trace in result.evidence.acquisition_traces.items()
+        }
+        required_coverage = {
+            "MATERIAL_IDENTITY",
+            "MATERIAL_PROPERTY",
+            "PARAMETER_EFFECT",
+            "MECHANISM",
+            "PROCESS_METHOD",
+        }
+        failed_extractions = [
+            miss for miss in result.evidence.misses if miss.status.value == "FAILED"
+        ]
         checks = {
             "real_pdf_count": len(ingestion["document_versions"]),
             "real_llm_calls": len(client.calls),
@@ -216,6 +236,14 @@ def run_acceptance(
             "structured_knowledge_count": knowledge_count,
             "belief_count": len(result.beliefs.beliefs),
             "prior_count": len(result.priors.priors),
+            "coverage_by_requirement_type": coverage_by_type,
+            "required_coverage_types": sorted(required_coverage),
+            "required_coverage_satisfied": all(
+                coverage_by_type.get(requirement_type, False)
+                for requirement_type in required_coverage
+            ),
+            "sufficient_requirement_count": sum(coverage_by_type.values()),
+            "failed_extraction_count": len(failed_extractions),
             "all_beliefs_reference_validated_evidence": all(
                 belief.evidence_id in {item.evidence_id for item in validated}
                 for belief in result.beliefs.beliefs
@@ -233,6 +261,8 @@ def run_acceptance(
             and checks["structured_knowledge_count"] == checks["validated_evidence_count"]
             and checks["belief_count"] > 0
             and checks["prior_count"] > 0
+            and checks["required_coverage_satisfied"]
+            and checks["failed_extraction_count"] == 0
             and checks["all_beliefs_reference_validated_evidence"]
             and checks["governance_non_gating_warning_present"]
         )

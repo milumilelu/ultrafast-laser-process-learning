@@ -1,4 +1,4 @@
-"""Task → literature evidence → EvidenceBelief → soft-prior V1."""
+"""Canonical task-driven EvidenceIR → Belief → soft-prior V1 implementation."""
 
 from ultrafast_evidence_prior.schemas import (
     EvidenceBelief,
@@ -9,6 +9,7 @@ from ultrafast_evidence_prior.schemas import (
     KnowledgeRequirementV1,
     PriorObjectSetV2,
     TaskRequestV1,
+    TransferObservation,
 )
 from ultrafast_evidence_prior.service import EvidencePriorAnalysisService
 
@@ -22,4 +23,5 @@ __all__ = [
     "KnowledgeRequirementV1",
     "PriorObjectSetV2",
     "TaskRequestV1",
+    "TransferObservation",
 ]

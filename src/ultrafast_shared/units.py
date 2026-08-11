@@ -6,6 +6,8 @@
 
 from __future__ import annotations
 
+import re
+import unicodedata
 from dataclasses import dataclass
 
 # 目标单位（规范单位制）
@@ -16,6 +18,7 @@ NORM_UNIT_LENGTH = "m"
 NORM_UNIT_FLUENCE = "J/m2"
 NORM_UNIT_SPEED = "m/s"
 NORM_UNIT_ENERGY = "J"
+NORM_UNIT_DIMENSIONLESS = "1"
 
 # 换算表：源单位 -> (规范单位, 系数)
 _FACTORS: dict[str, tuple[str, float]] = {
@@ -51,27 +54,50 @@ _FACTORS: dict[str, tuple[str, float]] = {
     "j/m2": (NORM_UNIT_FLUENCE, 1.0),
     "j/cm2": (NORM_UNIT_FLUENCE, 1e4),
     "mj/cm2": (NORM_UNIT_FLUENCE, 1e1),
+    "kj/cm2": (NORM_UNIT_FLUENCE, 1e7),
     # 速度
     "m/s": (NORM_UNIT_SPEED, 1.0),
     "mm/s": (NORM_UNIT_SPEED, 1e-3),
-    "m/s²": (NORM_UNIT_SPEED, 1.0),
+    "m/s2": (NORM_UNIT_SPEED, 1.0),
     "mm/min": (NORM_UNIT_SPEED, 1e-3 / 60.0),
     # 温度扩散系数（thermal diffusivity）
     "m2/s": ("m2/s", 1.0),
     "mm2/s": ("m2/s", 1e-6),
     "cm2/s": ("m2/s", 1e-4),
+    # 无量纲
+    "1": (NORM_UNIT_DIMENSIONLESS, 1.0),
+    "dimensionless": (NORM_UNIT_DIMENSIONLESS, 1.0),
+    "%": (NORM_UNIT_DIMENSIONLESS, 1e-2),
+    "percent": (NORM_UNIT_DIMENSIONLESS, 1e-2),
 }
+
+
+def canonicalize_unit(unit: str | None) -> str | None:
+    """Return a spelling-normalized unit token without changing its dimension."""
+
+    if unit is None:
+        return None
+    key = unicodedata.normalize("NFKC", str(unit)).casefold()
+    key = key.replace("μ", "u").replace("µ", "u").replace("−", "-")
+    key = key.replace("^", "")
+    return re.sub(r"\s+", "", key)
 
 
 def normalize_unit(unit: str | None) -> tuple[str | None, float | None]:
     """返回 (规范单位, 换算系数)；系数 None 表示单位无法识别/不可换算。"""
-    if unit is None:
+    key = canonicalize_unit(unit)
+    if key is None:
         return None, None
-    key = str(unit).strip().lower().replace(" ", "")
     found = _FACTORS.get(key)
     if found is None:
         return None, None
     return found
+
+
+def known_unit_tokens() -> tuple[str, ...]:
+    """Canonical unit spellings ordered longest-first for deterministic parsing."""
+
+    return tuple(sorted(_FACTORS, key=lambda item: (-len(item), item)))
 
 
 def convert(value: float, from_unit: str | None, to_unit: str | None = None) -> float | None:
@@ -80,10 +106,10 @@ def convert(value: float, from_unit: str | None, to_unit: str | None = None) -> 
     if factor is None:
         return None
     converted = float(value) * factor
-    if to_unit is None or to_unit == normalized:
+    if to_unit is None:
         return converted
     target_norm, target_factor = normalize_unit(to_unit)
-    if target_factor is None:
+    if target_norm != normalized or target_factor is None:
         return None
     return converted / target_factor
 

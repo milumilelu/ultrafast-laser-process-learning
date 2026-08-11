@@ -19,6 +19,7 @@ from ultrafast_evidence_prior.schemas import (
     EvidenceIRV2,
     ExtractionStatus,
     KnowledgeRequirementV1,
+    ParameterEffectContent,
     ParameterRangeContent,
     ParameterValueContent,
     ProcessObservationContent,
@@ -26,8 +27,9 @@ from ultrafast_evidence_prior.schemas import (
     ValidationState,
 )
 from ultrafast_knowledge.evidence_pipeline.schemas import EvidenceWindow, PaperCandidate
+from ultrafast_shared.units import known_unit_tokens, normalize_unit
 
-PROMPT_VERSION = "typed-evidence-extraction-v1"
+PROMPT_VERSION = "typed-evidence-extraction-v2"
 EXTRACTION_SCHEMA_VERSION = "evidence-ir-v2"
 
 SYSTEM_PROMPT = """You are a rigorous scientific evidence extractor.
@@ -43,6 +45,9 @@ Every returned condition is mechanically checked against cited blocks or PAPER_C
 Unsupported conditions remain unverified and cannot influence downstream applicability.
 
 Every item must cite existing block IDs and include a short verbatim evidence_quote.
+Copy evidence_quote character-for-character from the cited blocks. Never insert an
+ellipsis or silently join text across blocks. If the quote spans adjacent blocks,
+source_block_refs must contain every contributing block ID in reading order.
 The content.evidence_type must be one of ALLOWED_EVIDENCE_TYPES. Return multiple items
 when the paper directly supports multiple independent claims. Do not turn background
 statements or cited-work summaries into this paper's experimental observation.
@@ -66,7 +71,8 @@ Type-specific content fields:
 - PARAMETER_VALUE: parameter, value, unit, statement
 - PARAMETER_RANGE: parameter, lower, upper, unit, statement
 - PROCESS_OBSERVATION: statement, target_metric|null, measured_value|null, unit|null
-- PARAMETER_EFFECT: parameter, target_metric, direction, statement; direction is
+- PARAMETER_EFFECT: parameter, target_metric, direction, threshold_value|null,
+  lower|null, upper|null, unit|null, statement; direction is
   INCREASES|DECREASES|NON_MONOTONIC|OPTIMUM|THRESHOLD|NO_CLEAR_EFFECT|UNKNOWN
 - MECHANISM: mechanism, statement
 - PROCESS_METHOD: method, statement
@@ -90,6 +96,7 @@ class PaperExtractionOutcome:
     status: ExtractionStatus
     items: list[EvidenceIRV2]
     reason: str | None = None
+    llm_call_count: int = 1
 
 
 class TypedEvidenceExtractor:
@@ -100,11 +107,15 @@ class TypedEvidenceExtractor:
         model: str,
         max_windows: int = 8,
         timeout: float = 180.0,
+        max_attempts: int = 2,
+        max_tokens: int = 3500,
     ) -> None:
         self.client = client
         self.model = model
         self.max_windows = max_windows
         self.timeout = timeout
+        self.max_attempts = max(1, max_attempts)
+        self.max_tokens = max_tokens
         self._content_adapter = TypeAdapter(EvidenceContent)
 
     def extract(
@@ -119,16 +130,51 @@ class TypedEvidenceExtractor:
                 status=ExtractionStatus.NOT_FOUND,
                 items=[],
                 reason="no_evidence_windows",
+                llm_call_count=0,
             )
+        first = self._extract_once(requirement, candidate, selected)
+        if self.max_attempts == 1 or not _retryable(first):
+            return first
+        retry = self._extract_once(
+            requirement,
+            candidate,
+            selected,
+            correction=_retry_correction(first),
+        )
+        retry.llm_call_count += first.llm_call_count
+        if retry.items or retry.status == ExtractionStatus.FOUND:
+            return retry
+        first.llm_call_count = retry.llm_call_count
+        first.reason = "; ".join(
+            value for value in (first.reason, f"retry:{retry.reason}") if value
+        )
+        return first
+
+    def _extract_once(
+        self,
+        requirement: KnowledgeRequirementV1,
+        candidate: PaperCandidate,
+        selected: list[EvidenceWindow],
+        *,
+        correction: str | None = None,
+    ) -> PaperExtractionOutcome:
+        request_options: dict[str, Any] = {
+            "temperature": 0,
+            "timeout": self.timeout,
+            "max_tokens": self.max_tokens,
+            "response_format": {"type": "json_object"},
+        }
+        if str(getattr(self.client, "provider", "")).casefold() == "deepseek":
+            request_options["thinking"] = {"type": "disabled"}
         response = self.client.chat(
             [
                 {"role": "system", "content": SYSTEM_PROMPT},
-                {"role": "user", "content": self._render(requirement, selected)},
+                {
+                    "role": "user",
+                    "content": self._render(requirement, selected, correction=correction),
+                },
             ],
-            temperature=0,
-            timeout=self.timeout,
-            max_tokens=3500,
-            response_format={"type": "json_object"},
+            **request_options,
         )
         content = str(response.get("content") or response.get("message") or "")
         try:
@@ -258,16 +304,24 @@ class TypedEvidenceExtractor:
         unknown = [ref for ref in refs if ref not in available]
         if unknown:
             errors.append(f"unknown_source_block_refs:{','.join(unknown)}")
-        cited_text = "\n".join(available[ref].text for ref in refs if ref in available)
+        cited_blocks = [available[ref].text for ref in refs if ref in available]
+        cited_text = "\n".join(cited_blocks)
         if not quote:
             errors.append("missing_evidence_quote")
         elif not cited_text or _space_normalize(quote) not in _space_normalize(cited_text):
             errors.append("evidence_quote_not_verbatim")
         for value, unit in _numeric_claims(content):
-            if cited_text and not _number_present(value, cited_text):
-                errors.append(f"numeric_value_not_in_cited_blocks:{value}")
-            if unit and cited_text and not _unit_present(unit, cited_text):
-                errors.append(f"unit_not_in_cited_blocks:{unit}")
+            if not cited_blocks:
+                continue
+            if unit is None:
+                if not any(_number_present(value, text) for text in cited_blocks):
+                    errors.append(f"numeric_value_not_in_cited_blocks:{value}")
+                continue
+            if normalize_unit(unit)[0] is None:
+                errors.append(f"unsupported_claim_unit:{unit}")
+                continue
+            if not any(_numeric_unit_claim_present(value, unit, text) for text in cited_blocks):
+                errors.append(f"numeric_unit_not_co_located_or_compatible:{value}:{unit}")
         if isinstance(content, ParameterRangeContent) and content.lower > content.upper:
             errors.append("invalid_parameter_range")
         if isinstance(content, ReportedOptimumContent):
@@ -284,6 +338,8 @@ class TypedEvidenceExtractor:
     def _render(
         requirement: KnowledgeRequirementV1,
         windows: list[EvidenceWindow],
+        *,
+        correction: str | None = None,
     ) -> str:
         requirement_json = json.dumps(
             requirement.model_dump(mode="json"),
@@ -303,6 +359,8 @@ class TypedEvidenceExtractor:
             f"WINDOW {window.window_id} score={window.score}\n{window.render()}"
             for window in windows
         )
+        if correction:
+            rendered.append(f"RETRY_CORRECTION\n{correction}")
         return "\n\n".join(rendered)
 
 
@@ -330,6 +388,13 @@ def _numeric_claims(content: EvidenceContent) -> list[tuple[float, str | None]]:
         return [(content.lower, content.unit), (content.upper, content.unit)]
     if isinstance(content, ProcessObservationContent) and content.measured_value is not None:
         return [(content.measured_value, content.unit)]
+    if isinstance(content, ParameterEffectContent):
+        values = [
+            value
+            for value in (content.threshold_value, content.lower, content.upper)
+            if value is not None
+        ]
+        return [(value, content.unit) for value in values]
     if isinstance(content, ReportedOptimumContent):
         values: list[tuple[float, str | None]] = []
         for setting in content.parameters:
@@ -340,14 +405,29 @@ def _numeric_claims(content: EvidenceContent) -> list[tuple[float, str | None]]:
     return []
 
 
-def _numbers(text: str) -> list[float]:
-    values: list[float] = []
-    for raw in re.findall(r"(?<![A-Za-z])[-+]?\d+(?:[.,]\d+)?(?:[eE][-+]?\d+)?", text):
+_NUMBER_RE = re.compile(r"(?<![A-Za-z])[-+]?\d+(?:[.,]\d+)?(?:[eE][-+]?\d+)?")
+_LOCAL_EXPRESSION_LIMIT = 64
+_CLAUSE_BOUNDARY_RE = re.compile(r"[.!?;。！？；]")
+
+
+def _number_mentions(text: str) -> list[tuple[float, int, int]]:
+    values: list[tuple[float, int, int]] = []
+    for match in _NUMBER_RE.finditer(_canonical_text(text)):
         try:
-            values.append(float(raw.replace(",", ".")))
+            values.append(
+                (
+                    float(match.group(0).replace(",", ".")),
+                    match.start(),
+                    match.end(),
+                )
+            )
         except ValueError:
             continue
     return values
+
+
+def _numbers(text: str) -> list[float]:
+    return [value for value, _start, _end in _number_mentions(text)]
 
 
 def _number_present(expected: float, text: str) -> bool:
@@ -368,14 +448,100 @@ def _canonical_text(value: str) -> str:
     )
 
 
+def _unit_token_pattern(token: str) -> str:
+    parts: list[str] = []
+    for character in token:
+        if character == "/":
+            parts.append(r"\s*/\s*")
+        elif character == "2":
+            parts.append(r"\s*2")
+        else:
+            parts.append(re.escape(character))
+    return "".join(parts)
+
+
+_UNIT_TOKEN_RE = re.compile(
+    r"(?<![A-Za-z])(?:"
+    + "|".join(
+        _unit_token_pattern(token)
+        for token in known_unit_tokens()
+        if token != "1"
+    )
+    + r")(?![A-Za-z0-9])",
+    re.IGNORECASE,
+)
+
+
+def _unit_mentions(text: str) -> list[tuple[str, float, int, int]]:
+    normalized_text = _canonical_text(text).casefold()
+    output: list[tuple[str, float, int, int]] = []
+    for match in _UNIT_TOKEN_RE.finditer(normalized_text):
+        normalized, factor = normalize_unit(match.group(0))
+        if normalized is not None and factor is not None:
+            output.append((normalized, factor, match.start(), match.end()))
+    return output
+
+
 def _unit_present(unit: str, text: str) -> bool:
-    expected = re.sub(r"\s+", "", _canonical_text(unit)).casefold()
-    actual = re.sub(r"\s+", "", _canonical_text(text)).casefold()
-    return expected in actual
+    expected, _factor = normalize_unit(unit)
+    return expected is not None and any(
+        normalized == expected for normalized, _value, _start, _end in _unit_mentions(text)
+    )
+
+
+def _numeric_unit_claim_present(expected_value: float, expected_unit: str, text: str) -> bool:
+    expected_dimension, expected_factor = normalize_unit(expected_unit)
+    if expected_dimension is None or expected_factor is None:
+        return False
+    expected_canonical = float(expected_value) * expected_factor
+    normalized_text = _canonical_text(text)
+    for candidate, number_start, number_end in _number_mentions(text):
+        for dimension, factor, unit_start, unit_end in _unit_mentions(text):
+            if dimension != expected_dimension:
+                continue
+            candidate_canonical = candidate * factor
+            if not math.isclose(
+                expected_canonical,
+                candidate_canonical,
+                rel_tol=1e-6,
+                abs_tol=1e-12,
+            ):
+                continue
+            gap_start = min(number_end, unit_end)
+            gap_end = max(number_start, unit_start)
+            gap = normalized_text[gap_start:gap_end]
+            if len(gap) <= _LOCAL_EXPRESSION_LIMIT and not _CLAUSE_BOUNDARY_RE.search(gap):
+                return True
+    return False
 
 
 def _space_normalize(text: str) -> str:
-    return re.sub(r"\s+", " ", unicodedata.normalize("NFKC", text)).strip()
+    normalized = unicodedata.normalize("NFKC", text).translate(
+        str.maketrans({"’": "'", "‘": "'", "“": '"', "”": '"'})
+    )
+    normalized = re.sub(r"(?<=[0-9A-Za-z])-\s+(?=[0-9A-Za-z])", "", normalized)
+    return re.sub(r"\s+", " ", normalized).strip()
+
+
+def _retryable(outcome: PaperExtractionOutcome) -> bool:
+    if outcome.status == ExtractionStatus.FAILED:
+        return True
+    return bool(outcome.items) and not any(
+        item.validation_state == ValidationState.VALIDATED for item in outcome.items
+    )
+
+
+def _retry_correction(outcome: PaperExtractionOutcome) -> str:
+    errors = list(
+        dict.fromkeys(error for item in outcome.items for error in item.validation_errors)
+    )
+    failure = outcome.reason or ", ".join(errors) or "mechanical_validation_failed"
+    return (
+        f"The previous attempt failed: {failure}. Produce a fresh strict JSON response. "
+        "For each item, copy one short evidence_quote exactly from the rendered block text; "
+        "do not paraphrase or use ellipses. Cite every block contributing text to that quote. "
+        "If no mechanically groundable item exists, return NOT_FOUND."
+    )
 
 
 _CONDITION_UNITS = {
@@ -430,10 +596,10 @@ def _condition_supported_in_text(key: str, value: Any, text: str) -> bool:
     if isinstance(value, bool) or value is None:
         return False
     if isinstance(value, (int, float)):
-        if not _number_present(float(value), text):
-            return False
         unit = _CONDITION_UNITS.get(key)
-        return unit is None or _unit_present(unit, text)
+        if unit is not None:
+            return _numeric_unit_claim_present(float(value), unit, text)
+        return _number_present(float(value), text)
     if isinstance(value, dict):
         numeric_values = [
             item

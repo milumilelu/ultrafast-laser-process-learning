@@ -53,8 +53,9 @@ export interface LineageBeliefView {
   evidenceId: string
   evidenceType: string
   applicabilityScore: number
+  evidenceQuality: number
   transferLevel: string
-  priorWeight: number
+  recommendedPriorStrength: number
   uncertainty: string
   facetCount: number
 }
@@ -63,7 +64,8 @@ export interface LineagePriorView {
   priorId: string
   priorType: string
   applicabilityScore: number
-  weight: number
+  evidenceQuality: number
+  recommendedStrength: number
   uncertainty: string
   status: string
   conflictGroupId: string | null
@@ -213,8 +215,9 @@ function toBeliefView(belief: EvidenceBelief): LineageBeliefView {
     evidenceId: belief.evidence_id,
     evidenceType: belief.evidence_type,
     applicabilityScore: belief.applicability_score,
+    evidenceQuality: belief.evidence_quality,
     transferLevel: belief.transfer_level,
-    priorWeight: belief.prior_weight,
+    recommendedPriorStrength: belief.recommended_prior_strength,
     uncertainty: belief.uncertainty,
     facetCount: belief.facets.length,
   }
@@ -225,7 +228,8 @@ function toPriorView(prior: PriorObject): LineagePriorView {
     priorId: prior.prior_id,
     priorType: prior.prior_type,
     applicabilityScore: prior.applicability_score,
-    weight: prior.weight,
+    evidenceQuality: prior.evidence_quality,
+    recommendedStrength: prior.recommended_strength,
     uncertainty: prior.uncertainty,
     status: prior.status,
     conflictGroupId: prior.conflict_group_id ?? null,

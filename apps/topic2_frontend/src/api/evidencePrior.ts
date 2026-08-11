@@ -33,6 +33,7 @@ export interface EvidenceContent {
   material_grade?: string | null
   target_metric?: string | null
   measured_value?: number | null
+  threshold_value?: number | null
   parameters?: Array<Record<string, unknown>>
 }
 
@@ -87,8 +88,9 @@ export interface EvidenceBelief {
   evidence_id: string
   evidence_type: string
   applicability_score: number
+  evidence_quality: number
   transfer_level: string
-  prior_weight: number
+  recommended_prior_strength: number
   uncertainty: string
   facets: ApplicabilityFacet[]
   governance_status: string
@@ -100,7 +102,8 @@ export interface PriorObject {
   evidence_refs: string[]
   belief_refs: string[]
   applicability_score: number
-  weight: number
+  evidence_quality: number
+  recommended_strength: number
   uncertainty: string
   status: string
   conflict_group_id?: string | null
@@ -114,6 +117,22 @@ export interface PriorObject {
   direction?: string | null
   statement?: string
   mechanism?: string
+}
+
+export interface TransferObservation {
+  observation_id: string
+  evidence_refs: string[]
+  belief_refs: string[]
+  applicability_score: number
+  evidence_quality: number
+  recommended_strength: number
+  uncertainty: string
+  status: string
+  target_metric?: string | null
+  measured_value?: number | null
+  unit?: string | null
+  conditions: Record<string, unknown>
+  statement: string
 }
 
 export interface EvidencePriorResult {
@@ -147,6 +166,7 @@ export interface EvidencePriorResult {
   priors: {
     prior_set_id: string
     priors: PriorObject[]
+    observations: TransferObservation[]
     conflicts: Array<Record<string, unknown>>
     warnings: string[]
   }
