@@ -1,0 +1,24 @@
+{
+ "case_id": "e9dbf6f7-p10-t2",
+ "tool": "camelot",
+ "raw_tables": [
+  {
+   "table_index": 0,
+   "bbox": [
+    130.92093647003173,
+    600.1439392089843,
+    363.6069140625,
+    655.7815489196777
+   ],
+   "parsing_report": {
+    "accuracy": 97.33,
+    "whitespace": 8.33,
+    "order": 1,
+    "page": 10,
+    "confidence": 0.8922
+   },
+   "df_csv": "0,1,2,3\r\n,Control group,,Experimental group\r\nLaser power（W）,1.5,1.5,1\r\nFocus position（mm）,2,2,3\r\nCutting diameter（lm）,\"\u0001\n100\",\"\u0001\n100\",\"\u0001\n125\"\r\nProcessing speed（lm/s）,200,200,200\r\nProcessing laps （r）,100,50,50\r\n"
+  }
+ ],
+ "note": "Camelot parsing_report + dataframe CSV."
+}

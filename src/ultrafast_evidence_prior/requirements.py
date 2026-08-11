@@ -171,6 +171,22 @@ class KnowledgeRequirementTemplateCompiler:
                 "MEDIUM",
             ),
         ]
+        coverage_targets = {
+            KnowledgeRequirementType.MATERIAL_IDENTITY: [
+                material,
+                *([task.material_grade] if task.material_grade else []),
+            ],
+            KnowledgeRequirementType.MATERIAL_PROPERTY: list(target["properties"]),
+            KnowledgeRequirementType.PROCESS_OBSERVATION: [task.target_metric.value],
+            KnowledgeRequirementType.PARAMETER_EFFECT: list(target["parameters"]),
+            KnowledgeRequirementType.REPORTED_OPTIMUM: list(target["parameters"]),
+            KnowledgeRequirementType.MECHANISM: ["explicit_mechanism"],
+            KnowledgeRequirementType.PROCESS_METHOD: [
+                "processing_method",
+                "scan_strategy",
+                "experimental_configuration",
+            ],
+        }
         return [
             KnowledgeRequirementV1(
                 requirement_id=self._id(task, requirement_type),
@@ -179,6 +195,7 @@ class KnowledgeRequirementTemplateCompiler:
                 target_metric=task.target_metric,
                 evidence_types=evidence_types,
                 query_terms=list(dict.fromkeys(term for term in query_terms if term)),
+                coverage_targets=coverage_targets[requirement_type],
                 conditions=conditions,
                 priority=priority,
                 compiler_version=self.version,

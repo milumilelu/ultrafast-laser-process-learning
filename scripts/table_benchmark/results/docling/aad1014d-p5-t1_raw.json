@@ -1,0 +1,18 @@
+{
+ "case_id": "aad1014d-p5-t1",
+ "tool": "docling",
+ "raw_tables": [
+  {
+   "table_index": 0,
+   "bbox": [
+    165.52356847263871,
+    341.69083480121054,
+    559.4233792975544,
+    421.814949826406
+   ],
+   "markdown": "Table 1. Picosecond Bessel laser cutting process parameters and levels.\n\n|                     |        |   Factor Level |   Factor Level |   Factor Level |   Factor Level |   Factor Level |\n|---------------------|--------|----------------|----------------|----------------|----------------|----------------|\n| Process Parameters  | Unit   |              1 |              2 |              3 |              4 |              5 |\n| Pulse energy        | (mJ)   |          1.356 |          1.288 |          1.216 |          1.144 |          1.072 |\n| Defocusing distance | ( µ m) |              0 |            200 |            400 |            600 |            800 |\n| Hole spacing        | ( µ m) |              4 |              6 |              8 |             10 |             12 |",
+   "label": "table"
+  }
+ ],
+ "note": "Docling TableItem markdown + provenance bbox."
+}

@@ -1,0 +1,12 @@
+{
+ "case_id": "3c0cf585-p4-t1",
+ "pdf": "3c0cf5859d4f9a93_Universal threshold for femtosecond laser ablation with oblique illumination.pdf",
+ "page": 4,
+ "table_label": "Fig-5-like two-panel table",
+ "table_type": "figure",
+ "category": "C",
+ "expect_table": true,
+ "evaluate_cells": false,
+ "note": "two-panel figure-like table (P/S polarization threshold fluence vs AOI); axis-like numeric layout, cell pairing not recoverable from text layer; only detection scored",
+ "rows": null
+}

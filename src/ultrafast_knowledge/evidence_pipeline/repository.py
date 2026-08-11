@@ -31,5 +31,20 @@ class PersistentScientificPaperRepository:
             windows_per_paper=windows_per_paper,
         )
 
+    def retrieve_query(
+        self,
+        requirement: Requirement,
+        query_text: str,
+        *,
+        paper_top_k: int = 5,
+        windows_per_paper: int = 8,
+    ) -> tuple[list[PaperCandidate], dict[str, list[EvidenceWindow]]]:
+        return self.retriever.retrieve_query(
+            requirement,
+            query_text,
+            paper_top_k=paper_top_k,
+            windows_per_paper=windows_per_paper,
+        )
+
     def structured_knowledge(self, requirement: Requirement) -> list[dict]:
         return self.store.query_knowledge(requirement)

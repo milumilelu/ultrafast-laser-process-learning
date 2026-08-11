@@ -1,0 +1,638 @@
+{
+ "case_id": "4ae395a7-p8-t1",
+ "tool": "pymupdf",
+ "raw_tables": [
+  {
+   "table_index": 0,
+   "bbox": [
+    35.715999603271484,
+    57.1229248046875,
+    561.0222778320312,
+    779.0340576171875
+   ],
+   "extract": [
+    [
+     "Micromachines 2022, 13, 785",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "8 of 22"
+    ],
+    [
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     ""
+    ],
+    [
+     "",
+     "After the optim",
+     "is",
+     "ed laser para",
+     "meters were det",
+     "ermine",
+     "d, we varied the",
+     "laser fluence,"
+    ],
+    [
+     "",
+     "pulse repetition rate",
+     ",",
+     "laser beam sc",
+     "anning speed,",
+     "and hat",
+     "ch again (only",
+     "in a narrower"
+    ],
+    [
+     "",
+     "parameter range). De",
+     "s",
+     "pite this, the p",
+     "arameter values",
+     "yielding",
+     "the highest abla",
+     "tion efficiency"
+    ],
+    [
+     "",
+     "remained unchanged",
+     ",",
+     "indicating the",
+     "optimal glass c",
+     "utting p",
+     "arameter set.",
+     ""
+    ],
+    [
+     "",
+     "Therefore, the fi",
+     "n",
+     "al (optimised)",
+     "processing par",
+     "ameters",
+     "for cutting 0.3",
+     "mm wide cuts"
+    ],
+    [
+     "",
+     "in a low-laser-powe",
+     "r",
+     "regime are pr",
+     "esented in Tabl",
+     "e 1. Un",
+     "der optimised",
+     "glass ablation"
+    ],
+    [
+     "",
+     "parameters, the effect",
+     "i",
+     "ve cutting spee",
+     "d of 0.4 mm thic",
+     "k glass",
+     "plates in water w",
+     "as 0.26 mm/s."
+    ],
+    [
+     "",
+     "Cutting in ambient a",
+     "ir",
+     "was slower—",
+     "0.19 mm/s. Th",
+     "e differe",
+     "nce in effective",
+     "cutting speed"
+    ],
+    [
+     "",
+     "mostly resulted from",
+     "",
+     "the difference",
+     "in incident lase",
+     "r powe",
+     "r between two",
+     "environments"
+    ],
+    [
+     "",
+     "(2.75 W in water and",
+     "2.",
+     "1 W in ambien",
+     "t air). Consideri",
+     "ng this,",
+     "the effective cut",
+     "ting speed per"
+    ],
+    [
+     "",
+     "incident laser power",
+     "(",
+     "W) was 0.095",
+     "mm/s/W in wa",
+     "ter and",
+     "0.09 mm/s/W i",
+     "n ambient air."
+    ],
+    [
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     ""
+    ],
+    [
+     "",
+     "Table 1. Optimised gla",
+     "ss",
+     "cutting parame",
+     "ters (low-laser-po",
+     "wer cutt",
+     "ing regime).",
+     ""
+    ],
+    [
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     ""
+    ],
+    [
+     "",
+     "Ablation",
+     "",
+     "",
+     "",
+     "",
+     "",
+     ""
+    ],
+    [
+     "Average",
+     "Fl",
+     "ue",
+     "nce,",
+     "",
+     "P",
+     "ulse",
+     ""
+    ],
+    [
+     "Cutting",
+     "Efficiency,",
+     "",
+     "Scan Sp",
+     "eed, Pulse",
+     "",
+     "Hatch,",
+     "Cut Width,"
+    ],
+    [
+     "Laser",
+     "",
+     "",
+     "2",
+     "µ",
+     "Rep",
+     "etition\nµ",
+     "µ"
+    ],
+    [
+     "Environment\nPower, W",
+     "J\nµ 3 µ",
+     "/c",
+     "m mm/",
+     "s Energy,",
+     "J\nRat",
+     "m\ne, kHz",
+     "m"
+    ],
+    [
+     "",
+     "m / J",
+     "",
+     "",
+     "",
+     "",
+     "",
+     ""
+    ],
+    [
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     ""
+    ],
+    [
+     "Air 2.1",
+     "6.6",
+     "3",
+     ".5 800",
+     "3.2",
+     "",
+     "653 10",
+     "300"
+    ],
+    [
+     "Water (low power) 2.75",
+     "7.5",
+     "6",
+     ".1 600",
+     "5.2",
+     "",
+     "529 10",
+     "300"
+    ],
+    [
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     ""
+    ],
+    [
+     "",
+     "Despite the 14%",
+     "h",
+     "igher ablatio",
+     "n efficiency in w",
+     "ater-ass",
+     "isted conditions",
+     ", the improve-"
+    ],
+    [
+     "",
+     "ment in effective cutt",
+     "in",
+     "g speed per W",
+     "att was modest",
+     "(5.5%).",
+     "The reason for t",
+     "he discrepancy"
+    ],
+    [
+     "",
+     "between the ablation",
+     "e",
+     "fficiency and",
+     "effective cutting",
+     "speed",
+     "was caused by t",
+     "he steeper cut"
+    ],
+    [
+     "",
+     "walls produced in w",
+     "at",
+     "er [16]. Strong",
+     "shockwaves ar",
+     "e created",
+     "during laser a",
+     "blation in a liq-"
+    ],
+    [
+     "",
+     "uid environment tha",
+     "t i",
+     "mpinge on th",
+     "e cut sidewalls,",
+     "produci",
+     "ng shallower ta",
+     "per angles [16]."
+    ],
+    [
+     "",
+     "As a result, a larger v",
+     "o",
+     "lume of mater",
+     "ial was removed",
+     ", yieldi",
+     "ng a higher abla",
+     "tion efficiency,"
+    ],
+    [
+     "",
+     "despite removing the",
+     "",
+     "same material",
+     "layer thickness",
+     "per lase",
+     "r scan.",
+     ""
+    ],
+    [
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     ""
+    ],
+    [
+     "",
+     "3.1.2. Cut Sidewall Q",
+     "u",
+     "ality",
+     "",
+     "",
+     "",
+     ""
+    ],
+    [
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     ""
+    ],
+    [
+     "",
+     "The hatch (h) is",
+     "t",
+     "he distance b",
+     "etween two sca",
+     "nned lin",
+     "es that defines",
+     "the degree of"
+    ],
+    [
+     "",
+     "laser beam overlap b",
+     "et",
+     "ween two neig",
+     "hbouring cut lin",
+     "es. The",
+     "effect of hatch d",
+     "istance on the"
+    ],
+    [
+     "",
+     "bottom of milled cav",
+     "it",
+     "ies has been i",
+     "nvestigated in m",
+     "ultiple",
+     "papers [44–47].",
+     "However, we"
+    ],
+    [
+     "",
+     "could not find extens",
+     "iv",
+     "e research on t",
+     "he influence of t",
+     "he hatch",
+     "on the quality",
+     "of laser cutting."
+    ],
+    [
+     "",
+     "For this reason,",
+     "re",
+     "ctangular gla",
+     "ss strips (26 × 6",
+     "mm2) w",
+     "ere cut out of t",
+     "he larger glass"
+    ],
+    [
+     "",
+     "plates using the opti",
+     "m",
+     "ised laser par",
+     "ameter sets pres",
+     "ented in",
+     "Table 1 (2.1 W",
+     "in ambient air"
+    ],
+    [
+     "",
+     "and 2.75 W in water).",
+     "T",
+     "he optimal ha",
+     "tch in both envir",
+     "onment",
+     "s was 10 µm. Ne",
+     "vertheless, we"
+    ],
+    [
+     "",
+     "produced additional",
+     "c",
+     "uts with the fo",
+     "llowing hatch v",
+     "alues: 2,",
+     "4, 6, 8, and 12 µ",
+     "m. Here, only"
+    ],
+    [
+     "",
+     "the hatch value was",
+     "va",
+     "ried, whereas",
+     "other paramete",
+     "rs remai",
+     "ned unchanged",
+     ". Micrographs"
+    ],
+    [
+     "",
+     "of laser-cut walls are",
+     "d",
+     "epicted in Fig",
+     "ure 7.",
+     "",
+     "",
+     ""
+    ],
+    [
+     "",
+     "Cut sidewalls w",
+     "",
+     "ere covered w",
+     "ith periodically",
+     "recurri",
+     "ng ridges. The",
+     "se formations"
+    ],
+    [
+     "",
+     "were parallel to the l",
+     "as",
+     "er beam scann",
+     "ing direction an",
+     "d spann",
+     "ed uninterrupt",
+     "ed throughout"
+    ],
+    [
+     "",
+     "the length of the cut.",
+     "",
+     "Ridges are vis",
+     "ible as the dark",
+     "lines in",
+     "Figure 7 separa",
+     "ted by lighter"
+    ],
+    [
+     "",
+     "areas—the concaviti",
+     "es",
+     ".",
+     "",
+     "",
+     "",
+     ""
+    ],
+    [
+     "",
+     "In the experime",
+     "n",
+     "ts, we used a",
+     "Gaussian laser",
+     "beam i",
+     "ntensity profile",
+     ". Thus, these"
+    ],
+    [
+     "",
+     "formations resulted",
+     "fr",
+     "om the cumu",
+     "lative beam inte",
+     "nsity d",
+     "istribution proj",
+     "ected onto the"
+    ],
+    [
+     "",
+     "glass plate after mult",
+     "ip",
+     "le laser scans (",
+     "Figure 8). The a",
+     "ccumula",
+     "ted laser intensi",
+     "ty distribution"
+    ],
+    [
+     "",
+     "(the distance between",
+     "i",
+     "ntensity mini",
+     "mums and maxi",
+     "mums) d",
+     "epended on the",
+     "hatch distance"
+    ],
+    [
+     "",
+     "between individual c",
+     "u",
+     "t lines. Conca",
+     "vities represent",
+     "the lase",
+     "r beam intensity",
+     "peaks, where"
+    ],
+    [
+     "",
+     "more material was r",
+     "e",
+     "moved. In Fig",
+     "ure 8, dashed lin",
+     "es (nor",
+     "mal to the glass",
+     "plate surface)"
+    ],
+    [
+     "",
+     "were extrapolated fr",
+     "o",
+     "m the laser in",
+     "tensity peaks to",
+     "the inc",
+     "lined cut sidew",
+     "all, indicating"
+    ],
+    [
+     "",
+     "positions where conc",
+     "a",
+     "vities would b",
+     "e formed. Ridge",
+     "s were f",
+     "ormed in intens",
+     "ity minimums"
+    ],
+    [
+     "",
+     "between the cut line",
+     "s,",
+     "thus removi",
+     "ng less material",
+     ". Howe",
+     "ver, as the hatc",
+     "h distance de-"
+    ],
+    [
+     "",
+     "creased to 2 µm in a",
+     "m",
+     "bient air and 4",
+     "µm in water, th",
+     "e ridge",
+     "s became indist",
+     "inguishable to"
+    ],
+    [
+     "",
+     "the eye. Hatch beca",
+     "m",
+     "e comparable",
+     "to the pitch, yie",
+     "lding a",
+     "relatively unifo",
+     "rm overlap in"
+    ],
+    [
+     "",
+     "both directions.",
+     "",
+     "",
+     "",
+     "",
+     "",
+     ""
+    ]
+   ]
+  }
+ ],
+ "note": "PyMuPDF Table.extract() output; no per-cell bbox is exposed by the public API."
+}

@@ -12,6 +12,8 @@ from ultrafast_knowledge.evidence_pipeline.schemas import (
     SemanticBlockType,
     StructuredScientificPaper,
 )
+from ultrafast_knowledge.evidence_pipeline.tables.models import ScientificTable
+from ultrafast_knowledge.evidence_pipeline.tables.projector import TableBlockProjector
 
 _TABLE_CAPTION = re.compile(r"^\s*(?:table|tab\.)\s*[\dSIVX]", re.IGNORECASE)
 _EQUATION = re.compile(
@@ -28,6 +30,7 @@ class SemanticBlockBuilder:
         *,
         title: str = "",
         metadata: dict[str, Any] | None = None,
+        tables: list[ScientificTable] | None = None,
     ) -> StructuredScientificPaper:
         section_by_block: dict[str, Any] = {}
         for section in document.sections:
@@ -59,13 +62,34 @@ class SemanticBlockBuilder:
                     source_text_type=block.text_source,
                 )
             )
-        self._link_tables(document, semantic)
-        self._link_context(semantic)
         inferred_title = title.strip() or self._infer_title(semantic)
         abstract = "\n".join(
             block.text for block in semantic if block.section_type == "abstract"
         )
         paper_metadata = dict(metadata or {})
+        normalized_tables = list(tables or [])
+        if tables is not None:
+            semantic.extend(
+                TableBlockProjector().project(
+                    document,
+                    normalized_tables,
+                    paper_title=inferred_title,
+                    paper_metadata=paper_metadata,
+                    existing_blocks=semantic,
+                )
+            )
+        else:
+            self._link_tables(document, semantic)
+        semantic.sort(
+            key=lambda item: (
+                item.pdf_page_index,
+                item.bbox[1] if item.bbox else float("inf"),
+                0 if item.table_role == "summary" else 1,
+                item.table_row_index if item.table_row_index is not None else -1,
+                item.block_id,
+            )
+        )
+        self._link_context(semantic)
         section_titles = list(
             dict.fromkeys(
                 item.section_title for item in semantic if item.section_title
@@ -86,6 +110,7 @@ class SemanticBlockBuilder:
             retrieval_text=paper_retrieval_text,
             metadata=paper_metadata,
             blocks=semantic,
+            tables=normalized_tables,
             pdf_path=document.pdf_path,
         )
 
@@ -183,6 +208,8 @@ class SemanticBlockBuilder:
                 SemanticBlockType.FIGURE_CAPTION,
                 SemanticBlockType.EQUATION,
             }:
+                if block.block_type == SemanticBlockType.TABLE_CAPTION and block.table_id:
+                    continue
                 related: list[str] = []
                 for nearby in blocks[max(0, index - 1) : index + 2]:
                     if nearby.block_id != block.block_id and nearby.pdf_page_index == block.pdf_page_index:

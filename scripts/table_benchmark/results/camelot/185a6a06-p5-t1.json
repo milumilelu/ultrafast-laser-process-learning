@@ -1,0 +1,54 @@
+{
+ "case_id": "185a6a06-p5-t1",
+ "tool": "camelot",
+ "pdf": "185a6a0667e0b43d_Flat-top picosecond laser texturing of CFRP.pdf",
+ "page": 5,
+ "package_version": "2.0.0",
+ "python_version": "3.12.13",
+ "device": "cpu",
+ "os": "Windows-11",
+ "elapsed_time_s": 0.4935,
+ "is_cold": false,
+ "error": null,
+ "tables": [
+  {
+   "table_index": 0,
+   "bbox": [
+    88.50577789306641,
+    613.0752713857061,
+    260.4039404296875,
+    691.7754059414979
+   ],
+   "rows": [
+    [
+     "Parameters",
+     "Values"
+    ],
+    [
+     "Wavelength(nm)",
+     "355"
+    ],
+    [
+     "Fluence range (J/cm2)",
+     "2.3–7.0"
+    ],
+    [
+     "Pulse width (ps)",
+     "10"
+    ],
+    [
+     "Spot diameter (μm)",
+     "19"
+    ],
+    [
+     "Scanning speed (m/s)",
+     "1"
+    ],
+    [
+     "Pulse repetition rate (MHz)",
+     "1"
+    ]
+   ]
+  }
+ ]
+}

@@ -1,0 +1,24 @@
+{
+ "case_id": "6da19607-p5-t2",
+ "tool": "camelot",
+ "raw_tables": [
+  {
+   "table_index": 0,
+   "bbox": [
+    199.83628380063635,
+    276.20193025125747,
+    524.9878157392668,
+    360.00170867484525
+   ],
+   "parsing_report": {
+    "accuracy": 97.3,
+    "whitespace": 0.0,
+    "order": 1,
+    "page": 5,
+    "confidence": 0.973
+   },
+   "df_csv": "0,1,2\r\n\"Parameters \nParameters\",\"Symbol \nSymbol\",\"Values \nValues\"\r\n\"Pulse width \nPulse width\",\"𝜏 \nτ\",\"2.1 ps \n2.1 ps\"\r\n\"Diameter of the focal point \nDiameter of the focal point\",\"df \ndf\",\"48 µm \n48 µm\"\r\n\"Repetition rate\nRepetition rate\",\"f\nf\",\"75 kHz\n75 kHz\"\r\n\"Maximum average power\nMaximum average power\",\"Pmax\nPmax\",\"30 W\n30 W\"\r\n\"Maximum peak power\nMaximum peak power\",\"pk\n\u000bã\nP\nmax\n \n𝑃\u000bà\",\"190.4 MW\n190.4 MW\"\r\nMaximum pulse energy,Emax,0.4 J\r\n"
+  }
+ ],
+ "note": "Camelot parsing_report + dataframe CSV."
+}

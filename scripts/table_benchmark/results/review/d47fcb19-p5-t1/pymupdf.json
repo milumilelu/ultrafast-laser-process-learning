@@ -1,0 +1,31 @@
+{
+ "case_id": "d47fcb19-p5-t1",
+ "tool": "pymupdf",
+ "pdf": "d47fcb191eb2587a_Construction of microstructures on the Cu substrate using ultrafast laser processing to enhance the bonding strength of sintered Ag nanoparticles.pdf",
+ "page": 5,
+ "package_version": "1.28.2",
+ "python_version": "3.12.13",
+ "device": "cpu",
+ "os": "Windows-11",
+ "elapsed_time_s": 0.0546,
+ "is_cold": false,
+ "error": null,
+ "strategy_used": "default",
+ "tables": [
+  {
+   "table_index": 0,
+   "bbox": [
+    0.0,
+    36.3408006032308,
+    428.9949951171875,
+    65.79857025146484
+   ],
+   "rows": [
+    [
+     "Journal of\nLaser Applications",
+     "ARTICLE"
+    ]
+   ]
+  }
+ ]
+}

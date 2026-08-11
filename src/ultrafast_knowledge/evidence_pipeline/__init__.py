@@ -33,14 +33,27 @@ from ultrafast_knowledge.evidence_pipeline.schemas import (
 )
 from ultrafast_knowledge.evidence_pipeline.service import RequirementEvidencePipeline
 from ultrafast_knowledge.evidence_pipeline.store import ScientificIndexStore
+from ultrafast_knowledge.evidence_pipeline.tables import (
+    CamelotMLTableExtractor,
+    CamelotWorkerTableExtractor,
+    NullTableExtractor,
+    ScientificTable,
+    TableExtractionError,
+    TableExtractor,
+    TableNormalizer,
+    TableWarning,
+)
 
 __all__ = [
+    "CamelotMLTableExtractor",
+    "CamelotWorkerTableExtractor",
     "CrossPaperEvidenceAggregator",
     "EvidenceBenchmarkMetrics",
     "EvidenceIR",
     "EvidenceWindow",
     "ExtractionStatus",
     "HybridScientificIndex",
+    "NullTableExtractor",
     "PaperEvidence",
     "PersistentScientificPaperRepository",
     "RequirementEvidence",
@@ -52,10 +65,15 @@ __all__ = [
     "ScientificIndexIngestionService",
     "ScientificIndexNotReady",
     "ScientificIndexStore",
+    "ScientificTable",
     "SemanticBlock",
     "SemanticBlockBuilder",
     "SemanticBlockType",
     "StructuredScientificPaper",
+    "TableExtractionError",
+    "TableExtractor",
+    "TableNormalizer",
+    "TableWarning",
     "TwoLevelEvidenceRetriever",
     "evaluate_evidence_run",
 ]

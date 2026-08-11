@@ -1,0 +1,49 @@
+{
+ "case_id": "aad1014d-p5-t1",
+ "pdf": "aad1014d9273f0a3_sc04_034_Thick Glass High-Quality Cutting by Ultrafast Laser Bessel Beam Perforation-Assisted Separation.pdf",
+ "page": 5,
+ "table_label": "Table 1",
+ "table_type": "bordered",
+ "category": "C/E",
+ "note": "Bessel cutting process parameters and 5 levels; Factor Level merged header",
+ "rows": [
+  [
+   "Process Parameters",
+   "Unit",
+   "Factor Level 1",
+   "Factor Level 2",
+   "Factor Level 3",
+   "Factor Level 4",
+   "Factor Level 5"
+  ],
+  [
+   "Pulse energy",
+   "(mJ)",
+   "1.356",
+   "1.288",
+   "1.216",
+   "1.144",
+   "1.072"
+  ],
+  [
+   "Defocusing distance",
+   "(µm)",
+   "0",
+   "200",
+   "400",
+   "600",
+   "800"
+  ],
+  [
+   "Hole spacing",
+   "(µm)",
+   "4",
+   "6",
+   "8",
+   "10",
+   "12"
+  ]
+ ],
+ "expect_table": true,
+ "evaluate_cells": true
+}

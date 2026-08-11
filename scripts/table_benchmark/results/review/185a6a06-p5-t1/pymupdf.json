@@ -1,0 +1,31 @@
+{
+ "case_id": "185a6a06-p5-t1",
+ "tool": "pymupdf",
+ "pdf": "185a6a0667e0b43d_Flat-top picosecond laser texturing of CFRP.pdf",
+ "page": 5,
+ "package_version": "1.28.2",
+ "python_version": "3.12.13",
+ "device": "cpu",
+ "os": "Windows-11",
+ "elapsed_time_s": 0.0414,
+ "is_cold": false,
+ "error": null,
+ "strategy_used": "default",
+ "tables": [
+  {
+   "table_index": 0,
+   "bbox": [
+    0.0,
+    36.3408006032308,
+    428.9949951171875,
+    65.79857025146484
+   ],
+   "rows": [
+    [
+     "Journal of\nApplied Physics",
+     "ARTICLE"
+    ]
+   ]
+  }
+ ]
+}

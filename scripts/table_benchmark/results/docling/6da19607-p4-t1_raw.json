@@ -1,0 +1,18 @@
+{
+ "case_id": "6da19607-p4-t1",
+ "tool": "docling",
+ "raw_tables": [
+  {
+   "table_index": 0,
+   "bbox": [
+    165.65915990434584,
+    326.94209020520225,
+    559.7854856655001,
+    539.4012117749721
+   ],
+   "markdown": "Table 1. The experimental parameters for processing inclined bore samples with thermal barrier coating (TBC) microholes.\n\n| Parameters   | Average Power   | Scanning Speed                          |\n|--------------|-----------------|-----------------------------------------|\n| 1 2 3 4      | 12W             | 80 mm/s 160 mm/s 240 mm/s 320 mm/s      |\n| 5 6 7 8      | 18W             | 80 mm/s 160 mm/s 240 mm/s 320 mm/s      |\n| 9 10 11 12   | 24W             | 80 mm/s 160 mm/s 240 mm/s 320 mm/s      |\n| 13 14 15 16  | 30W             | 80 mm/s 160 mm/s 240 mm/s 320 mm/s 5 of |",
+   "label": "table"
+  }
+ ],
+ "note": "Docling TableItem markdown + provenance bbox."
+}

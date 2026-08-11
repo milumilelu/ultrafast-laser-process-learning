@@ -1,0 +1,42 @@
+[INFO] 2026-08-10 22:22:43,719 [RapidOCR] base.py:23: Using engine_name: torch
+[INFO] 2026-08-10 22:22:43,731 [RapidOCR] device_config.py:57: Using CPU device
+[INFO] 2026-08-10 22:22:43,739 [RapidOCR] download_file.py:60: File exists and is valid: C:\Users\RZF\Desktop\博士课题资料\ultrafast-laser-process-learning\.venv-table-docling\Lib\site-packages\rapidocr\models\PP-OCRv6_det_small.pth
+[INFO] 2026-08-10 22:22:43,739 [RapidOCR] main.py:50: Using C:\Users\RZF\Desktop\博士课题资料\ultrafast-laser-process-learning\.venv-table-docling\Lib\site-packages\rapidocr\models\PP-OCRv6_det_small.pth
+[INFO] 2026-08-10 22:22:43,851 [RapidOCR] base.py:23: Using engine_name: torch
+[INFO] 2026-08-10 22:22:43,852 [RapidOCR] device_config.py:57: Using CPU device
+[INFO] 2026-08-10 22:22:43,853 [RapidOCR] download_file.py:60: File exists and is valid: C:\Users\RZF\Desktop\博士课题资料\ultrafast-laser-process-learning\.venv-table-docling\Lib\site-packages\rapidocr\models\ch_ptocr_mobile_v2.0_cls_mobile.pth
+[INFO] 2026-08-10 22:22:43,853 [RapidOCR] main.py:50: Using C:\Users\RZF\Desktop\博士课题资料\ultrafast-laser-process-learning\.venv-table-docling\Lib\site-packages\rapidocr\models\ch_ptocr_mobile_v2.0_cls_mobile.pth
+[INFO] 2026-08-10 22:22:43,934 [RapidOCR] base.py:23: Using engine_name: torch
+[INFO] 2026-08-10 22:22:43,935 [RapidOCR] device_config.py:57: Using CPU device
+[INFO] 2026-08-10 22:22:43,952 [RapidOCR] download_file.py:60: File exists and is valid: C:\Users\RZF\Desktop\博士课题资料\ultrafast-laser-process-learning\.venv-table-docling\Lib\site-packages\rapidocr\models\PP-OCRv6_rec_small.pth
+[INFO] 2026-08-10 22:22:43,952 [RapidOCR] main.py:50: Using C:\Users\RZF\Desktop\博士课题资料\ultrafast-laser-process-learning\.venv-table-docling\Lib\site-packages\rapidocr\models\PP-OCRv6_rec_small.pth
+[transformers] `torch_dtype` is deprecated! Use `dtype` instead!
+
+Loading weights:   0%|          | 0/770 [00:00<?, ?it/s]
+Loading weights: 100%|██████████| 770/770 [00:00<00:00, 7987.37it/s]
+C:\Users\RZF\AppData\Local\Temp\docling_parse_ascii_d46262d4e7bd\site-packages\torch\nn\modules\conv.py:560: UserWarning: Using padding='same' with even kernel lengths and odd dilation may require a zero-padded copy of the input be created (Triggered internally at C:\actions-runner\_work\pytorch\pytorch\aten\src\ATen\native\Convolution.cpp:1102.)
+  return F.conv2d(
+[WARNING] 2026-08-10 22:23:32,107 [RapidOCR] main.py:132: The text detection result is empty
+RapidOCR returned empty result!
+RapidOCR returned empty result!
+179b114f-p5-t1: tables=1 error=None elapsed=14.69s
+185a6a06-p5-t1: tables=1 error=None elapsed=5.05s
+33dae6e7-p3-t1: tables=1 error=None elapsed=2.84s
+33dae6e7-p4-t2: tables=1 error=None elapsed=5.67s
+3c0cf585-p4-t1: tables=0 error=None elapsed=0.94s
+3c59d7dc-p4-t2: tables=1 error=None elapsed=5.03s
+4ae395a7-p8-t1: tables=1 error=None elapsed=1.95s
+64edf201-p5-t2: tables=1 error=None elapsed=2.33s
+6da19607-p10-t4: tables=1 error=None elapsed=3.85s
+6da19607-p4-t1: tables=1 error=None elapsed=2.56s
+6da19607-p5-t2: tables=1 error=None elapsed=4.61s
+aad1014d-p5-t1: tables=1 error=None elapsed=1.73s
+aad1014d-p6-t2: tables=2 error=None elapsed=6.25s
+c08322e5-p7-t2: tables=2 error=None elapsed=4.59s
+c5f4b1ec-p3-t1: tables=1 error=None elapsed=3.16s
+c5f4b1ec-p4-t2: tables=1 error=None elapsed=3.09s
+c5f4b1ec-p6-t3: tables=1 error=None elapsed=3.27s
+d47fcb19-p5-t1: tables=1 error=None elapsed=2.83s
+e9dbf6f7-p10-t2: tables=1 error=None elapsed=2.16s
+e9dbf6f7-p6-t1: tables=1 error=None elapsed=2.07s
+fa290122-p10-t1: tables=1 error=None elapsed=3.55s

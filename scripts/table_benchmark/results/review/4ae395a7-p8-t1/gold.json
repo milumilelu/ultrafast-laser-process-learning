@@ -1,0 +1,46 @@
+{
+ "case_id": "4ae395a7-p8-t1",
+ "pdf": "4ae395a7cb947897_sc04_032_Efficient Water-Assisted Glass Cutting with 355 nm Picosecond Laser Pulses.pdf",
+ "page": 8,
+ "table_label": "Table 1",
+ "table_type": "bordered",
+ "category": "E/F",
+ "note": "optimised glass cutting parameters; 2 rows; multi-line merged headers",
+ "rows": [
+  [
+   "Cutting Environment",
+   "Average Laser Power, W",
+   "Ablation Efficiency, µm3/µJ",
+   "Fluence, J/cm2",
+   "Scan Speed, mm/s",
+   "Pulse Energy, µJ",
+   "Pulse Repetition Rate, kHz",
+   "Hatch, µm",
+   "Cut Width, µm"
+  ],
+  [
+   "Air",
+   "2.1",
+   "6.6",
+   "3.5",
+   "800",
+   "3.2",
+   "653",
+   "10",
+   "300"
+  ],
+  [
+   "Water (low power)",
+   "2.75",
+   "7.5",
+   "6.1",
+   "600",
+   "5.2",
+   "529",
+   "10",
+   "300"
+  ]
+ ],
+ "expect_table": true,
+ "evaluate_cells": true
+}

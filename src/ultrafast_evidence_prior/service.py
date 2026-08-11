@@ -6,20 +6,17 @@ import uuid
 from typing import Any
 
 from ultrafast_app.services.scientific_pipeline import build_llm_client
+from ultrafast_evidence_prior.acquisition import EvidenceAcquisitionSession
 from ultrafast_evidence_prior.e2p import compile_beliefs, compile_priors
-from ultrafast_evidence_prior.extraction import PROMPT_VERSION, TypedEvidenceExtractor
+from ultrafast_evidence_prior.extraction import TypedEvidenceExtractor
 from ultrafast_evidence_prior.knowledge_store import StructuredKnowledgeStoreV2
 from ultrafast_evidence_prior.requirements import (
     KnowledgeRequirementTemplateCompiler,
-    as_retrieval_requirement,
-    requirement_signature,
 )
 from ultrafast_evidence_prior.schemas import (
     EquipmentContext,
     EvidenceIRSetV2,
-    EvidenceMiss,
     EvidencePriorAnalysisResult,
-    ExtractionStatus,
     ResolvedTaskV1,
     TaskRequestV1,
     ValidationState,
@@ -55,6 +52,13 @@ class EvidencePriorAnalysisService:
             timeout=llm_timeout,
             max_windows=windows_per_paper,
         )
+        self.acquisition = EvidenceAcquisitionSession(
+            repository=self.repository,
+            knowledge_store=self.knowledge_store,
+            extractor=self.extractor,
+            paper_top_k=paper_top_k,
+            windows_per_paper=windows_per_paper,
+        )
         self.requirement_compiler = KnowledgeRequirementTemplateCompiler()
 
     def analyze(
@@ -69,64 +73,31 @@ class EvidencePriorAnalysisService:
         items = []
         misses = []
         candidates_by_requirement: dict[str, list[dict[str, Any]]] = {}
+        acquisition_traces = {}
         knowledge_reused = 0
         llm_calls = 0
 
         for requirement in requirements:
-            retrieval_requirement = as_retrieval_requirement(requirement)
-            candidates, windows_by_paper = self.repository.retrieve(
-                retrieval_requirement,
-                paper_top_k=self.paper_top_k,
-                windows_per_paper=self.windows_per_paper,
+            acquisition = self.acquisition.run(
+                task,
+                requirement,
+                force_reextract=force_reextract,
             )
             candidates_by_requirement[requirement.requirement_id] = [
-                candidate.model_dump(mode="json") for candidate in candidates
+                candidate.model_dump(mode="json") for candidate in acquisition.candidates
             ]
-            signature = requirement_signature(requirement)
-            for candidate in candidates:
-                existing = []
-                if not force_reextract:
-                    existing = self.knowledge_store.for_requirement_paper(
-                        requirement_signature=signature,
-                        paper_id=candidate.paper_id,
-                        document_version_id=candidate.document_version_id,
-                        extractor_model=self.model,
-                        prompt_version=PROMPT_VERSION,
-                    )
-                if existing:
-                    items.extend(existing)
-                    knowledge_reused += len(existing)
-                    continue
-                key = f"{candidate.paper_id}::{candidate.document_version_id}"
-                outcome = self.extractor.extract(
-                    requirement,
-                    candidate,
-                    windows_by_paper.get(key, []),
-                )
-                llm_calls += 1
-                items.extend(outcome.items)
-                for item in outcome.items:
-                    if item.validation_state == ValidationState.VALIDATED:
-                        self.knowledge_store.upsert(
-                            item,
-                            requirement_signature=signature,
-                        )
-                if outcome.status != ExtractionStatus.FOUND or not outcome.items:
-                    misses.append(
-                        EvidenceMiss(
-                            requirement_id=requirement.requirement_id,
-                            paper_id=candidate.paper_id,
-                            document_version_id=candidate.document_version_id,
-                            status=outcome.status,
-                            reason=outcome.reason,
-                        )
-                    )
+            acquisition_traces[requirement.requirement_id] = acquisition.trace
+            items.extend(acquisition.items)
+            misses.extend(acquisition.misses)
+            knowledge_reused += acquisition.knowledge_reused_count
+            llm_calls += acquisition.llm_call_count
 
         evidence_set = EvidenceIRSetV2(
             evidence_set_id=f"evidence-set-{uuid.uuid4().hex}",
             items=items,
             misses=misses,
             paper_candidates=candidates_by_requirement,
+            acquisition_traces=acquisition_traces,
             knowledge_reused_count=knowledge_reused,
             llm_call_count=llm_calls,
         )

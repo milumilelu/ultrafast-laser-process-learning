@@ -1,0 +1,23 @@
+Looking in indexes: https://www.paddlepaddle.org.cn/packages/stable/cpu/
+Collecting paddlepaddle==3.2.2
+  Downloading paddlepaddle-3.2.2-cp312-cp312-win_amd64.whl (101.7 MB)
+     ---------------------------------------- 101.7/101.7 MB 60.7 MB/s  0:00:01
+Requirement already satisfied: httpx in .\.venv-table-paddle\Lib\site-packages (from paddlepaddle==3.2.2) (0.28.1)
+Requirement already satisfied: numpy>=1.21 in .\.venv-table-paddle\Lib\site-packages (from paddlepaddle==3.2.2) (2.3.5)
+Requirement already satisfied: protobuf>=3.20.2 in .\.venv-table-paddle\Lib\site-packages (from paddlepaddle==3.2.2) (6.33.4)
+Requirement already satisfied: Pillow in .\.venv-table-paddle\Lib\site-packages (from paddlepaddle==3.2.2) (12.1.0)
+Requirement already satisfied: opt-einsum==3.3.0 in .\.venv-table-paddle\Lib\site-packages (from paddlepaddle==3.2.2) (3.3.0)
+Requirement already satisfied: networkx in .\.venv-table-paddle\Lib\site-packages (from paddlepaddle==3.2.2) (3.6.1)
+Requirement already satisfied: typing-extensions in .\.venv-table-paddle\Lib\site-packages (from paddlepaddle==3.2.2) (4.15.0)
+Requirement already satisfied: safetensors>=0.6.0 in .\.venv-table-paddle\Lib\site-packages (from paddlepaddle==3.2.2) (0.7.0)
+Requirement already satisfied: anyio in .\.venv-table-paddle\Lib\site-packages (from httpx->paddlepaddle==3.2.2) (4.12.1)
+Requirement already satisfied: certifi in .\.venv-table-paddle\Lib\site-packages (from httpx->paddlepaddle==3.2.2) (2026.1.4)
+Requirement already satisfied: httpcore==1.* in .\.venv-table-paddle\Lib\site-packages (from httpx->paddlepaddle==3.2.2) (1.0.9)
+Requirement already satisfied: idna in .\.venv-table-paddle\Lib\site-packages (from httpx->paddlepaddle==3.2.2) (3.11)
+Requirement already satisfied: h11>=0.16 in .\.venv-table-paddle\Lib\site-packages (from httpcore==1.*->httpx->paddlepaddle==3.2.2) (0.16.0)
+Installing collected packages: paddlepaddle
+  Attempting uninstall: paddlepaddle
+    Found existing installation: paddlepaddle 3.3.0
+    Uninstalling paddlepaddle-3.3.0:
+      Successfully uninstalled paddlepaddle-3.3.0
+Successfully installed paddlepaddle-3.2.2

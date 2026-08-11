@@ -1,0 +1,68 @@
+{
+ "case_id": "64edf201-p5-t2",
+ "pdf": "64edf20172cbe34b_64edf20172cbe34b_task2_01_Hou_2024.pdf",
+ "page": 5,
+ "table_label": "Table 2",
+ "table_type": "bordered",
+ "category": "F",
+ "note": "geometric accuracy vs laser pulse width; multi-line 2-row headers; percentage + um values",
+ "rows": [
+  [
+   "Number",
+   "Laser Type",
+   "Upper Hole Diameter (µm)",
+   "Lower Hole Diameter (µm)",
+   "Upper Hole Diameter Error",
+   "Lower Hole Diameter Error",
+   "Upper Hole Roundness (µm)",
+   "Lower Hole Roundness (µm)",
+   "Taper (°)"
+  ],
+  [
+   "Case 1",
+   "Ideal hole",
+   "400.0",
+   "400.0",
+   "0",
+   "0",
+   "0",
+   "0",
+   "0"
+  ],
+  [
+   "Case 2",
+   "Nanosecond",
+   "539.2",
+   "448.6",
+   "34.80%",
+   "12.15%",
+   "0.0318",
+   "0.0357",
+   "7.41"
+  ],
+  [
+   "Case 3",
+   "Picosecond",
+   "396.4",
+   "385.2",
+   "−0.90%",
+   "−3.70%",
+   "0.0246",
+   "0.0346",
+   "0.92"
+  ],
+  [
+   "Case 4",
+   "Femtosecond",
+   "450.2",
+   "382.8",
+   "12.50%",
+   "−4.30%",
+   "0.0047",
+   "0.0131",
+   "5.50"
+  ]
+ ],
+ "expect_table": true,
+ "evaluate_cells": true
+}

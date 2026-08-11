@@ -1,0 +1,18 @@
+{
+ "case_id": "33dae6e7-p3-t1",
+ "tool": "docling",
+ "raw_tables": [
+  {
+   "table_index": 0,
+   "bbox": [
+    34.906649324484164,
+    609.3027700732646,
+    559.1487158164382,
+    642.6016883019782
+   ],
+   "markdown": "| Elements   | Cr      | Al ing using         | Mo an ultra-precision   | Co lapping            | W machine             | Ta (LAP-1X, Lab,     | Re Shanghai,        | Ni China) Subse-     |\n|------------|---------|----------------------|-------------------------|-----------------------|-----------------------|----------------------|---------------------|----------------------|\n| wt%        | 3.8~4.8 | 5.2~6.2 quently, the | 1.5~2.5 samples         | 8.5~9.5 were immersed | 7.0~9.0 in an alcohol | 6.0~8.5 solution for | 1.6~2.4 ten minutes | Bal before drilling. |",
+   "label": "table"
+  }
+ ],
+ "note": "Docling TableItem markdown + provenance bbox."
+}

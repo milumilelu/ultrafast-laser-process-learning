@@ -1,0 +1,24 @@
+{
+ "case_id": "185a6a06-p5-t1",
+ "tool": "camelot",
+ "raw_tables": [
+  {
+   "table_index": 0,
+   "bbox": [
+    88.50577789306641,
+    613.0752713857061,
+    260.4039404296875,
+    691.7754059414979
+   ],
+   "parsing_report": {
+    "accuracy": 99.84,
+    "whitespace": 0.0,
+    "order": 1,
+    "page": 5,
+    "confidence": 0.9984
+   },
+   "df_csv": "0,1\r\nParameters,Values\r\nWavelength(nm),355\r\nFluence range (J/cm2),2.3–7.0\r\nPulse width (ps),10\r\nSpot diameter (μm),19\r\nScanning speed (m/s),1\r\nPulse repetition rate (MHz),1\r\n"
+  }
+ ],
+ "note": "Camelot parsing_report + dataframe CSV."
+}

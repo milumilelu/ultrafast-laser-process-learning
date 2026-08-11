@@ -1,0 +1,149 @@
+== variant {'text_detection_model_name': 'PP-OCRv5_mobile_det', 'text_recognition_model_name': 'PP-OCRv5_mobile_rec', 'enable_mkldnn': False, 'cpu_threads': 4, 'text_det_limit_side_len': 1600} ==
+C:\Users\RZF\Desktop\��ʿ��������\ultrafast-laser-process-learning\tmp_paddle_variant2.py:9: UserWarning: `lang` and `ocr_version` will be ignored when model names or model directories are not `None`.
+  pipeline = PPStructureV3(
+Creating model: ('PP-DocLayout_plus-L', None, None)
+Model files already exist. Using cached files. To redownload, please delete the directory manually: `C:\Users\RZF\.paddlex\official_models\PP-DocLayout_plus-L`.
+INFO: Could not find files for the given pattern(s).
+C:\Users\RZF\Desktop\��ʿ��������\ultrafast-laser-process-learning\.venv-table-paddle\Lib\site-packages\paddle\utils\cpp_extension\extension_utils.py:712: UserWarning: No ccache found. Please be aware that recompiling all source files may be required. You can download and install ccache from: https://github.com/ccache/ccache/blob/master/doc/INSTALL.md
+  warnings.warn(warning_message)
+Creating model: ('PP-LCNet_x1_0_textline_ori', None, None)
+Model files already exist. Using cached files. To redownload, please delete the directory manually: `C:\Users\RZF\.paddlex\official_models\PP-LCNet_x1_0_textline_ori`.
+Creating model: ('PP-OCRv5_mobile_det', None, None)
+Connectivity check to the model hoster has been skipped because `PADDLE_PDX_DISABLE_MODEL_SOURCE_CHECK` is enabled.
+Using official model (PP-OCRv5_mobile_det), the model files will be automatically downloaded and saved in `C:\Users\RZF\.paddlex\official_models\PP-OCRv5_mobile_det`.
+Model packages ['PP-OCRv5_mobile_det'] were not found on huggingface, will try model source `aistudio`.
+Using official model (PP-OCRv5_mobile_det), the model files will be automatically downloaded and saved in `C:\Users\RZF\.paddlex\official_models\PP-OCRv5_mobile_det`.
+Model packages ['PP-OCRv5_mobile_det'] were not found on aistudio, will try model source `modelscope`.
+Using official model (PP-OCRv5_mobile_det), the model files will be automatically downloaded and saved in `C:\Users\RZF\.paddlex\official_models\PP-OCRv5_mobile_det`.
+2026-08-10 22:48:27,974 | INFO    | modelscope_hub.download | Downloading 6 files from PaddlePaddle/PP-OCRv5_mobile_det@master
+<Response [404]>
+
+Downloading:   0%|          | 0/6 [00:00<?, ?file/s]
+
+.gitattributes:   0%|          | 0.00/2.13k [00:00<?, ?B/s][A
+
+                                                           [A
+Downloading:  17%|����        | 1/6 [00:00<00:02,  2.01file/s]
+
+inference.json:   0%|          | 0.00/230k [00:00<?, ?B/s][A
+
+
+inference.yml:   0%|          | 0.00/903 [00:00<?, ?B/s][A[A
+
+
+                                                        [A[A
+Downloading:  33%|��������      | 2/6 [00:00<00:01,  3.51file/s]
+
+
+config.json:   0%|          | 0.00/2.87k [00:00<?, ?B/s][A[A
+
+
+                                                        [A[A
+
+
+inference.pdiparams:   0%|          | 0.00/4.69M [00:00<?, ?B/s][A[A
+
+inference.json: 100%|��������������������| 230k/230k [00:00<00:00, 1.90MB/s][A
+
+                                                                  [A
+
+README.md:   0%|          | 0.00/16.2k [00:00<?, ?B/s][A
+
+
+inference.pdiparams:  45%|����������     | 2.10M/4.69M [00:00<00:00, 20.5MB/s][A[A
+
+                                                      [A
+Downloading:  83%|������������������ | 5/6 [00:00<00:00,  7.65file/s]
+
+
+                                                                         [A[A
+Downloading: 100%|��������������������| 6/6 [00:00<00:00,  6.73file/s]
+Creating model: ('PP-OCRv5_mobile_rec', None, None)
+Using official model (PP-OCRv5_mobile_rec), the model files will be automatically downloaded and saved in `C:\Users\RZF\.paddlex\official_models\PP-OCRv5_mobile_rec`.
+Model packages ['PP-OCRv5_mobile_rec'] were not found on huggingface, will try model source `aistudio`.
+Using official model (PP-OCRv5_mobile_rec), the model files will be automatically downloaded and saved in `C:\Users\RZF\.paddlex\official_models\PP-OCRv5_mobile_rec`.
+Model packages ['PP-OCRv5_mobile_rec'] were not found on aistudio, will try model source `modelscope`.
+Using official model (PP-OCRv5_mobile_rec), the model files will be automatically downloaded and saved in `C:\Users\RZF\.paddlex\official_models\PP-OCRv5_mobile_rec`.
+2026-08-10 22:48:30,138 | INFO    | modelscope_hub.download | Downloading 6 files from PaddlePaddle/PP-OCRv5_mobile_rec@master
+<Response [404]>
+
+Downloading:   0%|          | 0/6 [00:00<?, ?file/s]
+
+inference.pdiparams:   0%|          | 0.00/16.5M [00:00<?, ?B/s][A
+
+
+.gitattributes:   0%|          | 0.00/2.13k [00:00<?, ?B/s][A[A
+
+
+                                                           [A[A
+Downloading:  17%|����        | 1/6 [00:00<00:02,  1.68file/s]
+
+
+inference.json:   0%|          | 0.00/218k [00:00<?, ?B/s][A[A
+
+inference.pdiparams:  19%|����        | 3.15M/16.5M [00:00<00:00, 29.2MB/s][A
+
+
+
+config.json:   0%|          | 0.00/352k [00:00<?, ?B/s][A[A[A
+
+
+
+
+inference.yml:   0%|          | 0.00/148k [00:00<?, ?B/s][A[A[A[A
+
+inference.pdiparams:  45%|����������     | 7.34M/16.5M [00:00<00:00, 36.0MB/s][A
+
+
+
+
+                                                         [A[A[A[A
+Downloading:  33%|��������      | 2/6 [00:00<00:01,  2.64file/s]
+
+
+inference.json: 100%|��������������������| 218k/218k [00:00<00:00, 1.35MB/s][A[A
+
+
+                                                                  [A[A
+
+inference.pdiparams:  70%|��������������   | 11.5M/16.5M [00:00<00:00, 37.6MB/s][A
+
+
+
+config.json: 100%|��������������������| 352k/352k [00:00<00:00, 1.67MB/s][A[A[A
+
+
+
+                                                               [A[A[A
+
+
+README.md:   0%|          | 0.00/16.1k [00:00<?, ?B/s][A[A
+
+
+                                                      [A[A
+Downloading:  83%|������������������ | 5/6 [00:00<00:00,  7.34file/s]
+
+inference.pdiparams:  96%|��������������������| 15.7M/16.5M [00:00<00:00, 37.9MB/s][A
+
+                                                                         [A
+Downloading: 100%|��������������������| 6/6 [00:01<00:00,  5.84file/s]
+Creating model: ('PP-LCNet_x1_0_table_cls', None, None)
+Model files already exist. Using cached files. To redownload, please delete the directory manually: `C:\Users\RZF\.paddlex\official_models\PP-LCNet_x1_0_table_cls`.
+Creating model: ('SLANeXt_wired', None, None)
+Model files already exist. Using cached files. To redownload, please delete the directory manually: `C:\Users\RZF\.paddlex\official_models\SLANeXt_wired`.
+Creating model: ('SLANet_plus', None, None)
+Model files already exist. Using cached files. To redownload, please delete the directory manually: `C:\Users\RZF\.paddlex\official_models\SLANet_plus`.
+Creating model: ('RT-DETR-L_wired_table_cell_det', None, None)
+Model files already exist. Using cached files. To redownload, please delete the directory manually: `C:\Users\RZF\.paddlex\official_models\RT-DETR-L_wired_table_cell_det`.
+Creating model: ('RT-DETR-L_wireless_table_cell_det', None, None)
+Model files already exist. Using cached files. To redownload, please delete the directory manually: `C:\Users\RZF\.paddlex\official_models\RT-DETR-L_wireless_table_cell_det`.
+== pipeline built ==
+Creating model: ('PP-LCNet_x1_0_doc_ori', None, None)
+Model files already exist. Using cached files. To redownload, please delete the directory manually: `C:\Users\RZF\.paddlex\official_models\PP-LCNet_x1_0_doc_ori`.
+Creating model: ('PP-LCNet_x1_0_textline_ori', None, None)
+Model files already exist. Using cached files. To redownload, please delete the directory manually: `C:\Users\RZF\.paddlex\official_models\PP-LCNet_x1_0_textline_ori`.
+Creating model: ('PP-OCRv5_mobile_det', None, None)
+Model files already exist. Using cached files. To redownload, please delete the directory manually: `C:\Users\RZF\.paddlex\official_models\PP-OCRv5_mobile_det`.
+Creating model: ('PP-OCRv5_mobile_rec', None, None)
+Model files already exist. Using cached files. To redownload, please delete the directory manually: `C:\Users\RZF\.paddlex\official_models\PP-OCRv5_mobile_rec`.
+== done, results: 1

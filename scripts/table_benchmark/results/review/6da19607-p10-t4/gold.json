@@ -1,0 +1,48 @@
+{
+ "case_id": "6da19607-p10-t4",
+ "pdf": "6da19607d54f8438_Investigation on Thermal Barrier Coating Damages for Ultrafast Laser Drilling of Cooling Holes.pdf",
+ "page": 10,
+ "table_label": "Table 4",
+ "table_type": "bordered",
+ "category": "F",
+ "note": "damage area matrix; Scanning Speed merged header",
+ "rows": [
+  [
+   "Pulse Energy",
+   "80 mm/s",
+   "160 mm/s",
+   "240 mm/s",
+   "320 mm/s"
+  ],
+  [
+   "40%",
+   "19,000",
+   "10,200",
+   "540",
+   "95.7"
+  ],
+  [
+   "60%",
+   "14,400",
+   "13,200",
+   "12,300",
+   "11,600"
+  ],
+  [
+   "80%",
+   "20,400",
+   "17,400",
+   "14,700",
+   "12,100"
+  ],
+  [
+   "100%",
+   "23,300",
+   "19,100",
+   "16,200",
+   "12,400"
+  ]
+ ],
+ "expect_table": true,
+ "evaluate_cells": true
+}

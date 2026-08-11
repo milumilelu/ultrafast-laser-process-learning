@@ -1,0 +1,22 @@
+{
+ "case_id": "c5f4b1ec-p3-t1",
+ "tool": "pymupdf",
+ "raw_tables": [
+  {
+   "table_index": 0,
+   "bbox": [
+    0.0,
+    36.3408006032308,
+    428.9949951171875,
+    65.79857025146484
+   ],
+   "extract": [
+    [
+     "Journal of\nLaser Applications",
+     "ARTICLE"
+    ]
+   ]
+  }
+ ],
+ "note": "PyMuPDF Table.extract() output; no per-cell bbox is exposed by the public API."
+}

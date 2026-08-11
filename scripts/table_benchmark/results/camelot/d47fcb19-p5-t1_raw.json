@@ -1,0 +1,24 @@
+{
+ "case_id": "d47fcb19-p5-t1",
+ "tool": "camelot",
+ "raw_tables": [
+  {
+   "table_index": 0,
+   "bbox": [
+    52.83000045776367,
+    633.8329205117549,
+    558.4932421875,
+    692.7488834129186
+   ],
+   "parsing_report": {
+    "accuracy": 99.76,
+    "whitespace": 13.33,
+    "order": 1,
+    "page": 5,
+    "confidence": 0.8646
+   },
+   "df_csv": "0,1,2,3,4,5\r\nLaser intensity (×105 W/cm2),8.67,16.82,25.48,34.14,\r\nScanning times,5,2.77 μm,3.20 μm,4.14 μm,5.11 μm\r\n,10,5.54 μm,6.09 μm,8.38 μm,10.80 μm\r\n,20,10.56 μm,13.72 μm,18.48 μm,31.32 μm\r\n,40,20.20 μm,26.32 μm,31.56 μm,36.40 μm\r\n"
+  }
+ ],
+ "note": "Camelot parsing_report + dataframe CSV."
+}

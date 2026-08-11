@@ -1,0 +1,432 @@
+{
+ "case_id": "33dae6e7-p3-t1",
+ "tool": "pymupdf",
+ "raw_tables": [
+  {
+   "table_index": 0,
+   "bbox": [
+    166.06500244140625,
+    51.99148178100586,
+    561.022216796875,
+    766.7841186523438
+   ],
+   "extract": [
+    [
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "3 of 16"
+    ],
+    [
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     ""
+    ],
+    [
+     "2. Materials a",
+     "nd Experime",
+     "ntal Methods",
+     "",
+     "",
+     "",
+     ""
+    ],
+    [
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     ""
+    ],
+    [
+     "2.1. Materials",
+     "and Experimen",
+     "t Setup",
+     "",
+     "",
+     "",
+     ""
+    ],
+    [
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     ""
+    ],
+    [
+     "The mate",
+     "rial used in t",
+     "his study was",
+     "the second",
+     "-generation ni",
+     "ckel-bas",
+     "ed superalloy"
+    ],
+    [
+     "DD6, and all",
+     "materials wer",
+     "e obtained fro",
+     "m Beijing I",
+     "nstitute of Aer",
+     "onautica",
+     "l Materials in"
+    ],
+    [
+     "China. DD6 i",
+     "s widely emp",
+     "loyed in turbi",
+     "ne workin",
+     "g blades and g",
+     "uide va",
+     "nes due to its"
+    ],
+    [
+     "outstanding o",
+     "verall perform",
+     "ance. The ele",
+     "mental com",
+     "position of DD",
+     "6 is sho",
+     "wn in Table 1."
+    ],
+    [
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     ""
+    ],
+    [
+     "Table 1. Eleme",
+     "ntary compositi",
+     "on (wt%) of sing",
+     "le-crystal al",
+     "loy DD6.",
+     "",
+     ""
+    ],
+    [
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     ""
+    ],
+    [
+     "Al",
+     "Mo",
+     "Co",
+     "W",
+     "Ta",
+     "Re",
+     "Ni"
+    ],
+    [
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     ""
+    ],
+    [
+     "5.2~6.2",
+     "1.5~2.5 8",
+     ".5~9.5 7.",
+     "0~9.0",
+     "6.0~8.5 1",
+     ".6~2.4",
+     "Bal"
+    ],
+    [
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     ""
+    ],
+    [
+     "Before la",
+     "ser processing",
+     ", the specimen",
+     "s were cut i",
+     "nto 30 mm × 1",
+     "0 mm ×",
+     "0.8 mm pieces"
+    ],
+    [
+     "(Figure 1) usin",
+     "g wire-cut ele",
+     "ctrical discharg",
+     "e machinin",
+     "g followed by",
+     "grinding",
+     "and polishing"
+    ],
+    [
+     "using an ultra",
+     "-precision lap",
+     "ping machine",
+     "(LAP-1X,",
+     "Lab, Shanghai",
+     ", China)",
+     "Subsequently,"
+    ],
+    [
+     "the samples w",
+     "ere immerse",
+     "d in an alcoho",
+     "l solution f",
+     "or ten minutes",
+     "before",
+     "drilling. After"
+    ],
+    [
+     "drilling, the su",
+     "rface and por",
+     "e wall morphol",
+     "ogy results",
+     "of air film pore",
+     "s were o",
+     "bserved using"
+    ],
+    [
+     "field emission",
+     "scanning elec",
+     "tron microsco",
+     "py(MIRA3,",
+     "TESCAN, Brn",
+     "o, Czech",
+     "Republic)."
+    ],
+    [
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     ""
+    ],
+    [
+     "Figure 1. Exper",
+     "imental sample",
+     "topography.",
+     "",
+     "",
+     "",
+     ""
+    ],
+    [
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     ""
+    ],
+    [
+     "The sche",
+     "matic of the u",
+     "ltrafast laser p",
+     "rocessing u",
+     "sed in this exp",
+     "eriment",
+     "is depicted in"
+    ],
+    [
+     "Figure 2. A co",
+     "mmercially d",
+     "iode-pumped",
+     "solid laser",
+     "(PH1-20, Ligh",
+     "t Conve",
+     "rsion, Vilnius,"
+    ],
+    [
+     "Lithuania) wa",
+     "s used in this",
+     "work, thus em",
+     "itting pulse",
+     "laser with a w",
+     "aveleng",
+     "th of 1030 nm,"
+    ],
+    [
+     "a pulse width",
+     "of 290 fs, a m",
+     "aximum powe",
+     "r of 20 W, a",
+     "nd a repetition",
+     "frequen",
+     "cy of 100 kHz."
+    ],
+    [
+     "During the m",
+     "achining proc",
+     "ess, the work",
+     "piece was s",
+     "ecurely fixed",
+     "on a 5-a",
+     "xis machining"
+    ],
+    [
+     "platform via",
+     "a fixture. The",
+     "workpiece’s",
+     "status was",
+     "continuously",
+     "monitor",
+     "ed through a"
+    ],
+    [
+     "CCD camera.",
+     "When workp",
+     "iece penetrati",
+     "on was det",
+     "ected, it indica",
+     "ted the",
+     "completion of"
+    ],
+    [
+     "machining, an",
+     "d the process",
+     "was stopped.",
+     "",
+     "",
+     "",
+     ""
+    ],
+    [
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     ""
+    ],
+    [
+     "2.2. Experimen",
+     "tal Design",
+     "",
+     "",
+     "",
+     "",
+     ""
+    ],
+    [
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     ""
+    ],
+    [
+     "Laser dri",
+     "lling typically",
+     "employs three",
+     "methods:",
+     "percussion dri",
+     "lling, rin",
+     "g cutting, and"
+    ],
+    [
+     "spiral trepann",
+     "ing [27]. Repe",
+     "ated impact dr",
+     "illing invol",
+     "ves single-poin",
+     "t impuls",
+     "es that abrade"
+    ],
+    [
+     "the center of t",
+     "he specimen,",
+     "thereby resulti",
+     "ng in poor",
+     "machining qu",
+     "ality and",
+     "difficulties in"
+    ],
+    [
+     "controlling ho",
+     "le diameter. C",
+     "oncentric circ",
+     "ular drillin",
+     "g can lead to d",
+     "ifficultie",
+     "s in removing"
+    ],
+    [
+     "material from",
+     "the hole as t",
+     "he feed depth",
+     "increases.",
+     "On the othe",
+     "r hand,",
+     "spiral drilling"
+    ],
+    [
+     "continuously",
+     "processes mic",
+     "roholes by sta",
+     "rting from",
+     "the inside and",
+     "workin",
+     "g downwards,"
+    ],
+    [
+     "thereby resulti",
+     "ng in superior",
+     "processing qu",
+     "ality comp",
+     "ared to impact",
+     "drilling",
+     "and concentric"
+    ],
+    [
+     "circle drilling",
+     ". Therefore, th",
+     "is paper inve",
+     "stigated th",
+     "e impact of las",
+     "er proce",
+     "ss parameters"
+    ],
+    [
+     "(laser power,",
+     "defocus, feed",
+     "distance, and",
+     "scanning v",
+     "elocity) on the",
+     "geomet",
+     "rical accuracy"
+    ]
+   ]
+  }
+ ],
+ "note": "PyMuPDF Table.extract() output; no per-cell bbox is exposed by the public API."
+}

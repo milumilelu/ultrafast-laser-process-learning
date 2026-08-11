@@ -1,0 +1,486 @@
+{
+ "case_id": "e9dbf6f7-p10-t2",
+ "tool": "pymupdf",
+ "pdf": "e9dbf6f752f449db_Experiments of drilling micro-holes on superalloy with thermal barrier coatings by using femtosecond laser.pdf",
+ "page": 10,
+ "package_version": "1.28.2",
+ "python_version": "3.12.13",
+ "device": "cpu",
+ "os": "Windows-11",
+ "elapsed_time_s": 0.2243,
+ "is_cold": false,
+ "error": null,
+ "strategy_used": "text",
+ "tables": [
+  {
+   "table_index": 0,
+   "bbox": [
+    59.52656555175781,
+    27.08781623840332,
+    443.5215759277344,
+    645.2725830078125
+   ],
+   "rows": [
+    [
+     "",
+     "",
+     "",
+     "",
+     "FER",
+     "ROELECTRICS",
+     "45/[383]"
+    ],
+    [
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     ""
+    ],
+    [
+     "",
+     "Table 2.",
+     "The experiment",
+     "parameter.",
+     "",
+     "",
+     ""
+    ],
+    [
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     ""
+    ],
+    [
+     "",
+     "",
+     "",
+     "Control group",
+     "Experimental gro",
+     "up",
+     ""
+    ],
+    [
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     ""
+    ],
+    [
+     "",
+     "Laser pow",
+     "er（W）",
+     "1.5",
+     "1.5",
+     "1",
+     ""
+    ],
+    [
+     "",
+     "Focus pos",
+     "ition（mm）",
+     "\u00012",
+     "\u00012",
+     "\u00013",
+     ""
+    ],
+    [
+     "",
+     "Cutting d",
+     "iameter（lm）",
+     "100",
+     "100 1",
+     "25",
+     ""
+    ],
+    [
+     "",
+     "Processin",
+     "g speed（lm/s）",
+     "200",
+     "200 2",
+     "00",
+     ""
+    ],
+    [
+     "",
+     "Processin",
+     "g laps （r）",
+     "100",
+     "50",
+     "50",
+     ""
+    ],
+    [
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     ""
+    ],
+    [
+     "comparable,",
+     "each micro",
+     "-hole is cutting",
+     "for 100 times.",
+     "Experimental",
+     "results ar",
+     "e shown in"
+    ],
+    [
+     "Figure 8. As",
+     "shown in",
+     "Figure 9, the di",
+     "ameters of the",
+     "inlet and out",
+     "let betwe",
+     "en the con-"
+    ],
+    [
+     "trol group an",
+     "d the expe",
+     "rimental group",
+     "was statisticall",
+     "y analyzed .",
+     "",
+     ""
+    ],
+    [
+     "The hole s",
+     "ize and mo",
+     "rphology of the",
+     "entrance hole",
+     "s in the two g",
+     "roups wer",
+     "e observed."
+    ],
+    [
+     "The diameter",
+     "of the ent",
+     "rance holes in t",
+     "he control grou",
+     "p was about 3",
+     "64 lm. T",
+     "he diameter"
+    ],
+    [
+     "of micro-hole",
+     "s in the ex",
+     "perimental grou",
+     "p was 368 lm.",
+     "Compared wi",
+     "th the co",
+     "ntrol group,"
+    ],
+    [
+     "the diameter",
+     "of the entr",
+     "ance holes in th",
+     "e experimental",
+     "group barely c",
+     "hanged. A",
+     "s shown in"
+    ],
+    [
+     "Figure 8a and",
+     "c, the mo",
+     "rphology of the",
+     "micro-hole en",
+     "trance in the c",
+     "ontrol gr",
+     "oup is ellip-"
+    ],
+    [
+     "tical, and the",
+     "roundness",
+     "of the micro-ho",
+     "le entrance in t",
+     "he experiment",
+     "al group i",
+     "s improved."
+    ],
+    [
+     "The roundne",
+     "ss of the c",
+     "ontrol group an",
+     "d the experime",
+     "ntal group wa",
+     "s calculat",
+     "ed as 88.8%"
+    ],
+    [
+     "and 94.1%, re",
+     "spectively.",
+     "It is shown that",
+     "the repair wit",
+     "h small laser p",
+     "ower will",
+     "not expand"
+    ],
+    [
+     "the micro-ho",
+     "le diameter",
+     "but can increas",
+     "e the roundnes",
+     "s of the inlet h",
+     "ole if the",
+     "appropriate"
+    ],
+    [
+     "rotary cutting",
+     "diameter",
+     "was selected. Fig",
+     "ure 8b and d sh",
+     "ow SEM imag",
+     "es of micr",
+     "o-holes exit"
+    ],
+    [
+     "in the contro",
+     "l group an",
+     "d the experimen",
+     "tal group. Thes",
+     "e two images s",
+     "how that",
+     "the morph-"
+    ],
+    [
+     "ology of the",
+     "exit holes i",
+     "n the control gr",
+     "oup was very",
+     "poor, the ellip",
+     "tical outli",
+     "ne could be"
+    ],
+    [
+     "seen in the e",
+     "xit. The en",
+     "ergy of femtose",
+     "cond laser disp",
+     "ersed at the en",
+     "d of the",
+     "filament. In"
+    ],
+    [
+     "addition, the",
+     "femtoseco",
+     "nd laser used w",
+     "as linearly pola",
+     "rized light so",
+     "in the pla",
+     "ne perpen-"
+    ],
+    [
+     "dicular to the",
+     "direction",
+     "of light wave tr",
+     "avels, the optic",
+     "al vector of li",
+     "nearly pol",
+     "arized light"
+    ],
+    [
+     "vibrates in a",
+     "fixed direc",
+     "tion, resulting i",
+     "n the material",
+     "of exit positio",
+     "n absorbi",
+     "ng different"
+    ],
+    [
+     "laser energy.",
+     "Therefore,",
+     "in the position",
+     "near the exit, th",
+     "ere will be obv",
+     "ious outw",
+     "ard expan-"
+    ],
+    [
+     "sion along a",
+     "certain dir",
+     "ection, and fina",
+     "lly the exit wil",
+     "l show an app",
+     "roximate",
+     "rectangular"
+    ],
+    [
+     "outline, and t",
+     "he gap bet",
+     "ween the long ax",
+     "is and the shor",
+     "t axis was larg",
+     "e. Compa",
+     "red with the"
+    ],
+    [
+     "control group",
+     ", the morp",
+     "hology of the o",
+     "utlet holes in t",
+     "he experiment",
+     "al group i",
+     "s improved."
+    ],
+    [
+     "The short axi",
+     "s increased",
+     "obviously after",
+     "repairing while",
+     "the long axis",
+     "changed li",
+     "ttle, but the"
+    ],
+    [
+     "outward expa",
+     "nsion mor",
+     "phology at the e",
+     "xit position stil",
+     "l existed. The r",
+     "esults sho",
+     "w that laser"
+    ],
+    [
+     "repair can im",
+     "prove the e",
+     "xternal expansi",
+     "on morphology",
+     "formed by the",
+     "energy d",
+     "ivergence at"
+    ],
+    [
+     "the end of fe",
+     "mtosecond",
+     "laser filament a",
+     "nd the polariza",
+     "tion state of la",
+     "ser. The fi",
+     "tting diam-"
+    ],
+    [
+     "eter of the o",
+     "utlet hole",
+     "is expanded by",
+     "45 lm and the",
+     "taper of the",
+     "hole is re",
+     "duced. The"
+    ],
+    [
+     "roundness of",
+     "the outlet",
+     "holes in control",
+     "group and the",
+     "experimental",
+     "group are",
+     "60.9% and"
+    ],
+    [
+     "76.2%, respec",
+     "tively. How",
+     "ever, the reami",
+     "ng effect caused",
+     "by laser ener",
+     "gy diverge",
+     "nce can not"
+    ],
+    [
+     "be completel",
+     "y eliminate",
+     "d in the repair",
+     "process, so the",
+     "outward expa",
+     "nsion mo",
+     "rphology of"
+    ],
+    [
+     "the micro-ho",
+     "les after re",
+     "pair still exists.",
+     "Figure 10 sho",
+     "ws the cross s",
+     "ection of",
+     "the control"
+    ],
+    [
+     "group and th",
+     "e experime",
+     "ntal group. The",
+     "outward expa",
+     "nsion morpho",
+     "logy of th",
+     "e pore wall"
+    ],
+    [
+     "can be observ",
+     "ed intuitiv",
+     "ely from the pro",
+     "file of the micr",
+     "o-holes. In the",
+     "control g",
+     "roup, a cer-"
+    ],
+    [
+     "tain taper cou",
+     "ld be obse",
+     "rved near the ex",
+     "it of the micro-",
+     "hole, but no o",
+     "bvious tap",
+     "er could be"
+    ],
+    [
+     "seen in the ex",
+     "perimental",
+     "group.",
+     "",
+     "",
+     "",
+     ""
+    ],
+    [
+     "A through",
+     "hole cavit",
+     "y has already m",
+     "achined with",
+     "high laser po",
+     "wers, as a",
+     "result, the"
+    ],
+    [
+     "processing en",
+     "vironment",
+     "is better when",
+     "the low power",
+     "laser is used",
+     "later. The",
+     "metal par-"
+    ],
+    [
+     "ticles produc",
+     "ed in the",
+     "repair process",
+     "are not only e",
+     "jected from th",
+     "e entran",
+     "ce, but also"
+    ]
+   ]
+  }
+ ]
+}

@@ -1,0 +1,576 @@
+{
+ "case_id": "aad1014d-p5-t1",
+ "tool": "pymupdf",
+ "pdf": "aad1014d9273f0a3_sc04_034_Thick Glass High-Quality Cutting by Ultrafast Laser Bessel Beam Perforation-Assisted Separation.pdf",
+ "page": 5,
+ "package_version": "1.28.2",
+ "python_version": "3.12.13",
+ "device": "cpu",
+ "os": "Windows-11",
+ "elapsed_time_s": 0.2366,
+ "is_cold": false,
+ "error": null,
+ "strategy_used": "text",
+ "tables": [
+  {
+   "table_index": 0,
+   "bbox": [
+    165.97500610351562,
+    51.99148178100586,
+    561.0194702148438,
+    770.4201049804688
+   ],
+   "rows": [
+    [
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "5 of 13"
+    ],
+    [
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     ""
+    ],
+    [
+     "method can ach",
+     "ieve superior edge str",
+     "ength compared",
+     "to other rep",
+     "or",
+     "ted proc",
+     "esses, such as"
+    ],
+    [
+     "full laser ablati",
+     "on cutting [28]. Impor",
+     "tantly, the avera",
+     "ge surface r",
+     "ou",
+     "ghness",
+     "measurement"
+    ],
+    [
+     "results remaine",
+     "d relatively stable and",
+     "were minimally",
+     "affected by f",
+     "a",
+     "ctors suc",
+     "h as scratches,"
+    ],
+    [
+     "contamination,",
+     "or measurement noise,",
+     "thus ensuring a",
+     "dependable",
+     "ev",
+     "aluation",
+     "of the cutting"
+    ],
+    [
+     "quality [29].",
+     "",
+     "",
+     "",
+     "",
+     "",
+     ""
+    ],
+    [
+     "A three-fa",
+     "ctor, five-level orthogon",
+     "al experiment w",
+     "as conducte",
+     "d",
+     "to exam",
+     "ine the impact"
+    ],
+    [
+     "of hole spacing",
+     ", pulse energy, and de",
+     "focusing distanc",
+     "e on the cut",
+     "ti",
+     "ng quali",
+     "ty of the glass"
+    ],
+    [
+     "samples. The",
+     "average surface roug",
+     "hness of the cro",
+     "ss-sections",
+     "se",
+     "rved as",
+     "the response"
+    ],
+    [
+     "variable for ass",
+     "essing the cutting qua",
+     "lity. To assess t",
+     "he impact of",
+     "e",
+     "ach fact",
+     "or, a range of"
+    ],
+    [
+     "values was cho",
+     "sen for each based on",
+     "upper and low",
+     "er critical th",
+     "re",
+     "sholds.",
+     "Hole spacing"
+    ],
+    [
+     "was varied in t",
+     "he range of 4 µm to 12",
+     "µm. Values of h",
+     "ole spacing",
+     "be",
+     "low 4 µ",
+     "m were found"
+    ],
+    [
+     "to cause overla",
+     "pping micro-holes and",
+     "excessive ablat",
+     "ion on the fr",
+     "o",
+     "nt surfa",
+     "ce of the glass,"
+    ],
+    [
+     "resulting in pe",
+     "rforation failure. Conv",
+     "ersely, larger h",
+     "ole spacing v",
+     "a",
+     "lues cou",
+     "ld lead to the"
+    ],
+    [
+     "deviation of cr",
+     "ack propagation from",
+     "the micro-hole",
+     "path. The p",
+     "u",
+     "lse ener",
+     "gy percentage"
+    ],
+    [
+     "was set in the r",
+     "ange of 100% to 80% t",
+     "o achieve the ab",
+     "lation of the",
+     "6",
+     "mm gla",
+     "ss. Successful"
+    ],
+    [
+     "perforation req",
+     "uired a minimum puls",
+     "e energy percent",
+     "age of aroun",
+     "d",
+     "80%. Th",
+     "e actual pulse"
+    ],
+    [
+     "energy correspo",
+     "nding to the set power",
+     "percentage was",
+     "measured us",
+     "i",
+     "ng a lase",
+     "r power meter."
+    ],
+    [
+     "Defocusing dis",
+     "tance varied in the ran",
+     "ge of 0 µm to 800",
+     "µm. A defo",
+     "c",
+     "using dis",
+     "tance of 0 µm"
+    ],
+    [
+     "corresponded t",
+     "o the precise penetratio",
+     "n of the Bessel be",
+     "am into the f",
+     "r",
+     "ont surfa",
+     "ce of the glass."
+    ],
+    [
+     "Positive values",
+     "indicated the upward",
+     "movement of t",
+     "he focus. Th",
+     "e",
+     "depth o",
+     "f focus for the"
+    ],
+    [
+     "Bessel beam pe",
+     "netrating both the front",
+     "and rear surface",
+     "s of the 6 m",
+     "m",
+     "glass wa",
+     "s measured to"
+    ],
+    [
+     "be 7.4 mm at fu",
+     "ll power. Other parame",
+     "ters in the exper",
+     "iment were h",
+     "e",
+     "ld const",
+     "ant. The factor"
+    ],
+    [
+     "levels of the or",
+     "thogonal experiment a",
+     "re summarized",
+     "in Table 1. P",
+     "a",
+     "rameter",
+     "optimization"
+    ],
+    [
+     "was performed",
+     "using the SPSS 26.0 so",
+     "ftware [30].",
+     "",
+     "",
+     "",
+     ""
+    ],
+    [
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     ""
+    ],
+    [
+     "Table 1. Picoseco",
+     "nd Bessel laser cutting p",
+     "rocess parameters",
+     "and levels.",
+     "",
+     "",
+     ""
+    ],
+    [
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     ""
+    ],
+    [
+     "",
+     "",
+     "",
+     "Factor Lev",
+     "el",
+     "",
+     ""
+    ],
+    [
+     "Process Param",
+     "eters Unit",
+     "",
+     "",
+     "",
+     "",
+     ""
+    ],
+    [
+     "",
+     "",
+     "1 2",
+     "3",
+     "",
+     "4",
+     "5"
+    ],
+    [
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     ""
+    ],
+    [
+     "Pulse energ",
+     "y (mJ) 1",
+     ".356 1.288",
+     "1.216",
+     "",
+     "1.144",
+     "1.072"
+    ],
+    [
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     ""
+    ],
+    [
+     "Defocusing dis",
+     "tance (µm)",
+     "0 200",
+     "400",
+     "",
+     "600",
+     "800"
+    ],
+    [
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     ""
+    ],
+    [
+     "Hole spacin",
+     "g (µm)",
+     "4 6",
+     "8",
+     "",
+     "10",
+     "12"
+    ],
+    [
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     ""
+    ],
+    [
+     "3. Results and",
+     "Discussion",
+     "",
+     "",
+     "",
+     "",
+     ""
+    ],
+    [
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     ""
+    ],
+    [
+     "3.1. Variance An",
+     "alysis of the L25 (53) Or",
+     "thogonal Experim",
+     "ents",
+     "",
+     "",
+     ""
+    ],
+    [
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     ""
+    ],
+    [
+     "Average s",
+     "urface roughness meas",
+     "urements were",
+     "obtained at t",
+     "h",
+     "ree posit",
+     "ions: near the"
+    ],
+    [
+     "front surface, a",
+     "rear surface, and the",
+     "middle of the c",
+     "ross-section",
+     "of",
+     "each gl",
+     "ass sample to"
+    ],
+    [
+     "assess the cutt",
+     "ing quality. The avera",
+     "ge surface roug",
+     "hness at the",
+     "s",
+     "e three",
+     "positions was"
+    ],
+    [
+     "used as the res",
+     "ponse variable for the",
+     "orthogonal expe",
+     "riment. The",
+     "o",
+     "rthogon",
+     "al experiment"
+    ],
+    [
+     "was designed",
+     "with 25 different worki",
+     "ng conditions, a",
+     "nd the corre",
+     "s",
+     "ponding",
+     "experimental"
+    ],
+    [
+     "results for aver",
+     "age surface roughness",
+     "are shown in Ta",
+     "ble 2. Figure",
+     "2",
+     "illustra",
+     "tes the typical"
+    ],
+    [
+     "cross-sectional",
+     "morphologies for each",
+     "parameter setti",
+     "ng.",
+     "",
+     "",
+     ""
+    ],
+    [
+     "The avera",
+     "ge surface roughness",
+     "of the cross-sect",
+     "ion was sign",
+     "i",
+     "ficantly",
+     "influenced by"
+    ],
+    [
+     "all three param",
+     "eters: hole spacing, p",
+     "ulse energy, and",
+     "defocusing",
+     "d",
+     "istance (",
+     "p < 0.05). The"
+    ],
+    [
+     "order of signif",
+     "icance, in terms of thei",
+     "r influence on th",
+     "e average s",
+     "ur",
+     "face rou",
+     "ghness of the"
+    ],
+    [
+     "cross-section, w",
+     "as determined to be as",
+     "follows: hole sp",
+     "acing, pulse",
+     "e",
+     "nergy, a",
+     "nd defocusing"
+    ],
+    [
+     "distance. The st",
+     "atistical analysis cond",
+     "ucted in this stu",
+     "dy determine",
+     "d",
+     "the opt",
+     "imal levels for"
+    ],
+    [
+     "each individual",
+     "factor, as well as the o",
+     "ptimal combinat",
+     "ion of multi",
+     "pl",
+     "e factors",
+     "in the orthog-"
+    ],
+    [
+     "onal experimen",
+     "t. The results of the st",
+     "atistical analysis",
+     "for each par",
+     "a",
+     "meter ar",
+     "e presented in"
+    ],
+    [
+     "Table 3 and Fig",
+     "ure 3. The analysis rev",
+     "ealed a decrease",
+     "in the avera",
+     "g",
+     "e surface",
+     "roughness of"
+    ],
+    [
+     "the cross-sectio",
+     "n as the pulse energy",
+     "decreased with",
+     "in the range",
+     "o",
+     "f 1.072",
+     "mJ to 1.356 mJ."
+    ],
+    [
+     "The average su",
+     "rface roughness increa",
+     "sed as the defoc",
+     "using distan",
+     "ce",
+     "increas",
+     "ed. Increasing"
+    ],
+    [
+     "the hole spacin",
+     "g from 4 µm to 12 µm",
+     "initially decrea",
+     "sed the ave",
+     "ra",
+     "ge surfa",
+     "ce roughness"
+    ]
+   ]
+  }
+ ]
+}

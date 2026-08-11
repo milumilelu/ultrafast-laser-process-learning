@@ -1,0 +1,28 @@
+{
+ "case_id": "c08322e5-p7-t2",
+ "tool": "paddleocr",
+ "pdf": "c08322e5e3aa6438_c08322e5e3aa6438_task2_17_Shi_2025.pdf",
+ "page": 7,
+ "package_version": "3.7.0",
+ "python_version": "3.12.13",
+ "device": "cpu",
+ "os": "Windows-11",
+ "elapsed_time_s": 95.0491,
+ "is_cold": false,
+ "error": null,
+ "dpi": 300,
+ "pipeline_kwargs": {
+  "lang": "en",
+  "device": "cpu",
+  "enable_mkldnn": true,
+  "use_doc_orientation_classify": false,
+  "use_doc_unwarping": false,
+  "use_region_detection": false,
+  "use_formula_recognition": false,
+  "use_chart_recognition": false,
+  "use_seal_recognition": false,
+  "text_det_limit_side_len": 1600,
+  "cpu_threads": 4
+ },
+ "tables": []
+}

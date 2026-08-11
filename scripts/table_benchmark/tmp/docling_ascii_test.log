@@ -1,0 +1,37 @@
+Input document test.pdf is not valid.
+Traceback (most recent call last):
+  File "C:\Users\RZF\Desktop\博士课题资料\ultrafast-laser-process-learning\.venv-table-docling\Lib\site-packages\docling\backend\docling_parse_backend.py", line 286, in __init__
+    self.parser = DoclingPdfParser(loglevel="fatal")
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\RZF\Desktop\博士课题资料\ultrafast-laser-process-learning\.venv-table-docling\Lib\site-packages\docling_parse\pdf_parser.py", line 965, in __init__
+    self.parser = pdf_parser(level=loglevel)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^
+RuntimeError: filename does not exists: C:\Users\RZF\Desktop\博士课题资料\ultrafast-laser-process-learning\.venv-table-docling\Lib\site-packages\docling_parse\pdf_resources/glyphs//standard/additional.dat
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "C:\Users\RZF\Desktop\博士课题资料\ultrafast-laser-process-learning\.venv-table-docling\Lib\site-packages\docling\datamodel\document.py", line 313, in _init_doc
+    self._backend = backend(self, path_or_stream=path_or_stream)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\RZF\Desktop\博士课题资料\ultrafast-laser-process-learning\.venv-table-docling\Lib\site-packages\docling\backend\docling_parse_backend.py", line 300, in __init__
+    raise DocumentLoadError(
+docling.exceptions.DocumentLoadError: docling-parse could not load document 0016e391ff72f44957c3f17e03138ea969e1628e7c9f2beb971c5897a51eb37c: filename does not exists: C:\Users\RZF\Desktop\博士课题资料\ultrafast-laser-process-learning\.venv-table-docling\Lib\site-packages\docling_parse\pdf_resources/glyphs//standard/additional.dat
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "<string>", line 1, in <module>
+  File "C:\Users\RZF\Desktop\博士课题资料\ultrafast-laser-process-learning\.venv-table-docling\Lib\site-packages\pydantic\_internal\_validate_call.py", line 40, in wrapper_function
+    return wrapper(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\RZF\Desktop\博士课题资料\ultrafast-laser-process-learning\.venv-table-docling\Lib\site-packages\pydantic\_internal\_validate_call.py", line 137, in __call__
+    res = self.__pydantic_validator__.validate_python(pydantic_core.ArgsKwargs(args, kwargs))
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\RZF\Desktop\博士课题资料\ultrafast-laser-process-learning\.venv-table-docling\Lib\site-packages\docling\document_converter.py", line 505, in convert
+    return next(all_res)
+           ^^^^^^^^^^^^^
+  File "C:\Users\RZF\Desktop\博士课题资料\ultrafast-laser-process-learning\.venv-table-docling\Lib\site-packages\docling\document_converter.py", line 581, in convert_all
+    raise ConversionError(
+docling.exceptions.ConversionError: Conversion failed for: test.pdf with status: failure. Errors: docling-parse could not load document 0016e391ff72f44957c3f17e03138ea969e1628e7c9f2beb971c5897a51eb37c: filename does not exists: C:\Users\RZF\Desktop\博士课题资料\ultrafast-laser-process-learning\.venv-table-docling\Lib\site-packages\docling_parse\pdf_resources/glyphs//standard/additional.dat
+The following objects are still open and will now be closed: [<PdfDocument 0x21debf018e0 from <_io.BytesIO object at 0x0000021DED1631F0>>]

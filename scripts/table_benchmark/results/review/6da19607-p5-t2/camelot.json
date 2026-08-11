@@ -1,0 +1,61 @@
+{
+ "case_id": "6da19607-p5-t2",
+ "tool": "camelot",
+ "pdf": "6da19607d54f8438_Investigation on Thermal Barrier Coating Damages for Ultrafast Laser Drilling of Cooling Holes.pdf",
+ "page": 5,
+ "package_version": "2.0.0",
+ "python_version": "3.12.13",
+ "device": "cpu",
+ "os": "Windows-11",
+ "elapsed_time_s": 0.5124,
+ "is_cold": false,
+ "error": null,
+ "tables": [
+  {
+   "table_index": 0,
+   "bbox": [
+    199.83628380063635,
+    276.20193025125747,
+    524.9878157392668,
+    360.00170867484525
+   ],
+   "rows": [
+    [
+     "Parameters \nParameters",
+     "Symbol \nSymbol",
+     "Values \nValues"
+    ],
+    [
+     "Pulse width \nPulse width",
+     "𝜏 \nτ",
+     "2.1 ps \n2.1 ps"
+    ],
+    [
+     "Diameter of the focal point \nDiameter of the focal point",
+     "df \ndf",
+     "48 µm \n48 µm"
+    ],
+    [
+     "Repetition rate\nRepetition rate",
+     "f\nf",
+     "75 kHz\n75 kHz"
+    ],
+    [
+     "Maximum average power\nMaximum average power",
+     "Pmax\nPmax",
+     "30 W\n30 W"
+    ],
+    [
+     "Maximum peak power\nMaximum peak power",
+     "pk\n\u000bã\nP\nmax\n \n𝑃\u000bà",
+     "190.4 MW\n190.4 MW"
+    ],
+    [
+     "Maximum pulse energy",
+     "Emax",
+     "0.4 J"
+    ]
+   ]
+  }
+ ]
+}

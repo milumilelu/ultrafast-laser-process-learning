@@ -1,0 +1,111 @@
+{
+ "case_id": "6da19607-p4-t1",
+ "tool": "camelot",
+ "pdf": "6da19607d54f8438_Investigation on Thermal Barrier Coating Damages for Ultrafast Laser Drilling of Cooling Holes.pdf",
+ "page": 4,
+ "package_version": "2.0.0",
+ "python_version": "3.12.13",
+ "device": "cpu",
+ "os": "Windows-11",
+ "elapsed_time_s": 0.6045,
+ "is_cold": false,
+ "error": null,
+ "tables": [
+  {
+   "table_index": 0,
+   "bbox": [
+    208.25479364309652,
+    331.9970562994684,
+    526.5888883117159,
+    536.3343968076173
+   ],
+   "rows": [
+    [
+     "Parameters",
+     "Average Power",
+     "Scanning Speed"
+    ],
+    [
+     "1",
+     "12 W",
+     "80 mm/s"
+    ],
+    [
+     "2",
+     "",
+     "160 mm/s"
+    ],
+    [
+     "3",
+     "",
+     "240 mm/s"
+    ],
+    [
+     "4",
+     "",
+     "320 mm/s"
+    ],
+    [
+     "5",
+     "",
+     "80 mm/s"
+    ],
+    [
+     "6",
+     "",
+     "160 mm/s"
+    ],
+    [
+     "7",
+     "18 W",
+     "240 mm/s"
+    ],
+    [
+     "8",
+     "",
+     "320 mm/s"
+    ],
+    [
+     "9",
+     "",
+     "80 mm/s"
+    ],
+    [
+     "10",
+     "",
+     "160 mm/s"
+    ],
+    [
+     "11",
+     "24 W",
+     "240 mm/s"
+    ],
+    [
+     "12",
+     "",
+     "320 mm/s"
+    ],
+    [
+     "13",
+     "",
+     "80 mm/s"
+    ],
+    [
+     "14",
+     "",
+     "160 mm/s\n5  of  16"
+    ],
+    [
+     "15",
+     "30 W",
+     "240 mm/s"
+    ],
+    [
+     "16",
+     "",
+     "320 mm/s"
+    ]
+   ]
+  }
+ ]
+}

@@ -1,0 +1,34 @@
+== variant {'enable_mkldnn': True, 'cpu_threads': 4, 'text_det_limit_side_len': 1600} ==
+Creating model: ('PP-DocLayout_plus-L', None, None)
+Model files already exist. Using cached files. To redownload, please delete the directory manually: `C:\Users\RZF\.paddlex\official_models\PP-DocLayout_plus-L`.
+INFO: Could not find files for the given pattern(s).
+C:\Users\RZF\Desktop\��ʿ��������\ultrafast-laser-process-learning\.venv-table-paddle\Lib\site-packages\paddle\utils\cpp_extension\extension_utils.py:718: UserWarning: No ccache found. Please be aware that recompiling all source files may be required. You can download and install ccache from: https://github.com/ccache/ccache/blob/master/doc/INSTALL.md
+  warnings.warn(warning_message)
+WARNING: Logging before InitGoogleLogging() is written to STDERR
+I0810 22:53:17.618198 40868 onednn_context.cc:81] oneDNN v3.6.2
+Creating model: ('PP-LCNet_x1_0_textline_ori', None, None)
+Model files already exist. Using cached files. To redownload, please delete the directory manually: `C:\Users\RZF\.paddlex\official_models\PP-LCNet_x1_0_textline_ori`.
+Creating model: ('PP-OCRv5_server_det', None, None)
+Model files already exist. Using cached files. To redownload, please delete the directory manually: `C:\Users\RZF\.paddlex\official_models\PP-OCRv5_server_det`.
+Creating model: ('PP-OCRv5_server_rec', None, None)
+Model files already exist. Using cached files. To redownload, please delete the directory manually: `C:\Users\RZF\.paddlex\official_models\PP-OCRv5_server_rec`.
+Creating model: ('PP-LCNet_x1_0_table_cls', None, None)
+Model files already exist. Using cached files. To redownload, please delete the directory manually: `C:\Users\RZF\.paddlex\official_models\PP-LCNet_x1_0_table_cls`.
+Creating model: ('SLANeXt_wired', None, None)
+Model files already exist. Using cached files. To redownload, please delete the directory manually: `C:\Users\RZF\.paddlex\official_models\SLANeXt_wired`.
+Creating model: ('SLANet_plus', None, None)
+Model files already exist. Using cached files. To redownload, please delete the directory manually: `C:\Users\RZF\.paddlex\official_models\SLANet_plus`.
+Creating model: ('RT-DETR-L_wired_table_cell_det', None, None)
+Model files already exist. Using cached files. To redownload, please delete the directory manually: `C:\Users\RZF\.paddlex\official_models\RT-DETR-L_wired_table_cell_det`.
+Creating model: ('RT-DETR-L_wireless_table_cell_det', None, None)
+Model files already exist. Using cached files. To redownload, please delete the directory manually: `C:\Users\RZF\.paddlex\official_models\RT-DETR-L_wireless_table_cell_det`.
+== pipeline built ==
+Creating model: ('PP-LCNet_x1_0_doc_ori', None, None)
+Model files already exist. Using cached files. To redownload, please delete the directory manually: `C:\Users\RZF\.paddlex\official_models\PP-LCNet_x1_0_doc_ori`.
+Creating model: ('PP-LCNet_x1_0_textline_ori', None, None)
+Model files already exist. Using cached files. To redownload, please delete the directory manually: `C:\Users\RZF\.paddlex\official_models\PP-LCNet_x1_0_textline_ori`.
+Creating model: ('PP-OCRv5_server_det', None, None)
+Model files already exist. Using cached files. To redownload, please delete the directory manually: `C:\Users\RZF\.paddlex\official_models\PP-OCRv5_server_det`.
+Creating model: ('PP-OCRv5_server_rec', None, None)
+Model files already exist. Using cached files. To redownload, please delete the directory manually: `C:\Users\RZF\.paddlex\official_models\PP-OCRv5_server_rec`.
+== done, results: 1

@@ -1,0 +1,41 @@
+{
+ "case_id": "185a6a06-p5-t1",
+ "pdf": "185a6a0667e0b43d_Flat-top picosecond laser texturing of CFRP.pdf",
+ "page": 5,
+ "table_label": "TABLE I",
+ "table_type": "borderless",
+ "category": "E",
+ "note": "pilot paper; laser parameter list",
+ "rows": [
+  [
+   "Parameters",
+   "Values"
+  ],
+  [
+   "Wavelength(nm)",
+   "355"
+  ],
+  [
+   "Fluence range (J/cm2)",
+   "2.3–7.0"
+  ],
+  [
+   "Pulse width (ps)",
+   "10"
+  ],
+  [
+   "Spot diameter (μm)",
+   "19"
+  ],
+  [
+   "Scanning speed (m/s)",
+   "1"
+  ],
+  [
+   "Pulse repetition rate (MHz)",
+   "1"
+  ]
+ ],
+ "expect_table": true,
+ "evaluate_cells": true
+}

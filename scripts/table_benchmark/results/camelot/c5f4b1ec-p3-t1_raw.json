@@ -1,0 +1,24 @@
+{
+ "case_id": "c5f4b1ec-p3-t1",
+ "tool": "camelot",
+ "raw_tables": [
+  {
+   "table_index": 0,
+   "bbox": [
+    52.15205474853516,
+    623.8617002664207,
+    559.5353320312499,
+    691.8111043229155
+   ],
+   "parsing_report": {
+    "accuracy": 100.0,
+    "whitespace": 19.05,
+    "order": 1,
+    "page": 3,
+    "confidence": 0.8095
+   },
+   "df_csv": "0,1,2,3,4,5,6\r\nC≤,Si≤,Mn≤,P≤,S≤,Cr≥,Ni≥\r\n0.05–0.15,1.00,1.00,0.025,0.015,20.5–23.5,Balance\r\nMo≥,Cu≤,N≤,Al≤,Ti≤,Fe≤,Co≤\r\n8.0–10.0,0.50,—,0.50,0.15,17.0–20.0,0.50–2.50\r\nV≤,W≤,B≤,,,,\r\n—,0.20–1.00,0.01,,,,\r\n"
+  }
+ ],
+ "note": "Camelot parsing_report + dataframe CSV."
+}

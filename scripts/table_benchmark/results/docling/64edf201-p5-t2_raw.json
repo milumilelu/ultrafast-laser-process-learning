@@ -1,0 +1,18 @@
+{
+ "case_id": "64edf201-p5-t2",
+ "tool": "docling",
+ "raw_tables": [
+  {
+   "table_index": 0,
+   "bbox": [
+    34.87870897119865,
+    121.12059025945155,
+    559.0872249037027,
+    198.5094669157918
+   ],
+   "markdown": "| Number   | Laser Type   | tant points posure of ablation Upper Hole Diameter ( µ m)   | of the the upper the substrate. Lower Hole Diameter ( µ m)   | film-cooling hole. hole to the laser Furthermore, Upper Hole Diameter Error   | The taper of during the debris Lower Hole Diameter Error   | the hole arises drilling process, accumulation Upper Hole Roundness ( µ m)   | due to the leading to inside the hole Lower Hole Roundness ( µ m)   | prolonged ex- the excessive Taper ( ◦ )   |\n|----------|--------------|-------------------------------------------------------------|--------------------------------------------------------------|-------------------------------------------------------------------------------|------------------------------------------------------------|------------------------------------------------------------------------------|---------------------------------------------------------------------|-------------------------------------------|\n| Case 1   | Ideal hole   | of uous 400.0                                               | may 400.0                                                    | 0                                                                             | 0                                                          | 0                                                                            | 0                                                                   | during contin- 0                          |\n| Case 2   | Nanosecond   | drilling 539.2                                              | 448.6                                                        | shield and hinder 34.80%                                                      | the laser 12.15%                                           | beam, resulting 0.0318                                                       | in a taper 0.0357                                                   | where the upper 7.41                      |\n| Case 3   | Picosecond   | hole 396.4                                                  | diameter exceeds 385.2                                       | the lower - 0.90%                                                             | hole diameter. - 3.70%                                     | The taper 0.0246                                                             |  can be 0.0346                                                     | determined using 0.92                     |\n| Case 4   | Femtosecond  | 450.2                                                       | 382.8                                                        | 12.50%                                                                        | - 4.30%                                                    | 0.0047                                                                       | 0.0131                                                              | 5.50                                      |",
+   "label": "table"
+  }
+ ],
+ "note": "Docling TableItem markdown + provenance bbox."
+}

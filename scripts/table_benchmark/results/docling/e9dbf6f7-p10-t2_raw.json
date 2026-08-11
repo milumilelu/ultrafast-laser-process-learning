@@ -1,0 +1,18 @@
+{
+ "case_id": "e9dbf6f7-p10-t2",
+ "tool": "docling",
+ "raw_tables": [
+  {
+   "table_index": 0,
+   "bbox": [
+    130.35809326171875,
+    597.085693359375,
+    372.34246826171875,
+    659.8826026916504
+   ],
+   "markdown": "Table 2. The experiment parameter.\n\n|                              | Control group   | Experimental   | group   |\n|------------------------------|-----------------|----------------|---------|\n| Laser power （ W ）            | 1.5             | 1.5            | 1       |\n| Focus position （ mm ）        | \u0000 2             | \u0000 2            | \u0000 3     |\n| Cutting diameter （ l m ）     | 100             | 100            | 125     |\n| Processing speed （ l m/s ） ） | 200             | 200            | 200     |\n| Processing laps （ r          | 100             | 50             | 50      |",
+   "label": "table"
+  }
+ ],
+ "note": "Docling TableItem markdown + provenance bbox."
+}

@@ -1,0 +1,28 @@
+{
+ "case_id": "aad1014d-p6-t2",
+ "tool": "paddleocr",
+ "pdf": "aad1014d9273f0a3_sc04_034_Thick Glass High-Quality Cutting by Ultrafast Laser Bessel Beam Perforation-Assisted Separation.pdf",
+ "page": 6,
+ "package_version": "3.7.0",
+ "python_version": "3.12.13",
+ "device": "cpu",
+ "os": "Windows-11",
+ "elapsed_time_s": 378.8263,
+ "is_cold": false,
+ "error": null,
+ "dpi": 300,
+ "pipeline_kwargs": {
+  "lang": "en",
+  "device": "cpu",
+  "enable_mkldnn": true,
+  "use_doc_orientation_classify": false,
+  "use_doc_unwarping": false,
+  "use_region_detection": false,
+  "use_formula_recognition": false,
+  "use_chart_recognition": false,
+  "use_seal_recognition": false,
+  "text_det_limit_side_len": 1600,
+  "cpu_threads": 4
+ },
+ "tables": []
+}

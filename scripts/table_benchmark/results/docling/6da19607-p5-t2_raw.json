@@ -1,0 +1,18 @@
+{
+ "case_id": "6da19607-p5-t2",
+ "tool": "docling",
+ "raw_tables": [
+  {
+   "table_index": 0,
+   "bbox": [
+    165.47119128257035,
+    272.6783052567756,
+    559.5693209871649,
+    364.06425468874943
+   ],
+   "markdown": "Table 2. The basic parameters of a laser emission system. Table 2. The basic parameters of a laser emission system.\n\n| Parameters Parameters                             | Symbol Symbol   | Values Values      |\n|---------------------------------------------------|-----------------|--------------------|\n| Pulse width Pulse width                           | t               | 2.1 ps 2.1 ps      |\n| Diameter of the focal point Diameter of the focal | d f             | 48 µ m 48 µm       |\n| Repetition rate Repetition rate                   | f               | 75 kHz 75 kHz      |\n| Maximum average power Maximum average power       | P max           | 30W 30             |\n| Maximum peak power Maximum peak power             | P pk max        | 190.4MW W 190.4 MW |\n| Maximum pulse energy                              | E max           | 0.4 J              |",
+   "label": "table"
+  }
+ ],
+ "note": "Docling TableItem markdown + provenance bbox."
+}

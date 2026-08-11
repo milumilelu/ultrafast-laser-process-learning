@@ -1,0 +1,71 @@
+{
+ "case_id": "aad1014d-p5-t1",
+ "tool": "camelot",
+ "pdf": "aad1014d9273f0a3_sc04_034_Thick Glass High-Quality Cutting by Ultrafast Laser Bessel Beam Perforation-Assisted Separation.pdf",
+ "page": 5,
+ "package_version": "2.0.0",
+ "python_version": "3.12.13",
+ "device": "cpu",
+ "os": "Windows-11",
+ "elapsed_time_s": 0.4261,
+ "is_cold": false,
+ "error": null,
+ "tables": [
+  {
+   "table_index": 0,
+   "bbox": [
+    171.8633929810199,
+    345.6735660195432,
+    545.040074495856,
+    418.57136359319105
+   ],
+   "rows": [
+    [
+     "Process Parameters",
+     "Unit",
+     "Factor Level",
+     "",
+     "",
+     "",
+     ""
+    ],
+    [
+     "",
+     "",
+     "1",
+     "2",
+     "3",
+     "4",
+     "5"
+    ],
+    [
+     "Pulse energy",
+     "(mJ)",
+     "1.356",
+     "1.288",
+     "1.216",
+     "1.144",
+     "1.072"
+    ],
+    [
+     "Defocusing distance",
+     "(µm)",
+     "0",
+     "200",
+     "400",
+     "600",
+     "800"
+    ],
+    [
+     "Hole spacing",
+     "(µm)",
+     "4",
+     "6",
+     "8",
+     "10",
+     "12"
+    ]
+   ]
+  }
+ ]
+}

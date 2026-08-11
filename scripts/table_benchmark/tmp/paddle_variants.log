@@ -1,0 +1,165 @@
+== variant {'lang': 'en', 'device': 'cpu'} ==
+Creating model: ('PP-LCNet_x1_0_doc_ori', None, None)
+Model files already exist. Using cached files. To redownload, please delete the directory manually: `C:\Users\RZF\.paddlex\official_models\PP-LCNet_x1_0_doc_ori`.
+INFO: Could not find files for the given pattern(s).
+C:\Users\RZF\Desktop\��ʿ��������\ultrafast-laser-process-learning\.venv-table-paddle\Lib\site-packages\paddle\utils\cpp_extension\extension_utils.py:712: UserWarning: No ccache found. Please be aware that recompiling all source files may be required. You can download and install ccache from: https://github.com/ccache/ccache/blob/master/doc/INSTALL.md
+  warnings.warn(warning_message)
+WARNING: Logging before InitGoogleLogging() is written to STDERR
+I0810 22:42:21.083214  7264 onednn_context.cc:81] oneDNN v3.6.2
+Creating model: ('UVDoc', None, None)
+Model files already exist. Using cached files. To redownload, please delete the directory manually: `C:\Users\RZF\.paddlex\official_models\UVDoc`.
+Creating model: ('PP-DocBlockLayout', None, None)
+Model files already exist. Using cached files. To redownload, please delete the directory manually: `C:\Users\RZF\.paddlex\official_models\PP-DocBlockLayout`.
+Creating model: ('PP-DocLayout_plus-L', None, None)
+Model files already exist. Using cached files. To redownload, please delete the directory manually: `C:\Users\RZF\.paddlex\official_models\PP-DocLayout_plus-L`.
+Creating model: ('PP-LCNet_x1_0_textline_ori', None, None)
+Model files already exist. Using cached files. To redownload, please delete the directory manually: `C:\Users\RZF\.paddlex\official_models\PP-LCNet_x1_0_textline_ori`.
+Creating model: ('PP-OCRv5_server_det', None, None)
+Model files already exist. Using cached files. To redownload, please delete the directory manually: `C:\Users\RZF\.paddlex\official_models\PP-OCRv5_server_det`.
+Creating model: ('PP-OCRv5_server_rec', None, None)
+Model files already exist. Using cached files. To redownload, please delete the directory manually: `C:\Users\RZF\.paddlex\official_models\PP-OCRv5_server_rec`.
+Creating model: ('PP-LCNet_x1_0_table_cls', None, None)
+Model files already exist. Using cached files. To redownload, please delete the directory manually: `C:\Users\RZF\.paddlex\official_models\PP-LCNet_x1_0_table_cls`.
+Creating model: ('SLANeXt_wired', None, None)
+Model files already exist. Using cached files. To redownload, please delete the directory manually: `C:\Users\RZF\.paddlex\official_models\SLANeXt_wired`.
+Creating model: ('SLANet_plus', None, None)
+Model files already exist. Using cached files. To redownload, please delete the directory manually: `C:\Users\RZF\.paddlex\official_models\SLANet_plus`.
+Creating model: ('RT-DETR-L_wired_table_cell_det', None, None)
+Model files already exist. Using cached files. To redownload, please delete the directory manually: `C:\Users\RZF\.paddlex\official_models\RT-DETR-L_wired_table_cell_det`.
+Creating model: ('RT-DETR-L_wireless_table_cell_det', None, None)
+Model files already exist. Using cached files. To redownload, please delete the directory manually: `C:\Users\RZF\.paddlex\official_models\RT-DETR-L_wireless_table_cell_det`.
+Creating model: ('PP-FormulaNet_plus-L', None, None)
+Model files already exist. Using cached files. To redownload, please delete the directory manually: `C:\Users\RZF\.paddlex\official_models\PP-FormulaNet_plus-L`.
+== pipeline built ==
+Traceback (most recent call last):
+  File "C:\Users\RZF\Desktop\��ʿ��������\ultrafast-laser-process-learning\tmp_paddle_variant.py", line 12, in <module>
+    res = pipeline.predict(png)
+          ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\RZF\Desktop\��ʿ��������\ultrafast-laser-process-learning\.venv-table-paddle\Lib\site-packages\paddleocr\_pipelines\pp_structurev3.py", line 261, in predict
+    return list(
+           ^^^^^
+  File "C:\Users\RZF\Desktop\��ʿ��������\ultrafast-laser-process-learning\.venv-table-paddle\Lib\site-packages\paddlex\inference\pipelines\_parallel.py", line 161, in predict
+    yield from self._pipeline.predict(
+  File "C:\Users\RZF\Desktop\��ʿ��������\ultrafast-laser-process-learning\.venv-table-paddle\Lib\site-packages\paddlex\inference\pipelines\layout_parsing\pipeline_v2.py", line 1059, in predict
+    layout_det_results = list(
+                         ^^^^^
+  File "C:\Users\RZF\Desktop\��ʿ��������\ultrafast-laser-process-learning\.venv-table-paddle\Lib\site-packages\paddlex\inference\models\predictors\base_predictor.py", line 117, in __call__
+    yield from self.apply(input, **kwargs)
+  File "C:\Users\RZF\Desktop\��ʿ��������\ultrafast-laser-process-learning\.venv-table-paddle\Lib\site-packages\paddlex\inference\models\predictors\base_predictor.py", line 140, in apply
+    pred = self.process(batch_data, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\RZF\Desktop\��ʿ��������\ultrafast-laser-process-learning\.venv-table-paddle\Lib\site-packages\paddlex\inference\models\object_detection\predictor.py", line 239, in process
+    batch_preds = self.runner(batch_inputs)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\RZF\Desktop\��ʿ��������\ultrafast-laser-process-learning\.venv-table-paddle\Lib\site-packages\paddlex\inference\models\runners\paddle_static\runner.py", line 297, in __call__
+    pred = self.infer(x)
+           ^^^^^^^^^^^^^
+  File "C:\Users\RZF\Desktop\��ʿ��������\ultrafast-laser-process-learning\.venv-table-paddle\Lib\site-packages\paddlex\inference\models\runners\paddle_static\runner.py", line 265, in __call__
+    self.predictor.run()
+NotImplementedError: (Unimplemented) ConvertPirAttribute2RuntimeAttribute not support [pir::ArrayAttribute<pir::DoubleAttribute>]  (at ..\paddle\fluid\framework\new_executor\instruction\onednn\onednn_instruction.cc:118)
+
+== variant {'lang': 'en', 'device': 'cpu', 'enable_mkldnn': True, 'cpu_threads': 4} ==
+Creating model: ('PP-LCNet_x1_0_doc_ori', None, None)
+Model files already exist. Using cached files. To redownload, please delete the directory manually: `C:\Users\RZF\.paddlex\official_models\PP-LCNet_x1_0_doc_ori`.
+INFO: Could not find files for the given pattern(s).
+C:\Users\RZF\Desktop\��ʿ��������\ultrafast-laser-process-learning\.venv-table-paddle\Lib\site-packages\paddle\utils\cpp_extension\extension_utils.py:712: UserWarning: No ccache found. Please be aware that recompiling all source files may be required. You can download and install ccache from: https://github.com/ccache/ccache/blob/master/doc/INSTALL.md
+  warnings.warn(warning_message)
+WARNING: Logging before InitGoogleLogging() is written to STDERR
+I0810 22:42:38.305925  8440 onednn_context.cc:81] oneDNN v3.6.2
+Creating model: ('UVDoc', None, None)
+Model files already exist. Using cached files. To redownload, please delete the directory manually: `C:\Users\RZF\.paddlex\official_models\UVDoc`.
+Creating model: ('PP-DocBlockLayout', None, None)
+Model files already exist. Using cached files. To redownload, please delete the directory manually: `C:\Users\RZF\.paddlex\official_models\PP-DocBlockLayout`.
+Creating model: ('PP-DocLayout_plus-L', None, None)
+Model files already exist. Using cached files. To redownload, please delete the directory manually: `C:\Users\RZF\.paddlex\official_models\PP-DocLayout_plus-L`.
+Creating model: ('PP-LCNet_x1_0_textline_ori', None, None)
+Model files already exist. Using cached files. To redownload, please delete the directory manually: `C:\Users\RZF\.paddlex\official_models\PP-LCNet_x1_0_textline_ori`.
+Creating model: ('PP-OCRv5_server_det', None, None)
+Model files already exist. Using cached files. To redownload, please delete the directory manually: `C:\Users\RZF\.paddlex\official_models\PP-OCRv5_server_det`.
+Creating model: ('PP-OCRv5_server_rec', None, None)
+Model files already exist. Using cached files. To redownload, please delete the directory manually: `C:\Users\RZF\.paddlex\official_models\PP-OCRv5_server_rec`.
+Creating model: ('PP-LCNet_x1_0_table_cls', None, None)
+Model files already exist. Using cached files. To redownload, please delete the directory manually: `C:\Users\RZF\.paddlex\official_models\PP-LCNet_x1_0_table_cls`.
+Creating model: ('SLANeXt_wired', None, None)
+Model files already exist. Using cached files. To redownload, please delete the directory manually: `C:\Users\RZF\.paddlex\official_models\SLANeXt_wired`.
+Creating model: ('SLANet_plus', None, None)
+Model files already exist. Using cached files. To redownload, please delete the directory manually: `C:\Users\RZF\.paddlex\official_models\SLANet_plus`.
+Creating model: ('RT-DETR-L_wired_table_cell_det', None, None)
+Model files already exist. Using cached files. To redownload, please delete the directory manually: `C:\Users\RZF\.paddlex\official_models\RT-DETR-L_wired_table_cell_det`.
+Creating model: ('RT-DETR-L_wireless_table_cell_det', None, None)
+Model files already exist. Using cached files. To redownload, please delete the directory manually: `C:\Users\RZF\.paddlex\official_models\RT-DETR-L_wireless_table_cell_det`.
+Creating model: ('PP-FormulaNet_plus-L', None, None)
+Model files already exist. Using cached files. To redownload, please delete the directory manually: `C:\Users\RZF\.paddlex\official_models\PP-FormulaNet_plus-L`.
+== pipeline built ==
+Traceback (most recent call last):
+  File "C:\Users\RZF\Desktop\��ʿ��������\ultrafast-laser-process-learning\tmp_paddle_variant.py", line 12, in <module>
+    res = pipeline.predict(png)
+          ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\RZF\Desktop\��ʿ��������\ultrafast-laser-process-learning\.venv-table-paddle\Lib\site-packages\paddleocr\_pipelines\pp_structurev3.py", line 261, in predict
+    return list(
+           ^^^^^
+  File "C:\Users\RZF\Desktop\��ʿ��������\ultrafast-laser-process-learning\.venv-table-paddle\Lib\site-packages\paddlex\inference\pipelines\_parallel.py", line 161, in predict
+    yield from self._pipeline.predict(
+  File "C:\Users\RZF\Desktop\��ʿ��������\ultrafast-laser-process-learning\.venv-table-paddle\Lib\site-packages\paddlex\inference\pipelines\layout_parsing\pipeline_v2.py", line 1059, in predict
+    layout_det_results = list(
+                         ^^^^^
+  File "C:\Users\RZF\Desktop\��ʿ��������\ultrafast-laser-process-learning\.venv-table-paddle\Lib\site-packages\paddlex\inference\models\predictors\base_predictor.py", line 117, in __call__
+    yield from self.apply(input, **kwargs)
+  File "C:\Users\RZF\Desktop\��ʿ��������\ultrafast-laser-process-learning\.venv-table-paddle\Lib\site-packages\paddlex\inference\models\predictors\base_predictor.py", line 140, in apply
+    pred = self.process(batch_data, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\RZF\Desktop\��ʿ��������\ultrafast-laser-process-learning\.venv-table-paddle\Lib\site-packages\paddlex\inference\models\object_detection\predictor.py", line 239, in process
+    batch_preds = self.runner(batch_inputs)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\RZF\Desktop\��ʿ��������\ultrafast-laser-process-learning\.venv-table-paddle\Lib\site-packages\paddlex\inference\models\runners\paddle_static\runner.py", line 297, in __call__
+    pred = self.infer(x)
+           ^^^^^^^^^^^^^
+  File "C:\Users\RZF\Desktop\��ʿ��������\ultrafast-laser-process-learning\.venv-table-paddle\Lib\site-packages\paddlex\inference\models\runners\paddle_static\runner.py", line 265, in __call__
+    self.predictor.run()
+NotImplementedError: (Unimplemented) ConvertPirAttribute2RuntimeAttribute not support [pir::ArrayAttribute<pir::DoubleAttribute>]  (at ..\paddle\fluid\framework\new_executor\instruction\onednn\onednn_instruction.cc:118)
+
+== variant {'lang': 'en', 'device': 'cpu', 'enable_mkldnn': False, 'cpu_threads': 4, 'text_det_limit_side_len': 960} ==
+Creating model: ('PP-LCNet_x1_0_doc_ori', None, None)
+Model files already exist. Using cached files. To redownload, please delete the directory manually: `C:\Users\RZF\.paddlex\official_models\PP-LCNet_x1_0_doc_ori`.
+INFO: Could not find files for the given pattern(s).
+C:\Users\RZF\Desktop\��ʿ��������\ultrafast-laser-process-learning\.venv-table-paddle\Lib\site-packages\paddle\utils\cpp_extension\extension_utils.py:712: UserWarning: No ccache found. Please be aware that recompiling all source files may be required. You can download and install ccache from: https://github.com/ccache/ccache/blob/master/doc/INSTALL.md
+  warnings.warn(warning_message)
+Creating model: ('UVDoc', None, None)
+Model files already exist. Using cached files. To redownload, please delete the directory manually: `C:\Users\RZF\.paddlex\official_models\UVDoc`.
+Creating model: ('PP-DocBlockLayout', None, None)
+Model files already exist. Using cached files. To redownload, please delete the directory manually: `C:\Users\RZF\.paddlex\official_models\PP-DocBlockLayout`.
+Creating model: ('PP-DocLayout_plus-L', None, None)
+Model files already exist. Using cached files. To redownload, please delete the directory manually: `C:\Users\RZF\.paddlex\official_models\PP-DocLayout_plus-L`.
+Creating model: ('PP-LCNet_x1_0_textline_ori', None, None)
+Model files already exist. Using cached files. To redownload, please delete the directory manually: `C:\Users\RZF\.paddlex\official_models\PP-LCNet_x1_0_textline_ori`.
+Creating model: ('PP-OCRv5_server_det', None, None)
+Model files already exist. Using cached files. To redownload, please delete the directory manually: `C:\Users\RZF\.paddlex\official_models\PP-OCRv5_server_det`.
+Creating model: ('PP-OCRv5_server_rec', None, None)
+Model files already exist. Using cached files. To redownload, please delete the directory manually: `C:\Users\RZF\.paddlex\official_models\PP-OCRv5_server_rec`.
+Creating model: ('PP-LCNet_x1_0_table_cls', None, None)
+Model files already exist. Using cached files. To redownload, please delete the directory manually: `C:\Users\RZF\.paddlex\official_models\PP-LCNet_x1_0_table_cls`.
+Creating model: ('SLANeXt_wired', None, None)
+Model files already exist. Using cached files. To redownload, please delete the directory manually: `C:\Users\RZF\.paddlex\official_models\SLANeXt_wired`.
+Creating model: ('SLANet_plus', None, None)
+Model files already exist. Using cached files. To redownload, please delete the directory manually: `C:\Users\RZF\.paddlex\official_models\SLANet_plus`.
+Creating model: ('RT-DETR-L_wired_table_cell_det', None, None)
+Model files already exist. Using cached files. To redownload, please delete the directory manually: `C:\Users\RZF\.paddlex\official_models\RT-DETR-L_wired_table_cell_det`.
+Creating model: ('RT-DETR-L_wireless_table_cell_det', None, None)
+Model files already exist. Using cached files. To redownload, please delete the directory manually: `C:\Users\RZF\.paddlex\official_models\RT-DETR-L_wireless_table_cell_det`.
+Creating model: ('PP-FormulaNet_plus-L', None, None)
+Model files already exist. Using cached files. To redownload, please delete the directory manually: `C:\Users\RZF\.paddlex\official_models\PP-FormulaNet_plus-L`.
+== pipeline built ==
+Windows fatal exception: access violation
+
+Current thread 0x00007ffc (most recent call first):
+  File "C:\Users\RZF\Desktop\\u535a\u58eb\u8bfe\u9898\u8d44\u6599\ultrafast-laser-process-learning\.venv-table-paddle\Lib\site-packages\paddlex\inference\models\runners\paddle_static\runner.py", line 265 in __call__
+  File "C:\Users\RZF\Desktop\\u535a\u58eb\u8bfe\u9898\u8d44\u6599\ultrafast-laser-process-learning\.venv-table-paddle\Lib\site-packages\paddlex\inference\models\runners\paddle_static\runner.py", line 297 in __call__
+  File "C:\Users\RZF\Desktop\\u535a\u58eb\u8bfe\u9898\u8d44\u6599\ultrafast-laser-process-learning\.venv-table-paddle\Lib\site-packages\paddlex\inference\models\text_detection\predictor.py", line 145 in process
+  File "C:\Users\RZF\Desktop\\u535a\u58eb\u8bfe\u9898\u8d44\u6599\ultrafast-laser-process-learning\.venv-table-paddle\Lib\site-packages\paddlex\inference\models\predictors\base_predictor.py", line 140 in apply
+  File "C:\Users\RZF\Desktop\\u535a\u58eb\u8bfe\u9898\u8d44\u6599\ultrafast-laser-process-learning\.venv-table-paddle\Lib\site-packages\paddlex\inference\models\predictors\base_predictor.py", line 117 in __call__
+  File "C:\Users\RZF\Desktop\\u535a\u58eb\u8bfe\u9898\u8d44\u6599\ultrafast-laser-process-learning\.venv-table-paddle\Lib\site-packages\paddlex\inference\pipelines\ocr\pipeline.py", line 366 in predict
+  File "C:\Users\RZF\Desktop\\u535a\u58eb\u8bfe\u9898\u8d44\u6599\ultrafast-laser-process-learning\.venv-table-paddle\Lib\site-packages\paddlex\inference\pipelines\_parallel.py", line 161 in predict
+  File "C:\Users\RZF\Desktop\\u535a\u58eb\u8bfe\u9898\u8d44\u6599\ultrafast-laser-process-learning\.venv-table-paddle\Lib\site-packages\paddlex\inference\pipelines\layout_parsing\pipeline_v2.py", line 1107 in predict
+  File "C:\Users\RZF\Desktop\\u535a\u58eb\u8bfe\u9898\u8d44\u6599\ultrafast-laser-process-learning\.venv-table-paddle\Lib\site-packages\paddlex\inference\pipelines\_parallel.py", line 161 in predict
+  File "C:\Users\RZF\Desktop\\u535a\u58eb\u8bfe\u9898\u8d44\u6599\ultrafast-laser-process-learning\.venv-table-paddle\Lib\site-packages\paddleocr\_pipelines\pp_structurev3.py", line 261 in predict
+  File "C:\Users\RZF\Desktop\\u535a\u58eb\u8bfe\u9898\u8d44\u6599\ultrafast-laser-process-learning\tmp_paddle_variant.py", line 12 in <module>

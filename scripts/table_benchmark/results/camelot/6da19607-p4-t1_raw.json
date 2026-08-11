@@ -1,0 +1,24 @@
+{
+ "case_id": "6da19607-p4-t1",
+ "tool": "camelot",
+ "raw_tables": [
+  {
+   "table_index": 0,
+   "bbox": [
+    208.25479364309652,
+    331.9970562994684,
+    526.5888883117159,
+    536.3343968076173
+   ],
+   "parsing_report": {
+    "accuracy": 99.04,
+    "whitespace": 23.53,
+    "order": 1,
+    "page": 4,
+    "confidence": 0.7574
+   },
+   "df_csv": "0,1,2\r\nParameters,Average Power,Scanning Speed\r\n1,12 W,80 mm/s\r\n2,,160 mm/s\r\n3,,240 mm/s\r\n4,,320 mm/s\r\n5,,80 mm/s\r\n6,,160 mm/s\r\n7,18 W,240 mm/s\r\n8,,320 mm/s\r\n9,,80 mm/s\r\n10,,160 mm/s\r\n11,24 W,240 mm/s\r\n12,,320 mm/s\r\n13,,80 mm/s\r\n14,,\"160 mm/s\n5  of  16\"\r\n15,30 W,240 mm/s\r\n16,,320 mm/s\r\n"
+  }
+ ],
+ "note": "Camelot parsing_report + dataframe CSV."
+}

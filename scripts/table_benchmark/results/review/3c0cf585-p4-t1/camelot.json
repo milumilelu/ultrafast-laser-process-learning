@@ -1,0 +1,14 @@
+{
+ "case_id": "3c0cf585-p4-t1",
+ "tool": "camelot",
+ "pdf": "3c0cf5859d4f9a93_Universal threshold for femtosecond laser ablation with oblique illumination.pdf",
+ "page": 4,
+ "package_version": "2.0.0",
+ "python_version": "3.12.13",
+ "device": "cpu",
+ "os": "Windows-11",
+ "elapsed_time_s": 0.6248,
+ "is_cold": false,
+ "error": null,
+ "tables": []
+}

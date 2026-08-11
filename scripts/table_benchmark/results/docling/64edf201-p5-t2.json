@@ -1,0 +1,70 @@
+{
+ "case_id": "64edf201-p5-t2",
+ "tool": "docling",
+ "pdf": "64edf20172cbe34b_64edf20172cbe34b_task2_01_Hou_2024.pdf",
+ "page": 5,
+ "package_version": "2.119.0",
+ "python_version": "3.12.13",
+ "device": "cpu",
+ "os": "Windows-11",
+ "elapsed_time_s": 2.3337,
+ "is_cold": false,
+ "error": null,
+ "tables": [
+  {
+   "table_index": 0,
+   "bbox": [
+    34.87870897119865,
+    121.12059025945155,
+    559.0872249037027,
+    198.5094669157918
+   ],
+   "rows": [
+    [
+     "Case 1",
+     "Ideal hole",
+     "of uous 400.0",
+     "may 400.0",
+     "0",
+     "0",
+     "0",
+     "0",
+     "during contin- 0"
+    ],
+    [
+     "Case 2",
+     "Nanosecond",
+     "drilling 539.2",
+     "448.6",
+     "shield and hinder 34.80%",
+     "the laser 12.15%",
+     "beam, resulting 0.0318",
+     "in a taper 0.0357",
+     "where the upper 7.41"
+    ],
+    [
+     "Case 3",
+     "Picosecond",
+     "hole 396.4",
+     "diameter exceeds 385.2",
+     "the lower - 0.90%",
+     "hole diameter. - 3.70%",
+     "The taper 0.0246",
+     " can be 0.0346",
+     "determined using 0.92"
+    ],
+    [
+     "Case 4",
+     "Femtosecond",
+     "450.2",
+     "382.8",
+     "12.50%",
+     "- 4.30%",
+     "0.0047",
+     "0.0131",
+     "5.50"
+    ]
+   ]
+  }
+ ]
+}

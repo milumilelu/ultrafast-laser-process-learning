@@ -1,0 +1,80 @@
+{
+ "case_id": "d47fcb19-p5-t1",
+ "tool": "paddleocr",
+ "pdf": "d47fcb191eb2587a_Construction of microstructures on the Cu substrate using ultrafast laser processing to enhance the bonding strength of sintered Ag nanoparticles.pdf",
+ "page": 5,
+ "package_version": "3.7.0",
+ "python_version": "3.12.13",
+ "device": "cpu",
+ "os": "Windows-11",
+ "elapsed_time_s": 120.1838,
+ "is_cold": false,
+ "error": null,
+ "dpi": 300,
+ "pipeline_kwargs": {
+  "lang": "en",
+  "device": "cpu",
+  "enable_mkldnn": true,
+  "use_doc_orientation_classify": false,
+  "use_doc_unwarping": false,
+  "use_region_detection": false,
+  "use_formula_recognition": false,
+  "use_chart_recognition": false,
+  "use_seal_recognition": false,
+  "text_det_limit_side_len": 1600,
+  "cpu_threads": 4
+ },
+ "tables": [
+  {
+   "table_index": 0,
+   "bbox": [
+    218.291748046875,
+    489.51055908203125,
+    2320.291748046875,
+    735.5105590820312
+   ],
+   "rows": [
+    [
+     "Laser intensity (×105 W/cm2)",
+     "8.67",
+     "16.82",
+     "25.48",
+     "34.14",
+     ""
+    ],
+    [
+     "Scanning times",
+     "5",
+     "2.77 μm",
+     "3.20 μm",
+     "4.14m",
+     "5.11μm"
+    ],
+    [
+     "",
+     "10",
+     "5.54 μm",
+     "6.09 m",
+     "8.38 μm",
+     "10.80 m"
+    ],
+    [
+     "",
+     "20",
+     "10.56 m",
+     "13.72 μm",
+     "18.48 m",
+     "31.32 μm"
+    ],
+    [
+     "",
+     "40",
+     "20.20 m",
+     "26.32 m",
+     "31.56 m",
+     "36.40 μm"
+    ]
+   ]
+  }
+ ]
+}

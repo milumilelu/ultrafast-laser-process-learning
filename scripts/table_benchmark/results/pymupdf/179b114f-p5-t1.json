@@ -1,0 +1,31 @@
+{
+ "case_id": "179b114f-p5-t1",
+ "tool": "pymupdf",
+ "pdf": "179b114fb0325d4a_Simulation_of_ultrashort_pulse_laser_drilling_of_glass_considering_hea_2020.pdf",
+ "page": 5,
+ "package_version": "1.28.2",
+ "python_version": "3.12.13",
+ "device": "cpu",
+ "os": "Windows-11",
+ "elapsed_time_s": 0.0564,
+ "is_cold": true,
+ "error": null,
+ "strategy_used": "default",
+ "tables": [
+  {
+   "table_index": 0,
+   "bbox": [
+    117.125,
+    31.123502731323242,
+    498.3500061035156,
+    44.07600212097168
+   ],
+   "rows": [
+    [
+     "Research Article",
+     "Vol. 28, No. 10 / 11 May 2020 / Optics Express 15244"
+    ]
+   ]
+  }
+ ]
+}

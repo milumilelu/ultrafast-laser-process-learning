@@ -1,0 +1,46 @@
+{
+ "case_id": "6da19607-p4-t1",
+ "tool": "docling",
+ "pdf": "6da19607d54f8438_Investigation on Thermal Barrier Coating Damages for Ultrafast Laser Drilling of Cooling Holes.pdf",
+ "page": 4,
+ "package_version": "2.119.0",
+ "python_version": "3.12.13",
+ "device": "cpu",
+ "os": "Windows-11",
+ "elapsed_time_s": 2.5602,
+ "is_cold": false,
+ "error": null,
+ "tables": [
+  {
+   "table_index": 0,
+   "bbox": [
+    165.65915990434584,
+    326.94209020520225,
+    559.7854856655001,
+    539.4012117749721
+   ],
+   "rows": [
+    [
+     "1 2 3 4",
+     "12W",
+     "80 mm/s 160 mm/s 240 mm/s 320 mm/s"
+    ],
+    [
+     "5 6 7 8",
+     "18W",
+     "80 mm/s 160 mm/s 240 mm/s 320 mm/s"
+    ],
+    [
+     "9 10 11 12",
+     "24W",
+     "80 mm/s 160 mm/s 240 mm/s 320 mm/s"
+    ],
+    [
+     "13 14 15 16",
+     "30W",
+     "80 mm/s 160 mm/s 240 mm/s 320 mm/s 5 of"
+    ]
+   ]
+  }
+ ]
+}

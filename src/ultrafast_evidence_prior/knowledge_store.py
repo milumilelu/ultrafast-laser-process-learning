@@ -139,3 +139,39 @@ class StructuredKnowledgeStoreV2:
             raw["extraction_route"] = "structured_knowledge"
             output.append(EvidenceIRV2.model_validate(raw))
         return output
+
+    def for_requirement(
+        self,
+        *,
+        requirement_signature: str,
+        extractor_model: str,
+        prompt_version: str = PROMPT_VERSION,
+        extraction_schema_version: str = EXTRACTION_SCHEMA_VERSION,
+    ) -> list[EvidenceIRV2]:
+        """Reuse every validated paper-local claim for an exact Requirement signature."""
+
+        with self.store.connection() as connection:
+            rows = connection.execute(
+                """
+                SELECT evidence_json, governance_status
+                FROM structured_scientific_knowledge_v2
+                WHERE requirement_signature=? AND extractor_model=?
+                  AND prompt_version=? AND extraction_schema_version=?
+                  AND validation_state=?
+                ORDER BY paper_id,document_version_id,created_at,evidence_id
+                """,
+                (
+                    requirement_signature,
+                    extractor_model,
+                    prompt_version,
+                    extraction_schema_version,
+                    ValidationState.VALIDATED.value,
+                ),
+            ).fetchall()
+        output: list[EvidenceIRV2] = []
+        for row in rows:
+            raw: dict[str, Any] = json.loads(row["evidence_json"])
+            raw["governance_status"] = str(row["governance_status"] or "unreviewed")
+            raw["extraction_route"] = "structured_knowledge"
+            output.append(EvidenceIRV2.model_validate(raw))
+        return output

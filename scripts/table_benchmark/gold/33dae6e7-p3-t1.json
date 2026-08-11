@@ -1,0 +1,35 @@
+{
+ "case_id": "33dae6e7-p3-t1",
+ "pdf": "33dae6e7c9a3a155_33dae6e7c9a3a155_task2_06_Zhang_2024.pdf",
+ "page": 3,
+ "table_label": "Table 1",
+ "table_type": "bordered",
+ "category": "E",
+ "note": "DD6 elemental composition",
+ "rows": [
+  [
+   "Elements",
+   "Cr",
+   "Al",
+   "Mo",
+   "Co",
+   "W",
+   "Ta",
+   "Re",
+   "Ni"
+  ],
+  [
+   "wt%",
+   "3.8~4.8",
+   "5.2~6.2",
+   "1.5~2.5",
+   "8.5~9.5",
+   "7.0~9.0",
+   "6.0~8.5",
+   "1.6~2.4",
+   "Bal"
+  ]
+ ],
+ "expect_table": true,
+ "evaluate_cells": true
+}

@@ -1,0 +1,18 @@
+{
+ "case_id": "3c59d7dc-p4-t2",
+ "tool": "docling",
+ "raw_tables": [
+  {
+   "table_index": 0,
+   "bbox": [
+    36.55536297280341,
+    334.91337875563937,
+    288.4742973722517,
+    405.85165049545043
+   ],
+   "markdown": "Table 2 The test data of the holes machined under different scanning paths.\n\n| Scanning path   | Inlet diameter ( μ m)   | Outlet diameter ( μ m)   | Inlet circularity   | Outlet circularity   | taper angle ( ◦ )   |\n|-----------------|-------------------------|--------------------------|---------------------|----------------------|---------------------|\n| (a)             | 639 - 648               | 508 - 547                | 98.6%               | 92.9%                | 4.2 - 5.5           |\n| (b)             | 639 - 661               | 516 - 558                | 96.6%               | 92.5%                | 4.3 - 5.1           |\n| (c)             | 641 - 645               | 523 - 552                | 99.4%               | 94.7%                | 3.9 - 4.9           |\n| (d)             | 633 - 640               | 479 - 522                | 98.9%               | 91.8%                | 4.9 - 6.5           |",
+   "label": "table"
+  }
+ ],
+ "note": "Docling TableItem markdown + provenance bbox."
+}

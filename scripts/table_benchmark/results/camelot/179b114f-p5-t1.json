@@ -1,0 +1,14 @@
+{
+ "case_id": "179b114f-p5-t1",
+ "tool": "camelot",
+ "pdf": "179b114fb0325d4a_Simulation_of_ultrashort_pulse_laser_drilling_of_glass_considering_hea_2020.pdf",
+ "page": 5,
+ "package_version": "2.0.0",
+ "python_version": "3.12.13",
+ "device": "cpu",
+ "os": "Windows-11",
+ "elapsed_time_s": 2.7884,
+ "is_cold": true,
+ "error": null,
+ "tables": []
+}

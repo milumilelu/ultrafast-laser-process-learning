@@ -1,0 +1,98 @@
+{
+ "case_id": "6da19607-p4-t1",
+ "pdf": "6da19607d54f8438_Investigation on Thermal Barrier Coating Damages for Ultrafast Laser Drilling of Cooling Holes.pdf",
+ "page": 4,
+ "table_label": "Table 1",
+ "table_type": "bordered",
+ "category": "E",
+ "note": "TBC microhole 2-factor 4-level design; Average Power merged over 4 rows (repeated in gold)",
+ "rows": [
+  [
+   "Parameters",
+   "Average Power",
+   "Scanning Speed"
+  ],
+  [
+   "1",
+   "12 W",
+   "80 mm/s"
+  ],
+  [
+   "2",
+   "12 W",
+   "160 mm/s"
+  ],
+  [
+   "3",
+   "12 W",
+   "240 mm/s"
+  ],
+  [
+   "4",
+   "12 W",
+   "320 mm/s"
+  ],
+  [
+   "5",
+   "18 W",
+   "80 mm/s"
+  ],
+  [
+   "6",
+   "18 W",
+   "160 mm/s"
+  ],
+  [
+   "7",
+   "18 W",
+   "240 mm/s"
+  ],
+  [
+   "8",
+   "18 W",
+   "320 mm/s"
+  ],
+  [
+   "9",
+   "24 W",
+   "80 mm/s"
+  ],
+  [
+   "10",
+   "24 W",
+   "160 mm/s"
+  ],
+  [
+   "11",
+   "24 W",
+   "240 mm/s"
+  ],
+  [
+   "12",
+   "24 W",
+   "320 mm/s"
+  ],
+  [
+   "13",
+   "30 W",
+   "80 mm/s"
+  ],
+  [
+   "14",
+   "30 W",
+   "160 mm/s"
+  ],
+  [
+   "15",
+   "30 W",
+   "240 mm/s"
+  ],
+  [
+   "16",
+   "30 W",
+   "320 mm/s"
+  ]
+ ],
+ "expect_table": true,
+ "evaluate_cells": true
+}

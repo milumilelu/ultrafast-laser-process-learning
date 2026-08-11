@@ -1,0 +1,432 @@
+{
+ "case_id": "6da19607-p5-t2",
+ "tool": "pymupdf",
+ "raw_tables": [
+  {
+   "table_index": 0,
+   "bbox": [
+    166.0050048828125,
+    57.1229248046875,
+    560.521484375,
+    783.6231079101562
+   ],
+   "extract": [
+    [
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "5 of 14"
+    ],
+    [
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     ""
+    ],
+    [
+     "2.2. Experim",
+     "ental Method",
+     "s and Experimenta",
+     "l Eq",
+     "uipment",
+     "",
+     ""
+    ],
+    [
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     ""
+    ],
+    [
+     "The pi",
+     "cosecond lase",
+     "r drilling experim",
+     "ent",
+     "is conducted a",
+     "ccording to the",
+     "aforementioned"
+    ],
+    [
+     "processing",
+     "parameters.",
+     "A commercially a",
+     "vail",
+     "able diode-pu",
+     "mped solid-stat",
+     "e laser from the"
+    ],
+    [
+     "Atlantic ser",
+     "ies (Atlantic",
+     "series, Tokyo, Jap",
+     "an)",
+     "is utilized, as",
+     "depicted in Fig",
+     "ure 3. The laser"
+    ],
+    [
+     "emits puls",
+     "es with a wa",
+     "velength of 1030",
+     "nm",
+     "and a pulse w",
+     "idth of 2.1 ps.",
+     "The remaining"
+    ],
+    [
+     "parameters",
+     "of the laser p",
+     "rocessing system",
+     "can",
+     "be found in Ta",
+     "ble 2. Following",
+     "the completion"
+    ],
+    [
+     "of picoseco",
+     "nd laser drill",
+     "ing, the surface",
+     "morp",
+     "hology of the",
+     "film-coated ho",
+     "les is examined"
+    ],
+    [
+     "using a coo",
+     "rdinate meas",
+     "uring machine (I",
+     "nfini",
+     "teFocus G4, G",
+     "raz, Austria). T",
+     "his examination"
+    ],
+    [
+     "includes th",
+     "e measurem",
+     "ent of entrance",
+     "and",
+     "exit aperture",
+     "s and the asse",
+     "ssment of hole"
+    ],
+    [
+     "surface top",
+     "ography. Sub",
+     "sequently, the sa",
+     "mple",
+     "s are sectioned",
+     "using wire ele",
+     "ctrical discharge"
+    ],
+    [
+     "machining",
+     "(DK7732, Ta",
+     "izhou, China), as",
+     "illu",
+     "strated in Figu",
+     "re 4. Since the",
+     "thermal barrier"
+    ],
+    [
+     "coating is a",
+     "non-metalli",
+     "c material and la",
+     "cks",
+     "conductivity,",
+     "it cannot be ob",
+     "served directly"
+    ],
+    [
+     "under a sca",
+     "nning electro",
+     "n microscope (SE",
+     "M).",
+     "Therefore, prio",
+     "r to SEM imagi",
+     "ng, the samples"
+    ],
+    [
+     "undergo a g",
+     "old-sputteri",
+     "ng process using a",
+     "n io",
+     "n sputter coate",
+     "r to enhance th",
+     "eir conductivity,"
+    ],
+    [
+     "ensuring th",
+     "e successful",
+     "preparation of th",
+     "e sa",
+     "mples.",
+     "",
+     ""
+    ],
+    [
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     ""
+    ],
+    [
+     "Figure 3. Th",
+     "e picosecond l",
+     "aser emission syste",
+     "m.",
+     "",
+     "",
+     ""
+    ],
+    [
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     ""
+    ],
+    [
+     "Table 2. The",
+     "basic paramet",
+     "ers of a laser emiss",
+     "ion s",
+     "ystem.",
+     "",
+     ""
+    ],
+    [
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     ""
+    ],
+    [
+     "",
+     "Parameter",
+     "s",
+     "",
+     "Symbol",
+     "",
+     "Values"
+    ],
+    [
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     ""
+    ],
+    [
+     "",
+     "Pulse widt",
+     "h",
+     "",
+     "τ",
+     "",
+     "2.1 ps"
+    ],
+    [
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     ""
+    ],
+    [
+     "Dia",
+     "meter of the fo",
+     "cal point",
+     "",
+     "d\nf",
+     "",
+     "48 µm"
+    ],
+    [
+     "",
+     "Repetition r",
+     "ate",
+     "",
+     "f",
+     "",
+     "75 kHz"
+    ],
+    [
+     "Ma",
+     "ximum averag",
+     "e power",
+     "",
+     "Pmax",
+     "",
+     "30 W"
+    ],
+    [
+     "",
+     "",
+     "",
+     "",
+     "pk",
+     "",
+     ""
+    ],
+    [
+     "M",
+     "aximum peak",
+     "power",
+     "",
+     "P\nmax",
+     "1",
+     "90.4 MW"
+    ],
+    [
+     "M",
+     "aximum pulse",
+     "energy",
+     "",
+     "Emax",
+     "",
+     "0.4 J"
+    ],
+    [
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     ""
+    ],
+    [
+     "Figure 4. Sa",
+     "mple after wir",
+     "e EDM.",
+     "",
+     "",
+     "",
+     ""
+    ],
+    [
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     ""
+    ],
+    [
+     "3. Results",
+     "and Discussi",
+     "ons",
+     "",
+     "",
+     "",
+     ""
+    ],
+    [
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     ""
+    ],
+    [
+     "3.1. Effects",
+     "of Process Par",
+     "ameters on Coating",
+     "Sur",
+     "face Roughness",
+     "",
+     ""
+    ],
+    [
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     ""
+    ],
+    [
+     "Surfac",
+     "e roughness",
+     "measurements w",
+     "ere",
+     "conducted at",
+     "positions locat",
+     "ed 10 µm away"
+    ],
+    [
+     "from the bl",
+     "unt and shar",
+     "p edges of the mic",
+     "roh",
+     "oles, as shown",
+     "in Figure 5. Fig",
+     "ure 6 illustrates"
+    ],
+    [
+     "the relatio",
+     "nship betwee",
+     "n surface rough",
+     "ness",
+     "and process",
+     "parameters on",
+     "the blunt and"
+    ],
+    [
+     "sharp side",
+     "s of the micr",
+     "ohole circumfere",
+     "nce.",
+     "The results i",
+     "ndicate that on",
+     "the blunt side,"
+    ],
+    [
+     "the surface",
+     "roughness in",
+     "creases with an i",
+     "ncre",
+     "ment in pulse",
+     "energy at a co",
+     "nstant scanning"
+    ],
+    [
+     "speed. Co",
+     "nversely, at t",
+     "he same pulse e",
+     "nerg",
+     "y, an increase",
+     "in scanning s",
+     "peed leads to a"
+    ]
+   ]
+  }
+ ],
+ "note": "PyMuPDF Table.extract() output; no per-cell bbox is exposed by the public API."
+}

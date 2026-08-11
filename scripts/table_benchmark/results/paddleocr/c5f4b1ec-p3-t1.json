@@ -1,0 +1,94 @@
+{
+ "case_id": "c5f4b1ec-p3-t1",
+ "tool": "paddleocr",
+ "pdf": "c5f4b1ec78b6429c_Optimization of femtosecond laser processing technology for film cooling hole in nickel-based superalloy based on multi-step drilling and milling methods.pdf",
+ "page": 3,
+ "package_version": "3.7.0",
+ "python_version": "3.12.13",
+ "device": "cpu",
+ "os": "Windows-11",
+ "elapsed_time_s": 122.4858,
+ "is_cold": true,
+ "error": null,
+ "dpi": 300,
+ "pipeline_kwargs": {
+  "lang": "en",
+  "device": "cpu",
+  "enable_mkldnn": true,
+  "use_doc_orientation_classify": false,
+  "use_doc_unwarping": false,
+  "use_region_detection": false,
+  "use_formula_recognition": false,
+  "use_chart_recognition": false,
+  "use_seal_recognition": false,
+  "text_det_limit_side_len": 1600,
+  "cpu_threads": 4
+ },
+ "tables": [
+  {
+   "table_index": 0,
+   "bbox": [
+    213.94970703125,
+    473.9205322265625,
+    2322.94970703125,
+    788.9205322265625
+   ],
+   "rows": [
+    [
+     "C≤",
+     "Si≤",
+     "Mn≤",
+     "P≤",
+     "S≤",
+     "Cr≥",
+     "Ni≥"
+    ],
+    [
+     "0.05-0.15",
+     "1.00",
+     "1.00",
+     "0.025",
+     "0.015",
+     "20.5-23.5",
+     "Balance"
+    ],
+    [
+     "Mo≥",
+     "Cu≤",
+     "N≤",
+     "Al≤",
+     "Ti≤",
+     "Fe≤",
+     "Co≤"
+    ],
+    [
+     "8.0-10.0",
+     "0.50",
+     "",
+     "0.50",
+     "0.15",
+     "17.0-20.0",
+     "0.50-2.50"
+    ],
+    [
+     "V≤",
+     "W≤",
+     "B≤",
+     "",
+     "",
+     "",
+     ""
+    ],
+    [
+     "",
+     "0.20-1.00",
+     "0.01",
+     "",
+     "",
+     "",
+     ""
+    ]
+   ]
+  }
+ ]
+}

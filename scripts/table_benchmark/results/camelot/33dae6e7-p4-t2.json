@@ -1,0 +1,131 @@
+{
+ "case_id": "33dae6e7-p4-t2",
+ "tool": "camelot",
+ "pdf": "33dae6e7c9a3a155_33dae6e7c9a3a155_task2_06_Zhang_2024.pdf",
+ "page": 4,
+ "package_version": "2.0.0",
+ "python_version": "3.12.13",
+ "device": "cpu",
+ "os": "Windows-11",
+ "elapsed_time_s": 0.5245,
+ "is_cold": false,
+ "error": null,
+ "tables": [
+  {
+   "table_index": 0,
+   "bbox": [
+    196.07894348409914,
+    270.31178369606914,
+    546.4475773503627,
+    449.3289507357147
+   ],
+   "rows": [
+    [
+     "NO.\nLaser drilling typically employs three methods: percussion drilling, ring cutting, and",
+     "Mean Power/W",
+     "Focus\nPosition/mm",
+     "Feed\nDistance/mm",
+     "Scanning\nVelocity/rpm"
+    ],
+    [
+     "spiral  trepanning  [27].  Repeated  impact  drilling  involves  single-point  impulses  that \n1",
+     "8",
+     "0",
+     "0.01",
+     "1500"
+    ],
+    [
+     "abrade the center of the specimen, thereby resulting in poor machining quality and diﬃ-\n2",
+     "10",
+     "0",
+     "0.01",
+     "1500"
+    ],
+    [
+     "culties in controlling hole diameter. Concentric circular drilling can lead to diﬃculties in \n3",
+     "12",
+     "0",
+     "0.01",
+     "1500"
+    ],
+    [
+     "removing material from the hole as the feed depth increases. On the other hand, spiral \n4",
+     "14",
+     "0",
+     "0.01",
+     "1500"
+    ],
+    [
+     "drilling  continuously  processes  microholes  by  starting  from  the  inside  and  working \n5",
+     "16",
+     "0",
+     "0.01",
+     "1500"
+    ],
+    [
+     "6\ndownwards, thereby resulting in superior processing quality compared to impact drilling",
+     "12",
+     "−0.5",
+     "0.01",
+     "1500"
+    ],
+    [
+     "7\nand concentric circle drilling. Therefore, this paper investigated the impact of laser process",
+     "12",
+     "0",
+     "0.01",
+     "1500"
+    ],
+    [
+     "8",
+     "12",
+     "0.5",
+     "0.01",
+     "1500"
+    ],
+    [
+     "parameters (laser power, defocus, feed distance, and scanning velocity) on the geometrical \n9",
+     "12",
+     "0",
+     "0.005",
+     "1500"
+    ],
+    [
+     "accuracy and surface quality results of microholes using helical punching. Each test was \n10",
+     "12",
+     "0",
+     "0.01",
+     "1500"
+    ],
+    [
+     "conducted thrice, and the experimental program is provided in Table 2. \n11",
+     "12",
+     "0",
+     "0.015",
+     "1500"
+    ],
+    [
+     "12",
+     "12",
+     "0",
+     "0.01",
+     "1000"
+    ],
+    [
+     "Table 2. Experimental scheme for the study of laser parameters on the quality of gas ﬁlm holes. \n13",
+     "12",
+     "0",
+     "0.01",
+     "1500"
+    ],
+    [
+     "14",
+     "12",
+     "0",
+     "0.01",
+     "2000"
+    ]
+   ]
+  }
+ ]
+}

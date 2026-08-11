@@ -1,0 +1,18 @@
+{
+ "case_id": "e9dbf6f7-p6-t1",
+ "tool": "docling",
+ "raw_tables": [
+  {
+   "table_index": 0,
+   "bbox": [
+    58.29969024658203,
+    633.6003189086914,
+    444.48016357421875,
+    659.1061515808105
+   ],
+   "markdown": "Table 1. Focus position set during the experiments.\n\n| Number             |   1 | 2 3   |   4 |   5 |   6 |   7 |   8 |   9 |   10 |\n|--------------------|-----|-------|-----|-----|-----|-----|-----|-----|------|\n| Focus position(mm) | 0.5 | 0 0.5 |   1 | 1.5 |   2 | 2.5 |   3 | 3.5 |    4 |",
+   "label": "table"
+  }
+ ],
+ "note": "Docling TableItem markdown + provenance bbox."
+}

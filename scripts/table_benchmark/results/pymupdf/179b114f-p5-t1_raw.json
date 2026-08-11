@@ -1,0 +1,22 @@
+{
+ "case_id": "179b114f-p5-t1",
+ "tool": "pymupdf",
+ "raw_tables": [
+  {
+   "table_index": 0,
+   "bbox": [
+    117.125,
+    31.123502731323242,
+    498.3500061035156,
+    44.07600212097168
+   ],
+   "extract": [
+    [
+     "Research Article",
+     "Vol. 28, No. 10 / 11 May 2020 / Optics Express 15244"
+    ]
+   ]
+  }
+ ],
+ "note": "PyMuPDF Table.extract() output; no per-cell bbox is exposed by the public API."
+}

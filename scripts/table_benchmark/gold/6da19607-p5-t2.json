@@ -1,0 +1,48 @@
+{
+ "case_id": "6da19607-p5-t2",
+ "pdf": "6da19607d54f8438_Investigation on Thermal Barrier Coating Damages for Ultrafast Laser Drilling of Cooling Holes.pdf",
+ "page": 5,
+ "table_label": "Table 2",
+ "table_type": "bordered",
+ "category": "E",
+ "note": "laser emission system parameters; symbol column",
+ "rows": [
+  [
+   "Parameters",
+   "Symbol",
+   "Values"
+  ],
+  [
+   "Pulse width",
+   "τ",
+   "2.1 ps"
+  ],
+  [
+   "Diameter of the focal point",
+   "df",
+   "48 µm"
+  ],
+  [
+   "Repetition rate",
+   "f",
+   "75 kHz"
+  ],
+  [
+   "Maximum average power",
+   "Pmax",
+   "30 W"
+  ],
+  [
+   "Maximum peak power",
+   "Ppk max",
+   "190.4 MW"
+  ],
+  [
+   "Maximum pulse energy",
+   "Emax",
+   "0.4 J"
+  ]
+ ],
+ "expect_table": true,
+ "evaluate_cells": true
+}

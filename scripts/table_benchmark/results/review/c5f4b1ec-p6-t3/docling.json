@@ -1,0 +1,61 @@
+{
+ "case_id": "c5f4b1ec-p6-t3",
+ "tool": "docling",
+ "pdf": "c5f4b1ec78b6429c_Optimization of femtosecond laser processing technology for film cooling hole in nickel-based superalloy based on multi-step drilling and milling methods.pdf",
+ "page": 6,
+ "package_version": "2.119.0",
+ "python_version": "3.12.13",
+ "device": "cpu",
+ "os": "Windows-11",
+ "elapsed_time_s": 3.2656,
+ "is_cold": false,
+ "error": null,
+ "tables": [
+  {
+   "table_index": 0,
+   "bbox": [
+    51.463623046875,
+    115.13713094294076,
+    560.2498168945312,
+    215.76621876508
+   ],
+   "rows": [
+    [
+     "Repetition frequency (kHz)",
+     "100 - 400",
+     "100 - 400"
+    ],
+    [
+     "Laser power (W)",
+     "10",
+     "10"
+    ],
+    [
+     "Feed rate in the Z-axis direction",
+     "10mm/min",
+     "The first step:4 mm/min, The second step:10 mm/min"
+    ],
+    [
+     "Beam rotation diameter (mm)",
+     "0.4",
+     "0.2"
+    ],
+    [
+     "Rotational speed of hollow motor (rpm)",
+     "2000",
+     "2000"
+    ],
+    [
+     "Angle",
+     "9°",
+     "4°"
+    ],
+    [
+     "Shift (mm)",
+     "4",
+     "3"
+    ]
+   ]
+  }
+ ]
+}

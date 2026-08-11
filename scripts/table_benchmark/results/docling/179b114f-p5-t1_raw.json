@@ -1,0 +1,18 @@
+{
+ "case_id": "179b114f-p5-t1",
+ "tool": "docling",
+ "raw_tables": [
+  {
+   "table_index": 0,
+   "bbox": [
+    217.15435791015625,
+    272.32427978515625,
+    393.5149230957031,
+    362.96185302734375
+   ],
+   "markdown": "Table 1. Simulated depth [ m] of holes drilled by one laser pulse, with different values of and .\n\n|      |     a |     a |     a |     a |      a |\n|------|-------|-------|-------|-------|--------|\n|      |   1.0 |   2.0 |   3.0 |   4.0 |    5.0 |\n| 0.01 | 0.390 | 0.390 | 0.398 | 0.454 |  0.626 |\n|  0.1 | 0.394 | 0.418 | 0.528 | 0.852 |  2.290 |\n|  1.0 | 0.506 | 0.680 | 1.410 | 4.379 | 13.479 |",
+   "label": "table"
+  }
+ ],
+ "note": "Docling TableItem markdown + provenance bbox."
+}

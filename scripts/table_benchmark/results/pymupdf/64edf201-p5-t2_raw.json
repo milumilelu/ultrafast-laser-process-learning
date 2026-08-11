@@ -1,0 +1,45 @@
+{
+ "case_id": "64edf201-p5-t2",
+ "tool": "pymupdf",
+ "raw_tables": [
+  {
+   "table_index": 0,
+   "bbox": [
+    253.4080047607422,
+    337.3650309244792,
+    338.3080139160156,
+    478.08502197265625
+   ],
+   "extract": [
+    [
+     "",
+     ""
+    ],
+    [
+     "D\n2\nβ",
+     null
+    ]
+   ]
+  },
+  {
+   "table_index": 1,
+   "bbox": [
+    384.8680114746094,
+    345.72503662109375,
+    470.8480224609375,
+    440.92503865559894
+   ],
+   "extract": [
+    [
+     "",
+     null
+    ],
+    [
+     "",
+     ""
+    ]
+   ]
+  }
+ ],
+ "note": "PyMuPDF Table.extract() output; no per-cell bbox is exposed by the public API."
+}

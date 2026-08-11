@@ -1,0 +1,24 @@
+{
+ "case_id": "33dae6e7-p4-t2",
+ "tool": "camelot",
+ "raw_tables": [
+  {
+   "table_index": 0,
+   "bbox": [
+    196.07894348409914,
+    270.31178369606914,
+    546.4475773503627,
+    449.3289507357147
+   ],
+   "parsing_report": {
+    "accuracy": 87.93,
+    "whitespace": 0.0,
+    "order": 1,
+    "page": 4,
+    "confidence": 0.8793
+   },
+   "df_csv": "0,1,2,3,4\r\n\"NO.\nLaser drilling typically employs three methods: percussion drilling, ring cutting, and\",Mean Power/W,\"Focus\nPosition/mm\",\"Feed\nDistance/mm\",\"Scanning\nVelocity/rpm\"\r\n\"spiral  trepanning  [27].  Repeated  impact  drilling  involves  single-point  impulses  that \n1\",8,0,0.01,1500\r\n\"abrade the center of the specimen, thereby resulting in poor machining quality and diﬃ-\n2\",10,0,0.01,1500\r\n\"culties in controlling hole diameter. Concentric circular drilling can lead to diﬃculties in \n3\",12,0,0.01,1500\r\n\"removing material from the hole as the feed depth increases. On the other hand, spiral \n4\",14,0,0.01,1500\r\n\"drilling  continuously  processes  microholes  by  starting  from  the  inside  and  working \n5\",16,0,0.01,1500\r\n\"6\ndownwards, thereby resulting in superior processing quality compared to impact drilling\",12,−0.5,0.01,1500\r\n\"7\nand concentric circle drilling. Therefore, this paper investigated the impact of laser process\",12,0,0.01,1500\r\n8,12,0.5,0.01,1500\r\n\"parameters (laser power, defocus, feed distance, and scanning velocity) on the geometrical \n9\",12,0,0.005,1500\r\n\"accuracy and surface quality results of microholes using helical punching. Each test was \n10\",12,0,0.01,1500\r\n\"conducted thrice, and the experimental program is provided in Table 2. \n11\",12,0,0.015,1500\r\n12,12,0,0.01,1000\r\n\"Table 2. Experimental scheme for the study of laser parameters on the quality of gas ﬁlm holes. \n13\",12,0,0.01,1500\r\n14,12,0,0.01,2000\r\n"
+  }
+ ],
+ "note": "Camelot parsing_report + dataframe CSV."
+}

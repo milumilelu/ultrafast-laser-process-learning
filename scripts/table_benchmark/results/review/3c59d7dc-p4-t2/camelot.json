@@ -1,0 +1,66 @@
+{
+ "case_id": "3c59d7dc-p4-t2",
+ "tool": "camelot",
+ "pdf": "3c59d7dc7191b335_Experimental study of nickel-based superalloy IN792 with femtosecond laser drilling method.pdf",
+ "page": 4,
+ "package_version": "2.0.0",
+ "python_version": "3.12.13",
+ "device": "cpu",
+ "os": "Windows-11",
+ "elapsed_time_s": 0.5323,
+ "is_cold": false,
+ "error": null,
+ "tables": [
+  {
+   "table_index": 0,
+   "bbox": [
+    42.9658334728136,
+    338.09524969167745,
+    282.15246697181084,
+    400.98731469350497
+   ],
+   "rows": [
+    [
+     "Scanning \npath",
+     "Inlet \ndiameter \n(μm)",
+     "Outlet \ndiameter \n(μm)",
+     "Inlet \ncircularity",
+     "Outlet \ncircularity",
+     "taper \n◦\n) \nangle ("
+    ],
+    [
+     "(a)",
+     "639–648",
+     "508–547",
+     "98.6%",
+     "92.9%",
+     "4.2–5.5"
+    ],
+    [
+     "(b)",
+     "639–661",
+     "516–558",
+     "96.6%",
+     "92.5%",
+     "4.3–5.1"
+    ],
+    [
+     "(c)",
+     "641–645",
+     "523–552",
+     "99.4%",
+     "94.7%",
+     "3.9–4.9"
+    ],
+    [
+     "(d)",
+     "633–640",
+     "479–522",
+     "98.9%",
+     "91.8%",
+     "4.9–6.5"
+    ]
+   ]
+  }
+ ]
+}

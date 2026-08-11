@@ -1,0 +1,24 @@
+{
+ "case_id": "33dae6e7-p3-t1",
+ "tool": "camelot",
+ "raw_tables": [
+  {
+   "table_index": 0,
+   "bbox": [
+    45.075908579140986,
+    613.5199938407862,
+    536.0262687589744,
+    639.5428417930826
+   ],
+   "parsing_report": {
+    "accuracy": 91.43,
+    "whitespace": 0.0,
+    "order": 1,
+    "page": 3,
+    "confidence": 0.9143
+   },
+   "df_csv": "0,1,2,3,4,5,6,7,8\r\nElements,Cr,Al,\"Mo\ning  using  an  ultra-precision  lapping  machine  (LAP-1X,  Lab,  Shanghai,  China)  Subse-\",Co,W,Ta,Re,Ni\r\nwt%,3.8~4.8,5.2~6.2,\"1.5~2.5\nquently, the samples were immersed in an alcohol solution for ten minutes before drilling.\",8.5~9.5,7.0~9.0,6.0~8.5,1.6~2.4,Bal\r\n"
+  }
+ ],
+ "note": "Camelot parsing_report + dataframe CSV."
+}

@@ -7,6 +7,8 @@ from typing import Any
 
 from pydantic import BaseModel, Field
 
+from ultrafast_knowledge.evidence_pipeline.tables.models import ScientificTable
+
 
 class SemanticBlockType(StrEnum):
     PARAGRAPH = "paragraph"
@@ -31,6 +33,8 @@ class SemanticBlock(BaseModel):
     section_type: str | None = None
     section_title: str | None = None
     table_id: str | None = None
+    table_role: str | None = None
+    table_row_index: int | None = None
     text: str
     retrieval_text: str = ""
     bbox: tuple[float, float, float, float] | None = None
@@ -48,6 +52,7 @@ class StructuredScientificPaper(BaseModel):
     retrieval_text: str = ""
     metadata: dict[str, Any] = Field(default_factory=dict)
     blocks: list[SemanticBlock] = Field(default_factory=list)
+    tables: list[ScientificTable] = Field(default_factory=list)
     pdf_path: str | None = None
 
     def block_by_id(self, block_id: str) -> SemanticBlock | None:

@@ -1,0 +1,469 @@
+{
+ "case_id": "33dae6e7-p4-t2",
+ "tool": "pymupdf",
+ "raw_tables": [
+  {
+   "table_index": 0,
+   "bbox": [
+    193.49537658691406,
+    100.95806503295898,
+    559.2789916992188,
+    747.45751953125
+   ],
+   "extract": [
+    [
+     "and the experimen",
+     "tal program i",
+     "s provided in Tab",
+     "le",
+     "2.",
+     "",
+     "",
+     "",
+     ""
+    ],
+    [
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     ""
+    ],
+    [
+     "2. Schematic diagram",
+     "of ultrafast la",
+     "ser processing exper",
+     "im",
+     "ent",
+     "system",
+     ".",
+     "",
+     ""
+    ],
+    [
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     ""
+    ],
+    [
+     ". Experimental schem",
+     "e for the study",
+     "of laser parameter",
+     "s o",
+     "n th",
+     "e quali",
+     "ty of g",
+     "as film holes.",
+     ""
+    ],
+    [
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     ""
+    ],
+    [
+     "",
+     "",
+     "Focus",
+     "",
+     "Fe",
+     "ed",
+     "",
+     "Scanning",
+     ""
+    ],
+    [
+     "NO. Mean",
+     "Power/W",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     ""
+    ],
+    [
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     ""
+    ],
+    [
+     "",
+     "",
+     "Position/mm",
+     "D",
+     "istan",
+     "ce/mm",
+     "",
+     "Velocity/rpm",
+     ""
+    ],
+    [
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     ""
+    ],
+    [
+     "1",
+     "8",
+     "0",
+     "",
+     "0.",
+     "01",
+     "",
+     "1500",
+     ""
+    ],
+    [
+     "2",
+     "10",
+     "0",
+     "",
+     "0.",
+     "01",
+     "",
+     "1500",
+     ""
+    ],
+    [
+     "3",
+     "12",
+     "0",
+     "",
+     "0.",
+     "01",
+     "",
+     "1500",
+     ""
+    ],
+    [
+     "4",
+     "14",
+     "0",
+     "",
+     "0.",
+     "01",
+     "",
+     "1500",
+     ""
+    ],
+    [
+     "5",
+     "16",
+     "0",
+     "",
+     "0.",
+     "01",
+     "",
+     "1500",
+     ""
+    ],
+    [
+     "6",
+     "12",
+     "−0.5",
+     "",
+     "0.",
+     "01",
+     "",
+     "1500",
+     ""
+    ],
+    [
+     "7",
+     "12",
+     "0",
+     "",
+     "0.",
+     "01",
+     "",
+     "1500",
+     ""
+    ],
+    [
+     "8",
+     "12",
+     "0.5",
+     "",
+     "0.",
+     "01",
+     "",
+     "1500",
+     ""
+    ],
+    [
+     "9",
+     "12",
+     "0",
+     "",
+     "0.",
+     "005",
+     "",
+     "1500",
+     ""
+    ],
+    [
+     "10",
+     "12",
+     "0",
+     "",
+     "0.",
+     "01",
+     "",
+     "1500",
+     ""
+    ],
+    [
+     "11",
+     "12",
+     "0",
+     "",
+     "0.",
+     "015",
+     "",
+     "1500",
+     ""
+    ],
+    [
+     "12",
+     "12",
+     "0",
+     "",
+     "0.",
+     "01",
+     "",
+     "1000",
+     ""
+    ],
+    [
+     "13",
+     "12",
+     "0",
+     "",
+     "0.",
+     "01",
+     "",
+     "1500",
+     ""
+    ],
+    [
+     "14",
+     "12",
+     "0",
+     "",
+     "0.",
+     "01",
+     "",
+     "2000",
+     ""
+    ],
+    [
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     ""
+    ],
+    [
+     "he surface topograp",
+     "hy was exam",
+     "ined using scanni",
+     "ng",
+     "ele",
+     "ctron",
+     "micros",
+     "copy (TESC",
+     "AN"
+    ],
+    [
+     "3) equipped with ED",
+     "S. Subseque",
+     "ntly, we employed",
+     "t",
+     "he le",
+     "ast sq",
+     "uares",
+     "method and",
+     "the"
+    ],
+    [
+     "um area method to",
+     "calculate th",
+     "e diameter, round",
+     "ne",
+     "ss,",
+     "and ta",
+     "per va",
+     "lues. The le",
+     "ast"
+    ],
+    [
+     "s method involves",
+     "fitting the me",
+     "asured circle conto",
+     "u",
+     "r of",
+     "corres",
+     "pondi",
+     "ng points to",
+     "the"
+    ],
+    [
+     "ference of a circle in",
+     "such a way",
+     "that the sum of th",
+     "e s",
+     "qua",
+     "re dist",
+     "ances",
+     "from the cen",
+     "ter"
+    ],
+    [
+     "circle to these points",
+     "is minimize",
+     "d. This method als",
+     "o",
+     "con",
+     "siders",
+     "the dif",
+     "ference in ra",
+     "dii"
+    ],
+    [
+     "en the measured cir",
+     "cle contour a",
+     "nd two concentric",
+     "ci",
+     "rcle",
+     "s, whi",
+     "ch is i",
+     "ndicative of",
+     "the"
+    ],
+    [
+     "ness error, as illustr",
+     "ated in Figu",
+     "re 3. The roundne",
+     "ss",
+     "(∆r",
+     ") and",
+     "taper",
+     "(β) are defi",
+     "ned"
+    ],
+    [
+     "ows:",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     ""
+    ],
+    [
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     ""
+    ],
+    [
+     "",
+     "∆",
+     "r = R −R\n1 2",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "(1)"
+    ],
+    [
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     ""
+    ],
+    [
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     ""
+    ],
+    [
+     "R represents the\n1",
+     "radius of the",
+     "smallest externa",
+     "ll",
+     "y ta",
+     "ngent",
+     "conce",
+     "ntric circle,",
+     "R\n2"
+    ],
+    [
+     "ponds to the radius",
+     "of the larges",
+     "t internally tange",
+     "nt",
+     "con",
+     "centri",
+     "c circl",
+     "e, and ∆r is",
+     "the"
+    ]
+   ]
+  }
+ ],
+ "note": "PyMuPDF Table.extract() output; no per-cell bbox is exposed by the public API."
+}

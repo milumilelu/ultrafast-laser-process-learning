@@ -1,0 +1,18 @@
+{
+ "case_id": "185a6a06-p5-t1",
+ "tool": "docling",
+ "raw_tables": [
+  {
+   "table_index": 0,
+   "bbox": [
+    51.70578384399414,
+    608.0232355702358,
+    297.7524108886719,
+    697.8454538308861
+   ],
+   "markdown": "TABLE I. Laser parameter list.\n\n| Parameters                  | Values    |\n|-----------------------------|-----------|\n| Wavelength(nm)              | 355       |\n| Fluence range (J/cm 2 )     | 2.3 - 7.0 |\n| Pulse width (ps)            | 10        |\n| Spot diameter ( μ m)        | 19        |\n| Scanning speed (m/s)        | 1         |\n| Pulse repetition rate (MHz) | 1         |",
+   "label": "table"
+  }
+ ],
+ "note": "Docling TableItem markdown + provenance bbox."
+}

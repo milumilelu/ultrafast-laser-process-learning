@@ -1,0 +1,81 @@
+{
+ "case_id": "64edf201-p5-t2",
+ "tool": "camelot",
+ "pdf": "64edf20172cbe34b_64edf20172cbe34b_task2_01_Hou_2024.pdf",
+ "page": 5,
+ "package_version": "2.0.0",
+ "python_version": "3.12.13",
+ "device": "cpu",
+ "os": "Windows-11",
+ "elapsed_time_s": 0.5006,
+ "is_cold": false,
+ "error": null,
+ "tables": [
+  {
+   "table_index": 0,
+   "bbox": [
+    48.94607624042269,
+    124.33167550855786,
+    540.7387790445669,
+    195.58768762905856
+   ],
+   "rows": [
+    [
+     "Number",
+     "Laser Type",
+     "Upper Hole\nDiameter\n(µm)",
+     "tant points of the ﬁlm-cooling hole. The taper of the hole arises due to the prolonged ex-\nLower Hole\nDiameter\nposure of the upper hole to the laser during the drilling process, leading to the excessive \n(µm)\nablation of the substrate. Furthermore, debris accumulation inside the hole during contin-",
+     "Upper Hole\nDiameter\nError",
+     "Lower Hole\nDiameter\nError",
+     "Upper Hole\nRoundness\n(µm)",
+     "Lower Hole\nRoundness\n(µm)",
+     "Taper\n(◦)"
+    ],
+    [
+     "Case 1",
+     "Ideal hole",
+     "400.0",
+     "400.0\nuous drilling may shield and hinder the laser beam, resulting in a taper where the upper",
+     "0",
+     "0",
+     "0",
+     "0",
+     "0"
+    ],
+    [
+     "Case 2",
+     "Nanosecond",
+     "539.2",
+     "448.6",
+     "34.80%",
+     "12.15%",
+     "0.0318",
+     "0.0357",
+     "7.41"
+    ],
+    [
+     "Case 3",
+     "Picosecond",
+     "396.4",
+     "385.2\nhole diameter exceeds the lower hole diameter. The taper    can be determined using",
+     "−0.90%",
+     "−3.70%",
+     "0.0246",
+     "0.0346",
+     "0.92"
+    ],
+    [
+     "Case 4",
+     "Femtosecond",
+     "450.2",
+     "382.8",
+     "12.50%",
+     "−4.30%",
+     "0.0047",
+     "0.0131",
+     "5.50"
+    ]
+   ]
+  }
+ ]
+}

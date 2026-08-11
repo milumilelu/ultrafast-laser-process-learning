@@ -1,0 +1,528 @@
+{
+ "case_id": "6da19607-p4-t1",
+ "tool": "pymupdf",
+ "raw_tables": [
+  {
+   "table_index": 0,
+   "bbox": [
+    166.3939971923828,
+    57.1229248046875,
+    560.9292602539062,
+    779.1986083984375
+   ],
+   "extract": [
+    [
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "4 of 14"
+    ],
+    [
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     ""
+    ],
+    [
+     "2. Experi",
+     "mental Des",
+     "ign Translation",
+     "",
+     "",
+     "",
+     "",
+     ""
+    ],
+    [
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     ""
+    ],
+    [
+     "2.1. Exper",
+     "imental Desi",
+     "gn",
+     "",
+     "",
+     "",
+     "",
+     ""
+    ],
+    [
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     ""
+    ],
+    [
+     "This",
+     "study focus",
+     "es on investigatin",
+     "g the in",
+     "fluence of",
+     "average pow",
+     "er and s",
+     "canning speed"
+    ],
+    [
+     "on the da",
+     "mage patte",
+     "rns of thermal ba",
+     "rrier c",
+     "oating (TB",
+     "C) microhol",
+     "es in incl",
+     "ined bores. A"
+    ],
+    [
+     "comprehe",
+     "nsive two-f",
+     "actor, four-level f",
+     "ull fact",
+     "orial exper",
+     "imental des",
+     "ign was",
+     "implemented,"
+    ],
+    [
+     "as illustra",
+     "ted in Table",
+     "1. The laser pow",
+     "er was",
+     "varied from",
+     "12 W to 30",
+     "W, whil",
+     "e the scanning"
+    ],
+    [
+     "speed ran",
+     "ged from 8",
+     "0 mm/s to 320 m",
+     "m/s. T",
+     "he substra",
+     "te material",
+     "employe",
+     "d was a high-"
+    ],
+    [
+     "temperatu",
+     "re nickel-b",
+     "ased single-crysta",
+     "l alloy",
+     "known as",
+     "DD6. The ce",
+     "ramic la",
+     "yer of the TBC"
+    ],
+    [
+     "consisted",
+     "of yttria-st",
+     "abilized zirconia",
+     "(YSZ)",
+     "with a nom",
+     "inal thickn",
+     "ess of 15",
+     "0 µm, and the"
+    ],
+    [
+     "bonding l",
+     "ayer materi",
+     "al was NiCoCrAl",
+     "Y with",
+     "a nominal",
+     "thickness o",
+     "f 20 µm.",
+     "The TBC was"
+    ],
+    [
+     "fabricated",
+     "using a ga",
+     "s-phase depositi",
+     "on tech",
+     "nique. Th",
+     "e dimensio",
+     "ns of the",
+     "experimental"
+    ],
+    [
+     "specimen",
+     "s and the l",
+     "ayout of the micr",
+     "o-hole",
+     "s are depic",
+     "ted in Figu",
+     "re 2. The",
+     "depth of the"
+    ],
+    [
+     "machined",
+     "holes was",
+     "approximately 1.",
+     "5 mm.",
+     "",
+     "",
+     "",
+     ""
+    ],
+    [
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     ""
+    ],
+    [
+     "Table 1. T",
+     "he experime",
+     "ntal parameters fo",
+     "r proce",
+     "ssing incline",
+     "d bore samp",
+     "les with t",
+     "hermal barrier"
+    ],
+    [
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     ""
+    ],
+    [
+     "coating (TB",
+     "C) microhol",
+     "es.",
+     "",
+     "",
+     "",
+     "",
+     ""
+    ],
+    [
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     ""
+    ],
+    [
+     "",
+     "Parameters",
+     "",
+     "Averag",
+     "e Power",
+     "",
+     "Scanning",
+     "Speed"
+    ],
+    [
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     ""
+    ],
+    [
+     "",
+     "1",
+     "",
+     "",
+     "",
+     "",
+     "80 mm",
+     "/s"
+    ],
+    [
+     "",
+     "2",
+     "",
+     "",
+     "",
+     "",
+     "160 m",
+     "m/s"
+    ],
+    [
+     "",
+     "",
+     "",
+     "12",
+     "W",
+     "",
+     "",
+     ""
+    ],
+    [
+     "",
+     "3",
+     "",
+     "",
+     "",
+     "",
+     "240 m",
+     "m/s"
+    ],
+    [
+     "",
+     "4",
+     "",
+     "",
+     "",
+     "",
+     "320 m",
+     "m/s"
+    ],
+    [
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     ""
+    ],
+    [
+     "",
+     "5",
+     "",
+     "",
+     "",
+     "",
+     "80 mm",
+     "/s"
+    ],
+    [
+     "",
+     "6",
+     "",
+     "",
+     "",
+     "",
+     "160 m",
+     "m/s"
+    ],
+    [
+     "",
+     "",
+     "",
+     "18",
+     "W",
+     "",
+     "",
+     ""
+    ],
+    [
+     "",
+     "7",
+     "",
+     "",
+     "",
+     "",
+     "240 m",
+     "m/s"
+    ],
+    [
+     "",
+     "8",
+     "",
+     "",
+     "",
+     "",
+     "320 m",
+     "m/s"
+    ],
+    [
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     ""
+    ],
+    [
+     "",
+     "9",
+     "",
+     "",
+     "",
+     "",
+     "80 mm",
+     "/s"
+    ],
+    [
+     "",
+     "10",
+     "",
+     "",
+     "",
+     "",
+     "160 m",
+     "m/s"
+    ],
+    [
+     "",
+     "",
+     "",
+     "24",
+     "W",
+     "",
+     "",
+     ""
+    ],
+    [
+     "",
+     "11",
+     "",
+     "",
+     "",
+     "",
+     "240 m",
+     "m/s"
+    ],
+    [
+     "",
+     "12",
+     "",
+     "",
+     "",
+     "",
+     "320 m",
+     "m/s"
+    ],
+    [
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     ""
+    ],
+    [
+     "",
+     "13",
+     "",
+     "",
+     "",
+     "",
+     "80 mm",
+     "/s"
+    ],
+    [
+     "",
+     "14",
+     "",
+     "",
+     "",
+     "",
+     "160 m",
+     "m/s"
+    ],
+    [
+     "",
+     "",
+     "",
+     "30",
+     "W",
+     "",
+     "",
+     ""
+    ],
+    [
+     "",
+     "15",
+     "",
+     "",
+     "",
+     "",
+     "240 m",
+     "m/s"
+    ],
+    [
+     "",
+     "16",
+     "",
+     "",
+     "",
+     "",
+     "320 m",
+     "m/s"
+    ],
+    [
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     ""
+    ],
+    [
+     "Figure 2. T",
+     "he dimensio",
+     "ns of the coated in",
+     "clined b",
+     "ore sample",
+     "s for picosec",
+     "ond laser",
+     "processing and"
+    ],
+    [
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     ""
+    ],
+    [
+     "the arrang",
+     "ement of the",
+     "microholes within",
+     "the ther",
+     "mal barrier",
+     "coating (TBC",
+     ").",
+     ""
+    ]
+   ]
+  }
+ ],
+ "note": "PyMuPDF Table.extract() output; no per-cell bbox is exposed by the public API."
+}

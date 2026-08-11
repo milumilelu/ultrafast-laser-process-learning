@@ -1,0 +1,18 @@
+{
+ "case_id": "c5f4b1ec-p6-t3",
+ "tool": "docling",
+ "raw_tables": [
+  {
+   "table_index": 0,
+   "bbox": [
+    51.463623046875,
+    115.13713094294076,
+    560.2498168945312,
+    215.76621876508
+   ],
+   "markdown": "| Parameters                             | Multistep drilling   | Multistep milling                                  |\n|----------------------------------------|----------------------|----------------------------------------------------|\n| Repetition frequency (kHz)             | 100 - 400            | 100 - 400                                          |\n| Laser power (W)                        | 10                   | 10                                                 |\n| Feed rate in the Z-axis direction      | 10mm/min             | The first step:4 mm/min, The second step:10 mm/min |\n| Beam rotation diameter (mm)            | 0.4                  | 0.2                                                |\n| Rotational speed of hollow motor (rpm) | 2000                 | 2000                                               |\n| Angle                                  | 9°                   | 4°                                                 |\n| Shift (mm)                             | 4                    | 3                                                  |",
+   "label": "table"
+  }
+ ],
+ "note": "Docling TableItem markdown + provenance bbox."
+}

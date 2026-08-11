@@ -1,0 +1,48 @@
+{
+ "case_id": "c5f4b1ec-p4-t2",
+ "pdf": "c5f4b1ec78b6429c_Optimization of femtosecond laser processing technology for film cooling hole in nickel-based superalloy based on multi-step drilling and milling methods.pdf",
+ "page": 4,
+ "table_label": "TABLE II",
+ "table_type": "borderless",
+ "category": "E",
+ "note": "femtosecond laser parameters; 3-col Parameter/Symbol/Value",
+ "rows": [
+  [
+   "Parameter",
+   "Symbol",
+   "Value"
+  ],
+  [
+   "Average power",
+   "P",
+   "10 W"
+  ],
+  [
+   "Repetition frequency",
+   "frep",
+   "100/200/400 kHz"
+  ],
+  [
+   "Pulse width",
+   "τp",
+   "400 fs"
+  ],
+  [
+   "Maximum single pulse energy",
+   "Esp",
+   "50 μJ"
+  ],
+  [
+   "Wavelength",
+   "λ",
+   "1030 nm"
+  ],
+  [
+   "Beam quality factor",
+   "M2",
+   "<1.3"
+  ]
+ ],
+ "expect_table": true,
+ "evaluate_cells": true
+}

@@ -13,6 +13,8 @@ from typing import Any, Protocol
 from pydantic import TypeAdapter, ValidationError
 
 from ultrafast_evidence_prior.schemas import (
+    ConditionProvenance,
+    ConditionValidationState,
     EvidenceContent,
     EvidenceIRV2,
     ExtractionStatus,
@@ -37,6 +39,8 @@ Important transfer rule: a paper whose material grade, wavelength, pulse width, 
 equipment differs from the task may still contain useful evidence. Do not reject it
 for a condition mismatch. Extract the direct claim and record only conditions that
 the cited text or PAPER_CONTEXT explicitly supports; downstream E2P assesses transfer.
+Every returned condition is mechanically checked against cited blocks or PAPER_CONTEXT.
+Unsupported conditions remain unverified and cannot influence downstream applicability.
 
 Every item must cite existing block IDs and include a short verbatim evidence_quote.
 The content.evidence_type must be one of ALLOWED_EVIDENCE_TYPES. Return multiple items
@@ -190,6 +194,13 @@ class TypedEvidenceExtractor:
         confidence = min(1.0, max(0.0, confidence))
         available = {block.block_id: block for window in windows for block in window.blocks}
         cited = [available[ref] for ref in refs if ref in available]
+        paper_metadata = windows[0].paper_metadata if windows else {}
+        condition_provenance = _condition_provenance(
+            conditions,
+            refs,
+            available,
+            paper_metadata,
+        )
         errors = self._validate(
             requirement,
             evidence_content,
@@ -218,6 +229,7 @@ class TypedEvidenceExtractor:
             paper_metadata=windows[0].paper_metadata if windows else {},
             content=evidence_content,
             conditions=conditions,
+            condition_provenance=condition_provenance,
             evidence_quote=quote,
             source_block_refs=refs,
             source_pages=sorted({block.page for block in cited}),
@@ -364,3 +376,101 @@ def _unit_present(unit: str, text: str) -> bool:
 
 def _space_normalize(text: str) -> str:
     return re.sub(r"\s+", " ", unicodedata.normalize("NFKC", text)).strip()
+
+
+_CONDITION_UNITS = {
+    "wavelength_nm": "nm",
+    "laser_wavelength_nm": "nm",
+    "pulse_width_fs": "fs",
+    "pulse_duration_fs": "fs",
+    "pulse_width_min_fs": "fs",
+    "pulse_width_max_fs": "fs",
+    "frequency_kHz": "kHz",
+    "repetition_rate_kHz": "kHz",
+    "scan_speed_mm_s": "mm/s",
+    "hatch_spacing_um": "um",
+    "fluence_J_cm2": "J/cm2",
+    "average_power_W": "W",
+}
+
+
+def _condition_provenance(
+    conditions: dict[str, Any],
+    refs: list[str],
+    available: dict[str, Any],
+    paper_metadata: dict[str, Any],
+) -> dict[str, ConditionProvenance]:
+    cited_text = "\n".join(available[ref].text for ref in refs if ref in available)
+    output: dict[str, ConditionProvenance] = {}
+    for key, value in conditions.items():
+        if cited_text and _condition_supported_in_text(key, value, cited_text):
+            output[key] = ConditionProvenance(
+                source="BLOCK",
+                source_block_refs=[ref for ref in refs if ref in available],
+                validation_state=ConditionValidationState.VALIDATED,
+                reason_codes=["condition_value_present_in_cited_blocks"],
+            )
+            continue
+        if key in paper_metadata and _condition_values_equal(value, paper_metadata[key]):
+            output[key] = ConditionProvenance(
+                source="PAPER_METADATA",
+                validation_state=ConditionValidationState.VALIDATED,
+                reason_codes=["condition_matches_paper_metadata"],
+            )
+            continue
+        output[key] = ConditionProvenance(
+            source="UNRESOLVED",
+            validation_state=ConditionValidationState.UNVERIFIED,
+            reason_codes=["condition_not_grounded_in_cited_blocks_or_metadata"],
+        )
+    return output
+
+
+def _condition_supported_in_text(key: str, value: Any, text: str) -> bool:
+    if isinstance(value, bool) or value is None:
+        return False
+    if isinstance(value, (int, float)):
+        if not _number_present(float(value), text):
+            return False
+        unit = _CONDITION_UNITS.get(key)
+        return unit is None or _unit_present(unit, text)
+    if isinstance(value, dict):
+        numeric_values = [
+            item
+            for item in value.values()
+            if isinstance(item, (int, float)) and not isinstance(item, bool)
+        ]
+        return bool(numeric_values) and all(
+            _condition_supported_in_text(key, item, text) for item in numeric_values
+        )
+    if isinstance(value, (list, tuple)):
+        return bool(value) and all(_condition_supported_in_text(key, item, text) for item in value)
+    expected = _semantic_normalize(str(value))
+    actual = _semantic_normalize(text)
+    aliases = {expected}
+    if key in {"target_metric", "target"}:
+        aliases.update(
+            {
+                "depth" if expected in {"depth um", "depth"} else expected,
+                "roughness" if expected in {"roughness um", "roughness"} else expected,
+            }
+        )
+    if key in {"laser_type", "pulse_regime"}:
+        if expected == "fs":
+            aliases.add("femtosecond")
+        elif expected == "ps":
+            aliases.add("picosecond")
+    return any(alias and alias in actual for alias in aliases)
+
+
+def _condition_values_equal(left: Any, right: Any) -> bool:
+    if isinstance(left, bool) or isinstance(right, bool):
+        return left is right
+    if isinstance(left, (int, float)) and isinstance(right, (int, float)):
+        return math.isclose(float(left), float(right), rel_tol=1e-6, abs_tol=1e-12)
+    return _semantic_normalize(str(left)) == _semantic_normalize(str(right))
+
+
+def _semantic_normalize(value: str) -> str:
+    canonical = _canonical_text(value).casefold().replace("_", " ")
+    return re.sub(r"[^0-9a-z\u4e00-\u9fff]+", " ", canonical).strip()

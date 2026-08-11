@@ -1,0 +1,24 @@
+{
+ "case_id": "aad1014d-p5-t1",
+ "tool": "camelot",
+ "raw_tables": [
+  {
+   "table_index": 0,
+   "bbox": [
+    171.8633929810199,
+    345.6735660195432,
+    545.040074495856,
+    418.57136359319105
+   ],
+   "parsing_report": {
+    "accuracy": 99.98,
+    "whitespace": 17.14,
+    "order": 1,
+    "page": 5,
+    "confidence": 0.8284
+   },
+   "df_csv": "0,1,2,3,4,5,6\r\nProcess Parameters,Unit,Factor Level,,,,\r\n,,1,2,3,4,5\r\nPulse energy,(mJ),1.356,1.288,1.216,1.144,1.072\r\nDefocusing distance,(µm),0,200,400,600,800\r\nHole spacing,(µm),4,6,8,10,12\r\n"
+  }
+ ],
+ "note": "Camelot parsing_report + dataframe CSV."
+}

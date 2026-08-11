@@ -1,0 +1,674 @@
+[
+ {
+  "case_id": "179b114f-p5-t1",
+  "table_type": "image",
+  "category": "G",
+  "evaluate_cells": false,
+  "results": {
+   "pymupdf": {
+    "detected": true,
+    "numeric_accuracy": null,
+    "header_value_accuracy": null,
+    "error": null
+   },
+   "docling": {
+    "detected": true,
+    "numeric_accuracy": null,
+    "header_value_accuracy": null,
+    "error": null
+   },
+   "paddleocr": {
+    "detected": true,
+    "numeric_accuracy": null,
+    "header_value_accuracy": null,
+    "error": null
+   },
+   "camelot": {
+    "detected": false,
+    "numeric_accuracy": null,
+    "header_value_accuracy": null,
+    "error": null
+   }
+  }
+ },
+ {
+  "case_id": "185a6a06-p5-t1",
+  "table_type": "borderless",
+  "category": "E",
+  "evaluate_cells": true,
+  "results": {
+   "pymupdf": {
+    "detected": false,
+    "numeric_accuracy": 0.0,
+    "header_value_accuracy": 0.0,
+    "error": null
+   },
+   "docling": {
+    "detected": true,
+    "numeric_accuracy": 1.0,
+    "header_value_accuracy": 0.0,
+    "error": null
+   },
+   "paddleocr": {
+    "detected": true,
+    "numeric_accuracy": 1.0,
+    "header_value_accuracy": 0.8333333333333334,
+    "error": null
+   },
+   "camelot": {
+    "detected": true,
+    "numeric_accuracy": 1.0,
+    "header_value_accuracy": 1.0,
+    "error": null
+   }
+  }
+ },
+ {
+  "case_id": "33dae6e7-p3-t1",
+  "table_type": "bordered",
+  "category": "E",
+  "evaluate_cells": true,
+  "results": {
+   "pymupdf": {
+    "detected": false,
+    "numeric_accuracy": 0.0,
+    "header_value_accuracy": 0.0,
+    "error": null
+   },
+   "docling": {
+    "detected": true,
+    "numeric_accuracy": 1.0,
+    "header_value_accuracy": 0.125,
+    "error": null
+   },
+   "paddleocr": {
+    "detected": true,
+    "numeric_accuracy": 1.0,
+    "header_value_accuracy": 1.0,
+    "error": null
+   },
+   "camelot": {
+    "detected": true,
+    "numeric_accuracy": 1.0,
+    "header_value_accuracy": 0.875,
+    "error": null
+   }
+  }
+ },
+ {
+  "case_id": "33dae6e7-p4-t2",
+  "table_type": "bordered",
+  "category": "E/F",
+  "evaluate_cells": true,
+  "results": {
+   "pymupdf": {
+    "detected": true,
+    "numeric_accuracy": 0.08571428571428572,
+    "header_value_accuracy": 0.0,
+    "error": null
+   },
+   "docling": {
+    "detected": true,
+    "numeric_accuracy": 0.9,
+    "header_value_accuracy": 0.0,
+    "error": null
+   },
+   "paddleocr": {
+    "detected": true,
+    "numeric_accuracy": 1.0,
+    "header_value_accuracy": 1.0,
+    "error": null
+   },
+   "camelot": {
+    "detected": true,
+    "numeric_accuracy": 0.9571428571428572,
+    "header_value_accuracy": 0.21428571428571427,
+    "error": null
+   }
+  }
+ },
+ {
+  "case_id": "3c0cf585-p4-t1",
+  "table_type": "figure",
+  "category": "C",
+  "evaluate_cells": false,
+  "results": {
+   "pymupdf": {
+    "detected": true,
+    "numeric_accuracy": null,
+    "header_value_accuracy": null,
+    "error": null
+   },
+   "docling": {
+    "detected": false,
+    "numeric_accuracy": null,
+    "header_value_accuracy": null,
+    "error": null
+   },
+   "paddleocr": {
+    "detected": false,
+    "numeric_accuracy": null,
+    "header_value_accuracy": null,
+    "error": null
+   },
+   "camelot": {
+    "detected": false,
+    "numeric_accuracy": null,
+    "header_value_accuracy": null,
+    "error": null
+   }
+  }
+ },
+ {
+  "case_id": "3c59d7dc-p4-t2",
+  "table_type": "bordered",
+  "category": "F",
+  "evaluate_cells": true,
+  "results": {
+   "pymupdf": {
+    "detected": false,
+    "numeric_accuracy": 0.0,
+    "header_value_accuracy": 0.0,
+    "error": null
+   },
+   "docling": {
+    "detected": false,
+    "numeric_accuracy": 0.0,
+    "header_value_accuracy": 0.0,
+    "error": null
+   },
+   "paddleocr": {
+    "detected": true,
+    "numeric_accuracy": 1.0,
+    "header_value_accuracy": 0.6,
+    "error": null
+   },
+   "camelot": {
+    "detected": true,
+    "numeric_accuracy": 1.0,
+    "header_value_accuracy": 0.8,
+    "error": null
+   }
+  }
+ },
+ {
+  "case_id": "4ae395a7-p8-t1",
+  "table_type": "bordered",
+  "category": "E/F",
+  "evaluate_cells": true,
+  "results": {
+   "pymupdf": {
+    "detected": false,
+    "numeric_accuracy": 0.0,
+    "header_value_accuracy": 0.0,
+    "error": null
+   },
+   "docling": {
+    "detected": true,
+    "numeric_accuracy": 0.8888888888888888,
+    "header_value_accuracy": 0.0,
+    "error": null
+   },
+   "paddleocr": {
+    "detected": false,
+    "numeric_accuracy": 0.0,
+    "header_value_accuracy": 0.0,
+    "error": null
+   },
+   "camelot": {
+    "detected": true,
+    "numeric_accuracy": 1.0,
+    "header_value_accuracy": 0.875,
+    "error": null
+   }
+  }
+ },
+ {
+  "case_id": "64edf201-p5-t2",
+  "table_type": "bordered",
+  "category": "F",
+  "evaluate_cells": true,
+  "results": {
+   "pymupdf": {
+    "detected": false,
+    "numeric_accuracy": 0.0,
+    "header_value_accuracy": 0.0,
+    "error": null
+   },
+   "docling": {
+    "detected": false,
+    "numeric_accuracy": 0.0,
+    "header_value_accuracy": 0.0,
+    "error": null
+   },
+   "paddleocr": {
+    "detected": false,
+    "numeric_accuracy": 0.0,
+    "header_value_accuracy": 0.0,
+    "error": null
+   },
+   "camelot": {
+    "detected": true,
+    "numeric_accuracy": 1.0,
+    "header_value_accuracy": 0.75,
+    "error": null
+   }
+  }
+ },
+ {
+  "case_id": "6da19607-p10-t4",
+  "table_type": "bordered",
+  "category": "F",
+  "evaluate_cells": true,
+  "results": {
+   "pymupdf": {
+    "detected": false,
+    "numeric_accuracy": 0.0,
+    "header_value_accuracy": 0.0,
+    "error": null
+   },
+   "docling": {
+    "detected": true,
+    "numeric_accuracy": 0.20833333333333334,
+    "header_value_accuracy": 0.0,
+    "error": null
+   },
+   "paddleocr": {
+    "detected": false,
+    "numeric_accuracy": 0.0,
+    "header_value_accuracy": 0.0,
+    "error": null
+   },
+   "camelot": {
+    "detected": true,
+    "numeric_accuracy": 0.20833333333333334,
+    "header_value_accuracy": 0.0,
+    "error": null
+   }
+  }
+ },
+ {
+  "case_id": "6da19607-p4-t1",
+  "table_type": "bordered",
+  "category": "E",
+  "evaluate_cells": true,
+  "results": {
+   "pymupdf": {
+    "detected": false,
+    "numeric_accuracy": 0.020833333333333332,
+    "header_value_accuracy": 0.0,
+    "error": null
+   },
+   "docling": {
+    "detected": false,
+    "numeric_accuracy": 0.0,
+    "header_value_accuracy": 0.0,
+    "error": null
+   },
+   "paddleocr": {
+    "detected": false,
+    "numeric_accuracy": 0.0,
+    "header_value_accuracy": 0.0,
+    "error": null
+   },
+   "camelot": {
+    "detected": true,
+    "numeric_accuracy": 0.7291666666666666,
+    "header_value_accuracy": 1.0,
+    "error": null
+   }
+  }
+ },
+ {
+  "case_id": "6da19607-p5-t2",
+  "table_type": "bordered",
+  "category": "E",
+  "evaluate_cells": true,
+  "results": {
+   "pymupdf": {
+    "detected": false,
+    "numeric_accuracy": 0.0,
+    "header_value_accuracy": 0.0,
+    "error": null
+   },
+   "docling": {
+    "detected": false,
+    "numeric_accuracy": 0.0,
+    "header_value_accuracy": 0.0,
+    "error": null
+   },
+   "paddleocr": {
+    "detected": false,
+    "numeric_accuracy": 0.0,
+    "header_value_accuracy": 0.0,
+    "error": null
+   },
+   "camelot": {
+    "detected": true,
+    "numeric_accuracy": 0.16666666666666666,
+    "header_value_accuracy": 0.0,
+    "error": null
+   }
+  }
+ },
+ {
+  "case_id": "aad1014d-p5-t1",
+  "table_type": "bordered",
+  "category": "C/E",
+  "evaluate_cells": true,
+  "results": {
+   "pymupdf": {
+    "detected": false,
+    "numeric_accuracy": 0.0,
+    "header_value_accuracy": 0.0,
+    "error": null
+   },
+   "docling": {
+    "detected": true,
+    "numeric_accuracy": 0.75,
+    "header_value_accuracy": 0.0,
+    "error": null
+   },
+   "paddleocr": {
+    "detected": false,
+    "numeric_accuracy": 0.0,
+    "header_value_accuracy": 0.0,
+    "error": null
+   },
+   "camelot": {
+    "detected": true,
+    "numeric_accuracy": 0.75,
+    "header_value_accuracy": 0.16666666666666666,
+    "error": null
+   }
+  }
+ },
+ {
+  "case_id": "aad1014d-p6-t2",
+  "table_type": "bordered",
+  "category": "F",
+  "evaluate_cells": true,
+  "results": {
+   "pymupdf": {
+    "detected": false,
+    "numeric_accuracy": 0.0,
+    "header_value_accuracy": 0.0,
+    "error": null
+   },
+   "docling": {
+    "detected": true,
+    "numeric_accuracy": 1.0,
+    "header_value_accuracy": 0.0,
+    "error": null
+   },
+   "paddleocr": {
+    "detected": false,
+    "numeric_accuracy": 0.0,
+    "header_value_accuracy": 0.0,
+    "error": null
+   },
+   "camelot": {
+    "detected": true,
+    "numeric_accuracy": 1.0,
+    "header_value_accuracy": 1.0,
+    "error": null
+   }
+  }
+ },
+ {
+  "case_id": "c08322e5-p7-t2",
+  "table_type": "bordered",
+  "category": "D",
+  "evaluate_cells": true,
+  "results": {
+   "pymupdf": {
+    "detected": false,
+    "numeric_accuracy": 0.0,
+    "header_value_accuracy": 0.0,
+    "error": null
+   },
+   "docling": {
+    "detected": true,
+    "numeric_accuracy": 0.6,
+    "header_value_accuracy": 0.0,
+    "error": null
+   },
+   "paddleocr": {
+    "detected": false,
+    "numeric_accuracy": 0.0,
+    "header_value_accuracy": 0.0,
+    "error": null
+   },
+   "camelot": {
+    "detected": true,
+    "numeric_accuracy": 0.9333333333333333,
+    "header_value_accuracy": 0.044444444444444446,
+    "error": null
+   }
+  }
+ },
+ {
+  "case_id": "c5f4b1ec-p3-t1",
+  "table_type": "borderless",
+  "category": "E",
+  "evaluate_cells": true,
+  "results": {
+   "pymupdf": {
+    "detected": false,
+    "numeric_accuracy": 0.0,
+    "header_value_accuracy": 0.0,
+    "error": null
+   },
+   "docling": {
+    "detected": false,
+    "numeric_accuracy": 0.42857142857142855,
+    "header_value_accuracy": 0.0,
+    "error": null
+   },
+   "paddleocr": {
+    "detected": false,
+    "numeric_accuracy": 0.0,
+    "header_value_accuracy": 0.0,
+    "error": null
+   },
+   "camelot": {
+    "detected": false,
+    "numeric_accuracy": 0.0,
+    "header_value_accuracy": 0.0,
+    "error": null
+   }
+  }
+ },
+ {
+  "case_id": "c5f4b1ec-p4-t2",
+  "table_type": "borderless",
+  "category": "E",
+  "evaluate_cells": true,
+  "results": {
+   "pymupdf": {
+    "detected": false,
+    "numeric_accuracy": 0.0,
+    "header_value_accuracy": 0.0,
+    "error": null
+   },
+   "docling": {
+    "detected": false,
+    "numeric_accuracy": 0.0,
+    "header_value_accuracy": 0.0,
+    "error": null
+   },
+   "paddleocr": {
+    "detected": true,
+    "numeric_accuracy": 0.0,
+    "header_value_accuracy": 0.0,
+    "error": null
+   },
+   "camelot": {
+    "detected": true,
+    "numeric_accuracy": 0.0,
+    "header_value_accuracy": 0.0,
+    "error": null
+   }
+  }
+ },
+ {
+  "case_id": "c5f4b1ec-p6-t3",
+  "table_type": "borderless",
+  "category": "D/E",
+  "evaluate_cells": true,
+  "results": {
+   "pymupdf": {
+    "detected": false,
+    "numeric_accuracy": 0.0,
+    "header_value_accuracy": 0.0,
+    "error": null
+   },
+   "docling": {
+    "detected": true,
+    "numeric_accuracy": 0.8571428571428571,
+    "header_value_accuracy": 0.0,
+    "error": null
+   },
+   "paddleocr": {
+    "detected": true,
+    "numeric_accuracy": 1.0,
+    "header_value_accuracy": 1.0,
+    "error": null
+   },
+   "camelot": {
+    "detected": true,
+    "numeric_accuracy": 1.0,
+    "header_value_accuracy": 1.0,
+    "error": null
+   }
+  }
+ },
+ {
+  "case_id": "d47fcb19-p5-t1",
+  "table_type": "borderless",
+  "category": "F",
+  "evaluate_cells": true,
+  "results": {
+   "pymupdf": {
+    "detected": false,
+    "numeric_accuracy": 0.0,
+    "header_value_accuracy": 0.0,
+    "error": null
+   },
+   "docling": {
+    "detected": true,
+    "numeric_accuracy": 0.0,
+    "header_value_accuracy": 0.0,
+    "error": null
+   },
+   "paddleocr": {
+    "detected": true,
+    "numeric_accuracy": 0.16666666666666666,
+    "header_value_accuracy": 0.0,
+    "error": null
+   },
+   "camelot": {
+    "detected": true,
+    "numeric_accuracy": 0.16666666666666666,
+    "header_value_accuracy": 0.0,
+    "error": null
+   }
+  }
+ },
+ {
+  "case_id": "e9dbf6f7-p10-t2",
+  "table_type": "bordered",
+  "category": "F",
+  "evaluate_cells": true,
+  "results": {
+   "pymupdf": {
+    "detected": false,
+    "numeric_accuracy": 0.06666666666666667,
+    "header_value_accuracy": 0.0,
+    "error": null
+   },
+   "docling": {
+    "detected": false,
+    "numeric_accuracy": 0.0,
+    "header_value_accuracy": 0.0,
+    "error": null
+   },
+   "paddleocr": {
+    "detected": false,
+    "numeric_accuracy": 0.0,
+    "header_value_accuracy": 0.0,
+    "error": null
+   },
+   "camelot": {
+    "detected": true,
+    "numeric_accuracy": 1.0,
+    "header_value_accuracy": 0.26666666666666666,
+    "error": null
+   }
+  }
+ },
+ {
+  "case_id": "e9dbf6f7-p6-t1",
+  "table_type": "bordered",
+  "category": "E",
+  "evaluate_cells": true,
+  "results": {
+   "pymupdf": {
+    "detected": false,
+    "numeric_accuracy": 0.0,
+    "header_value_accuracy": 0.0,
+    "error": null
+   },
+   "docling": {
+    "detected": true,
+    "numeric_accuracy": 0.1,
+    "header_value_accuracy": 0.1,
+    "error": null
+   },
+   "paddleocr": {
+    "detected": false,
+    "numeric_accuracy": 0.0,
+    "header_value_accuracy": 0.0,
+    "error": null
+   },
+   "camelot": {
+    "detected": true,
+    "numeric_accuracy": 1.0,
+    "header_value_accuracy": 1.0,
+    "error": null
+   }
+  }
+ },
+ {
+  "case_id": "fa290122-p10-t1",
+  "table_type": "bordered",
+  "category": "C/E",
+  "evaluate_cells": true,
+  "results": {
+   "pymupdf": {
+    "detected": false,
+    "numeric_accuracy": 0.0,
+    "header_value_accuracy": 0.0,
+    "error": null
+   },
+   "docling": {
+    "detected": true,
+    "numeric_accuracy": 0.9879518072289156,
+    "header_value_accuracy": 0.0,
+    "error": null
+   },
+   "paddleocr": {
+    "detected": false,
+    "numeric_accuracy": 0.0,
+    "header_value_accuracy": 0.0,
+    "error": null
+   },
+   "camelot": {
+    "detected": true,
+    "numeric_accuracy": 1.0,
+    "header_value_accuracy": 0.8333333333333334,
+    "error": null
+   }
+  }
+ }
+]

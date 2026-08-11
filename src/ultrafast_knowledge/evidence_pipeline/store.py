@@ -14,10 +14,11 @@ from ultrafast_knowledge.evidence_pipeline.schemas import (
     SemanticBlock,
     StructuredScientificPaper,
 )
+from ultrafast_knowledge.evidence_pipeline.tables.models import ScientificTable
 from ultrafast_memory.db.session import get_connection
 from ultrafast_requirements.schemas import Requirement
 
-SCHEMA_VERSION = "scientific-index-store-v1"
+SCHEMA_VERSION = "scientific-index-store-v2"
 
 
 class ScientificIndexStore:
@@ -64,6 +65,8 @@ class ScientificIndexStore:
                     section_type TEXT,
                     section_title TEXT,
                     table_id TEXT,
+                    table_role TEXT,
+                    table_row_index INTEGER,
                     raw_text TEXT NOT NULL,
                     retrieval_text TEXT NOT NULL,
                     bbox_json TEXT,
@@ -78,6 +81,21 @@ class ScientificIndexStore:
                 ON scientific_semantic_block_store(paper_id, pdf_page_index);
                 CREATE INDEX IF NOT EXISTS idx_scientific_block_document
                 ON scientific_semantic_block_store(document_version_id);
+
+                CREATE TABLE IF NOT EXISTS scientific_table_store (
+                    table_id TEXT PRIMARY KEY,
+                    document_version_id TEXT NOT NULL,
+                    paper_id TEXT NOT NULL,
+                    page_start INTEGER NOT NULL,
+                    page_end INTEGER NOT NULL,
+                    payload_json TEXT NOT NULL,
+                    extractor_version TEXT NOT NULL,
+                    normalization_version TEXT NOT NULL,
+                    schema_version TEXT NOT NULL,
+                    indexed_at TEXT NOT NULL
+                );
+                CREATE INDEX IF NOT EXISTS idx_scientific_table_document
+                ON scientific_table_store(document_version_id, page_start);
 
                 CREATE TABLE IF NOT EXISTS scientific_hybrid_index_state (
                     index_name TEXT PRIMARY KEY,
@@ -131,7 +149,21 @@ class ScientificIndexStore:
                 ON structured_scientific_knowledge(quantity, extraction_status);
                 """
             )
+            self._ensure_block_columns(conn)
             conn.commit()
+
+    @staticmethod
+    def _ensure_block_columns(conn: Any) -> None:
+        columns = {
+            str(row[1])
+            for row in conn.execute("PRAGMA table_info(scientific_semantic_block_store)")
+        }
+        if "table_role" not in columns:
+            conn.execute("ALTER TABLE scientific_semantic_block_store ADD COLUMN table_role TEXT")
+        if "table_row_index" not in columns:
+            conn.execute(
+                "ALTER TABLE scientific_semantic_block_store ADD COLUMN table_row_index INTEGER"
+            )
 
     def upsert_paper(self, paper: StructuredScientificPaper) -> None:
         now = _now()
@@ -163,18 +195,47 @@ class ScientificIndexStore:
                 "DELETE FROM scientific_semantic_block_store WHERE document_version_id=?",
                 (paper.document_version_id,),
             )
+            conn.execute(
+                "DELETE FROM scientific_table_store WHERE document_version_id=?",
+                (paper.document_version_id,),
+            )
             conn.executemany(
                 """
                 INSERT INTO scientific_semantic_block_store
                 (block_id,document_version_id,paper_id,block_type,page,pdf_page_index,
-                 section_id,section_path,section_type,section_title,table_id,raw_text,
+                 section_id,section_path,section_type,section_title,table_id,table_role,
+                 table_row_index,raw_text,
                  retrieval_text,bbox_json,previous_block_id,next_block_id,
                  related_block_ids_json,source_text_type,schema_version,indexed_at)
-                VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)
+                VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)
                 """,
                 [self._block_record(block, now) for block in paper.blocks],
             )
+            conn.executemany(
+                """
+                INSERT INTO scientific_table_store
+                (table_id,document_version_id,paper_id,page_start,page_end,payload_json,
+                 extractor_version,normalization_version,schema_version,indexed_at)
+                VALUES (?,?,?,?,?,?,?,?,?,?)
+                """,
+                [self._table_record(table, now) for table in paper.tables],
+            )
             conn.commit()
+
+    @staticmethod
+    def _table_record(table: ScientificTable, now: str) -> tuple[Any, ...]:
+        return (
+            table.table_id,
+            table.document_version_id,
+            table.paper_id,
+            table.page_start,
+            table.page_end,
+            table.model_dump_json(),
+            table.extractor_version,
+            table.normalization_version,
+            SCHEMA_VERSION,
+            now,
+        )
 
     @staticmethod
     def _block_record(block: SemanticBlock, now: str) -> tuple[Any, ...]:
@@ -190,6 +251,8 @@ class ScientificIndexStore:
             block.section_type,
             block.section_title,
             block.table_id,
+            block.table_role,
+            block.table_row_index,
             block.text,
             block.retrieval_text,
             json.dumps(block.bbox) if block.bbox is not None else None,
@@ -222,8 +285,20 @@ class ScientificIndexStore:
             retrieval_text=str(row.get("retrieval_text") or ""),
             metadata=json.loads(row.get("metadata_json") or "{}"),
             blocks=self.blocks(document_version_id=str(row["document_version_id"])),
+            tables=self.tables(document_version_id=str(row["document_version_id"])),
             pdf_path=row.get("pdf_path"),
         )
+
+    def tables(self, *, document_version_id: str | None = None) -> list[ScientificTable]:
+        where = "WHERE document_version_id=?" if document_version_id else ""
+        params = [document_version_id] if document_version_id else []
+        with self.connection() as conn:
+            rows = conn.execute(
+                f"SELECT payload_json FROM scientific_table_store {where} "
+                "ORDER BY paper_id,page_start,rowid",
+                params,
+            ).fetchall()
+        return [ScientificTable.model_validate_json(row["payload_json"]) for row in rows]
 
     def blocks(
         self,
@@ -273,6 +348,8 @@ class ScientificIndexStore:
             section_type=row.get("section_type"),
             section_title=row.get("section_title"),
             table_id=row.get("table_id"),
+            table_role=row.get("table_role"),
+            table_row_index=row.get("table_row_index"),
             text=str(row.get("raw_text") or ""),
             retrieval_text=str(row.get("retrieval_text") or ""),
             bbox=tuple(json.loads(row["bbox_json"])) if row.get("bbox_json") else None,

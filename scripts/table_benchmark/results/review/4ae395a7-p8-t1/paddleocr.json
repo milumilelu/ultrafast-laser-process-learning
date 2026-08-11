@@ -1,0 +1,28 @@
+{
+ "case_id": "4ae395a7-p8-t1",
+ "tool": "paddleocr",
+ "pdf": "4ae395a7cb947897_sc04_032_Efficient Water-Assisted Glass Cutting with 355 nm Picosecond Laser Pulses.pdf",
+ "page": 8,
+ "package_version": "3.7.0",
+ "python_version": "3.12.13",
+ "device": "cpu",
+ "os": "Windows-11",
+ "elapsed_time_s": 140.0393,
+ "is_cold": false,
+ "error": null,
+ "dpi": 300,
+ "pipeline_kwargs": {
+  "lang": "en",
+  "device": "cpu",
+  "enable_mkldnn": true,
+  "use_doc_orientation_classify": false,
+  "use_doc_unwarping": false,
+  "use_region_detection": false,
+  "use_formula_recognition": false,
+  "use_chart_recognition": false,
+  "use_seal_recognition": false,
+  "text_det_limit_side_len": 1600,
+  "cpu_threads": 4
+ },
+ "tables": []
+}

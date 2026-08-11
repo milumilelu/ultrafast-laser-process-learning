@@ -1,0 +1,1363 @@
+{
+ "description": "Table extraction benchmark cases derived from gold/*.json (single source of truth for rows).",
+ "count": 21,
+ "cases": [
+  {
+   "case_id": "179b114f-p5-t1",
+   "pdf": "179b114fb0325d4a_Simulation_of_ultrashort_pulse_laser_drilling_of_glass_considering_hea_2020.pdf",
+   "page": 5,
+   "table_label": "Table 1",
+   "table_type": "image",
+   "category": "G",
+   "expect_table": true,
+   "evaluate_cells": false,
+   "note": "Table body is a raster image (no text layer); only detection is scored. Known values from text: depth 0.626 um at alpha=5.0,beta=0.01; 0.680 um at alpha=2.0,beta=1.0",
+   "rows": null
+  },
+  {
+   "case_id": "185a6a06-p5-t1",
+   "pdf": "185a6a0667e0b43d_Flat-top picosecond laser texturing of CFRP.pdf",
+   "page": 5,
+   "table_label": "TABLE I",
+   "table_type": "borderless",
+   "category": "E",
+   "note": "pilot paper; laser parameter list",
+   "rows": [
+    [
+     "Parameters",
+     "Values"
+    ],
+    [
+     "Wavelength(nm)",
+     "355"
+    ],
+    [
+     "Fluence range (J/cm2)",
+     "2.3–7.0"
+    ],
+    [
+     "Pulse width (ps)",
+     "10"
+    ],
+    [
+     "Spot diameter (μm)",
+     "19"
+    ],
+    [
+     "Scanning speed (m/s)",
+     "1"
+    ],
+    [
+     "Pulse repetition rate (MHz)",
+     "1"
+    ]
+   ],
+   "expect_table": true,
+   "evaluate_cells": true
+  },
+  {
+   "case_id": "33dae6e7-p3-t1",
+   "pdf": "33dae6e7c9a3a155_33dae6e7c9a3a155_task2_06_Zhang_2024.pdf",
+   "page": 3,
+   "table_label": "Table 1",
+   "table_type": "bordered",
+   "category": "E",
+   "note": "DD6 elemental composition",
+   "rows": [
+    [
+     "Elements",
+     "Cr",
+     "Al",
+     "Mo",
+     "Co",
+     "W",
+     "Ta",
+     "Re",
+     "Ni"
+    ],
+    [
+     "wt%",
+     "3.8~4.8",
+     "5.2~6.2",
+     "1.5~2.5",
+     "8.5~9.5",
+     "7.0~9.0",
+     "6.0~8.5",
+     "1.6~2.4",
+     "Bal"
+    ]
+   ],
+   "expect_table": true,
+   "evaluate_cells": true
+  },
+  {
+   "case_id": "33dae6e7-p4-t2",
+   "pdf": "33dae6e7c9a3a155_33dae6e7c9a3a155_task2_06_Zhang_2024.pdf",
+   "page": 4,
+   "table_label": "Table 2",
+   "table_type": "bordered",
+   "category": "E/F",
+   "note": "experimental scheme; laser power/focus/feed/velocity; 14 rows",
+   "rows": [
+    [
+     "NO.",
+     "Mean Power/W",
+     "Focus Position/mm",
+     "Feed Distance/mm",
+     "Scanning Velocity/rpm"
+    ],
+    [
+     "1",
+     "8",
+     "0",
+     "0.01",
+     "1500"
+    ],
+    [
+     "2",
+     "10",
+     "0",
+     "0.01",
+     "1500"
+    ],
+    [
+     "3",
+     "12",
+     "0",
+     "0.01",
+     "1500"
+    ],
+    [
+     "4",
+     "14",
+     "0",
+     "0.01",
+     "1500"
+    ],
+    [
+     "5",
+     "16",
+     "0",
+     "0.01",
+     "1500"
+    ],
+    [
+     "6",
+     "12",
+     "−0.5",
+     "0.01",
+     "1500"
+    ],
+    [
+     "7",
+     "12",
+     "0",
+     "0.01",
+     "1500"
+    ],
+    [
+     "8",
+     "12",
+     "0.5",
+     "0.01",
+     "1500"
+    ],
+    [
+     "9",
+     "12",
+     "0",
+     "0.005",
+     "1500"
+    ],
+    [
+     "10",
+     "12",
+     "0",
+     "0.01",
+     "1500"
+    ],
+    [
+     "11",
+     "12",
+     "0",
+     "0.015",
+     "1500"
+    ],
+    [
+     "12",
+     "12",
+     "0",
+     "0.01",
+     "1000"
+    ],
+    [
+     "13",
+     "12",
+     "0",
+     "0.01",
+     "1500"
+    ],
+    [
+     "14",
+     "12",
+     "0",
+     "0.01",
+     "2000"
+    ]
+   ],
+   "expect_table": true,
+   "evaluate_cells": true
+  },
+  {
+   "case_id": "3c0cf585-p4-t1",
+   "pdf": "3c0cf5859d4f9a93_Universal threshold for femtosecond laser ablation with oblique illumination.pdf",
+   "page": 4,
+   "table_label": "Fig-5-like two-panel table",
+   "table_type": "figure",
+   "category": "C",
+   "expect_table": true,
+   "evaluate_cells": false,
+   "note": "two-panel figure-like table (P/S polarization threshold fluence vs AOI); axis-like numeric layout, cell pairing not recoverable from text layer; only detection scored",
+   "rows": null
+  },
+  {
+   "case_id": "3c59d7dc-p4-t2",
+   "pdf": "3c59d7dc7191b335_Experimental study of nickel-based superalloy IN792 with femtosecond laser drilling method.pdf",
+   "page": 4,
+   "table_label": "Table 2",
+   "table_type": "bordered",
+   "category": "F",
+   "note": "hole test data for 4 scanning paths; en-dash ranges",
+   "rows": [
+    [
+     "Scanning path",
+     "Inlet diameter (μm)",
+     "Outlet diameter (μm)",
+     "Inlet circularity",
+     "Outlet circularity",
+     "taper angle (°)"
+    ],
+    [
+     "(a)",
+     "639–648",
+     "508–547",
+     "98.6%",
+     "92.9%",
+     "4.2–5.5"
+    ],
+    [
+     "(b)",
+     "639–661",
+     "516–558",
+     "96.6%",
+     "92.5%",
+     "4.3–5.1"
+    ],
+    [
+     "(c)",
+     "641–645",
+     "523–552",
+     "99.4%",
+     "94.7%",
+     "3.9–4.9"
+    ],
+    [
+     "(d)",
+     "633–640",
+     "479–522",
+     "98.9%",
+     "91.8%",
+     "4.9–6.5"
+    ]
+   ],
+   "expect_table": true,
+   "evaluate_cells": true
+  },
+  {
+   "case_id": "4ae395a7-p8-t1",
+   "pdf": "4ae395a7cb947897_sc04_032_Efficient Water-Assisted Glass Cutting with 355 nm Picosecond Laser Pulses.pdf",
+   "page": 8,
+   "table_label": "Table 1",
+   "table_type": "bordered",
+   "category": "E/F",
+   "note": "optimised glass cutting parameters; 2 rows; multi-line merged headers",
+   "rows": [
+    [
+     "Cutting Environment",
+     "Average Laser Power, W",
+     "Ablation Efficiency, µm3/µJ",
+     "Fluence, J/cm2",
+     "Scan Speed, mm/s",
+     "Pulse Energy, µJ",
+     "Pulse Repetition Rate, kHz",
+     "Hatch, µm",
+     "Cut Width, µm"
+    ],
+    [
+     "Air",
+     "2.1",
+     "6.6",
+     "3.5",
+     "800",
+     "3.2",
+     "653",
+     "10",
+     "300"
+    ],
+    [
+     "Water (low power)",
+     "2.75",
+     "7.5",
+     "6.1",
+     "600",
+     "5.2",
+     "529",
+     "10",
+     "300"
+    ]
+   ],
+   "expect_table": true,
+   "evaluate_cells": true
+  },
+  {
+   "case_id": "64edf201-p5-t2",
+   "pdf": "64edf20172cbe34b_64edf20172cbe34b_task2_01_Hou_2024.pdf",
+   "page": 5,
+   "table_label": "Table 2",
+   "table_type": "bordered",
+   "category": "F",
+   "note": "geometric accuracy vs laser pulse width; multi-line 2-row headers; percentage + um values",
+   "rows": [
+    [
+     "Number",
+     "Laser Type",
+     "Upper Hole Diameter (µm)",
+     "Lower Hole Diameter (µm)",
+     "Upper Hole Diameter Error",
+     "Lower Hole Diameter Error",
+     "Upper Hole Roundness (µm)",
+     "Lower Hole Roundness (µm)",
+     "Taper (°)"
+    ],
+    [
+     "Case 1",
+     "Ideal hole",
+     "400.0",
+     "400.0",
+     "0",
+     "0",
+     "0",
+     "0",
+     "0"
+    ],
+    [
+     "Case 2",
+     "Nanosecond",
+     "539.2",
+     "448.6",
+     "34.80%",
+     "12.15%",
+     "0.0318",
+     "0.0357",
+     "7.41"
+    ],
+    [
+     "Case 3",
+     "Picosecond",
+     "396.4",
+     "385.2",
+     "−0.90%",
+     "−3.70%",
+     "0.0246",
+     "0.0346",
+     "0.92"
+    ],
+    [
+     "Case 4",
+     "Femtosecond",
+     "450.2",
+     "382.8",
+     "12.50%",
+     "−4.30%",
+     "0.0047",
+     "0.0131",
+     "5.50"
+    ]
+   ],
+   "expect_table": true,
+   "evaluate_cells": true
+  },
+  {
+   "case_id": "6da19607-p10-t4",
+   "pdf": "6da19607d54f8438_Investigation on Thermal Barrier Coating Damages for Ultrafast Laser Drilling of Cooling Holes.pdf",
+   "page": 10,
+   "table_label": "Table 4",
+   "table_type": "bordered",
+   "category": "F",
+   "note": "damage area matrix; Scanning Speed merged header",
+   "rows": [
+    [
+     "Pulse Energy",
+     "80 mm/s",
+     "160 mm/s",
+     "240 mm/s",
+     "320 mm/s"
+    ],
+    [
+     "40%",
+     "19,000",
+     "10,200",
+     "540",
+     "95.7"
+    ],
+    [
+     "60%",
+     "14,400",
+     "13,200",
+     "12,300",
+     "11,600"
+    ],
+    [
+     "80%",
+     "20,400",
+     "17,400",
+     "14,700",
+     "12,100"
+    ],
+    [
+     "100%",
+     "23,300",
+     "19,100",
+     "16,200",
+     "12,400"
+    ]
+   ],
+   "expect_table": true,
+   "evaluate_cells": true
+  },
+  {
+   "case_id": "6da19607-p4-t1",
+   "pdf": "6da19607d54f8438_Investigation on Thermal Barrier Coating Damages for Ultrafast Laser Drilling of Cooling Holes.pdf",
+   "page": 4,
+   "table_label": "Table 1",
+   "table_type": "bordered",
+   "category": "E",
+   "note": "TBC microhole 2-factor 4-level design; Average Power merged over 4 rows (repeated in gold)",
+   "rows": [
+    [
+     "Parameters",
+     "Average Power",
+     "Scanning Speed"
+    ],
+    [
+     "1",
+     "12 W",
+     "80 mm/s"
+    ],
+    [
+     "2",
+     "12 W",
+     "160 mm/s"
+    ],
+    [
+     "3",
+     "12 W",
+     "240 mm/s"
+    ],
+    [
+     "4",
+     "12 W",
+     "320 mm/s"
+    ],
+    [
+     "5",
+     "18 W",
+     "80 mm/s"
+    ],
+    [
+     "6",
+     "18 W",
+     "160 mm/s"
+    ],
+    [
+     "7",
+     "18 W",
+     "240 mm/s"
+    ],
+    [
+     "8",
+     "18 W",
+     "320 mm/s"
+    ],
+    [
+     "9",
+     "24 W",
+     "80 mm/s"
+    ],
+    [
+     "10",
+     "24 W",
+     "160 mm/s"
+    ],
+    [
+     "11",
+     "24 W",
+     "240 mm/s"
+    ],
+    [
+     "12",
+     "24 W",
+     "320 mm/s"
+    ],
+    [
+     "13",
+     "30 W",
+     "80 mm/s"
+    ],
+    [
+     "14",
+     "30 W",
+     "160 mm/s"
+    ],
+    [
+     "15",
+     "30 W",
+     "240 mm/s"
+    ],
+    [
+     "16",
+     "30 W",
+     "320 mm/s"
+    ]
+   ],
+   "expect_table": true,
+   "evaluate_cells": true
+  },
+  {
+   "case_id": "6da19607-p5-t2",
+   "pdf": "6da19607d54f8438_Investigation on Thermal Barrier Coating Damages for Ultrafast Laser Drilling of Cooling Holes.pdf",
+   "page": 5,
+   "table_label": "Table 2",
+   "table_type": "bordered",
+   "category": "E",
+   "note": "laser emission system parameters; symbol column",
+   "rows": [
+    [
+     "Parameters",
+     "Symbol",
+     "Values"
+    ],
+    [
+     "Pulse width",
+     "τ",
+     "2.1 ps"
+    ],
+    [
+     "Diameter of the focal point",
+     "df",
+     "48 µm"
+    ],
+    [
+     "Repetition rate",
+     "f",
+     "75 kHz"
+    ],
+    [
+     "Maximum average power",
+     "Pmax",
+     "30 W"
+    ],
+    [
+     "Maximum peak power",
+     "Ppk max",
+     "190.4 MW"
+    ],
+    [
+     "Maximum pulse energy",
+     "Emax",
+     "0.4 J"
+    ]
+   ],
+   "expect_table": true,
+   "evaluate_cells": true
+  },
+  {
+   "case_id": "aad1014d-p5-t1",
+   "pdf": "aad1014d9273f0a3_sc04_034_Thick Glass High-Quality Cutting by Ultrafast Laser Bessel Beam Perforation-Assisted Separation.pdf",
+   "page": 5,
+   "table_label": "Table 1",
+   "table_type": "bordered",
+   "category": "C/E",
+   "note": "Bessel cutting process parameters and 5 levels; Factor Level merged header",
+   "rows": [
+    [
+     "Process Parameters",
+     "Unit",
+     "Factor Level 1",
+     "Factor Level 2",
+     "Factor Level 3",
+     "Factor Level 4",
+     "Factor Level 5"
+    ],
+    [
+     "Pulse energy",
+     "(mJ)",
+     "1.356",
+     "1.288",
+     "1.216",
+     "1.144",
+     "1.072"
+    ],
+    [
+     "Defocusing distance",
+     "(µm)",
+     "0",
+     "200",
+     "400",
+     "600",
+     "800"
+    ],
+    [
+     "Hole spacing",
+     "(µm)",
+     "4",
+     "6",
+     "8",
+     "10",
+     "12"
+    ]
+   ],
+   "expect_table": true,
+   "evaluate_cells": true
+  },
+  {
+   "case_id": "aad1014d-p6-t2",
+   "pdf": "aad1014d9273f0a3_sc04_034_Thick Glass High-Quality Cutting by Ultrafast Laser Bessel Beam Perforation-Assisted Separation.pdf",
+   "page": 6,
+   "table_label": "Table 2",
+   "table_type": "bordered",
+   "category": "F",
+   "note": "L25(5^3) orthogonal experiment results; 25 rows",
+   "rows": [
+    [
+     "No.",
+     "Pulse Energy (mJ)",
+     "Defocusing Distance (µm)",
+     "Hole Spacing (µm)",
+     "Average Surface Roughness (µm)"
+    ],
+    [
+     "1",
+     "1.356",
+     "0",
+     "4",
+     "0.532"
+    ],
+    [
+     "2",
+     "1.356",
+     "200",
+     "8",
+     "0.440"
+    ],
+    [
+     "3",
+     "1.356",
+     "400",
+     "12",
+     "0.535"
+    ],
+    [
+     "4",
+     "1.356",
+     "600",
+     "6",
+     "0.555"
+    ],
+    [
+     "5",
+     "1.356",
+     "800",
+     "10",
+     "0.547"
+    ],
+    [
+     "6",
+     "1.288",
+     "0",
+     "12",
+     "0.483"
+    ],
+    [
+     "7",
+     "1.288",
+     "200",
+     "6",
+     "0.448"
+    ],
+    [
+     "8",
+     "1.288",
+     "400",
+     "10",
+     "0.478"
+    ],
+    [
+     "9",
+     "1.288",
+     "600",
+     "4",
+     "0.553"
+    ],
+    [
+     "10",
+     "1.288",
+     "800",
+     "8",
+     "0.498"
+    ],
+    [
+     "11",
+     "1.216",
+     "0",
+     "10",
+     "0.429"
+    ],
+    [
+     "12",
+     "1.216",
+     "200",
+     "4",
+     "0.448"
+    ],
+    [
+     "13",
+     "1.216",
+     "400",
+     "8",
+     "0.413"
+    ],
+    [
+     "14",
+     "1.216",
+     "600",
+     "12",
+     "0.517"
+    ],
+    [
+     "15",
+     "1.216",
+     "800",
+     "6",
+     "0.527"
+    ],
+    [
+     "16",
+     "1.144",
+     "0",
+     "8",
+     "0.395"
+    ],
+    [
+     "17",
+     "1.144",
+     "200",
+     "12",
+     "0.533"
+    ],
+    [
+     "18",
+     "1.144",
+     "400",
+     "6",
+     "0.455"
+    ],
+    [
+     "19",
+     "1.144",
+     "600",
+     "10",
+     "0.445"
+    ],
+    [
+     "20",
+     "1.144",
+     "800",
+     "4",
+     "0.460"
+    ],
+    [
+     "21",
+     "1.072",
+     "0",
+     "6",
+     "0.383"
+    ],
+    [
+     "22",
+     "1.072",
+     "200",
+     "10",
+     "0.403"
+    ],
+    [
+     "23",
+     "1.072",
+     "400",
+     "4",
+     "0.450"
+    ],
+    [
+     "24",
+     "1.072",
+     "600",
+     "8",
+     "0.379"
+    ],
+    [
+     "25",
+     "1.072",
+     "800",
+     "12",
+     "0.569"
+    ]
+   ],
+   "expect_table": true,
+   "evaluate_cells": true
+  },
+  {
+   "case_id": "c08322e5-p7-t2",
+   "pdf": "c08322e5e3aa6438_c08322e5e3aa6438_task2_17_Shi_2025.pdf",
+   "page": 7,
+   "table_label": "Table 2",
+   "table_type": "bordered",
+   "category": "D",
+   "note": "material plasticity parameters; material column merged over rows (repeated in gold); scientific notation cells",
+   "rows": [
+    [
+     "Material",
+     "T (°C)",
+     "σy (MPa)",
+     "εy"
+    ],
+    [
+     "BC",
+     "400",
+     "1100",
+     "0"
+    ],
+    [
+     "BC",
+     "400",
+     "2500",
+     "0.23"
+    ],
+    [
+     "BC",
+     "800",
+     "300",
+     "0"
+    ],
+    [
+     "BC",
+     "800",
+     "375",
+     "0.022"
+    ],
+    [
+     "BC",
+     "1000",
+     "11",
+     "0"
+    ],
+    [
+     "BC",
+     "1000",
+     "19",
+     "0.01"
+    ],
+    [
+     "SUB",
+     "27",
+     "708",
+     "0"
+    ],
+    [
+     "SUB",
+     "27",
+     "716",
+     "1.998 × 10⁻³"
+    ],
+    [
+     "SUB",
+     "27",
+     "830",
+     "0.0402"
+    ],
+    [
+     "SUB",
+     "600",
+     "627",
+     "0"
+    ],
+    [
+     "SUB",
+     "600",
+     "636",
+     "1.998 × 10⁻³"
+    ],
+    [
+     "SUB",
+     "600",
+     "991",
+     "0.0862"
+    ],
+    [
+     "SUB",
+     "1000",
+     "204",
+     "0"
+    ],
+    [
+     "SUB",
+     "1000",
+     "205",
+     "1.998 × 10⁻³"
+    ],
+    [
+     "SUB",
+     "1000",
+     "355",
+     "0.2390"
+    ]
+   ],
+   "expect_table": true,
+   "evaluate_cells": true
+  },
+  {
+   "case_id": "c5f4b1ec-p3-t1",
+   "pdf": "c5f4b1ec78b6429c_Optimization of femtosecond laser processing technology for film cooling hole in nickel-based superalloy based on multi-step drilling and milling methods.pdf",
+   "page": 3,
+   "table_label": "TABLE I",
+   "table_type": "borderless",
+   "category": "E",
+   "note": "GH3536 composition; 7-col grid, 3 blocks; multi-line cells 'C<=0.05-0.15'",
+   "rows": [
+    [
+     "C≤ 0.05–0.15",
+     "Si≤ 1.00",
+     "Mn≤ 1.00",
+     "P≤ 0.025",
+     "S≤ 0.015",
+     "Cr≥ 20.5–23.5",
+     "Ni≥ Balance"
+    ],
+    [
+     "Mo≥ 8.0–10.0",
+     "Cu≤ 0.50",
+     "N≤ —",
+     "Al≤ 0.50",
+     "Ti≤ 0.15",
+     "Fe≤ 17.0–20.0",
+     "Co≤ 0.50–2.50"
+    ],
+    [
+     "V≤ —",
+     "W≤ 0.20–1.00",
+     "B≤ 0.01",
+     "",
+     "",
+     "",
+     ""
+    ]
+   ],
+   "expect_table": true,
+   "evaluate_cells": true
+  },
+  {
+   "case_id": "c5f4b1ec-p4-t2",
+   "pdf": "c5f4b1ec78b6429c_Optimization of femtosecond laser processing technology for film cooling hole in nickel-based superalloy based on multi-step drilling and milling methods.pdf",
+   "page": 4,
+   "table_label": "TABLE II",
+   "table_type": "borderless",
+   "category": "E",
+   "note": "femtosecond laser parameters; 3-col Parameter/Symbol/Value",
+   "rows": [
+    [
+     "Parameter",
+     "Symbol",
+     "Value"
+    ],
+    [
+     "Average power",
+     "P",
+     "10 W"
+    ],
+    [
+     "Repetition frequency",
+     "frep",
+     "100/200/400 kHz"
+    ],
+    [
+     "Pulse width",
+     "τp",
+     "400 fs"
+    ],
+    [
+     "Maximum single pulse energy",
+     "Esp",
+     "50 μJ"
+    ],
+    [
+     "Wavelength",
+     "λ",
+     "1030 nm"
+    ],
+    [
+     "Beam quality factor",
+     "M2",
+     "<1.3"
+    ]
+   ],
+   "expect_table": true,
+   "evaluate_cells": true
+  },
+  {
+   "case_id": "c5f4b1ec-p6-t3",
+   "pdf": "c5f4b1ec78b6429c_Optimization of femtosecond laser processing technology for film cooling hole in nickel-based superalloy based on multi-step drilling and milling methods.pdf",
+   "page": 6,
+   "table_label": "TABLE III",
+   "table_type": "borderless",
+   "category": "D/E",
+   "note": "multistep drilling vs milling parameters; multi-line cell in feed-rate row",
+   "rows": [
+    [
+     "Parameters",
+     "Multistep drilling",
+     "Multistep milling"
+    ],
+    [
+     "Repetition frequency (kHz)",
+     "100–400",
+     "100–400"
+    ],
+    [
+     "Laser power (W)",
+     "10",
+     "10"
+    ],
+    [
+     "Feed rate in the Z-axis direction",
+     "10 mm/min",
+     "The first step:4 mm/min, The second step:10 mm/min"
+    ],
+    [
+     "Beam rotation diameter (mm)",
+     "0.4",
+     "0.2"
+    ],
+    [
+     "Rotational speed of hollow motor (rpm)",
+     "2000",
+     "2000"
+    ],
+    [
+     "Angle",
+     "9°",
+     "4°"
+    ],
+    [
+     "Shift (mm)",
+     "4",
+     "3"
+    ]
+   ],
+   "expect_table": true,
+   "evaluate_cells": true
+  },
+  {
+   "case_id": "d47fcb19-p5-t1",
+   "pdf": "d47fcb191eb2587a_Construction of microstructures on the Cu substrate using ultrafast laser processing to enhance the bonding strength of sintered Ag nanoparticles.pdf",
+   "page": 5,
+   "table_label": "TABLE I",
+   "table_type": "borderless",
+   "category": "F",
+   "note": "groove depth vs laser intensity and scanning times; matrix; units in cells",
+   "rows": [
+    [
+     "Scanning times",
+     "8.67",
+     "16.82",
+     "25.48",
+     "34.14"
+    ],
+    [
+     "5",
+     "2.77 µm",
+     "3.20 µm",
+     "4.14 µm",
+     "5.11 µm"
+    ],
+    [
+     "10",
+     "5.54 µm",
+     "6.09 µm",
+     "8.38 µm",
+     "10.80 µm"
+    ],
+    [
+     "20",
+     "10.56 µm",
+     "13.72 µm",
+     "18.48 µm",
+     "31.32 µm"
+    ],
+    [
+     "40",
+     "20.20 µm",
+     "26.32 µm",
+     "31.56 µm",
+     "36.40 µm"
+    ]
+   ],
+   "expect_table": true,
+   "evaluate_cells": true
+  },
+  {
+   "case_id": "e9dbf6f7-p10-t2",
+   "pdf": "e9dbf6f752f449db_Experiments of drilling micro-holes on superalloy with thermal barrier coatings by using femtosecond laser.pdf",
+   "page": 10,
+   "table_label": "Table 2",
+   "table_type": "bordered",
+   "category": "F",
+   "note": "experiment parameter; Control group merged over 2 cols (repeated in gold); broken glyphs in text layer (gold uses true units)",
+   "rows": [
+    [
+     "",
+     "Control group",
+     "Control group",
+     "Experimental group"
+    ],
+    [
+     "Laser power（W）",
+     "1.5",
+     "1.5",
+     "1"
+    ],
+    [
+     "Focus position（mm）",
+     "−2",
+     "−2",
+     "−3"
+    ],
+    [
+     "Cutting diameter（μm）",
+     "100",
+     "100",
+     "125"
+    ],
+    [
+     "Processing speed（μm/s）",
+     "200",
+     "200",
+     "200"
+    ],
+    [
+     "Processing laps（r）",
+     "100",
+     "50",
+     "50"
+    ]
+   ],
+   "expect_table": true,
+   "evaluate_cells": true
+  },
+  {
+   "case_id": "e9dbf6f7-p6-t1",
+   "pdf": "e9dbf6f752f449db_Experiments of drilling micro-holes on superalloy with thermal barrier coatings by using femtosecond laser.pdf",
+   "page": 6,
+   "table_label": "Table 1",
+   "table_type": "bordered",
+   "category": "E",
+   "note": "focus position; transposed layout; text layer loses minus signs (gold uses true values)",
+   "rows": [
+    [
+     "Number",
+     "1",
+     "2",
+     "3",
+     "4",
+     "5",
+     "6",
+     "7",
+     "8",
+     "9",
+     "10"
+    ],
+    [
+     "Focus position(mm)",
+     "+0.5",
+     "0",
+     "−0.5",
+     "−1",
+     "−1.5",
+     "−2",
+     "−2.5",
+     "−3",
+     "−3.5",
+     "−4"
+    ]
+   ],
+   "expect_table": true,
+   "evaluate_cells": true
+  },
+  {
+   "case_id": "fa290122-p10-t1",
+   "pdf": "fa2901229e182fee_Near-unity broadband omnidirectional emissivity via femtosecond laser surface processing.pdf",
+   "page": 10,
+   "table_label": "Table 1",
+   "table_type": "bordered",
+   "category": "C/E",
+   "note": "FLSP processing params + roughness + emissivity; Nitrogen/Air groups; complex merged headers",
+   "rows": [
+    [
+     "Peak Fluence (J/cm2)",
+     "Pulse Count",
+     "Figure",
+     "Oxide Layer Thickness (μm)",
+     "Average Roughness, Ra (μm)",
+     "Average Height, Rz (μm)",
+     "Hemispherical Emissivity, εh"
+    ],
+    [
+     "0.58",
+     "1865",
+     "2a",
+     "< 0.5",
+     "6.03+/-0.1",
+     "57.26+/-0.3",
+     "0.265+/-0.011"
+    ],
+    [
+     "1.14",
+     "1865",
+     "-",
+     "-",
+     "10.59+/-0.4",
+     "88.02+/-0.3",
+     "0.399+/-0.016"
+    ],
+    [
+     "1.85",
+     "1865",
+     "2b",
+     "< 0.5",
+     "18.33+/-0.6",
+     "127.69+/-3.5",
+     "0.600+/-0.024"
+    ],
+    [
+     "2.23",
+     "1865",
+     "-",
+     "-",
+     "22.56+/-0.7",
+     "239.83+/-8.6",
+     "0.815+/-0.033"
+    ],
+    [
+     "2.86",
+     "1865",
+     "-",
+     "-",
+     "35.59+/-1.1",
+     "317.56+/-14.3",
+     "0.852+/-0.034"
+    ],
+    [
+     "3.43",
+     "1865",
+     "-",
+     "-",
+     "42.78+/-0.8",
+     "377.45+/-14.3",
+     "0.838+/-0.034"
+    ],
+    [
+     "4.05",
+     "1865",
+     "2c",
+     "< 0.5",
+     "52.86+/-1.9",
+     "496.67+/-38.5",
+     "0.843+/-0.034"
+    ],
+    [
+     "0.58",
+     "1865",
+     "3a",
+     "2.5+/-1.5",
+     "3.38+/-0.3",
+     "47.18+/-1.4",
+     "0.786+/-0.031"
+    ],
+    [
+     "1.14",
+     "1865",
+     "-",
+     "-",
+     "9.97+/-0.8",
+     "94.01+/-3.8",
+     "0.865+/-0.035"
+    ],
+    [
+     "2.23",
+     "1685",
+     "-",
+     "-",
+     "10.78+/-0.6",
+     "120.71+/-6.6",
+     "0.904+/-0.036"
+    ],
+    [
+     "2.86",
+     "1865",
+     "3b",
+     "6.5+/-2.5",
+     "12.44+/-0.5",
+     "130.43+/-2.3",
+     "0.937+/-0.038"
+    ],
+    [
+     "3.43",
+     "1865",
+     "-",
+     "-",
+     "15.81+/-0.9",
+     "155.04+/-9.2",
+     "0.936+/-0.037"
+    ],
+    [
+     "4.05",
+     "1865",
+     "-",
+     "-",
+     "22.92+/-0.7",
+     "179.40+/-5.2",
+     "0.926+/-0.037"
+    ],
+    [
+     "4.28",
+     "1865",
+     "3c",
+     "5.1+/-2.2",
+     "25.38+/-0.4",
+     "217.45+/-6.6",
+     "0.856+/-0.034"
+    ]
+   ],
+   "expect_table": true,
+   "evaluate_cells": true
+  }
+ ]
+}

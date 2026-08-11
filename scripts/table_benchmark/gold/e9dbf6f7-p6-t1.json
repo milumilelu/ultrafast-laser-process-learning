@@ -1,0 +1,39 @@
+{
+ "case_id": "e9dbf6f7-p6-t1",
+ "pdf": "e9dbf6f752f449db_Experiments of drilling micro-holes on superalloy with thermal barrier coatings by using femtosecond laser.pdf",
+ "page": 6,
+ "table_label": "Table 1",
+ "table_type": "bordered",
+ "category": "E",
+ "note": "focus position; transposed layout; text layer loses minus signs (gold uses true values)",
+ "rows": [
+  [
+   "Number",
+   "1",
+   "2",
+   "3",
+   "4",
+   "5",
+   "6",
+   "7",
+   "8",
+   "9",
+   "10"
+  ],
+  [
+   "Focus position(mm)",
+   "+0.5",
+   "0",
+   "−0.5",
+   "−1",
+   "−1.5",
+   "−2",
+   "−2.5",
+   "−3",
+   "−3.5",
+   "−4"
+  ]
+ ],
+ "expect_table": true,
+ "evaluate_cells": true
+}

@@ -1,0 +1,52 @@
+Creating model: ('PP-DocLayout_plus-L', None, None)
+Model files already exist. Using cached files. To redownload, please delete the directory manually: `C:\Users\RZF\.paddlex\official_models\PP-DocLayout_plus-L`.
+INFO: Could not find files for the given pattern(s).
+C:\Users\RZF\Desktop\��ʿ��������\ultrafast-laser-process-learning\.venv-table-paddle\Lib\site-packages\paddle\utils\cpp_extension\extension_utils.py:718: UserWarning: No ccache found. Please be aware that recompiling all source files may be required. You can download and install ccache from: https://github.com/ccache/ccache/blob/master/doc/INSTALL.md
+  warnings.warn(warning_message)
+WARNING: Logging before InitGoogleLogging() is written to STDERR
+I0810 22:57:23.448635 26608 onednn_context.cc:81] oneDNN v3.6.2
+Creating model: ('PP-LCNet_x1_0_textline_ori', None, None)
+Model files already exist. Using cached files. To redownload, please delete the directory manually: `C:\Users\RZF\.paddlex\official_models\PP-LCNet_x1_0_textline_ori`.
+Creating model: ('PP-OCRv5_server_det', None, None)
+Model files already exist. Using cached files. To redownload, please delete the directory manually: `C:\Users\RZF\.paddlex\official_models\PP-OCRv5_server_det`.
+Creating model: ('PP-OCRv5_server_rec', None, None)
+Model files already exist. Using cached files. To redownload, please delete the directory manually: `C:\Users\RZF\.paddlex\official_models\PP-OCRv5_server_rec`.
+Creating model: ('PP-LCNet_x1_0_table_cls', None, None)
+Model files already exist. Using cached files. To redownload, please delete the directory manually: `C:\Users\RZF\.paddlex\official_models\PP-LCNet_x1_0_table_cls`.
+Creating model: ('SLANeXt_wired', None, None)
+Model files already exist. Using cached files. To redownload, please delete the directory manually: `C:\Users\RZF\.paddlex\official_models\SLANeXt_wired`.
+Creating model: ('SLANet_plus', None, None)
+Model files already exist. Using cached files. To redownload, please delete the directory manually: `C:\Users\RZF\.paddlex\official_models\SLANet_plus`.
+Creating model: ('RT-DETR-L_wired_table_cell_det', None, None)
+Model files already exist. Using cached files. To redownload, please delete the directory manually: `C:\Users\RZF\.paddlex\official_models\RT-DETR-L_wired_table_cell_det`.
+Creating model: ('RT-DETR-L_wireless_table_cell_det', None, None)
+Model files already exist. Using cached files. To redownload, please delete the directory manually: `C:\Users\RZF\.paddlex\official_models\RT-DETR-L_wireless_table_cell_det`.
+Creating model: ('PP-LCNet_x1_0_doc_ori', None, None)
+Model files already exist. Using cached files. To redownload, please delete the directory manually: `C:\Users\RZF\.paddlex\official_models\PP-LCNet_x1_0_doc_ori`.
+Creating model: ('PP-LCNet_x1_0_textline_ori', None, None)
+Model files already exist. Using cached files. To redownload, please delete the directory manually: `C:\Users\RZF\.paddlex\official_models\PP-LCNet_x1_0_textline_ori`.
+Creating model: ('PP-OCRv5_server_det', None, None)
+Model files already exist. Using cached files. To redownload, please delete the directory manually: `C:\Users\RZF\.paddlex\official_models\PP-OCRv5_server_det`.
+Creating model: ('PP-OCRv5_server_rec', None, None)
+Model files already exist. Using cached files. To redownload, please delete the directory manually: `C:\Users\RZF\.paddlex\official_models\PP-OCRv5_server_rec`.
+179b114f-p5-t1: tables=0 error=None elapsed=107.68s
+185a6a06-p5-t1: tables=0 error=None elapsed=98.56s
+33dae6e7-p3-t1: tables=0 error=None elapsed=98.44s
+33dae6e7-p4-t2: tables=0 error=None elapsed=123.27s
+3c0cf585-p4-t1: tables=0 error=None elapsed=167.13s
+3c59d7dc-p4-t2: tables=0 error=None elapsed=151.31s
+4ae395a7-p8-t1: tables=0 error=None elapsed=140.04s
+64edf201-p5-t2: tables=0 error=None elapsed=132.27s
+6da19607-p10-t4: tables=0 error=None elapsed=100.85s
+6da19607-p4-t1: tables=0 error=None elapsed=113.69s
+6da19607-p5-t2: tables=0 error=None elapsed=91.30s
+aad1014d-p5-t1: tables=0 error=None elapsed=134.18s
+aad1014d-p6-t2: tables=0 error=None elapsed=378.83s
+c08322e5-p7-t2: tables=0 error=None elapsed=95.05s
+c5f4b1ec-p3-t1: tables=0 error=FzErrorSystem: code=2: cannot open file 'C:\Users\RZF\Desktop\��ʿ��������\ultrafast-laser-process-learning\scripts\table_benchmark\tmp\paddle_pages\c5f4b1ec78b6429c_Optimization of femtosecond laser processing technology for film cooling hole in nickel-based superalloy b elapsed=0.03s
+c5f4b1ec-p4-t2: tables=0 error=FzErrorSystem: code=2: cannot open file 'C:\Users\RZF\Desktop\��ʿ��������\ultrafast-laser-process-learning\scripts\table_benchmark\tmp\paddle_pages\c5f4b1ec78b6429c_Optimization of femtosecond laser processing technology for film cooling hole in nickel-based superalloy b elapsed=0.02s
+c5f4b1ec-p6-t3: tables=0 error=FzErrorSystem: code=2: cannot open file 'C:\Users\RZF\Desktop\��ʿ��������\ultrafast-laser-process-learning\scripts\table_benchmark\tmp\paddle_pages\c5f4b1ec78b6429c_Optimization of femtosecond laser processing technology for film cooling hole in nickel-based superalloy b elapsed=0.03s
+d47fcb19-p5-t1: tables=0 error=FzErrorSystem: code=2: cannot open file 'C:\Users\RZF\Desktop\��ʿ��������\ultrafast-laser-process-learning\scripts\table_benchmark\tmp\paddle_pages\d47fcb191eb2587a_Construction of microstructures on the Cu substrate using ultrafast laser processing to enhance the bondin elapsed=0.04s
+e9dbf6f7-p10-t2: tables=0 error=None elapsed=112.29s
+e9dbf6f7-p6-t1: tables=0 error=None elapsed=119.16s
+fa290122-p10-t1: tables=0 error=None elapsed=129.41s

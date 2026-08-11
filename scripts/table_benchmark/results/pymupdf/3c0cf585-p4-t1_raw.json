@@ -1,0 +1,36 @@
+{
+ "case_id": "3c0cf585-p4-t1",
+ "tool": "pymupdf",
+ "raw_tables": [
+  {
+   "table_index": 0,
+   "bbox": [
+    53.769649505615234,
+    73.96818542480469,
+    301.20806884765625,
+    179.01062520345053
+   ],
+   "extract": [
+    [
+     "P-polarization (J/cm2)\n0.6\nIncident beam\nTimes cos(AOI) fluence\n0.4 Internal field\nThreshold\n0.2\n0.0\n0 20 40 60\nAOI (deg.)",
+     null,
+     "(J/cm2)\n0.6\nfluence\n0.4\nshold\n0.2",
+     "S-polarization\nIncident beam\nTimes cos(AOI)\nInternal field\n0 20 40 60 80\nAOI (deg.)"
+    ],
+    [
+     null,
+     "P-polarization\nIncident beam\nTimes cos(AOI)\nInternal field",
+     "(J/cm2)\n0\nfluence\n0\nshold\n0",
+     "S-polarization\nIncident beam\nTimes cos(AOI)\nInternal field"
+    ],
+    [
+     null,
+     "",
+     "Thre",
+     ""
+    ]
+   ]
+  }
+ ],
+ "note": "PyMuPDF Table.extract() output; no per-cell bbox is exposed by the public API."
+}

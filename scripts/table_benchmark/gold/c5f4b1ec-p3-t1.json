@@ -1,0 +1,40 @@
+{
+ "case_id": "c5f4b1ec-p3-t1",
+ "pdf": "c5f4b1ec78b6429c_Optimization of femtosecond laser processing technology for film cooling hole in nickel-based superalloy based on multi-step drilling and milling methods.pdf",
+ "page": 3,
+ "table_label": "TABLE I",
+ "table_type": "borderless",
+ "category": "E",
+ "note": "GH3536 composition; 7-col grid, 3 blocks; multi-line cells 'C<=0.05-0.15'",
+ "rows": [
+  [
+   "C≤ 0.05–0.15",
+   "Si≤ 1.00",
+   "Mn≤ 1.00",
+   "P≤ 0.025",
+   "S≤ 0.015",
+   "Cr≥ 20.5–23.5",
+   "Ni≥ Balance"
+  ],
+  [
+   "Mo≥ 8.0–10.0",
+   "Cu≤ 0.50",
+   "N≤ —",
+   "Al≤ 0.50",
+   "Ti≤ 0.15",
+   "Fe≤ 17.0–20.0",
+   "Co≤ 0.50–2.50"
+  ],
+  [
+   "V≤ —",
+   "W≤ 0.20–1.00",
+   "B≤ 0.01",
+   "",
+   "",
+   "",
+   ""
+  ]
+ ],
+ "expect_table": true,
+ "evaluate_cells": true
+}

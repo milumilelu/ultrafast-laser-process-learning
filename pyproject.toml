@@ -20,12 +20,14 @@ dependencies = [
   "fastapi==0.141.1",
   "uvicorn==0.30.0",
   "sqlalchemy==2.0.51",
+  "pymupdf==1.28.2",
 ]
 
 [project.optional-dependencies]
 dev = ["pytest==9.1.1", "httpx==0.28.1",
   "fastapi==0.141.1",
   "uvicorn==0.30.0", "ruff==0.16.1", "import-linter==2.13", "pymupdf==1.28.2", "mypy==1.17.1", "pyyaml==6.0.3"]
+tables = ["camelot-py==2.0.0"]
 
 [tool.setuptools.packages.find]
 where = ["src"]

@@ -1,0 +1,24 @@
+{
+ "case_id": "c5f4b1ec-p6-t3",
+ "tool": "camelot",
+ "raw_tables": [
+  {
+   "table_index": 0,
+   "bbox": [
+    52.79925682067871,
+    120.9699392722801,
+    559.356796875,
+    209.25052947652608
+   ],
+   "parsing_report": {
+    "accuracy": 100.0,
+    "whitespace": 0.0,
+    "order": 1,
+    "page": 6,
+    "confidence": 1.0
+   },
+   "df_csv": "0,1,2\r\nParameters,Multistep drilling,Multistep milling\r\nRepetition frequency (kHz),100–400,100–400\r\nLaser power (W),10,10\r\nFeed rate in the Z-axis direction,10 mm/min,\"The first step:4 mm/min, The second step:10 mm/min\"\r\nBeam rotation diameter (mm),0.4,0.2\r\nRotational speed of hollow motor (rpm),2000,2000\r\nAngle,9°,4°\r\nShift (mm),4,3\r\n"
+  }
+ ],
+ "note": "Camelot parsing_report + dataframe CSV."
+}

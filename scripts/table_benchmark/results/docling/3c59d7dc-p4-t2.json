@@ -1,0 +1,58 @@
+{
+ "case_id": "3c59d7dc-p4-t2",
+ "tool": "docling",
+ "pdf": "3c59d7dc7191b335_Experimental study of nickel-based superalloy IN792 with femtosecond laser drilling method.pdf",
+ "page": 4,
+ "package_version": "2.119.0",
+ "python_version": "3.12.13",
+ "device": "cpu",
+ "os": "Windows-11",
+ "elapsed_time_s": 5.0327,
+ "is_cold": false,
+ "error": null,
+ "tables": [
+  {
+   "table_index": 0,
+   "bbox": [
+    36.55536297280341,
+    334.91337875563937,
+    288.4742973722517,
+    405.85165049545043
+   ],
+   "rows": [
+    [
+     "(a)",
+     "639 - 648",
+     "508 - 547",
+     "98.6%",
+     "92.9%",
+     "4.2 - 5.5"
+    ],
+    [
+     "(b)",
+     "639 - 661",
+     "516 - 558",
+     "96.6%",
+     "92.5%",
+     "4.3 - 5.1"
+    ],
+    [
+     "(c)",
+     "641 - 645",
+     "523 - 552",
+     "99.4%",
+     "94.7%",
+     "3.9 - 4.9"
+    ],
+    [
+     "(d)",
+     "633 - 640",
+     "479 - 522",
+     "98.9%",
+     "91.8%",
+     "4.9 - 6.5"
+    ]
+   ]
+  }
+ ]
+}

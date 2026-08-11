@@ -1,0 +1,173 @@
+[INFO] 2026-08-10 22:00:02,241 [RapidOCR] base.py:23: Using engine_name: torch
+[INFO] 2026-08-10 22:00:02,314 [RapidOCR] device_config.py:57: Using CPU device
+[INFO] 2026-08-10 22:00:02,316 [RapidOCR] download_file.py:68: Initiating download: https://www.modelscope.cn/models/RapidAI/RapidOCR/resolve/v3.9.2/torch/PP-OCRv6/det/PP-OCRv6_det_small.pth
+[INFO] 2026-08-10 22:00:02,684 [RapidOCR] download_file.py:82: Download size: 9.77MB
+[INFO] 2026-08-10 22:00:02,995 [RapidOCR] download_file.py:95: Successfully saved to: C:\Users\RZF\Desktop\博士课题资料\ultrafast-laser-process-learning\.venv-table-docling\Lib\site-packages\rapidocr\models\PP-OCRv6_det_small.pth
+[INFO] 2026-08-10 22:00:02,997 [RapidOCR] main.py:50: Using C:\Users\RZF\Desktop\博士课题资料\ultrafast-laser-process-learning\.venv-table-docling\Lib\site-packages\rapidocr\models\PP-OCRv6_det_small.pth
+[INFO] 2026-08-10 22:00:03,162 [RapidOCR] base.py:23: Using engine_name: torch
+[INFO] 2026-08-10 22:00:03,162 [RapidOCR] device_config.py:57: Using CPU device
+[INFO] 2026-08-10 22:00:03,163 [RapidOCR] download_file.py:68: Initiating download: https://www.modelscope.cn/models/RapidAI/RapidOCR/resolve/v3.9.2/torch/PP-OCRv4/cls/ch_ptocr_mobile_v2.0_cls_mobile.pth
+[INFO] 2026-08-10 22:00:03,511 [RapidOCR] download_file.py:82: Download size: 0.56MB
+[INFO] 2026-08-10 22:00:03,563 [RapidOCR] download_file.py:95: Successfully saved to: C:\Users\RZF\Desktop\博士课题资料\ultrafast-laser-process-learning\.venv-table-docling\Lib\site-packages\rapidocr\models\ch_ptocr_mobile_v2.0_cls_mobile.pth
+[INFO] 2026-08-10 22:00:03,565 [RapidOCR] main.py:50: Using C:\Users\RZF\Desktop\博士课题资料\ultrafast-laser-process-learning\.venv-table-docling\Lib\site-packages\rapidocr\models\ch_ptocr_mobile_v2.0_cls_mobile.pth
+[INFO] 2026-08-10 22:00:03,624 [RapidOCR] base.py:23: Using engine_name: torch
+[INFO] 2026-08-10 22:00:03,624 [RapidOCR] device_config.py:57: Using CPU device
+[INFO] 2026-08-10 22:00:03,624 [RapidOCR] download_file.py:68: Initiating download: https://www.modelscope.cn/models/RapidAI/RapidOCR/resolve/v3.9.2/torch/PP-OCRv6/rec/PP-OCRv6_rec_small.pth
+[INFO] 2026-08-10 22:00:03,930 [RapidOCR] download_file.py:82: Download size: 20.34MB
+[INFO] 2026-08-10 22:00:04,585 [RapidOCR] download_file.py:95: Successfully saved to: C:\Users\RZF\Desktop\博士课题资料\ultrafast-laser-process-learning\.venv-table-docling\Lib\site-packages\rapidocr\models\PP-OCRv6_rec_small.pth
+[INFO] 2026-08-10 22:00:04,586 [RapidOCR] main.py:50: Using C:\Users\RZF\Desktop\博士课题资料\ultrafast-laser-process-learning\.venv-table-docling\Lib\site-packages\rapidocr\models\PP-OCRv6_rec_small.pth
+[INFO] 2026-08-10 22:00:04,709 [RapidOCR] download_file.py:68: Initiating download: https://www.modelscope.cn/models/RapidAI/RapidOCR/resolve/v3.9.2/paddle/PP-OCRv6/rec/PP-OCRv6_rec_small/ppocrv6_dict.txt
+[INFO] 2026-08-10 22:00:04,938 [RapidOCR] download_file.py:82: Download size: 0.07MB
+[INFO] 2026-08-10 22:00:05,007 [RapidOCR] download_file.py:95: Successfully saved to: C:\Users\RZF\Desktop\博士课题资料\ultrafast-laser-process-learning\.venv-table-docling\Lib\site-packages\rapidocr\models\ppocrv6_dict.txt
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+C:\Users\RZF\Desktop\博士课题资料\ultrafast-laser-process-learning\.venv-table-docling\Lib\site-packages\huggingface_hub\file_download.py:141: UserWarning: `huggingface_hub` cache-system uses symlinks by default to efficiently store duplicated files but your machine does not support them in C:\Users\RZF\.cache\huggingface\hub\models--docling-project--docling-layout-heron. Caching files will still work but in a degraded version that might require more space on your disk. This warning can be disabled by setting the `HF_HUB_DISABLE_SYMLINKS_WARNING` environment variable. For more details, see https://huggingface.co/docs/huggingface_hub/how-to-cache#limitations.
+To support symlinks on Windows, you either need to activate Developer Mode or to run Python as an administrator. In order to activate developer mode, see this article: https://docs.microsoft.com/en-us/windows/apps/get-started/enable-your-device-for-development
+  warnings.warn(message)
+[transformers] `torch_dtype` is deprecated! Use `dtype` instead!
+
+Loading weights:   0%|          | 0/770 [00:00<?, ?it/s]
+Loading weights: 100%|██████████| 770/770 [00:00<00:00, 8189.40it/s]
+C:\Users\RZF\Desktop\博士课题资料\ultrafast-laser-process-learning\.venv-table-docling\Lib\site-packages\huggingface_hub\file_download.py:141: UserWarning: `huggingface_hub` cache-system uses symlinks by default to efficiently store duplicated files but your machine does not support them in C:\Users\RZF\.cache\huggingface\hub\models--docling-project--docling-models. Caching files will still work but in a degraded version that might require more space on your disk. This warning can be disabled by setting the `HF_HUB_DISABLE_SYMLINKS_WARNING` environment variable. For more details, see https://huggingface.co/docs/huggingface_hub/how-to-cache#limitations.
+To support symlinks on Windows, you either need to activate Developer Mode or to run Python as an administrator. In order to activate developer mode, see this article: https://docs.microsoft.com/en-us/windows/apps/get-started/enable-your-device-for-development
+  warnings.warn(message)
+W0810 22:13:15.474000 30184 Lib\site-packages\torch\_dynamo\variables\tensor.py:1759] [0/0] Graph break from `Tensor.item()`, consider setting:
+W0810 22:13:15.474000 30184 Lib\site-packages\torch\_dynamo\variables\tensor.py:1759] [0/0]     torch._dynamo.config.capture_scalar_outputs = True
+W0810 22:13:15.474000 30184 Lib\site-packages\torch\_dynamo\variables\tensor.py:1759] [0/0] or:
+W0810 22:13:15.474000 30184 Lib\site-packages\torch\_dynamo\variables\tensor.py:1759] [0/0]     env TORCHDYNAMO_CAPTURE_SCALAR_OUTPUTS=1
+W0810 22:13:15.474000 30184 Lib\site-packages\torch\_dynamo\variables\tensor.py:1759] [0/0] to include these operations in the captured graph.
+W0810 22:13:15.474000 30184 Lib\site-packages\torch\_dynamo\variables\tensor.py:1759] [0/0] 
+W0810 22:13:15.474000 30184 Lib\site-packages\torch\_dynamo\variables\tensor.py:1759] [0/0] Graph break: from user code at:
+W0810 22:13:15.474000 30184 Lib\site-packages\torch\_dynamo\variables\tensor.py:1759] [0/0]   File "C:\Users\RZF\Desktop\博士课题资料\ultrafast-laser-process-learning\.venv-table-docling\Lib\site-packages\transformers\utils\generic.py", line 939, in wrapper
+W0810 22:13:15.474000 30184 Lib\site-packages\torch\_dynamo\variables\tensor.py:1759] [0/0]     output = func(self, *args, **kwargs)
+W0810 22:13:15.474000 30184 Lib\site-packages\torch\_dynamo\variables\tensor.py:1759] [0/0]              ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+W0810 22:13:15.474000 30184 Lib\site-packages\torch\_dynamo\variables\tensor.py:1759] [0/0]   File "C:\Users\RZF\Desktop\博士课题资料\ultrafast-laser-process-learning\.venv-table-docling\Lib\site-packages\transformers\models\rt_detr_v2\modeling_rt_detr_v2.py", line 1864, in forward
+W0810 22:13:15.474000 30184 Lib\site-packages\torch\_dynamo\variables\tensor.py:1759] [0/0]     outputs = self.model(
+W0810 22:13:15.474000 30184 Lib\site-packages\torch\_dynamo\variables\tensor.py:1759] [0/0]               ^^^^^^^^^^^
+W0810 22:13:15.474000 30184 Lib\site-packages\torch\_dynamo\variables\tensor.py:1759] [0/0]   File "C:\Users\RZF\Desktop\博士课题资料\ultrafast-laser-process-learning\.venv-table-docling\Lib\site-packages\transformers\utils\generic.py", line 939, in wrapper
+W0810 22:13:15.474000 30184 Lib\site-packages\torch\_dynamo\variables\tensor.py:1759] [0/0]     output = func(self, *args, **kwargs)
+W0810 22:13:15.474000 30184 Lib\site-packages\torch\_dynamo\variables\tensor.py:1759] [0/0]              ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+W0810 22:13:15.474000 30184 Lib\site-packages\torch\_dynamo\variables\tensor.py:1759] [0/0]   File "C:\Users\RZF\Desktop\博士课题资料\ultrafast-laser-process-learning\.venv-table-docling\Lib\site-packages\transformers\models\rt_detr_v2\modeling_rt_detr_v2.py", line 1626, in forward
+W0810 22:13:15.474000 30184 Lib\site-packages\torch\_dynamo\variables\tensor.py:1759] [0/0]     decoder_outputs = self.decoder(
+W0810 22:13:15.474000 30184 Lib\site-packages\torch\_dynamo\variables\tensor.py:1759] [0/0]                       ^^^^^^^^^^^^^
+W0810 22:13:15.474000 30184 Lib\site-packages\torch\_dynamo\variables\tensor.py:1759] [0/0]   File "C:\Users\RZF\Desktop\博士课题资料\ultrafast-laser-process-learning\.venv-table-docling\Lib\site-packages\transformers\utils\generic.py", line 1068, in wrapper
+W0810 22:13:15.474000 30184 Lib\site-packages\torch\_dynamo\variables\tensor.py:1759] [0/0]     output = func(self, *args, **kwargs)
+W0810 22:13:15.474000 30184 Lib\site-packages\torch\_dynamo\variables\tensor.py:1759] [0/0]              ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+W0810 22:13:15.474000 30184 Lib\site-packages\torch\_dynamo\variables\tensor.py:1759] [0/0]   File "C:\Users\RZF\Desktop\博士课题资料\ultrafast-laser-process-learning\.venv-table-docling\Lib\site-packages\transformers\utils\output_capturing.py", line 262, in wrapper
+W0810 22:13:15.474000 30184 Lib\site-packages\torch\_dynamo\variables\tensor.py:1759] [0/0]     outputs = func(self, *args, **kwargs)
+W0810 22:13:15.474000 30184 Lib\site-packages\torch\_dynamo\variables\tensor.py:1759] [0/0]               ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+W0810 22:13:15.474000 30184 Lib\site-packages\torch\_dynamo\variables\tensor.py:1759] [0/0]   File "C:\Users\RZF\Desktop\博士课题资料\ultrafast-laser-process-learning\.venv-table-docling\Lib\site-packages\transformers\models\rt_detr_v2\modeling_rt_detr_v2.py", line 623, in forward
+W0810 22:13:15.474000 30184 Lib\site-packages\torch\_dynamo\variables\tensor.py:1759] [0/0]     hidden_states = decoder_layer(
+W0810 22:13:15.474000 30184 Lib\site-packages\torch\_dynamo\variables\tensor.py:1759] [0/0]                     ^^^^^^^^^^^^^^
+W0810 22:13:15.474000 30184 Lib\site-packages\torch\_dynamo\variables\tensor.py:1759] [0/0]   File "C:\Users\RZF\Desktop\博士课题资料\ultrafast-laser-process-learning\.venv-table-docling\Lib\site-packages\transformers\models\rt_detr_v2\modeling_rt_detr_v2.py", line 409, in forward
+W0810 22:13:15.474000 30184 Lib\site-packages\torch\_dynamo\variables\tensor.py:1759] [0/0]     hidden_states, _ = self.encoder_attn(
+W0810 22:13:15.474000 30184 Lib\site-packages\torch\_dynamo\variables\tensor.py:1759] [0/0]                        ^^^^^^^^^^^^^^^^^^
+W0810 22:13:15.474000 30184 Lib\site-packages\torch\_dynamo\variables\tensor.py:1759] [0/0]   File "C:\Users\RZF\Desktop\博士课题资料\ultrafast-laser-process-learning\.venv-table-docling\Lib\site-packages\transformers\models\rt_detr_v2\modeling_rt_detr_v2.py", line 185, in forward
+W0810 22:13:15.474000 30184 Lib\site-packages\torch\_dynamo\variables\tensor.py:1759] [0/0]     torch_compilable_check(
+W0810 22:13:15.474000 30184 Lib\site-packages\torch\_dynamo\variables\tensor.py:1759] [0/0]   File "C:\Users\RZF\Desktop\博士课题资料\ultrafast-laser-process-learning\.venv-table-docling\Lib\site-packages\transformers\utils\import_utils.py", line 1832, in torch_compilable_check
+W0810 22:13:15.474000 30184 Lib\site-packages\torch\_dynamo\variables\tensor.py:1759] [0/0]     torch._check_tensor_all(cond)
+W0810 22:13:15.474000 30184 Lib\site-packages\torch\_dynamo\variables\tensor.py:1759] [0/0] 
+W0810 22:13:15.474000 30184 Lib\site-packages\torch\_dynamo\variables\tensor.py:1759] [0/0] 
+Stage layout failed for run 1: InvalidCxxCompiler: Compiler: cl is not found.
+
+Set TORCHDYNAMO_VERBOSE=1 for the internal stack trace (please do this especially if you're reporting a bug to PyTorch). For even more developer context, set TORCH_LOGS="+dynamo"
+Traceback (most recent call last):
+  File "C:\Users\RZF\Desktop\博士课题资料\ultrafast-laser-process-learning\.venv-table-docling\Lib\site-packages\docling\pipeline\standard_pdf_pipeline.py", line 353, in _process_batch
+    processed_pages = list(self.model(good[0].conv_res, pages))  # type: ignore[arg-type]
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\RZF\Desktop\博士课题资料\ultrafast-laser-process-learning\.venv-table-docling\Lib\site-packages\docling\models\base_layout_model.py", line 59, in __call__
+    predictions = self.predict_layout(conv_res, pages)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\RZF\Desktop\博士课题资料\ultrafast-laser-process-learning\.venv-table-docling\Lib\site-packages\docling\models\stages\layout\layout_object_detection_model.py", line 115, in predict_layout
+    engine_outputs = self.engine.predict_batch(batch)
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\RZF\Desktop\博士课题资料\ultrafast-laser-process-learning\.venv-table-docling\Lib\site-packages\docling\models\inference_engines\object_detection\transformers_engine.py", line 208, in predict_batch
+    outputs = self._model(**inputs)  # type: ignore[operator]
+              ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\RZF\Desktop\博士课题资料\ultrafast-laser-process-learning\.venv-table-docling\Lib\site-packages\torch\_dynamo\eval_frame.py", line 511, in __call__
+    return super().__call__(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\RZF\Desktop\博士课题资料\ultrafast-laser-process-learning\.venv-table-docling\Lib\site-packages\torch\nn\modules\module.py", line 1778, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\RZF\Desktop\博士课题资料\ultrafast-laser-process-learning\.venv-table-docling\Lib\site-packages\torch\nn\modules\module.py", line 1789, in _call_impl
+    return forward_call(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\RZF\Desktop\博士课题资料\ultrafast-laser-process-learning\.venv-table-docling\Lib\site-packages\torch\_dynamo\eval_frame.py", line 1183, in compile_wrapper
+    raise e.remove_dynamo_frames() from None  # see TORCHDYNAMO_VERBOSE=1
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\RZF\Desktop\博士课题资料\ultrafast-laser-process-learning\.venv-table-docling\Lib\site-packages\torch\_inductor\compile_fx.py", line 1079, in _compile_fx_inner
+    raise InductorError(e, currentframe()).with_traceback(
+  File "C:\Users\RZF\Desktop\博士课题资料\ultrafast-laser-process-learning\.venv-table-docling\Lib\site-packages\torch\_inductor\compile_fx.py", line 1059, in _compile_fx_inner
+    mb_compiled_graph = fx_codegen_and_compile(
+                        ^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\RZF\Desktop\博士课题资料\ultrafast-laser-process-learning\.venv-table-docling\Lib\site-packages\torch\_inductor\compile_fx.py", line 1847, in fx_codegen_and_compile
+    return scheme.codegen_and_compile(gm, example_inputs, inputs_to_check, graph_kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\RZF\Desktop\博士课题资料\ultrafast-laser-process-learning\.venv-table-docling\Lib\site-packages\torch\_inductor\compile_fx.py", line 1608, in codegen_and_compile
+    compiled_module = graph.compile_to_module()
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\RZF\Desktop\博士课题资料\ultrafast-laser-process-learning\.venv-table-docling\Lib\site-packages\torch\_inductor\graph.py", line 2669, in compile_to_module
+    return self._compile_to_module()
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\RZF\Desktop\博士课题资料\ultrafast-laser-process-learning\.venv-table-docling\Lib\site-packages\torch\_inductor\graph.py", line 2675, in _compile_to_module
+    self.codegen_with_cpp_wrapper() if self.cpp_wrapper else self.codegen()
+                                                             ^^^^^^^^^^^^^^
+  File "C:\Users\RZF\Desktop\博士课题资料\ultrafast-laser-process-learning\.venv-table-docling\Lib\site-packages\torch\_inductor\graph.py", line 2611, in codegen
+    self.scheduler.codegen()
+  File "C:\Users\RZF\Desktop\博士课题资料\ultrafast-laser-process-learning\.venv-table-docling\Lib\site-packages\torch\_inductor\scheduler.py", line 9206, in codegen
+    self._codegen_partitions()
+  File "C:\Users\RZF\Desktop\博士课题资料\ultrafast-laser-process-learning\.venv-table-docling\Lib\site-packages\torch\_inductor\scheduler.py", line 9354, in _codegen_partitions
+    self._codegen(partition)
+  File "C:\Users\RZF\Desktop\博士课题资料\ultrafast-laser-process-learning\.venv-table-docling\Lib\site-packages\torch\_inductor\scheduler.py", line 9508, in _codegen
+    self.get_backend(device).codegen_node(node)
+  File "C:\Users\RZF\Desktop\博士课题资料\ultrafast-laser-process-learning\.venv-table-docling\Lib\site-packages\torch\_inductor\codegen\cpp.py", line 5550, in codegen_node
+    cpp_kernel_proxy = self.kernel_proxy_cls(kernel_group)
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\RZF\Desktop\博士课题资料\ultrafast-laser-process-learning\.venv-table-docling\Lib\site-packages\torch\_inductor\codegen\cpp.py", line 4182, in __init__
+    self.picked_vec_isa: cpu_vec_isa.VecISA = cpu_vec_isa.pick_vec_isa()
+                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\RZF\Desktop\博士课题资料\ultrafast-laser-process-learning\.venv-table-docling\Lib\site-packages\torch\_inductor\cpu_vec_isa.py", line 653, in pick_vec_isa
+    _valid_vec_isa_list: list[VecISA] = valid_vec_isa_list()
+                                        ^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\RZF\Desktop\博士课题资料\ultrafast-laser-process-learning\.venv-table-docling\Lib\site-packages\torch\_inductor\cpu_vec_isa.py", line 640, in valid_vec_isa_list
+    isa_list.extend(
+  File "C:\Users\RZF\Desktop\博士课题资料\ultrafast-laser-process-learning\.venv-table-docling\Lib\site-packages\torch\_inductor\cpu_vec_isa.py", line 643, in <genexpr>
+    if all(flag in _cpu_supported_x86_isa for flag in str(isa).split()) and isa
+                                                                            ^^^
+  File "C:\Users\RZF\Desktop\博士课题资料\ultrafast-laser-process-learning\.venv-table-docling\Lib\site-packages\torch\_inductor\cpu_vec_isa.py", line 211, in __bool__
+    return self.__bool__impl(config.cpp.vec_isa_ok)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\RZF\Desktop\博士课题资料\ultrafast-laser-process-learning\.venv-table-docling\Lib\site-packages\torch\_inductor\cpu_vec_isa.py", line 221, in __bool__impl
+    return self.check_build(VecISA._avx_code)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\RZF\Desktop\博士课题资料\ultrafast-laser-process-learning\.venv-table-docling\Lib\site-packages\torch\_inductor\cpu_vec_isa.py", line 183, in check_build
+    extra=_get_isa_dry_compile_fingerprint(self.build_arch_flags()),
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\RZF\Desktop\博士课题资料\ultrafast-laser-process-learning\.venv-table-docling\Lib\site-packages\torch\_inductor\cpu_vec_isa.py", line 30, in _get_isa_dry_compile_fingerprint
+    compiler_info = get_compiler_version_info(get_cpp_compiler())
+                                              ^^^^^^^^^^^^^^^^^^
+  File "C:\Users\RZF\Desktop\博士课题资料\ultrafast-laser-process-learning\.venv-table-docling\Lib\site-packages\torch\_inductor\cpp_builder.py", line 386, in get_cpp_compiler
+    check_compiler_exist_windows(compiler)
+  File "C:\Users\RZF\Desktop\博士课题资料\ultrafast-laser-process-learning\.venv-table-docling\Lib\site-packages\torch\_inductor\cpp_builder.py", line 145, in check_compiler_exist_windows
+    raise exc.InvalidCxxCompiler(compiler) from e
+torch._inductor.exc.InductorError: InvalidCxxCompiler: Compiler: cl is not found.
+
+Set TORCHDYNAMO_VERBOSE=1 for the internal stack trace (please do this especially if you're reporting a bug to PyTorch). For even more developer context, set TORCH_LOGS="+dynamo"
+
+Traceback (most recent call last):
+  File "<string>", line 1, in <module>
+  File "C:\Users\RZF\Desktop\博士课题资料\ultrafast-laser-process-learning\.venv-table-docling\Lib\site-packages\pydantic\_internal\_validate_call.py", line 40, in wrapper_function
+    return wrapper(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\RZF\Desktop\博士课题资料\ultrafast-laser-process-learning\.venv-table-docling\Lib\site-packages\pydantic\_internal\_validate_call.py", line 137, in __call__
+    res = self.__pydantic_validator__.validate_python(pydantic_core.ArgsKwargs(args, kwargs))
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\RZF\Desktop\博士课题资料\ultrafast-laser-process-learning\.venv-table-docling\Lib\site-packages\docling\document_converter.py", line 505, in convert
+    return next(all_res)
+           ^^^^^^^^^^^^^
+  File "C:\Users\RZF\Desktop\博士课题资料\ultrafast-laser-process-learning\.venv-table-docling\Lib\site-packages\docling\document_converter.py", line 581, in convert_all
+    raise ConversionError(
+docling.exceptions.ConversionError: Conversion failed for: test.pdf with status: failure. Errors: InvalidCxxCompiler: Compiler: cl is not found.
+
+Set TORCHDYNAMO_VERBOSE=1 for the internal stack trace (please do this especially if you're reporting a bug to PyTorch). For even more developer context, set TORCH_LOGS="+dynamo"
+

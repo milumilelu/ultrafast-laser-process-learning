@@ -1,0 +1,12 @@
+{
+ "case_id": "179b114f-p5-t1",
+ "pdf": "179b114fb0325d4a_Simulation_of_ultrashort_pulse_laser_drilling_of_glass_considering_hea_2020.pdf",
+ "page": 5,
+ "table_label": "Table 1",
+ "table_type": "image",
+ "category": "G",
+ "expect_table": true,
+ "evaluate_cells": false,
+ "note": "Table body is a raster image (no text layer); only detection is scored. Known values from text: depth 0.626 um at alpha=5.0,beta=0.01; 0.680 um at alpha=2.0,beta=1.0",
+ "rows": null
+}

@@ -65,6 +65,12 @@ class ValidationState(StrEnum):
     REJECTED = "REJECTED"
 
 
+class ConditionValidationState(StrEnum):
+    VALIDATED = "VALIDATED"
+    UNVERIFIED = "UNVERIFIED"
+    REJECTED = "REJECTED"
+
+
 class TaskRequestV1(StrictModel):
     material: str = Field(min_length=1)
     material_grade: str | None = None
@@ -109,6 +115,7 @@ class KnowledgeRequirementV1(StrictModel):
     target_metric: TargetMetric
     evidence_types: list[EvidenceType] = Field(min_length=1)
     query_terms: list[str] = Field(min_length=1)
+    coverage_targets: list[str] = Field(default_factory=list)
     conditions: dict[str, Any] = Field(default_factory=dict)
     expected_unit: str | None = None
     priority: Literal["HIGH", "MEDIUM", "LOW"] = "MEDIUM"
@@ -195,6 +202,13 @@ EvidenceContent = Annotated[
 ]
 
 
+class ConditionProvenance(StrictModel):
+    source: Literal["BLOCK", "PAPER_METADATA", "UNRESOLVED"]
+    source_block_refs: list[str] = Field(default_factory=list)
+    validation_state: ConditionValidationState = ConditionValidationState.UNVERIFIED
+    reason_codes: list[str] = Field(default_factory=list)
+
+
 class EvidenceIRV2(StrictModel):
     schema_version: str = "evidence-ir-v2"
     evidence_id: str
@@ -205,6 +219,7 @@ class EvidenceIRV2(StrictModel):
     paper_metadata: dict[str, Any] = Field(default_factory=dict)
     content: EvidenceContent
     conditions: dict[str, Any] = Field(default_factory=dict)
+    condition_provenance: dict[str, ConditionProvenance] = Field(default_factory=dict)
     evidence_quote: str = ""
     source_block_refs: list[str] = Field(default_factory=list)
     source_pages: list[int] = Field(default_factory=list)
@@ -220,6 +235,16 @@ class EvidenceIRV2(StrictModel):
     def evidence_type(self) -> EvidenceType:
         return EvidenceType(self.content.evidence_type)
 
+    @property
+    def validated_conditions(self) -> dict[str, Any]:
+        return {
+            key: value
+            for key, value in self.conditions.items()
+            if self.condition_provenance.get(key) is not None
+            and self.condition_provenance[key].validation_state
+            == ConditionValidationState.VALIDATED
+        }
+
 
 class EvidenceMiss(StrictModel):
     requirement_id: str
@@ -229,12 +254,108 @@ class EvidenceMiss(StrictModel):
     reason: str | None = None
 
 
+class CoverageFacetSpec(StrictModel):
+    facet_id: str
+    kind: str
+    canonical_target: str | None = None
+    importance: Literal["CORE", "OPTIONAL"] = "CORE"
+    minimum_claims: int = Field(default=1, ge=1)
+    minimum_papers: int = Field(default=1, ge=1)
+    required_condition_keys: list[str] = Field(default_factory=list)
+
+
+class RequirementCoverageSpec(StrictModel):
+    schema_version: str = "requirement-coverage-spec-v1"
+    requirement_id: str
+    facets: list[CoverageFacetSpec] = Field(min_length=1)
+    minimum_core_facets: int = Field(default=1, ge=1)
+    target_coverage: float = Field(default=1.0, ge=0.0, le=1.0)
+
+
+class CoverageFacetResult(StrictModel):
+    facet_id: str
+    status: Literal["SUPPORTED", "PARTIAL", "MISSING", "CONFLICT"]
+    evidence_ids: list[str] = Field(default_factory=list)
+    paper_ids: list[str] = Field(default_factory=list)
+    missing_condition_keys: list[str] = Field(default_factory=list)
+
+
+class CoverageGap(StrictModel):
+    facet_id: str
+    missing_fields: list[str] = Field(default_factory=list)
+    reason_codes: list[str] = Field(default_factory=list)
+    suggested_terms: list[str] = Field(default_factory=list)
+
+
+class EvidenceCoverageReport(StrictModel):
+    schema_version: str = "evidence-coverage-report-v1"
+    requirement_id: str
+    coverage_ratio: float = Field(ge=0.0, le=1.0)
+    operationally_sufficient: bool
+    facets: list[CoverageFacetResult] = Field(default_factory=list)
+    gaps: list[CoverageGap] = Field(default_factory=list)
+    rejected_evidence_ids: list[str] = Field(default_factory=list)
+
+
+class SupplementalQuery(StrictModel):
+    query_id: str
+    gap_ids: list[str] = Field(min_length=1)
+    query_text: str = Field(min_length=1, max_length=256)
+    target_index: Literal["PAPER", "BLOCK", "BOTH"] = "BOTH"
+    paper_ids: list[str] = Field(default_factory=list)
+    preferred_sections: list[str] = Field(default_factory=list)
+    top_k: int = Field(default=3, ge=1, le=20)
+
+
+class SupplementalQueryPlan(StrictModel):
+    schema_version: str = "supplemental-query-plan-v1"
+    plan_id: str
+    round: int = Field(ge=1)
+    planner_type: Literal["DETERMINISTIC", "LLM"]
+    queries: list[SupplementalQuery] = Field(max_length=3)
+    reason_codes: list[str] = Field(default_factory=list)
+
+
+class AcquisitionRoundTrace(StrictModel):
+    round: int = Field(ge=0)
+    planner_type: Literal["CACHE", "BASELINE", "DETERMINISTIC", "LLM"]
+    queries: list[SupplementalQuery] = Field(default_factory=list)
+    candidate_count: int = 0
+    new_candidate_count: int = 0
+    window_count: int = 0
+    new_window_count: int = 0
+    extraction_calls: int = 0
+    validated_evidence_count: int = 0
+    coverage: EvidenceCoverageReport
+
+
+class AcquisitionTrace(StrictModel):
+    schema_version: str = "evidence-acquisition-trace-v1"
+    requirement_id: str
+    coverage_spec: RequirementCoverageSpec
+    rounds: list[AcquisitionRoundTrace] = Field(default_factory=list)
+    stop_reason: Literal[
+        "COVERAGE_SATISFIED",
+        "MAX_ROUNDS",
+        "QUERY_BUDGET_EXHAUSTED",
+        "NO_NOVEL_HITS",
+        "NO_COVERAGE_GAIN",
+        "NO_ELIGIBLE_GAPS",
+        "INVALID_QUERY_PLAN",
+        "INDEX_NOT_READY",
+    ]
+    index_revisions: dict[str, str] = Field(default_factory=dict)
+    total_queries: int = 0
+    total_extraction_calls: int = 0
+
+
 class EvidenceIRSetV2(StrictModel):
     schema_version: str = "evidence-ir-set-v2"
     evidence_set_id: str
     items: list[EvidenceIRV2] = Field(default_factory=list)
     misses: list[EvidenceMiss] = Field(default_factory=list)
     paper_candidates: dict[str, list[dict[str, Any]]] = Field(default_factory=dict)
+    acquisition_traces: dict[str, AcquisitionTrace] = Field(default_factory=dict)
     knowledge_reused_count: int = 0
     llm_call_count: int = 0
 

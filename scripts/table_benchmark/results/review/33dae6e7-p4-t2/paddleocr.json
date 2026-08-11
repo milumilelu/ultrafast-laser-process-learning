@@ -1,0 +1,144 @@
+{
+ "case_id": "33dae6e7-p4-t2",
+ "tool": "paddleocr",
+ "pdf": "33dae6e7c9a3a155_33dae6e7c9a3a155_task2_06_Zhang_2024.pdf",
+ "page": 4,
+ "package_version": "3.7.0",
+ "python_version": "3.12.13",
+ "device": "cpu",
+ "os": "Windows-11",
+ "elapsed_time_s": 123.2661,
+ "is_cold": false,
+ "dpi": 300,
+ "pipeline_kwargs": {
+  "lang": "en",
+  "device": "cpu",
+  "enable_mkldnn": true,
+  "use_doc_orientation_classify": false,
+  "use_doc_unwarping": false,
+  "use_region_detection": false,
+  "use_formula_recognition": false,
+  "use_chart_recognition": false,
+  "use_seal_recognition": false,
+  "text_det_limit_side_len": 1600,
+  "cpu_threads": 4
+ },
+ "tables": [
+  {
+   "table_index": 0,
+   "bbox": [
+    695.034423828125,
+    1625.904052734375,
+    2320.034423828125,
+    2408.904052734375
+   ],
+   "rows": [
+    [
+     "NO.",
+     "Mean Power/W",
+     "Focus Position/mm",
+     "Feed Distance/mm",
+     "Scanning Velocity/rpm"
+    ],
+    [
+     "1",
+     "8",
+     "0",
+     "0.01",
+     "1500"
+    ],
+    [
+     "2",
+     "10",
+     "0",
+     "0.01",
+     "1500"
+    ],
+    [
+     "3",
+     "12",
+     "0",
+     "0.01",
+     "1500"
+    ],
+    [
+     "4",
+     "14",
+     "0",
+     "0.01",
+     "1500"
+    ],
+    [
+     "5",
+     "16",
+     "0",
+     "0.01",
+     "1500"
+    ],
+    [
+     "6",
+     "12",
+     "-0.5",
+     "0.01",
+     "1500"
+    ],
+    [
+     "7",
+     "12",
+     "0",
+     "0.01",
+     "1500"
+    ],
+    [
+     "8",
+     "12",
+     "0.5",
+     "0.01",
+     "1500"
+    ],
+    [
+     "9",
+     "12",
+     "0",
+     "0.005",
+     "1500"
+    ],
+    [
+     "10",
+     "12",
+     "0",
+     "0.01",
+     "1500"
+    ],
+    [
+     "11",
+     "12",
+     "0",
+     "0.015",
+     "1500"
+    ],
+    [
+     "12",
+     "12",
+     "0",
+     "0.01",
+     "1000"
+    ],
+    [
+     "13",
+     "12",
+     "0",
+     "0.01",
+     "1500"
+    ],
+    [
+     "14",
+     "12",
+     "0",
+     "0.01",
+     "2000"
+    ]
+   ]
+  }
+ ]
+}

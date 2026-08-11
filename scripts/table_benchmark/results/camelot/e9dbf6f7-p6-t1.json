@@ -1,0 +1,52 @@
+{
+ "case_id": "e9dbf6f7-p6-t1",
+ "tool": "camelot",
+ "pdf": "e9dbf6f752f449db_Experiments of drilling micro-holes on superalloy with thermal barrier coatings by using femtosecond laser.pdf",
+ "page": 6,
+ "package_version": "2.0.0",
+ "python_version": "3.12.13",
+ "device": "cpu",
+ "os": "Windows-11",
+ "elapsed_time_s": 0.3801,
+ "is_cold": false,
+ "error": null,
+ "tables": [
+  {
+   "table_index": 0,
+   "bbox": [
+    59.06789772033691,
+    637.3073547363281,
+    443.179921875,
+    657.0128471374511
+   ],
+   "rows": [
+    [
+     "Number",
+     "1",
+     "2",
+     "3",
+     "4",
+     "5",
+     "6",
+     "7",
+     "8",
+     "9",
+     "10"
+    ],
+    [
+     "Focus position(mm)",
+     "0.5",
+     "0",
+     "0.5",
+     "1",
+     "1.5",
+     "2",
+     "2.5",
+     "3",
+     "3.5",
+     "4"
+    ]
+   ]
+  }
+ ]
+}

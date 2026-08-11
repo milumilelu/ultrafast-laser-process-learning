@@ -64,12 +64,15 @@ def compile_beliefs(
 
 
 def _belief(task: ResolvedTaskV1, evidence: EvidenceIRV2) -> EvidenceBelief:
+    validated_conditions = evidence.validated_conditions
     material_value = _evidence_material(evidence)
     grade_value = _first(
-        evidence.conditions,
+        validated_conditions,
         "material_grade",
         "grade",
-    ) or evidence.paper_metadata.get("material_grade")
+    )
+    if grade_value is None and isinstance(evidence.content, MaterialIdentityContent):
+        grade_value = evidence.content.material_grade
     target_value = _evidence_target(evidence)
     facets = [
         _string_facet("material", task.material, material_value, mismatch_score=0.2),
@@ -311,9 +314,7 @@ def _prior_range(prior: ParameterPrior) -> tuple[float, float] | None:
 def _evidence_material(evidence: EvidenceIRV2) -> Any:
     if isinstance(evidence.content, MaterialIdentityContent):
         return evidence.content.material
-    return _first(evidence.conditions, "material", "material_name") or evidence.paper_metadata.get(
-        "material"
-    )
+    return _first(evidence.validated_conditions, "material", "material_name")
 
 
 def _evidence_target(evidence: EvidenceIRV2) -> Any:
@@ -326,7 +327,7 @@ def _evidence_target(evidence: EvidenceIRV2) -> Any:
         and content.target_metric
     ):
         return content.target_metric
-    return _first(evidence.conditions, "target_metric", "target")
+    return _first(evidence.validated_conditions, "target_metric", "target")
 
 
 def _string_facet(
@@ -401,7 +402,9 @@ def _grade_facet(task_grade: Any, evidence_grade: Any) -> ApplicabilityFacet:
 
 def _wavelength_facet(task: ResolvedTaskV1, evidence: EvidenceIRV2) -> ApplicabilityFacet:
     task_value = task.equipment.wavelength_nm
-    evidence_value = _number(_first(evidence.conditions, "wavelength_nm", "laser_wavelength_nm"))
+    evidence_value = _number(
+        _first(evidence.validated_conditions, "wavelength_nm", "laser_wavelength_nm")
+    )
     return _numeric_distance_facet(
         "wavelength_nm",
         task_value,
@@ -413,7 +416,7 @@ def _wavelength_facet(task: ResolvedTaskV1, evidence: EvidenceIRV2) -> Applicabi
 def _pulse_width_facet(task: ResolvedTaskV1, evidence: EvidenceIRV2) -> ApplicabilityFacet:
     task_range = _range(task.equipment.pulse_width_min_fs, task.equipment.pulse_width_max_fs)
     evidence_range = _evidence_range(
-        evidence.conditions,
+        evidence.validated_conditions,
         scalar_keys=("pulse_width_fs", "pulse_duration_fs"),
         lower_keys=("pulse_width_min_fs", "pulse_duration_min_fs"),
         upper_keys=("pulse_width_max_fs", "pulse_duration_max_fs"),
@@ -491,7 +494,7 @@ def _condition_completeness_facet(
     present = [
         name
         for name, keys in relevant
-        if any(_first(evidence.conditions, key) is not None for key in keys)
+        if any(_first(evidence.validated_conditions, key) is not None for key in keys)
     ]
     fraction = len(present) / len(relevant)
     score = 0.5 + 0.5 * fraction

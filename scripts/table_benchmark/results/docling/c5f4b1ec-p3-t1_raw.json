@@ -1,0 +1,18 @@
+{
+ "case_id": "c5f4b1ec-p3-t1",
+ "tool": "docling",
+ "raw_tables": [
+  {
+   "table_index": 0,
+   "bbox": [
+    51.52837371826172,
+    617.6804638039631,
+    560.1057739257812,
+    697.6791921864884
+   ],
+   "markdown": "TABLE I. Chemical composition of GH3536 nickel-based superalloy (wt. %).\n\n| C ≤         | Si ≤        | Mn ≤   | P ≤   | S ≤   | Cr ≥        | Ni ≥        |\n|-------------|-------------|--------|-------|-------|-------------|-------------|\n| 0.05 - 0.15 | 1.00        | 1.00   | 0.025 | 0.015 | 20.5 - 23.5 | Balance     |\n| Mo ≥        | Cu ≤        | N ≤    | Al ≤  | Ti ≤  | Fe ≤        | Co ≤        |\n| 8.0 - 10.0  | 0.50        | -      | 0.50  | 0.15  | 17.0 - 20.0 | 0.50 - 2.50 |\n| V ≤         | W ≤         | B ≤    |       |       |             |             |\n| -           | 0.20 - 1.00 | 0.01   |       |       |             |             |",
+   "label": "table"
+  }
+ ],
+ "note": "Docling TableItem markdown + provenance bbox."
+}
